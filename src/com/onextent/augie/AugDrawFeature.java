@@ -9,6 +9,7 @@ import java.util.List;
 import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,21 +20,33 @@ public class AugDrawFeature extends AugDrawBase {
 	int lastX;
 	int lastY;
     final AugmentedView augview;
-    final List<Line> lines;
-    Line currentLine;
+    final List<List<Line>> scribles;
+    List<Line> currentScrible;
 
 	public AugDrawFeature(AugmentedView v, Activity activity) {
 		
 		super(v);
 		augview = v;
 	    lastX = -1;
-	    lines = new ArrayList<Line>();
-	    currentLine = null;
+	    scribles = new ArrayList<List<Line>>();
+	    currentScrible = null;
 	}
 	
 	public void undoLastLine() {
-		int last = lines.size();
-		if (last > 0) lines.remove(last);
+		int last = scribles.size();
+		int lastidx = last - 1;
+		if (last > 0) {
+			scribles.remove(lastidx);
+			augview.reset();
+		}
+	}
+
+	private void scrible(int lx, int ly, int x, int y) {
+		Point p1 = new Point(lx, ly);
+		Point p2 = new Point(x, y);
+		Line l = new Line(p1, p2);
+		currentScrible.add(l);
+		augview.getCanvas().drawLine(lx, ly, x, y, augview.getPaint());
 	}
 	
     @Override
@@ -46,9 +59,13 @@ public class AugDrawFeature extends AugDrawBase {
 	    	lastX = -1;
 	    	break;
 	    case MotionEvent.ACTION_DOWN:
+	    	
+	    	currentScrible = new ArrayList<Line>();
+	    	scribles.add(currentScrible);
+	    	
 	    	if (lastX != -1) {
 	    		if ((int) event.getX() != lastX) {
-	    			augview.getCanvas().drawLine(lastX, lastY, x, y, augview.getPaint());
+	    			scrible(lastX, lastY, x, y);
 	    		}
 	    	}
 	        lastX = (int) event.getX();
@@ -56,16 +73,7 @@ public class AugDrawFeature extends AugDrawBase {
 	    	break;
 	    case MotionEvent.ACTION_MOVE:
 	    	if (lastX != -1) {
-	    		augview.getCanvas().drawLine(lastX, lastY, x, y, augview.getPaint());
-	    		
-	    		//warning, expensive ...
-	    		//todo: scribles
-	    		/*
-	    		Point p1 = new Point(lastX, lastY);
-	    		Point p2 = new Point(x, y);
-	    		Line l = new Line(p1, p2);
-	    		lines.add(l);
-	    		 */
+	    		scrible(lastX, lastY, x, y);
 	    	}
 	        lastX = (int) event.getX();
 	        lastY = (int) event.getY();
@@ -78,13 +86,15 @@ public class AugDrawFeature extends AugDrawBase {
     
     @Override
 	public void clear() {
-    	lines.clear();
+    	scribles.clear();
 	}
 
     @Override
 	public void redraw() {
-    	//for (Scrible s : scribles) {
-    		
-    	//}
+    	for (List<Line> s : scribles) {
+    		for (Line l : s) {
+    			augview.getCanvas().drawLine(l.p1.x, l.p1.y, l.p2.x, l.p2.y, augview.getPaint());
+    		}
+    	}
 	}
 }

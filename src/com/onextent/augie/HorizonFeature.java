@@ -16,10 +16,12 @@ public class HorizonFeature extends AugDrawBase {
 
 	private Point startP;
 	private List<Line> lines;
+	private final AugDrawFeature augdraw;
     
-    public HorizonFeature(AugmentedView augview) {
+    public HorizonFeature(AugmentedView augview, AugDrawFeature augdraw) {
 	    super(augview);
 	    this.lines = new ArrayList<Line>();
+	    this.augdraw = augdraw;
     }
 
     private LINE_TYPE getLineType(Point p1, Point p2) {
@@ -71,16 +73,14 @@ public class HorizonFeature extends AugDrawBase {
             	p2 = new Point(augview.getWidth(), startP.y);
             	line = new HLine(p1, p2);
             	lines.add(line);
-            	redraw();
-            	augview.reset();
+            	augdraw.undoLastLine();
             	break;
             case VERTICAL_LINE:
             	p1 = new Point(startP.x, 0);
             	p2 = new Point(startP.x, augview.getHeight());
             	line = new VLine(p1, p2);
             	lines.add(line);
-            	redraw();
-            	augview.reset();
+            	augdraw.undoLastLine();
             	break;
             case BAD_LINE:
             	break;

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugmentedViewFeature;
 import com.onextent.augie.testcamera.TestCameraActivity;
 
@@ -25,11 +26,13 @@ public class CameraShutterFeature implements AugmentedViewFeature {
 	static final String TAG = TestCameraActivity.TAG;
 	
 	private final AugCamera augcamera;
+	private final AugDrawFeature augdraw;
 	private Point startP;
 	
-	public CameraShutterFeature(AugCamera c) {
+	public CameraShutterFeature(AugCamera c, AugDrawFeature d) {
 	    super();
 	    augcamera = c;
+	    augdraw = d;
     }
 	
 	public void redraw() {
@@ -59,6 +62,7 @@ public class CameraShutterFeature implements AugmentedViewFeature {
             	if (c != null)  {
             		//Toast.makeText(cameraActivity, "shooting...", Toast.LENGTH_SHORT).show();
             		c.takePicture(null, null, mPicture);
+            		augdraw.undoLastLine();
             	} else {
             		//Toast.makeText(cameraActivity, "error!  camera not found", Toast.LENGTH_SHORT).show();
             	}

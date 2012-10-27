@@ -93,9 +93,7 @@ public class AugmentedView extends View implements OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
-		Log.d(TAG, "  trying to draw bmp");
 	    if (bitmap != null) {
-		Log.d(TAG, "  drawing bmp");
 	    	canvas.drawBitmap(bitmap, 0, 0, null);
 	    }
     }

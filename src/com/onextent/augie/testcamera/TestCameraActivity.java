@@ -45,19 +45,19 @@ public class TestCameraActivity extends Activity {
         augmentedView.addFeature(augcamera);
         CameraPreview camPreview = new CameraPreview(this, augcamera);
         
-        AugmentedViewFeature drawer = new AugDrawFeature(augmentedView, this);
+        AugDrawFeature drawer = new AugDrawFeature(augmentedView, this);
         augmentedView.addFeature(drawer);
         
-        AugmentedViewFeature horizon = new HorizonFeature(augmentedView);
+        AugmentedViewFeature horizon = new HorizonFeature(augmentedView, drawer);
         augmentedView.addFeature(horizon);
         
-        AugmentedViewFeature shutter = new CameraShutterFeature(augcamera);
+        AugmentedViewFeature shutter = new CameraShutterFeature(augcamera, drawer);
         augmentedView.addFeature(shutter);
         
         ShakeResetFeature shakeReseter = new ShakeResetFeature(augmentedView, this);
         augmentedView.addFeature(shakeReseter);
         shakeReseter.registerOneShakeReset(drawer);
-        shakeReseter.registerOneShakeReset(horizon); //todo: on 2nd shake only
+        shakeReseter.registerTwoShakeReset(horizon);
         
         FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
         layout.addView(camPreview); //bottom layer
