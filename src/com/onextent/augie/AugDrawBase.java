@@ -11,10 +11,10 @@ import android.view.View;
 
 public class AugDrawBase implements AugmentedViewFeature {
 
-	protected static final String TAG = TestCameraActivity.TAG;
-	protected final AugmentedView augview;
+    protected static final String TAG = TestCameraActivity.TAG;
+    protected final AugmentedView augview;
 
-	protected enum LINE_TYPE {HORIZONTAL_LINE, VERTICAL_LINE, BAD_LINE}
+    protected enum LINE_TYPE {HORIZONTAL_LINE, VERTICAL_LINE, BAD_LINE}
 
 	
 	protected class Line {

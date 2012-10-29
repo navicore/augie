@@ -114,13 +114,11 @@ public class ShakeResetFeature implements AugmentedViewFeature {
 				long diff = now.getTimeInMillis() - last.getTimeInMillis();
 				//TODO settings need to be configurable.  false doubles too easy right now
 				if(diff > 1500) { 
-					Log.d(TAG, "single!!!! " + diff);
 					doing_double = true;
 					handleAccel(se, oneShakeRegistry);
 					last.setTime(new_date); 
 
 				} else if (doing_double && diff > 400) {
-					Log.d(TAG, "double!!!! " + diff);
 					doing_double = false;
 					handleAccel(se, twoShakeRegistry);
 					last.setTime(new_date); 

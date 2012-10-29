@@ -62,7 +62,7 @@ public class CameraShutterFeature implements AugmentedViewFeature {
             	if (c != null)  {
             		//Toast.makeText(cameraActivity, "shooting...", Toast.LENGTH_SHORT).show();
             		c.takePicture(null, null, mPicture);
-            		augdraw.undoLastLine();
+            		augdraw.undoLastScrible();
             	} else {
             		//Toast.makeText(cameraActivity, "error!  camera not found", Toast.LENGTH_SHORT).show();
             	}

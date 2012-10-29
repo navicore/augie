@@ -32,7 +32,12 @@ public class AugDrawFeature extends AugDrawBase {
 	    currentScrible = null;
 	}
 	
-	public void undoLastLine() {
+	public void undoCurrentScrible() {
+	    currentScrible.clear();
+	    augview.reset();
+	}
+	
+	public void undoLastScrible() {
 		int last = scribles.size();
 		int lastidx = last - 1;
 		if (last > 0) {
