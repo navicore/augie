@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 public class CameraShutterFeature implements AugmentedViewFeature {
 	
-	static final String TAG = TestCameraActivity.TAG;
-	
 	private final AugCamera augcamera;
 	private final AugDrawFeature augdraw;
 	private Point startP;
@@ -35,7 +33,7 @@ public class CameraShutterFeature implements AugmentedViewFeature {
 	    augdraw = d;
     }
 	
-	public void redraw() {
+	public void updateBmp() {
 		//noop	
 	}
 

@@ -6,6 +6,7 @@ package com.onextent.augie.testcamera;
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugmentedView;
 import com.onextent.augie.AugmentedViewFeature;
+import com.onextent.augie.HorizonCheckFeature;
 import com.onextent.augie.HorizonFeature;
 import com.onextent.augie.ShakeResetFeature;
 import com.onextent.augie.camera.AugCamera;
@@ -27,7 +28,7 @@ public class TestCameraActivity extends Activity {
 	
 	private AugmentedView augmentedView;
 	
-	public static final String TAG = "OETEST";  //for logging
+	static final String TAG = AugmentedViewFeature.TAG;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,11 @@ public class TestCameraActivity extends Activity {
         AugDrawFeature drawer = new AugDrawFeature(augmentedView, this);
         augmentedView.addFeature(drawer);
         
-        AugmentedViewFeature horizon = new HorizonFeature(augmentedView, drawer);
+        HorizonFeature horizon = new HorizonFeature(augmentedView, drawer);
         augmentedView.addFeature(horizon);
+        
+        AugmentedViewFeature horizonChecker = new HorizonCheckFeature(augmentedView, horizon, this);
+        augmentedView.addFeature(horizonChecker);
         
         AugmentedViewFeature shutter = new CameraShutterFeature(augcamera, drawer);
         augmentedView.addFeature(shutter);

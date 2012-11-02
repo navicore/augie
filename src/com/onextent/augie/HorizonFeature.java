@@ -79,6 +79,8 @@ public class HorizonFeature extends AugDrawBase {
         }
         return null;
     }
+    
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
         	
@@ -91,7 +93,6 @@ public class HorizonFeature extends AugDrawBase {
 
         case MotionEvent.ACTION_MOVE:
             
-            //todo: settings for faster UI would mean skip interim painting
             if (movingLine != null)  {
                 paintLine(event, true);
             }
@@ -134,9 +135,10 @@ public class HorizonFeature extends AugDrawBase {
         Line line;
         switch (lt) {
         case HORIZONTAL_LINE:
-            p1 = new Point(0, startP.y);
-            p2 = new Point(augview.getWidth(), startP.y);
-            line = new HLine(p1, p2);
+            //p1 = new Point(0, startP.y);
+            //p2 = new Point(augview.getWidth(), startP.y);
+            //line = new HLine(p1, p2);
+            line = new HLine(0, augview.getWidth(), startP.y);
             newMovingLine(line);
             if (moving)
                 augdraw.undoCurrentScrible();
@@ -145,9 +147,10 @@ public class HorizonFeature extends AugDrawBase {
             }
             break;
         case VERTICAL_LINE:
-            p1 = new Point(startP.x, 0);
-            p2 = new Point(startP.x, augview.getHeight());
-            line = new VLine(p1, p2);
+            //p1 = new Point(startP.x, 0);
+            //p2 = new Point(startP.x, augview.getHeight());
+            //line = new VLine(p1, p2);
+            line = new VLine(0, augview.getHeight(), startP.x);
             newMovingLine(line);
             if (moving)
                 augdraw.undoCurrentScrible();
@@ -165,13 +168,18 @@ public class HorizonFeature extends AugDrawBase {
         lines.add(l);
     }
 
-    public void redraw() {
+    public List<Line> getLines() {
+        return lines;
+    }
+    
+    @Override
+    public void updateBmp() {
         for (Line l : lines) {
-            //todo: calculate p2 based on rotation
             augview.getCanvas().drawLine(l.p1.x, l.p1.y, l.p2.x, l.p2.y, augview.getPaint());
         }
     }
 
+    @Override
     public void clear() {
         lines.clear();
     }

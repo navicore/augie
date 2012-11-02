@@ -15,7 +15,7 @@ import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
 	
-	static final String TAG = TestCameraActivity.TAG;
+    protected static final String TAG = AugmentedView.TAG;
 
 	int lastX;
 	int lastY;
@@ -95,7 +95,7 @@ public class AugDrawFeature extends AugDrawBase {
 	}
 
     @Override
-	public void redraw() {
+	public void updateBmp() {
     	for (List<Line> s : scribles) {
     		for (Line l : s) {
     			augview.getCanvas().drawLine(l.p1.x, l.p1.y, l.p2.x, l.p2.y, augview.getPaint());

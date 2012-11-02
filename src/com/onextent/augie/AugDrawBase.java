@@ -3,15 +3,13 @@
  */
 package com.onextent.augie;
 
-import com.onextent.augie.testcamera.TestCameraActivity;
-
 import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class AugDrawBase implements AugmentedViewFeature {
 
-    protected static final String TAG = TestCameraActivity.TAG;
+    protected static final String TAG = AugmentedView.TAG;
     protected final AugmentedView augview;
 
     protected enum LINE_TYPE {HORIZONTAL_LINE, VERTICAL_LINE, BAD_LINE}
@@ -20,21 +18,25 @@ public class AugDrawBase implements AugmentedViewFeature {
 	protected class Line {
 		Point p1;
     	Point p2;
+    	Point center;
     	Line(Point p1, Point p2) {
 	        this.p1 = p1;
 	        this.p2 = p2;
+	        this.center = null;
         }
     }
 	protected class VLine extends Line {
 
-		VLine(Point p1, Point p2) {
-	        super(p1, p2);
+		VLine(int top, int bottom, int x) {
+		    super(new Point(x, top), new Point(x, bottom));
+		    center = new Point(x, bottom / 2);
         }
 	}
 	protected class HLine extends Line {
 
-		HLine(Point p1, Point p2) {
-	        super(p1, p2);
+		HLine(int left, int right, int y) {
+		    super(new Point(left, y), new Point(right, y));
+		    center = new Point(right / 2, y);
         }
 	}
 	
@@ -48,7 +50,7 @@ public class AugDrawBase implements AugmentedViewFeature {
 	    return false;
     }
 
-	public void redraw() {
+	public void updateBmp() {
 	    // TODO Auto-generated method stub
 	    
     }

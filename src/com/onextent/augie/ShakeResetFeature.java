@@ -23,7 +23,7 @@ import android.view.View;
 
 public class ShakeResetFeature implements AugmentedViewFeature {
 
-	static final String TAG = TestCameraActivity.TAG;
+    protected static final String TAG = AugmentedView.TAG;
 	private final SensorManager mSensorManager;
 	private float mAccel; 			// acceleration apart from gravity
 	private float mAccelCurrent; 	// current acceleration including gravity
@@ -61,7 +61,7 @@ public class ShakeResetFeature implements AugmentedViewFeature {
 		return false;
 	}
 
-	public void redraw() {
+	public void updateBmp() {
 		//noop
 	}
 

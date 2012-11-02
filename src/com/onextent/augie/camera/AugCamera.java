@@ -13,7 +13,6 @@ import com.onextent.augie.testcamera.TestCameraActivity;
 
 public class AugCamera implements AugmentedViewFeature {
 
-	static final String TAG = TestCameraActivity.TAG;
 	private Camera camera;
 	private int camera_id;
 	
@@ -65,7 +64,7 @@ public class AugCamera implements AugmentedViewFeature {
 		return false;
 	}
 
-	public void redraw() {
+	public void updateBmp() {
 		// TODO Auto-generated method stub
 
 	}

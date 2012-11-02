@@ -20,7 +20,7 @@ import android.view.View.OnTouchListener;
 
 public class AugmentedView extends View implements OnTouchListener {
 	
-	static final String TAG = TestCameraActivity.TAG;
+    static final String TAG = AugmentedViewFeature.TAG;
 	
 	Bitmap bitmap;
 	Canvas canvas;
@@ -57,7 +57,7 @@ public class AugmentedView extends View implements OnTouchListener {
     public void reset() {
 	    initBmp();
 	    for (AugmentedViewFeature f : features) {
-	    	f.redraw();
+	    	f.updateBmp();
 	    }
 	    invalidate();
     }
@@ -102,10 +102,6 @@ public class AugmentedView extends View implements OnTouchListener {
 	   
 		boolean handled = false;
 		try {
-			switch(event.getAction() & MotionEvent.ACTION_MASK) {
-			case MotionEvent.ACTION_DOWN:
-				break;
-			}
 	    	for (AugmentedViewFeature f : features) {
 	    		boolean b = f.onTouch(v, event);
 	    		if (b) handled = true;

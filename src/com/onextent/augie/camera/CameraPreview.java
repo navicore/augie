@@ -5,6 +5,7 @@ package com.onextent.augie.camera;
 
 import java.io.IOException;
 
+import com.onextent.augie.AugmentedViewFeature;
 import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.app.Activity;
@@ -16,9 +17,10 @@ import android.util.Log;
 enum TOUCH_STATE {NOSTATE, SHOOTING, ZOOMING};
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-	static final String TAG = TestCameraActivity.TAG;
     private final SurfaceHolder holder;
     private final AugCamera augcamera;
+    
+    protected final String TAG = AugmentedViewFeature.TAG;
    
     public CameraPreview(Activity context, AugCamera c) {
         super(context);
