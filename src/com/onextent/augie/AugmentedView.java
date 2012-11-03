@@ -9,6 +9,7 @@ import java.util.List;
 import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -25,16 +26,21 @@ public class AugmentedView extends View implements OnTouchListener {
 	Bitmap bitmap;
 	Canvas canvas;
 	final Paint paint;
+	final SharedPreferences prefs;
 
 	List<AugmentedViewFeature> features;
 	
-	public AugmentedView(Context context) {
+	public AugmentedView(Context context, SharedPreferences p) {
 	    super(context);
+	    prefs = p;
+	    
 	    paint = new Paint();
 	    paint.setStyle(Paint.Style.STROKE); 
-	    paint.setStrokeWidth(18);
+        
+	    float stroke_w = Float.parseFloat(prefs.getString("DRAW_LINE_WIDTH", "18"));
+        paint.setStrokeWidth( stroke_w );
+        
 	    paint.setColor(Color.WHITE);
-	    //paint.setColor(Color.BLACK);
 	    paint.setAlpha(Color.WHITE);
 	    features = new ArrayList<AugmentedViewFeature>();
     }
@@ -55,11 +61,13 @@ public class AugmentedView extends View implements OnTouchListener {
 	}
 	
     public void reset() {
-	    initBmp();
+	    boolean succ = initBmp(getWidth(), getHeight());
+	    if (succ) {
 	    for (AugmentedViewFeature f : features) {
 	    	f.updateBmp();
 	    }
 	    invalidate();
+	    }
     }
 
     public void resume() {
@@ -74,8 +82,11 @@ public class AugmentedView extends View implements OnTouchListener {
 	    }
     }
 
-    public void initBmp() {
-	    Bitmap img = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+    public boolean initBmp(int w, int h) {
+        //int w = getWidth();
+        //int h = getHeight();
+        if (w <= 0 || h <= 0) return false;
+	    Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 	    Canvas c = new Canvas();
 	    c.setBitmap(img);
 	    if (bitmap != null) {
@@ -83,12 +94,12 @@ public class AugmentedView extends View implements OnTouchListener {
 	    }
 	    bitmap = img;
 	    canvas = c;
-
+	    return true;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    	initBmp();
+    	initBmp(w, h);
     }
 
     @Override

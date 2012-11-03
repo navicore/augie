@@ -8,6 +8,9 @@ import com.onextent.augie.AugDrawBase.Line;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -19,6 +22,7 @@ import android.view.View;
 public class HorizonCheckFeature implements AugmentedViewFeature, SensorEventListener {
 
     protected static final String TAG = AugmentedView.TAG;
+    private final SharedPreferences prefs;
     private final SensorManager mSensorManager;
     private final AugmentedView augview;
     private final HorizonFeature horizonFeture;
@@ -30,8 +34,9 @@ public class HorizonCheckFeature implements AugmentedViewFeature, SensorEventLis
     private double mAngle;
     private long lastUpdateTime;
 
-    public HorizonCheckFeature(AugmentedView v, HorizonFeature h, Activity activity) {
+    public HorizonCheckFeature(AugmentedView v, HorizonFeature h, Activity activity, SharedPreferences p) {
 
+        prefs = p;
         lastUpdateTime = 0;
         mAngle = 0;
         augview = v;
@@ -69,18 +74,25 @@ public class HorizonCheckFeature implements AugmentedViewFeature, SensorEventLis
         augview.getCanvas().drawLine(x1, y1, x2, y2, augview.getPaint());
     }
     public void updateBmp() {
-        //todo: paint red
+        if (!prefs.getBoolean("HORIZON_CHECKER", true)) return;
 
-        /*
-             X1 = 0 
-             Y1 = Yc + Xc * tan(a) 
-             X2 = screenWidth 
-             Y2 = Yc - (screenWidth - Xc) * tan(a)
+        /* X1 = 0 
+           Y1 = Yc + Xc * tan(a) 
+           X2 = screenWidth 
+           Y2 = Yc - (screenWidth - Xc) * tan(a)
          */
+        Paint p = augview.getPaint();
+        float orig_w = p.getStrokeWidth();
+        int old_color = p.getColor();
+        p.setColor(Color.RED);
         for (Line line : horizonFeture.getLines()) {
+            float temp_w = line.width;
+            p.setStrokeWidth( temp_w );
             if (line instanceof HLine) correctHorizontal(line);
             else correctVertical(line);
         }
+        p.setColor(old_color);
+        p.setStrokeWidth(orig_w);
     }
 
     public void clear() {
@@ -97,12 +109,12 @@ public class HorizonCheckFeature implements AugmentedViewFeature, SensorEventLis
 
     public void onSensorChanged(SensorEvent event) {
 
-        if ((lastUpdateTime != 0) && 
-                ((System.currentTimeMillis() - lastUpdateTime) < 200)) return;
+        if (horizonFeture.getLines() == null) return;
+
+        if ( ( lastUpdateTime != 0 ) && 
+                ((System.currentTimeMillis() - lastUpdateTime) < 300)) return;
 
         lastUpdateTime = System.currentTimeMillis();
-
-        if (horizonFeture.getLines().isEmpty()) return;
 
         switch (event.sensor.getType()) { 
         case Sensor.TYPE_ACCELEROMETER:

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,8 +21,8 @@ public class HorizonFeature extends AugDrawBase {
     private List<Line> lines;
     private final AugDrawFeature augdraw;
     
-    public HorizonFeature(AugmentedView augview, AugDrawFeature augdraw) {
-        super(augview);
+    public HorizonFeature(AugmentedView augview, AugDrawFeature augdraw, SharedPreferences p) {
+        super(augview, p);
         this.lines = new ArrayList<Line>();
         this.augdraw = augdraw;
         this.movingLine = null;
@@ -174,9 +176,14 @@ public class HorizonFeature extends AugDrawBase {
     
     @Override
     public void updateBmp() {
+        Paint p = augview.getPaint();
+        float orig_w = p.getStrokeWidth();
         for (Line l : lines) {
+            float temp_w = l.width;
+            p.setStrokeWidth( temp_w );
             augview.getCanvas().drawLine(l.p1.x, l.p1.y, l.p2.x, l.p2.y, augview.getPaint());
         }
+        p.setStrokeWidth(orig_w);
     }
 
     @Override

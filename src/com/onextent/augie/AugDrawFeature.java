@@ -10,6 +10,7 @@ import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -25,7 +26,7 @@ public class AugDrawFeature extends AugDrawBase {
 
 	public AugDrawFeature(AugmentedView v, Activity activity) {
 		
-		super(v);
+		super(v, PreferenceManager.getDefaultSharedPreferences(activity));
 		augview = v;
 	    lastX = -1;
 	    scribles = new ArrayList<List<Line>>();

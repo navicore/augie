@@ -15,14 +15,17 @@ import com.onextent.augie.camera.CameraShutterFeature;
 import com.onextent.augie.testcamera.R;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
-import android.hardware.Camera;
 
+import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.util.Log;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 public class TestCameraActivity extends Activity {
 	
@@ -34,13 +37,15 @@ public class TestCameraActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         setContentView(R.layout.main);
 
-        augmentedView = new AugmentedView(this);
+        augmentedView = new AugmentedView(this, prefs);
         
         AugCamera augcamera = new AugCamera();
         augmentedView.addFeature(augcamera);
@@ -49,11 +54,14 @@ public class TestCameraActivity extends Activity {
         AugDrawFeature drawer = new AugDrawFeature(augmentedView, this);
         augmentedView.addFeature(drawer);
         
-        HorizonFeature horizon = new HorizonFeature(augmentedView, drawer);
-        augmentedView.addFeature(horizon);
-        
-        AugmentedViewFeature horizonChecker = new HorizonCheckFeature(augmentedView, horizon, this);
-        augmentedView.addFeature(horizonChecker);
+        HorizonFeature horizon = new HorizonFeature(augmentedView, drawer, prefs);
+       
+        if (prefs.getBoolean("HORIZON_CHECKER", true)) {
+            AugmentedViewFeature horizonChecker = new HorizonCheckFeature(augmentedView, 
+                    horizon, this, prefs);
+            augmentedView.addFeature(horizonChecker);
+        }
+        augmentedView.addFeature(horizon); //paint over checker
         
         AugmentedViewFeature shutter = new CameraShutterFeature(augcamera, drawer);
         augmentedView.addFeature(shutter);
@@ -85,5 +93,11 @@ public class TestCameraActivity extends Activity {
     protected void onStop() {
       augmentedView.stop();
       super.onStop();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        startActivity(new Intent(this, TestCameraPreferences.class));
+        return(true);
     }
 }
