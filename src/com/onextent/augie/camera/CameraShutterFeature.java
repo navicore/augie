@@ -13,8 +13,11 @@ import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugmentedViewFeature;
 import com.onextent.augie.testcamera.TestCameraActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,11 +32,19 @@ public class CameraShutterFeature implements AugmentedViewFeature {
 	private final AugCamera augcamera;
 	private final AugDrawFeature augdraw;
 	private Point startP;
+	private final SharedPreferences prefs;
+	private final Context context;
+	private final PictureCallback jpgCb;
+	private final PictureCallback rawCb;
 	
-	public CameraShutterFeature(AugCamera c, AugDrawFeature d) {
+	public CameraShutterFeature(Context ctx, AugCamera c, AugDrawFeature d, SharedPreferences p) {
 	    super();
+	    prefs = p;
+	    context = ctx;
 	    augcamera = c;
 	    augdraw = d;
+	    jpgCb = new CameraPictureCallback(".jpg");
+	    rawCb = new CameraPictureCallback(".raw");
     }
 	
 	public void updateBmp() {
@@ -49,7 +60,6 @@ public class CameraShutterFeature implements AugmentedViewFeature {
             startP = new Point((int) event.getX(), (int) event.getY());
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
-            //Toast.makeText(cameraActivity, "action ptr down", Toast.LENGTH_SHORT).show();
 			break;
 		case MotionEvent.ACTION_MOVE:
 			break;
@@ -62,16 +72,17 @@ public class CameraShutterFeature implements AugmentedViewFeature {
             if (scrlen < MAX_SCRIBLE_LEN && dist < MAX_SCRIBLE_END_DISTANCE) {
             	Camera c = augcamera.getCamera();
             	if (c != null)  {
-            		//Toast.makeText(cameraActivity, "shooting...", Toast.LENGTH_SHORT).show();
-            		c.takePicture(null, null, mPicture);
+            	    if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
+            	        c.takePicture(null, rawCb, jpgCb);
+            	    else
+            	        c.takePicture(null, null, jpgCb);
             		augdraw.undoLastScrible();
             	} else {
-            		//Toast.makeText(cameraActivity, "error!  camera not found", Toast.LENGTH_SHORT).show();
+            		Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
             	}
             }
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
-            //Toast.makeText(cameraActivity, "action ptr up", Toast.LENGTH_SHORT).show();
 			break;
 		default:
 			return false;
@@ -85,13 +96,26 @@ public class CameraShutterFeature implements AugmentedViewFeature {
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+    private class CameraPictureCallback implements PictureCallback {
+        
+        private final String suffix;
+        
+        CameraPictureCallback(String suffix) {
+            this.suffix = suffix;
+        }
 
         public void onPictureTaken(byte[] data, Camera camera) {
 
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            if (data == null){
+                Log.d(TAG, suffix + " data is null");
+                Toast.makeText(context, "this device does not support " + suffix, Toast.LENGTH_LONG).show();
+                return;
+            }
+            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, suffix);
             if (pictureFile == null){
-                Log.d(TAG, "Error creating media file, check storage permissions");
+                String msg = "Error storing file, check storage permissions";
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                Log.d(TAG, msg);
                 return;
             }
 
@@ -99,7 +123,7 @@ public class CameraShutterFeature implements AugmentedViewFeature {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
-                //Toast.makeText(cameraActivity, "picture saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "file saved as " + pictureFile.getName(), Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -109,10 +133,10 @@ public class CameraShutterFeature implements AugmentedViewFeature {
             if (c != null)
             	c.startPreview();
         }
-    };
+    }
     
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
+    private static File getOutputMediaFile(int type, String suf){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -131,10 +155,10 @@ public class CameraShutterFeature implements AugmentedViewFeature {
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "IMG_"+ timeStamp + ".jpg");
+            "IMG_"+ timeStamp + suf);
         } else if(type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "VID_"+ timeStamp + ".mp4");
+            "VID_"+ timeStamp + suf);
         } else {
             return null;
         }
