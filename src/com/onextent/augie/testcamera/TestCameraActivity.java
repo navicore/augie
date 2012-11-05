@@ -6,6 +6,7 @@ package com.onextent.augie.testcamera;
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugmentedView;
 import com.onextent.augie.AugmentedViewFeature;
+import com.onextent.augie.FrameLevelerFeature;
 import com.onextent.augie.HorizonCheckFeature;
 import com.onextent.augie.HorizonFeature;
 import com.onextent.augie.ShakeResetFeature;
@@ -56,11 +57,13 @@ public class TestCameraActivity extends Activity {
         
         HorizonFeature horizon = new HorizonFeature(augmentedView, drawer, prefs);
        
-        if (prefs.getBoolean("HORIZON_CHECKER", true)) {
-            AugmentedViewFeature horizonChecker = new HorizonCheckFeature(augmentedView, 
-                    horizon, this, prefs);
-            augmentedView.addFeature(horizonChecker);
-        }
+        AugmentedViewFeature horizonChecker = new HorizonCheckFeature(augmentedView, 
+                horizon, this, prefs);
+        augmentedView.addFeature(horizonChecker);
+        AugmentedViewFeature frameLeveler = new FrameLevelerFeature(augmentedView, 
+                horizon, this, prefs);
+        augmentedView.addFeature(frameLeveler);
+
         augmentedView.addFeature(horizon); //paint over checker
         
         AugmentedViewFeature shutter = new CameraShutterFeature(augcamera, drawer);
@@ -68,8 +71,9 @@ public class TestCameraActivity extends Activity {
         
         ShakeResetFeature shakeReseter = new ShakeResetFeature(augmentedView, this);
         augmentedView.addFeature(shakeReseter);
-        shakeReseter.registerOneShakeReset(drawer);
-        shakeReseter.registerTwoShakeReset(horizon);
+        //shakeReseter.registerOneShakeReset(drawer);
+        //shakeReseter.registerTwoShakeReset(horizon);
+        shakeReseter.registerTwoShakeReset(drawer);
         
         FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
         layout.addView(camPreview); //bottom layer

@@ -77,12 +77,11 @@ public class AugCamera implements AugmentedViewFeature {
 	// the camera preview should handle releasing the camera
 	
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		
+	    releaseCamera();
 	}
 
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -57,17 +57,6 @@ public class HorizonFeature extends AugDrawBase {
         return LINE_TYPE.BAD_LINE;
     }
   
-    static float CLOSE_PIXELS = 25;
-    public boolean closeToEdge(MotionEvent e) {
-        float x = e.getX();
-        float y = e.getY();
-        if ( x < CLOSE_PIXELS ) return true;
-        if ( x > (augview.getWidth() - CLOSE_PIXELS )) return true;
-        if ( y < CLOSE_PIXELS ) return true;
-        if ( y > (augview.getHeight() - CLOSE_PIXELS )) return true;
-        
-        return false;
-    }
     public Line getLine(MotionEvent e) {
         if (closeToEdge(e)) return null;
         for (Line l : lines) {
@@ -133,36 +122,41 @@ public class HorizonFeature extends AugDrawBase {
             lt = getLineType(startP, endP);
         }
         
-        Point p1, p2;
         Line line;
+        float vwidth = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
+        float hwidth = Float.parseFloat(prefs.getString("HORIZONTAL_LINE_WIDTH", "18"));
         switch (lt) {
         case HORIZONTAL_LINE:
-            //p1 = new Point(0, startP.y);
-            //p2 = new Point(augview.getWidth(), startP.y);
-            //line = new HLine(p1, p2);
-            line = new HLine(0, augview.getWidth(), startP.y);
+            line = new HLine(0, augview.getWidth(), startP.y, hwidth);
             newMovingLine(line);
             if (moving)
                 augdraw.undoCurrentScrible();
             else {
                 augdraw.undoLastScrible();
             }
+            if (ycloseToEdge(event)) {
+                deleteMovingLine();
+            }
             break;
         case VERTICAL_LINE:
-            //p1 = new Point(startP.x, 0);
-            //p2 = new Point(startP.x, augview.getHeight());
-            //line = new VLine(p1, p2);
-            line = new VLine(0, augview.getHeight(), startP.x);
+            line = new VLine(0, augview.getHeight(), startP.x, vwidth);
             newMovingLine(line);
             if (moving)
                 augdraw.undoCurrentScrible();
             else {
                 augdraw.undoLastScrible();
+            }
+            if (xcloseToEdge(event)) {
+                deleteMovingLine();
             }
             break;
         case BAD_LINE:
             break;
         }
+    }
+    private void deleteMovingLine() {
+        lines.remove(movingLine);
+        movingLine = null;
     }
     private void newMovingLine(Line l) {
         lines.remove(movingLine);

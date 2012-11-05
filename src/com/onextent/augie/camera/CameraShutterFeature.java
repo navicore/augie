@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 public class CameraShutterFeature implements AugmentedViewFeature {
 	
+    private static final int MAX_SCRIBLE_LEN = 10;
+    private static final int MAX_SCRIBLE_END_DISTANCE = 50;
+
 	private final AugCamera augcamera;
 	private final AugDrawFeature augdraw;
 	private Point startP;
@@ -54,8 +57,9 @@ public class CameraShutterFeature implements AugmentedViewFeature {
 
             Point endP = new Point((int) event.getX(), (int) event.getY());
             double dist = Math.sqrt(Math.pow(startP.x-endP.x, 2) + Math.pow(startP.y-endP.y, 2));
-            
-            if (dist < 50) {
+           
+            int scrlen = augdraw.getScribleLength();
+            if (scrlen < MAX_SCRIBLE_LEN && dist < MAX_SCRIBLE_END_DISTANCE) {
             	Camera c = augcamera.getCamera();
             	if (c != null)  {
             		//Toast.makeText(cameraActivity, "shooting...", Toast.LENGTH_SHORT).show();
@@ -113,7 +117,8 @@ public class CameraShutterFeature implements AugmentedViewFeature {
         // using Environment.getExternalStorageState() before doing this.
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                  Environment.DIRECTORY_PICTURES), "MikesCamera");
+                  Environment.DIRECTORY_DCIM), "Augie");
+//                  Environment.DIRECTORY_PICTURES), "Camera");
        
         if ( !mediaStorageDir.exists() ){
             if (! mediaStorageDir.mkdirs()){
