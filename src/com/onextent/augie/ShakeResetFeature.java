@@ -137,3 +137,4 @@ public class ShakeResetFeature implements AugmentedViewFeature, SensorEventListe
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }
+

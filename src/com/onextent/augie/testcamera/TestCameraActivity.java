@@ -66,7 +66,7 @@ public class TestCameraActivity extends Activity {
 
         augmentedView.addFeature(horizon); //paint over checker
         
-        AugmentedViewFeature shutter = new CameraShutterFeature(this, augcamera, drawer, prefs);
+        AugmentedViewFeature shutter = CameraShutterFeature.getInstance(this, augcamera, drawer, prefs);
         augmentedView.addFeature(shutter);
         
         ShakeResetFeature shakeReseter = new ShakeResetFeature(augmentedView, this);

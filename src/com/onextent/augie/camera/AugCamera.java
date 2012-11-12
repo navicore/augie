@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.onextent.augie.AugmentedViewFeature;
-import com.onextent.augie.testcamera.TestCameraActivity;
 
 public class AugCamera implements AugmentedViewFeature {
 
@@ -86,3 +85,4 @@ public class AugCamera implements AugmentedViewFeature {
 	}
 
 }
+
