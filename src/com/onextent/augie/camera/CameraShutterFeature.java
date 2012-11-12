@@ -11,24 +11,23 @@ import android.util.Log;
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugmentedViewFeature;
 
+/*
+ * factory to allow pre-icecreamsandwich touchfocus devices
+ */
 public abstract class CameraShutterFeature implements AugmentedViewFeature {
 
-    private static CameraShutterFeature sInstance;
-
     public static CameraShutterFeature getInstance(Context ctx, 
-                                                    AugCamera c, 
-                                                    AugDrawFeature d, 
-                                                    SharedPreferences p) {
+            AugCamera c, 
+            AugDrawFeature d, 
+            SharedPreferences p) {
+        CameraShutterFeature sInstance;
 
-        if (sInstance == null) {
-
-            int sdkVersion = Build.VERSION.SDK_INT;
-            Log.d(TAG, "CameraShutterFeature sdkVersion=" + sdkVersion);
-            if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
-                sInstance = new SimpleCameraShutterFeature(ctx, c, d, p);
-            } else  {
-                sInstance = new SimpleCameraShutterFeature(ctx, c, d, p);
-            }
+        int sdkVersion = Build.VERSION.SDK_INT;
+        Log.d(TAG, "CameraShutterFeature sdkVersion=" + sdkVersion);
+        if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
+            sInstance = new SimpleCameraShutterFeature(ctx, c, d, p);
+        } else  {
+            sInstance = new TouchFocusShutterFeature(ctx, c, d, p);
         }
         return sInstance;
     }

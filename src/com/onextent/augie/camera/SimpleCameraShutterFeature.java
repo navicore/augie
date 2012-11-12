@@ -10,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.onextent.augie.AugDrawFeature;
-import com.onextent.augie.AugmentedViewFeature;
-import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,7 +27,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
     private static final int MAX_SCRIBLE_LEN = 10;
     private static final int MAX_SCRIBLE_END_DISTANCE = 50;
 
-	private final AugCamera augcamera;
+	protected final AugCamera augcamera;
 	private final AugDrawFeature augdraw;
 	private Point startP;
 	private final SharedPreferences prefs;
@@ -51,6 +49,19 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 		//noop	
 	}
 
+	protected void takePicture() {
+	    Camera c = augcamera.getCamera();
+	    if (c != null)  {
+	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
+	            c.takePicture(null, rawCb, jpgCb);
+	        else
+	            c.takePicture(null, null, jpgCb);
+	        augdraw.undoLastScrible();
+	    } else {
+	        Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
+	    }
+	}
+
 	public boolean onTouch(View v, MotionEvent event) {
 
 		try {
@@ -70,16 +81,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
            
             int scrlen = augdraw.getScribleLength();
             if (scrlen < MAX_SCRIBLE_LEN && dist < MAX_SCRIBLE_END_DISTANCE) {
-            	Camera c = augcamera.getCamera();
-            	if (c != null)  {
-            	    if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
-            	        c.takePicture(null, rawCb, jpgCb);
-            	    else
-            	        c.takePicture(null, null, jpgCb);
-            		augdraw.undoLastScrible();
-            	} else {
-            		Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
-            	}
+                
+                takePicture();
             }
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
@@ -170,6 +173,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 	}
 
 	public void resume() {
+        Log.d(TAG, "SimpleCameraShutterFeature resume");
 		//noop
 	}
 
