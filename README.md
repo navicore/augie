@@ -22,10 +22,10 @@ Augmented reality Tools, Libraries, and Applications
   * ~~recognize clockwise / couner-clockwise~~
   * ~~convert to rect~~
 1. TouchFocusShutterFeature
-  * ~~on 'up' redraw scrible as rectangle
-      * unless moving rect
-      * blue for focus
-      * green for meter~~
+  * ~~on 'up' redraw scrible as rectangle~~
+      * ~~unless moving rect~~
+      * ~~blue for focus~~
+      * ~~green for meter~~
   * adjust position of rect to camera movement
   * adjust position of rect to faces (snap to nearby face)
   * rect should follow faces
