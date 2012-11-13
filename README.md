@@ -16,16 +16,16 @@ Augmented reality Tools, Libraries, and Applications
 1. Touch Focus
 1. ~~Create factory for pre-ics and post-ics~~
 1. Rect Object
-  * a 'point is within boards' function
+  * a 'point is within bounds' function
   * a 'move' function(from_point, to_point)
-1. Gesture Object
-  * recognize clockwise / couner-clockwise
-  * convert to rect
+1. ~~Gesture Object~~
+  * ~~recognize clockwise / couner-clockwise~~
+  * ~~convert to rect~~
 1. TouchFocusShutterFeature
-  * on 'up' redraw scrible as rectangle
+  * ~~on 'up' redraw scrible as rectangle
       * unless moving rect
       * blue for focus
-      * green for meter
+      * green for meter~~
   * adjust position of rect to camera movement
   * adjust position of rect to faces (snap to nearby face)
   * rect should follow faces
