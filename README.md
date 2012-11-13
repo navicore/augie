@@ -5,7 +5,6 @@ Augmented reality Tools, Libraries, and Applications
 ----------------------------------------------------
 
 ### TODO
-
 1. Touch Focus
   1. Rect Object
     * a 'point is within boards' function
@@ -18,11 +17,9 @@ Augmented reality Tools, Libraries, and Applications
       * unless moving rect
       * blue for focus
       * green for meter
-
 1. Properties Activity
   * support ice cream fancy stuff
   * add camera settings stored by name
-
 1. Properties Activity
 
 ### BUGS
