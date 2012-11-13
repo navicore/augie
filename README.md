@@ -2,6 +2,7 @@ Augie
 =====
 Augmented reality Tools, Libraries, and Applications
 ----------------------------------------------------
+
 ### TODO
 1. Touch Focus
   1. ~~Create factory for pre-ics and post-ics~~
@@ -25,6 +26,7 @@ Augmented reality Tools, Libraries, and Applications
   * register features
     * when they are turned on 
     * with a set of required features
+
 ### BUGS
 1. release camera on suspend better, why does prev freeze?
 1. detect boarders more reliably
