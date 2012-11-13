@@ -26,6 +26,9 @@ Augmented reality Tools, Libraries, and Applications
       * unless moving rect
       * blue for focus
       * green for meter
+  * adjust position of rect to camera movement
+  * adjust position of rect to faces (snap to nearby face)
+  * rect should follow faces
 1. Settings Activity
   * ~~basic legacy prefs activity~~
   * support ice cream fancy stuff
