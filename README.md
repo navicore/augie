@@ -24,8 +24,7 @@ Augmented reality Tools, Libraries, and Applications
 1. Properties Activity
 1. Feature Dependancy Manager
   * unregister features when they are turned off
-  * register features when they are turned on
-    * need to be able to accompany the 'reg' call with a set of required features to be called first
+  * register features when they are turned on but need to be able to accompany the 'reg' call with a set of required features to be called first
     
 
 ### BUGS
