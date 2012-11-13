@@ -29,6 +29,12 @@ Augmented reality Tools, Libraries, and Applications
   * adjust position of rect to camera movement
   * adjust position of rect to faces (snap to nearby face)
   * rect should follow faces
+1. Pano Helper
+  * a begin/end
+      * button
+      * gesture
+  * remember frame borders
+  * stitcher
 1. Settings Activity
   * ~~basic legacy prefs activity~~
   * support ice cream fancy stuff
@@ -39,6 +45,23 @@ Augmented reality Tools, Libraries, and Applications
   * register features
       * when they are turned on 
       * with a set of required features
+1. Fire sharing Intents
+  * email
+  * g+
+  * instagram
+  * facebook
+1. Fire processing Intents
+  * instagram
+  * photoshop
+1. Processing
+  * Edit
+      1. crop
+      1. rotate
+      1. brightness
+      1. sharpness
+      1. noise reduction
+      1. saturation
+  * Effects
 
 ### BUGS
 1. release camera on suspend better, why does prev freeze?
