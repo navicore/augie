@@ -24,17 +24,18 @@ import android.widget.Toast;
 
 public class SimpleCameraShutterFeature extends CameraShutterFeature {
 	
-    private static final int MAX_SCRIBLE_LEN = 10;
-    private static final int MAX_SCRIBLE_END_DISTANCE = 50;
-
+	protected final SharedPreferences prefs;
 	protected final AugCamera augcamera;
-	private final AugDrawFeature augdraw;
+	protected final AugDrawFeature augdraw;
+	
 	private Point startP;
-	private final SharedPreferences prefs;
 	private final Context context;
 	private final PictureCallback jpgCb;
 	private final PictureCallback rawCb;
 	
+    private static final int MAX_SCRIBLE_LEN = 10;
+    private static final int MAX_SCRIBLE_END_DISTANCE = 50;
+
 	public SimpleCameraShutterFeature(Context ctx, AugCamera c, AugDrawFeature d, SharedPreferences p) {
 	    super();
 	    prefs = p;
@@ -50,6 +51,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 	}
 
 	protected void takePicture() {
+	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
 	    Camera c = augcamera.getCamera();
 	    if (c != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
