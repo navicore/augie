@@ -32,10 +32,10 @@ Augmented reality Tools, Libraries, and Applications
   * add camera settings stored by name
 1. Properties Activity
 1. Feature Dependancy Manager
-  * unregister features when they are turned off
-  * register features
-    1. when they are turned on 
-    1. with a set of required features
+  1. unregister features when they are turned off
+  1. register features
+    * when they are turned on 
+    * with a set of required features
 
 ### BUGS
 1. release camera on suspend better, why does prev freeze?
