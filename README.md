@@ -4,6 +4,14 @@ Augmented reality Tools, Libraries, and Applications
 ----------------------------------------------------
 
 ### TODO
+1. ~~Draw~~
+  * ~~Etchasketch-like~~
+  * ~~Shake Clear~~
+1. ~~Draw Horizons~~
+  * ~~Horizon and Vertical~~
+  * ~~Level~~
+  * ~~Drag Delete~~
+1. ~~Touch Shutter~~
 1. Touch Focus
   1. ~~Create factory for pre-ics and post-ics~~
   1. Rect Object
@@ -17,7 +25,8 @@ Augmented reality Tools, Libraries, and Applications
       * unless moving rect
       * blue for focus
       * green for meter
-1. Properties Activity
+1. Settings Activity
+  * ~~basic legacy prefs activity~~
   * support ice cream fancy stuff
   * add camera settings stored by name
 1. Properties Activity
