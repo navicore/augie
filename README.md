@@ -6,6 +6,7 @@ Augmented reality Tools, Libraries, and Applications
 
 ### TODO
 1. Touch Focus
+  1. ~~Create factory for pre-ics and post-ics~~
   1. Rect Object
     * a 'point is within boards' function
     * a 'move' function(from_point, to_point)
