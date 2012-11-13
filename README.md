@@ -34,8 +34,8 @@ Augmented reality Tools, Libraries, and Applications
 1. Feature Dependancy Manager
   * unregister features when they are turned off
   * register features
-    * when they are turned on 
-    * with a set of required features
+      * when they are turned on 
+      * with a set of required features
 
 ### BUGS
 1. release camera on suspend better, why does prev freeze?
