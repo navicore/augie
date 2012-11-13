@@ -12,6 +12,7 @@ Augmented reality Tools, Libraries, and Applications
   * ~~Level~~
   * ~~Drag Delete~~
 1. ~~Touch Shutter~~
+1. ~~RAW~~
 1. Touch Focus
   1. ~~Create factory for pre-ics and post-ics~~
   1. Rect Object
