@@ -23,9 +23,9 @@ Augmented reality Tools, Libraries, and Applications
   * convert to rect
 1. TouchFocusShutterFeature
   * on 'up' redraw scrible as rectangle
-    * unless moving rect
-    * blue for focus
-    * green for meter
+      * unless moving rect
+      * blue for focus
+      * green for meter
 1. Settings Activity
   * ~~basic legacy prefs activity~~
   * support ice cream fancy stuff
