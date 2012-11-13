@@ -40,5 +40,6 @@ Augmented reality Tools, Libraries, and Applications
 ### BUGS
 1. release camera on suspend better, why does prev freeze?
 1. detect boarders more reliably
+1. horizon gets confussed if device is oriented diff
 
 
