@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.onextent.augie.AugDrawFeature;
+import com.onextent.augie.marker.AugScrible;
+import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,14 +30,10 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 	protected final AugCamera augcamera;
 	protected final AugDrawFeature augdraw;
 	
-	private Point startP;
 	private final Context context;
 	private final PictureCallback jpgCb;
 	private final PictureCallback rawCb;
 	
-    private static final int MAX_SCRIBLE_LEN = 10;
-    private static final int MAX_SCRIBLE_END_DISTANCE = 50;
-
 	public SimpleCameraShutterFeature(Context ctx, AugCamera c, AugDrawFeature d, SharedPreferences p) {
 	    super();
 	    prefs = p;
@@ -70,7 +68,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 			
 		switch(event.getAction() & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN:
-            startP = new Point((int) event.getX(), (int) event.getY());
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			break;
@@ -78,14 +75,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 			break;
 		case MotionEvent.ACTION_UP:
 
-            Point endP = new Point((int) event.getX(), (int) event.getY());
-            double dist = Math.sqrt(Math.pow(startP.x-endP.x, 2) + Math.pow(startP.y-endP.y, 2));
-           
-            int scrlen = augdraw.getScribleLength();
-            if (scrlen < MAX_SCRIBLE_LEN && dist < MAX_SCRIBLE_END_DISTANCE) {
-                
-                takePicture();
-            }
+            AugScrible scrible = augdraw.getCurrentScrible();
+            if (scrible.getGestureType() == GESTURE_TYPE.TAP) takePicture();
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
 			break;

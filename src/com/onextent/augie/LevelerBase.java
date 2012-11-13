@@ -7,7 +7,9 @@ package com.onextent.augie;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.onextent.augie.AugDrawBase.Line;
+import com.onextent.augie.marker.AugLine;
+import com.onextent.augie.marker.MarkerFactory;
+import com.onextent.augie.marker.impl.AugLineImpl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,12 +31,12 @@ public abstract class LevelerBase implements AugmentedViewFeature, SensorEventLi
 
     protected static final String TAG = AugmentedViewFeature.TAG;
     protected static final Map<Double, Double> tanCache;
-    protected static final Map<String, Line> vlineCache;
-    protected static final Map<String, Line> hlineCache;
+    protected static final Map<String, AugLine> vlineCache;
+    protected static final Map<String, AugLine> hlineCache;
     static {
         tanCache = new HashMap<Double, Double>();
-        hlineCache = new HashMap<String, Line>();
-        vlineCache = new HashMap<String, Line>();
+        hlineCache = new HashMap<String, AugLine>();
+        vlineCache = new HashMap<String, AugLine>();
     }
     protected final SharedPreferences prefs;
     protected final SensorManager mSensorManager;
@@ -72,35 +74,35 @@ public abstract class LevelerBase implements AugmentedViewFeature, SensorEventLi
         return v;
     }
 
-    protected Line correctVertical(Line line) {
+    protected AugLine correctVertical(AugLine line) {
 
-        Line cline;
-        String key = line.center.x + "." + mAngle;
+        AugLine cline;
+        String key = line.getCenter().x + "." + mAngle;
         if (vlineCache.containsKey(key)) {
             cline = vlineCache.get(key);
         } else {
-            int x1 = (int) (line.center.x - line.center.y * getTan(mAngle));
+            int x1 = (int) (line.getCenter().x - line.getCenter().y * getTan(mAngle));
             int y1 = 0;
-            int x2 = (int) (line.center.x + (augview.getHeight() - line.center.y) * getTan(mAngle));
+            int x2 = (int) (line.getCenter().x + (augview.getHeight() - line.getCenter().y) * getTan(mAngle));
             int y2 = augview.getHeight();
-            cline = new Line(new Point(x1, y1), new Point(x2, y2));
+            cline = MarkerFactory.createLine( new Point(x1, y1), new Point(x2, y2) );
             vlineCache.put(key, cline);
         }
 
         return cline;
     }
-    protected Line correctHorizontal(Line line) {
+    protected AugLine correctHorizontal(AugLine line) {
 
-        Line cline;
-        String key = line.center.y + "." + mAngle;
+        AugLine cline;
+        String key = line.getCenter().y + "." + mAngle;
         if (hlineCache.containsKey(key)) {
             cline = hlineCache.get(key);
         } else {
             int x1 = 0;
-            int y1 = (int) (line.center.y + line.center.x * getTan(mAngle));
+            int y1 = (int) (line.getCenter().y + line.getCenter().x * getTan(mAngle));
             int x2 = augview.getWidth();
-            int y2 = (int) (line.center.y - (augview.getWidth() - line.center.x) * getTan(mAngle));
-            cline = new Line(new Point(x1, y1), new Point(x2, y2));
+            int y2 = (int) (line.getCenter().y - (augview.getWidth() - line.getCenter().x) * getTan(mAngle));
+            cline = MarkerFactory.createLine(new Point(x1, y1), new Point(x2, y2));
             hlineCache.put(key, cline);
         }
 

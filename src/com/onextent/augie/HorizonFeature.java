@@ -6,6 +6,10 @@ package com.onextent.augie;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.onextent.augie.marker.AugScrible;
+import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.augie.marker.impl.AugLineImpl;
+
 
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -16,52 +20,23 @@ import android.view.View;
 
 public class HorizonFeature extends AugDrawBase {
 
-    private Line movingLine;
+    private AugLineImpl movingLine;
     private Point startP;
-    private List<Line> lines;
+    private List<AugLineImpl> lines;
     private final AugDrawFeature augdraw;
     
     public HorizonFeature(AugmentedView augview, AugDrawFeature augdraw, SharedPreferences p) {
         super(augview, p);
-        this.lines = new ArrayList<Line>();
+        this.lines = new ArrayList<AugLineImpl>();
         this.augdraw = augdraw;
         this.movingLine = null;
     }
 
-    private LINE_TYPE getLineType(Point p1, Point p2) {
-    
-        LINE_TYPE t = getLineTypeByOrder(p1, p2);
-        if (t == LINE_TYPE.BAD_LINE) return getLineTypeByOrder(p2,  p1);
-        return t;
-    }
-    private LINE_TYPE getLineTypeByOrder(Point begin, Point end) {
-        boolean verti = false;
-        int ydif = begin.y - end.y;
-        //if (ydif < 200 && ydif > -200) {
-        if (ydif < 200) {
-            verti = true;
-        }
-        boolean horiz = false;
-        int xdif = begin.x - end.x;
-        //if (xdif < 200 && xdif > -200) {
-        if (xdif < 200) {
-            horiz = true;
-        }
-           
-        if ( horiz && begin.x < 50 && end.x > (augview.getWidth() -50) ) {
-            return LINE_TYPE.HORIZONTAL_LINE;
-                
-        } else if ( verti && begin.y < 50 && end.y > (augview.getHeight() - 50) ) {
-            return LINE_TYPE.VERTICAL_LINE;
-        }
-        return LINE_TYPE.BAD_LINE;
-    }
-  
-    public Line getLine(MotionEvent e) {
+    public AugLineImpl getLine(MotionEvent e) {
         if (closeToEdge(e)) return null;
-        for (Line l : lines) {
-            float diffx = l.p1.x - e.getX();
-            float diffy = l.p1.y - e.getY();
+        for (AugLineImpl l : lines) {
+            float diffx = l.getP1().x - e.getX();
+            float diffy = l.getP1().y - e.getY();
             if ( Math.abs(diffx) < CLOSE_PIXELS ) {
                 return l;
             } else if ( Math.abs(diffy) < CLOSE_PIXELS) {
@@ -103,26 +78,27 @@ public class HorizonFeature extends AugDrawBase {
 
     private void paintLine(MotionEvent event, boolean moving) {
         Point endP;
-        LINE_TYPE lt;
+        AugScrible.GESTURE_TYPE lt;
         if (movingLine != null) {
             if (movingLine instanceof HLine) {
-                lt = LINE_TYPE.HORIZONTAL_LINE;
+                lt = AugScrible.GESTURE_TYPE.HORIZONTAL_LINE;
                 int newy = (int) event.getY();
-                startP = new Point(movingLine.p1.x, newy);
+                startP = new Point(movingLine.getP1().x, newy);
             } else if (movingLine instanceof VLine) {
-                lt = LINE_TYPE.VERTICAL_LINE;
+                lt = AugScrible.GESTURE_TYPE.VERTICAL_LINE;
                 int newx = (int) event.getX();
-                startP = new Point(newx, movingLine.p1.y);
+                startP = new Point(newx, movingLine.getP1().y);
             } else {
                 Log.e(TAG, "moving line is bad line !!!!!");
-                lt = LINE_TYPE.BAD_LINE;
+                lt = AugScrible.GESTURE_TYPE.NONE;
             }
         } else {
             endP = new Point((int) event.getX(), (int) event.getY());
-            lt = getLineType(startP, endP);
+            AugScrible s = augdraw.getCurrentScrible();
+            lt = s == null ? GESTURE_TYPE.NONE : augdraw.getCurrentScrible().getGestureType();
         }
         
-        Line line;
+        AugLineImpl line;
         float vwidth = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
         float hwidth = Float.parseFloat(prefs.getString("HORIZONTAL_LINE_WIDTH", "18"));
         switch (lt) {
@@ -150,7 +126,7 @@ public class HorizonFeature extends AugDrawBase {
                 deleteMovingLine();
             }
             break;
-        case BAD_LINE:
+        case NONE:
             break;
         }
     }
@@ -158,13 +134,13 @@ public class HorizonFeature extends AugDrawBase {
         lines.remove(movingLine);
         movingLine = null;
     }
-    private void newMovingLine(Line l) {
+    private void newMovingLine(AugLineImpl l) {
         lines.remove(movingLine);
         movingLine = l;
         lines.add(l);
     }
 
-    public List<Line> getLines() {
+    public List<AugLineImpl> getLines() {
         return lines;
     }
     
@@ -172,10 +148,10 @@ public class HorizonFeature extends AugDrawBase {
     public void updateBmp() {
         Paint p = augview.getPaint();
         float orig_w = p.getStrokeWidth();
-        for (Line l : lines) {
-            float temp_w = l.width;
+        for (AugLineImpl l : lines) {
+            float temp_w = l.getBorderWidth();
             p.setStrokeWidth( temp_w );
-            augview.getCanvas().drawLine(l.p1.x, l.p1.y, l.p2.x, l.p2.y, augview.getPaint());
+            augview.getCanvas().drawLine(l.getP1().x, l.getP1().y, l.getP2().x, l.getP2().y, augview.getPaint());
         }
         p.setStrokeWidth(orig_w);
     }

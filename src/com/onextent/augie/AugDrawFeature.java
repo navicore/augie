@@ -6,6 +6,10 @@ package com.onextent.augie;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.onextent.augie.marker.AugLine;
+import com.onextent.augie.marker.AugScrible;
+import com.onextent.augie.marker.MarkerFactory;
+import com.onextent.augie.marker.impl.AugLineImpl;
 import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.app.Activity;
@@ -21,22 +25,27 @@ public class AugDrawFeature extends AugDrawBase {
 	int lastX;
 	int lastY;
     final AugmentedView augview;
-    final List<List<Line>> scribles;
-    List<Line> currentScrible;
+    final List<AugScrible> scribles;
+    AugScrible currentScrible;
 
 	public AugDrawFeature(AugmentedView v, Activity activity) {
 		
 		super(v, PreferenceManager.getDefaultSharedPreferences(activity));
 		augview = v;
 	    lastX = -1;
-	    scribles = new ArrayList<List<Line>>();
+	    scribles = new ArrayList<AugScrible>();
 	    currentScrible = null;
 	}
 	
+	public AugScrible getCurrentScrible() {
+	    return currentScrible;
+	}
+	/*
 	public int getScribleLength() {
 	    if (currentScrible == null) return 0;
 	    return currentScrible.size();
 	}
+	 */
 	
 	public void undoCurrentScrible() {
 	    currentScrible.clear();
@@ -55,7 +64,7 @@ public class AugDrawFeature extends AugDrawBase {
 	private void scrible(int lx, int ly, int x, int y) {
 		Point p1 = new Point(lx, ly);
 		Point p2 = new Point(x, y);
-		Line l = new Line(p1, p2);
+		AugLine l = MarkerFactory.createLine(p1, p2);
 		currentScrible.add(l);
 		augview.getCanvas().drawLine(lx, ly, x, y, augview.getPaint());
 	}
@@ -72,7 +81,7 @@ public class AugDrawFeature extends AugDrawBase {
 	    	break;
 	    case MotionEvent.ACTION_DOWN:
 	    	
-	    	currentScrible = new ArrayList<Line>();
+	    	currentScrible = MarkerFactory.createScrible(augview);
 	    	scribles.add(currentScrible);
 	    	
 	    	if (lastX != -1) {
@@ -104,9 +113,9 @@ public class AugDrawFeature extends AugDrawBase {
     @Override
 	public void updateBmp() {
         if (!prefs.getBoolean("ETCHA_ENABLED", true)) return;
-    	for (List<Line> s : scribles) {
-    		for (Line l : s) {
-    			augview.getCanvas().drawLine(l.p1.x, l.p1.y, l.p2.x, l.p2.y, augview.getPaint());
+    	for (AugScrible s : scribles) {
+    		for (AugLine l : s) {
+    			augview.getCanvas().drawLine(l.getP1().x, l.getP1().y, l.getP2().x, l.getP2().y, augview.getPaint());
     		}
     	}
 	}

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.onextent.augie.AugDrawFeature;
+import com.onextent.augie.AugmentedView;
 import com.onextent.augie.AugmentedViewFeature;
 
 /*
@@ -19,7 +20,8 @@ public abstract class CameraShutterFeature implements AugmentedViewFeature {
     public static CameraShutterFeature getInstance(Context ctx, 
             AugCamera c, 
             AugDrawFeature d, 
-            SharedPreferences p) {
+            SharedPreferences p,
+            AugmentedView v) {
         CameraShutterFeature sInstance;
 
         int sdkVersion = Build.VERSION.SDK_INT;
@@ -27,7 +29,7 @@ public abstract class CameraShutterFeature implements AugmentedViewFeature {
         if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
             sInstance = new SimpleCameraShutterFeature(ctx, c, d, p);
         } else  {
-            sInstance = new TouchFocusShutterFeature(ctx, c, d, p);
+            sInstance = new TouchFocusShutterFeature(ctx, c, d, p, v);
         }
         return sInstance;
     }

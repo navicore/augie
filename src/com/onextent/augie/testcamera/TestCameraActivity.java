@@ -66,7 +66,7 @@ public class TestCameraActivity extends Activity {
 
         augmentedView.addFeature(horizon); //paint over checker
         
-        AugmentedViewFeature shutter = CameraShutterFeature.getInstance(this, augcamera, drawer, prefs);
+        AugmentedViewFeature shutter = CameraShutterFeature.getInstance(this, augcamera, drawer, prefs, augmentedView);
         augmentedView.addFeature(shutter);
         
         ShakeResetFeature shakeReseter = new ShakeResetFeature(augmentedView, this);
@@ -74,6 +74,7 @@ public class TestCameraActivity extends Activity {
         //shakeReseter.registerOneShakeReset(drawer);
         //shakeReseter.registerTwoShakeReset(horizon);
         shakeReseter.registerTwoShakeReset(drawer);
+        shakeReseter.registerTwoShakeReset(shutter);
         
         FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
         layout.addView(camPreview); //bottom layer

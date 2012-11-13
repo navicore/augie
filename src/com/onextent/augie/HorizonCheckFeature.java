@@ -4,13 +4,13 @@
 package com.onextent.augie;
 
 import com.onextent.augie.AugDrawBase.HLine;
-import com.onextent.augie.AugDrawBase.Line;
+import com.onextent.augie.marker.AugLine;
+import com.onextent.augie.marker.impl.AugLineImpl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 
 public class HorizonCheckFeature extends LevelerBase {
 
@@ -25,17 +25,17 @@ public class HorizonCheckFeature extends LevelerBase {
         float orig_w = p.getStrokeWidth();
         int old_color = p.getColor();
         p.setColor(Color.RED);
-        for (Line line : horizonFeture.getLines()) {
-            float temp_w = line.width;
+        for (AugLineImpl line : horizonFeture.getLines()) {
+            float temp_w = line.getBorderWidth();
             p.setStrokeWidth( temp_w );
-            Line cline;
+            AugLine cline;
             if (line instanceof HLine) {
                 cline = correctHorizontal(line);
             } else {
                 cline = correctVertical(line);
             }
-            augview.getCanvas().drawLine(cline.p1.x, cline.p1.y, 
-                    cline.p2.x, cline.p2.y, augview.getPaint());
+            augview.getCanvas().drawLine(cline.getP1().x, cline.getP1().y, 
+                    cline.getP2().x, cline.getP2().y, augview.getPaint());
         }
         p.setColor(old_color);
         p.setStrokeWidth(orig_w);
