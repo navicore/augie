@@ -78,6 +78,7 @@ public class AugDrawFeature extends AugDrawBase {
 	    switch (action) {
 	    case MotionEvent.ACTION_UP:
 	    	lastX = -1;
+	    	//todo: setting that discards current scrible and makes 'undolastscrible' func a noop
 	    	break;
 	    case MotionEvent.ACTION_DOWN:
 	    	

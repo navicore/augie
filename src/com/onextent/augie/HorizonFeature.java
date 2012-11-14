@@ -77,7 +77,7 @@ public class HorizonFeature extends AugDrawBase {
     }
 
     private void paintLine(MotionEvent event, boolean moving) {
-        Point endP;
+        //Point endP;
         AugScrible.GESTURE_TYPE lt;
         if (movingLine != null) {
             if (movingLine instanceof HLine) {
@@ -93,7 +93,7 @@ public class HorizonFeature extends AugDrawBase {
                 lt = AugScrible.GESTURE_TYPE.NONE;
             }
         } else {
-            endP = new Point((int) event.getX(), (int) event.getY());
+            //endP = new Point((int) event.getX(), (int) event.getY());
             AugScrible s = augdraw.getCurrentScrible();
             lt = s == null ? GESTURE_TYPE.NONE : augdraw.getCurrentScrible().getGestureType();
         }
