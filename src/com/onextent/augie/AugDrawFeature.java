@@ -40,14 +40,9 @@ public class AugDrawFeature extends AugDrawBase {
 	public AugScrible getCurrentScrible() {
 	    return currentScrible;
 	}
-	/*
-	public int getScribleLength() {
-	    if (currentScrible == null) return 0;
-	    return currentScrible.size();
-	}
-	 */
 	
 	public void undoCurrentScrible() {
+	    if (currentScrible == null) return;
 	    currentScrible.clear();
 	    augview.reset();
 	}
@@ -71,7 +66,6 @@ public class AugDrawFeature extends AugDrawBase {
 	
     @Override
 	public boolean onTouch(View v, MotionEvent event) {
-        if (!prefs.getBoolean("ETCHA_ENABLED", true)) return false;
 	    int action = event.getAction();
 	    int x = (int) event.getX();
 	    int y = (int) event.getY();
@@ -113,7 +107,11 @@ public class AugDrawFeature extends AugDrawBase {
 
     @Override
 	public void updateBmp() {
-        if (!prefs.getBoolean("ETCHA_ENABLED", true)) return;
+        if (!prefs.getBoolean("ETCHA_ENABLED", false) && lastX == -1) {
+        //if (lastX == -1) {
+            if (currentScrible != null) currentScrible.clear();
+            scribles.clear();
+        }
     	for (AugScrible s : scribles) {
     		for (AugLine l : s) {
     			augview.getCanvas().drawLine(l.getP1().x, l.getP1().y, l.getP2().x, l.getP2().y, augview.getPaint());

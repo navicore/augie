@@ -74,7 +74,7 @@ public class TestCameraActivity extends Activity {
         //shakeReseter.registerOneShakeReset(drawer);
         //shakeReseter.registerTwoShakeReset(horizon);
         shakeReseter.registerTwoShakeReset(drawer);
-        shakeReseter.registerTwoShakeReset(shutter);
+        //shakeReseter.registerTwoShakeReset(shutter);
         
         FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
         layout.addView(camPreview); //bottom layer

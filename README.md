@@ -45,6 +45,7 @@ Augmented reality Tools, Libraries, and Applications
   * register features
       * when they are turned on 
       * with a set of required features
+1. GPS Tagging
 1. Fire sharing Intents
   * email
   * g+
@@ -62,10 +63,16 @@ Augmented reality Tools, Libraries, and Applications
       1. noise reduction
       1. saturation
   * Effects
+1. Flat (or angle!) Compass Overlay with moon and sun path info
+1. Text Overlay for local info modules
+  * Sun (rise set compass angle) module
+  * Moon (rise set compass angle and size) module
+  * Tide info module
+  * Surf info module
+  * Temp
 
 ### BUGS
 1. release camera on suspend better, why does prev freeze?
 1. detect boarders more reliably
 1. horizon gets confused if device is oriented diff
-
 
