@@ -11,9 +11,9 @@ Augmented reality Tools, Libraries, and Applications
   * ~~Horizon and Vertical~~
   * ~~Level~~
   * ~~Drag Delete~~
+  * calibration
 1. ~~Touch Shutter~~
 1. ~~RAW~~
-1. Touch Focus
 1. ~~Create factory for pre-ics and post-ics~~
 1. Rect Object
   * a 'point is within bounds' function
@@ -22,7 +22,8 @@ Augmented reality Tools, Libraries, and Applications
   * ~~recognize clockwise / couner-clockwise~~
   * ~~convert to rect~~
 1. TouchFocusShutterFeature
-  * ~~on 'up' redraw scrible as rectangle~~
+  * ~~take picture on 'up'~~
+  * ~~on scrible 'up' redraw scrible as rectangle~~
       * ~~unless moving rect~~
       * ~~blue for focus~~
       * ~~green for meter~~
@@ -33,7 +34,10 @@ Augmented reality Tools, Libraries, and Applications
   * a begin/end
       * button
       * gesture
+  * remember horizon and adjust line as panning
   * remember frame borders
+    * with marks on horizon line (easy)
+    * with frame (harder)
   * stitcher
 1. Settings Activity
   * ~~basic legacy prefs activity~~

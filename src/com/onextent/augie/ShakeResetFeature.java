@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.onextent.augie.testcamera.TestCameraActivity;
+import com.onextent.augie.augmatic.AugmaticActivity;
 
 import android.app.Activity;
 import android.content.Context;

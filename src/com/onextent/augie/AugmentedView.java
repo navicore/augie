@@ -6,7 +6,7 @@ package com.onextent.augie;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.onextent.augie.testcamera.TestCameraActivity;
+import com.onextent.augie.augmatic.AugmaticActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;

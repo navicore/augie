@@ -6,7 +6,6 @@ package com.onextent.augie.camera;
 import java.io.IOException;
 
 import com.onextent.augie.AugmentedViewFeature;
-import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.app.Activity;
 import android.hardware.Camera;
@@ -28,7 +27,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         
         holder = getHolder();
         holder.addCallback(this);
-        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
        
     }
 

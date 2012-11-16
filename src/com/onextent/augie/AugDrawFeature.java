@@ -9,8 +9,6 @@ import java.util.List;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
-import com.onextent.augie.marker.impl.AugLineImpl;
-import com.onextent.augie.testcamera.TestCameraActivity;
 
 import android.app.Activity;
 import android.graphics.Point;
