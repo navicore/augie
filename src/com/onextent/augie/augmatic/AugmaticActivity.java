@@ -20,7 +20,7 @@ import com.onextent.augie.camera.CameraPreview;
 import com.onextent.augie.camera.CameraShutterFeature;
 import com.onextent.augie.augmatic.R;
 
-import android.annotation.TargetApi;
+import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
@@ -30,7 +30,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -47,6 +46,7 @@ public class AugmaticActivity extends SherlockActivity {
 	private AugmentedView augmentedView;
 	
 	static final String TAG = AugmentedViewFeature.TAG;
+    Button menu_btn;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,6 @@ public class AugmaticActivity extends SherlockActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                              WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
 
@@ -92,20 +91,22 @@ public class AugmaticActivity extends SherlockActivity {
         shakeReseter.registerTwoShakeReset(drawer);
         
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.camera_preview);
-        //FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
         layout.addView(camPreview); //bottom layer
         layout.addView(augmentedView); //transparent top layer
         layout.setOnTouchListener(augmentedView);
-        
-        Button btn=new Button(this);
-        btn.setMinimumHeight(30);
-        btn.setMinimumWidth(30);
-        //btn.setBackgroundResource(R.drawable.ic_launcher);
-        btn.setBackgroundResource(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
-        layout.addView(btn);
-        btn.setOnClickListener(new View.OnClickListener() {
+
+        menu_btn=new Button(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+        menu_btn.setMinimumHeight(30);
+        menu_btn.setMinimumWidth(30);
+        menu_btn.setBackgroundResource(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
+        menu_btn.setLayoutParams(params);
+        layout.addView(menu_btn);
+        menu_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getSupportActionBar().show();
+                menu_btn.setVisibility(View.GONE);
             }
         });
         getSupportActionBar().setBackgroundDrawable(null);
@@ -143,6 +144,7 @@ public class AugmaticActivity extends SherlockActivity {
                 return true;
             case R.id.menu_hide:
                 getSupportActionBar().hide();
+                menu_btn.setVisibility(View.VISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
