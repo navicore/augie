@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference 
+    	android:title="Drawing (Etcha)"
+    	android:key="ETCHA_ENABLED"
+    	android:summaryOn="enabled" 
+    	android:summaryOff="disabled"
+    	android:defaultValue="false"/>
+    <CheckBoxPreference 
+    	android:title="Frame Leveler"
+    	android:key="FRAME_LEVELER_ENABLED"
+    	android:summaryOn="enabled" 
+    	android:summaryOff="disabled"
+    	android:defaultValue="false"/>
+    <CheckBoxPreference 
+    	android:title="Horizon Checker"
+    	android:key="HORIZON_CHECKER_ENABLED"
+    	android:summaryOn="checking horizon accuracy" 
+    	android:summaryOff="not checking horizon accuracy"
+    	android:defaultValue="true"/>
+    <CheckBoxPreference 
+    	android:title="Touch Shoot"
+    	android:key="TOUCH_SHOOT_ENABLED"
+    	android:summaryOn="shoot when the screen is touched" 
+    	android:summaryOff="shoot when external button is pressed"
+    	android:defaultValue="true"/>
+    <CheckBoxPreference 
+    	android:title="Touch Focus"
+    	android:key="TOUCH_FOCUS_ENABLED"
+    	android:summaryOn="camera focus area by touch" 
+    	android:summaryOff="camera focus fully automatic"
+    	android:defaultValue="true"/>
+    <CheckBoxPreference 
+    	android:title="Save RAW"
+    	android:key="SAVE_RAW_ENABLED"
+    	android:summaryOn="save raw + jpg format files" 
+    	android:summaryOff="save only jpg format"
+    	android:defaultValue="false"/>
+    <EditTextPreference 
+    	android:numeric = "integer"
+    	android:key="HORIZON_LINE_WIDTH" 
+    	android:title="Horizon Line Width" 
+    	android:defaultValue="9"/>
+    <EditTextPreference 
+    	android:numeric = "integer"
+    	android:key="VERTICAL_LINE_WIDTH" 
+    	android:title="Vertical Line Width" 
+    	android:defaultValue="12"/>
+    <EditTextPreference 
+    	android:numeric = "integer"
+    	android:key="ETCHA_LINE_WIDTH" 
+    	android:title="Drawing Line Width" 
+    	android:defaultValue="18"/>
+
+</PreferenceScreen>

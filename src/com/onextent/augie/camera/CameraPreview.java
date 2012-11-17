@@ -27,8 +27,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         
         holder = getHolder();
         holder.addCallback(this);
-        //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-       
+        //@#%#! documentation is wroooong.  you need this for 2.x
+        //it is deprecated but NOT ignored on 2.3.3
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
@@ -37,6 +38,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             c.setPreviewDisplay(holder);
             c.startPreview();
         } catch (IOException e) {
+            
+            //failing here
+            
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
     }

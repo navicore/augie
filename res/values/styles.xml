@@ -3,6 +3,8 @@
     <!--
         parent="@style/Theme.Sherlock"
     	parent="android:Theme.Light"
+        parent="@style/Theme.Sherlock"
+        parent="@style/Theme.Sherlock.Light"
     -->
     
     <style name="AppTheme" 
