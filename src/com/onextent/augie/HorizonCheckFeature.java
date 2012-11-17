@@ -14,10 +14,11 @@ import android.graphics.Paint;
 
 public class HorizonCheckFeature extends LevelerBase {
 
-    public HorizonCheckFeature(AugmentedView v, HorizonFeature h, Context context, SharedPreferences p) {
+    public HorizonCheckFeature(AugieView v, HorizonFeature h, Context context, SharedPreferences p) {
         super(v, h, context, p);
     }
    
+    @Override
     public void updateBmp() {
         if (!prefs.getBoolean("HORIZON_CHECKER_ENABLED", true)) return;
 

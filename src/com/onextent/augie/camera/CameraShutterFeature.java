@@ -9,19 +9,19 @@ import android.os.Build;
 import android.util.Log;
 
 import com.onextent.augie.AugDrawFeature;
-import com.onextent.augie.AugmentedView;
-import com.onextent.augie.AugmentedViewFeature;
+import com.onextent.augie.AugieView;
+import com.onextent.augie.Augiement;
 
 /*
  * factory to allow pre-icecreamsandwich touchfocus devices
  */
-public abstract class CameraShutterFeature implements AugmentedViewFeature {
+public abstract class CameraShutterFeature implements Augiement {
 
     public static CameraShutterFeature getInstance(Context ctx, 
             AugCamera c, 
             AugDrawFeature d, 
             SharedPreferences p,
-            AugmentedView v) {
+            AugieView v) {
         CameraShutterFeature sInstance;
 
         int sdkVersion = Build.VERSION.SDK_INT;

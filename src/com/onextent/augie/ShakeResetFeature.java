@@ -8,33 +8,29 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.onextent.augie.augmatic.AugmaticActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.FloatMath;
+import java.lang.Math;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
-public class ShakeResetFeature implements AugmentedViewFeature, SensorEventListener {
+public class ShakeResetFeature implements Augiement, SensorEventListener {
 
-    protected static final String TAG = AugmentedView.TAG;
+    protected static final String TAG = AugieView.TAG;
     private final SensorManager mSensorManager;
     private float mAccel; 			// acceleration apart from gravity
     private float mAccelCurrent; 	// current acceleration including gravity
     private float mAccelLast; 		// last acceleration including gravity
-    final AugmentedView augview;
-    final List<AugmentedViewFeature> oneShakeRegistry;
-    final List<AugmentedViewFeature> twoShakeRegistry;
+    final AugieView augview;
+    final List<Augiement> oneShakeRegistry;
+    final List<Augiement> twoShakeRegistry;
     final Calendar last, now;
     boolean doing_double = false;
 
-    public ShakeResetFeature(AugmentedView v, Activity activity) {
+    public ShakeResetFeature(AugieView v, Activity activity) {
 
         augview = v;
         mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
@@ -42,8 +38,8 @@ public class ShakeResetFeature implements AugmentedViewFeature, SensorEventListe
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
-        oneShakeRegistry = new ArrayList<AugmentedViewFeature>();
-        twoShakeRegistry = new ArrayList<AugmentedViewFeature>();
+        oneShakeRegistry = new ArrayList<Augiement>();
+        twoShakeRegistry = new ArrayList<Augiement>();
         last = Calendar.getInstance(); 
         last.setTime(new Date()); 
         now = Calendar.getInstance(); 
@@ -56,16 +52,11 @@ public class ShakeResetFeature implements AugmentedViewFeature, SensorEventListe
         mSensorManager.unregisterListener(this);
     }
 
-    public void registerOneShakeReset(AugmentedViewFeature f) {
+    public void registerOneShakeReset(Augiement f) {
         oneShakeRegistry.add(f);
     }
-    public void registerTwoShakeReset(AugmentedViewFeature f) {
+    public void registerTwoShakeReset(Augiement f) {
         twoShakeRegistry.add(f);
-    }
-
-    public boolean onTouch(View v, MotionEvent event) {
-        //noop
-        return false;
     }
 
     public void updateBmp() {
@@ -91,22 +82,22 @@ public class ShakeResetFeature implements AugmentedViewFeature, SensorEventListe
         float y = se.values[1];
         float z = se.values[2];
         mAccelLast = mAccelCurrent;
-        mAccelCurrent = FloatMath.sqrt((x*x + y*y + z*z));
+        mAccelCurrent = (float) Math.sqrt((x*x + y*y + z*z));
         float delta = mAccelCurrent - mAccelLast;
         mAccel = mAccel * 0.9f + delta; // perform low-cut filter
         return mAccel > 4;
     }
 
-    private void handleAccel(SensorEvent se, List<AugmentedViewFeature> reg) {
+    private void handleAccel(SensorEvent se, List<Augiement> reg) {
         float x = se.values[0];
         float y = se.values[1];
         float z = se.values[2];
         mAccelLast = mAccelCurrent;
-        mAccelCurrent = FloatMath.sqrt((x*x + y*y + z*z));
+        mAccelCurrent = (float) Math.sqrt((x*x + y*y + z*z));
         float delta = mAccelCurrent - mAccelLast;
         mAccel = mAccel * 0.9f + delta; // perform low-cut filter
         if (mAccel > 4) {
-            for (AugmentedViewFeature f : reg) {
+            for (Augiement f : reg) {
                 f.clear();
             }
             augview.reset();

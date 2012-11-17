@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
@@ -15,16 +16,16 @@ import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Toast;
 
-public class SimpleCameraShutterFeature extends CameraShutterFeature {
+public class SimpleCameraShutterFeature extends CameraShutterFeature implements OnTouchListener {
 	
 	protected final SharedPreferences prefs;
 	protected final AugCamera augcamera;
@@ -44,6 +45,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 	    rawCb = new CameraPictureCallback(".raw");
     }
 	
+	@Override
 	public void updateBmp() {
 		//noop	
 	}
@@ -62,6 +64,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 	    }
 	}
 
+	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
 		try {
@@ -147,7 +150,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
             }
         }
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
@@ -161,18 +164,20 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature {
 
         return mediaFile;
     }
+    
+	@Override
 	public void stop() {
 		//noop
 	}
 
+	@Override
 	public void resume() {
         Log.d(TAG, "SimpleCameraShutterFeature resume");
 		//noop
 	}
 
+	@Override
 	public void clear() {
 		//noop
     }
 }
-
-

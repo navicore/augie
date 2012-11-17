@@ -16,14 +16,13 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 
 public class FrameLevelerFeature extends LevelerBase {
     
     private final List<AugLine> frameLines;
     private boolean isInitialized = false;
 
-    public FrameLevelerFeature(AugmentedView v, HorizonFeature h, Context context, SharedPreferences p) {
+    public FrameLevelerFeature(AugieView v, HorizonFeature h, Context context, SharedPreferences p) {
         super(v, h, context, p);
         frameLines = new ArrayList<AugLine>();
     }
@@ -47,6 +46,7 @@ public class FrameLevelerFeature extends LevelerBase {
         return true;
     }
     
+    @Override
     public void updateBmp() {
         
         if (!prefs.getBoolean("FRAME_LEVELER_ENABLED", false)) return;

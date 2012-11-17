@@ -5,9 +5,9 @@ package com.onextent.augie.camera;
 
 import java.io.IOException;
 
-import com.onextent.augie.AugmentedViewFeature;
+import com.onextent.augie.Augiement;
 
-import android.app.Activity;
+import android.content.Context;
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,9 +19,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private final SurfaceHolder holder;
     private final AugCamera augcamera;
     
-    protected final String TAG = AugmentedViewFeature.TAG;
-   
-    public CameraPreview(Activity context, AugCamera c) {
+    protected final String TAG = Augiement.TAG;
+
+    public CameraPreview(Context context) {
+        super(context);
+        throw new java.lang.UnsupportedOperationException(); // ha ha
+    }
+    
+    @SuppressWarnings("deprecation")
+    public CameraPreview(Context context, AugCamera c) {
         super(context);
         augcamera = c;
         

@@ -5,12 +5,10 @@ package com.onextent.augie.camera;
 
 import android.hardware.Camera;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
-import com.onextent.augie.AugmentedViewFeature;
+import com.onextent.augie.Augiement;
 
-public class AugCamera implements AugmentedViewFeature {
+public class AugCamera implements Augiement {
 
 	private Camera camera;
 	private int camera_id;
@@ -56,11 +54,6 @@ public class AugCamera implements AugmentedViewFeature {
         		camera.release();
         		camera = null;
         	}
-	}
-
-	public boolean onTouch(View v, MotionEvent event) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public void updateBmp() {

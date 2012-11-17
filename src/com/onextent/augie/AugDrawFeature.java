@@ -18,15 +18,15 @@ import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
 	
-    protected static final String TAG = AugmentedView.TAG;
+    protected static final String TAG = AugieView.TAG;
 
 	int lastX;
 	int lastY;
-    final AugmentedView augview;
+    final AugieView augview;
     final List<AugScrible> scribles;
     AugScrible currentScrible;
 
-	public AugDrawFeature(AugmentedView v, Activity activity) {
+	public AugDrawFeature(AugieView v, Activity activity) {
 		
 		super(v, PreferenceManager.getDefaultSharedPreferences(activity));
 		augview = v;

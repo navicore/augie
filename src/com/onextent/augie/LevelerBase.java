@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.MarkerFactory;
-import com.onextent.augie.marker.impl.AugLineImpl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,17 +18,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
         /** X1 = 0 
             Y1 = Yc + Xc * tan(a) 
             X2 = screenWidth 
             Y2 = Yc - (screenWidth - Xc) * tan(a)
          */
-public abstract class LevelerBase implements AugmentedViewFeature, SensorEventListener {
+public abstract class LevelerBase implements Augiement, SensorEventListener {
 
-    protected static final String TAG = AugmentedViewFeature.TAG;
+    protected static final String TAG = Augiement.TAG;
     protected static final Map<Double, Double> tanCache;
     protected static final Map<String, AugLine> vlineCache;
     protected static final Map<String, AugLine> hlineCache;
@@ -40,7 +37,7 @@ public abstract class LevelerBase implements AugmentedViewFeature, SensorEventLi
     }
     protected final SharedPreferences prefs;
     protected final SensorManager mSensorManager;
-    protected final AugmentedView augview;
+    protected final AugieView augview;
     protected final HorizonFeature horizonFeture;
     private float[] mGravs = new float[3];
     private float[] mGeoMags = new float[3];
@@ -50,7 +47,7 @@ public abstract class LevelerBase implements AugmentedViewFeature, SensorEventLi
     protected double mAngle;
     protected long lastUpdateTime;
 
-    public LevelerBase(AugmentedView v, HorizonFeature h, Context activity, SharedPreferences p) {
+    public LevelerBase(AugieView v, HorizonFeature h, Context activity, SharedPreferences p) {
         super();
         prefs           = p;
         lastUpdateTime  = 0;
@@ -121,15 +118,12 @@ public abstract class LevelerBase implements AugmentedViewFeature, SensorEventLi
                 SensorManager.SENSOR_DELAY_UI);
     }
 
-    public boolean onTouch(View v, MotionEvent event) {
-        //noop
-        return false;
-    }
-
+    @Override
     public void clear() {
         //noop
     }
 
+    @Override
     public void stop() {
         Log.d(TAG, "stopping " + HorizonCheckFeature.class.getName());
         unregisterSensorListeners();
@@ -138,6 +132,7 @@ public abstract class LevelerBase implements AugmentedViewFeature, SensorEventLi
         if (tanCache.size() > 1000)  tanCache.clear();
     }
 
+    @Override
     public void resume() {
         Log.d(TAG, "resuming " + HorizonCheckFeature.class.getName());
         registerSensorListeners();

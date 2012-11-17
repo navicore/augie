@@ -25,7 +25,7 @@ public class HorizonFeature extends AugDrawBase {
     private List<AugLineImpl> lines;
     private final AugDrawFeature augdraw;
     
-    public HorizonFeature(AugmentedView augview, AugDrawFeature augdraw, SharedPreferences p) {
+    public HorizonFeature(AugieView augview, AugDrawFeature augdraw, SharedPreferences p) {
         super(augview, p);
         this.lines = new ArrayList<AugLineImpl>();
         this.augdraw = augdraw;
@@ -127,6 +127,8 @@ public class HorizonFeature extends AugDrawBase {
             }
             break;
         case NONE:
+            break;
+        default:
             break;
         }
     }

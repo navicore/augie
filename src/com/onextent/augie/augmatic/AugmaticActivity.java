@@ -9,8 +9,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.onextent.augie.AugDrawFeature;
-import com.onextent.augie.AugmentedView;
-import com.onextent.augie.AugmentedViewFeature;
+import com.onextent.augie.AugieViewImpl;
+import com.onextent.augie.Augiement;
 import com.onextent.augie.FrameLevelerFeature;
 import com.onextent.augie.HorizonCheckFeature;
 import com.onextent.augie.HorizonFeature;
@@ -20,7 +20,6 @@ import com.onextent.augie.camera.CameraPreview;
 import com.onextent.augie.camera.CameraShutterFeature;
 import com.onextent.augie.augmatic.R;
 
-import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
@@ -43,9 +42,9 @@ import android.preference.PreferenceManager;
  */
 public class AugmaticActivity extends SherlockActivity {
 	
-	private AugmentedView augmentedView;
+	private AugieViewImpl augmentedView;
 	
-	static final String TAG = AugmentedViewFeature.TAG;
+	static final String TAG = Augiement.TAG;
     Button menu_btn;
     
     @Override
@@ -63,7 +62,7 @@ public class AugmaticActivity extends SherlockActivity {
 
         setContentView(R.layout.main);
 
-        augmentedView = new AugmentedView(this, prefs);
+        augmentedView = new AugieViewImpl(this);
         
         AugCamera augcamera = new AugCamera();
         augmentedView.addFeature(augcamera);
@@ -74,16 +73,16 @@ public class AugmaticActivity extends SherlockActivity {
         
         HorizonFeature horizon = new HorizonFeature(augmentedView, drawer, prefs);
        
-        AugmentedViewFeature horizonChecker = new HorizonCheckFeature(augmentedView, 
+        Augiement horizonChecker = new HorizonCheckFeature(augmentedView, 
                 horizon, this, prefs);
         augmentedView.addFeature(horizonChecker);
-        AugmentedViewFeature frameLeveler = new FrameLevelerFeature(augmentedView, 
+        Augiement frameLeveler = new FrameLevelerFeature(augmentedView, 
                 horizon, this, prefs);
         augmentedView.addFeature(frameLeveler);
 
         augmentedView.addFeature(horizon); //paint over checker
         
-        AugmentedViewFeature shutter = CameraShutterFeature.getInstance(this, augcamera, drawer, prefs, augmentedView);
+        Augiement shutter = CameraShutterFeature.getInstance(this, augcamera, drawer, prefs, augmentedView);
         augmentedView.addFeature(shutter);
         
         ShakeResetFeature shakeReseter = new ShakeResetFeature(augmentedView, this);

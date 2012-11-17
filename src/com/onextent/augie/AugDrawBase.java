@@ -9,11 +9,12 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 
-public class AugDrawBase implements AugmentedViewFeature {
+public class AugDrawBase implements Augiement, OnTouchListener {
 
-    protected static final String TAG = AugmentedView.TAG;
-    protected final AugmentedView augview;
+    protected static final String TAG = AugieView.TAG;
+    protected final AugieView augview;
     protected final SharedPreferences prefs;
     public static float CLOSE_PIXELS = 25;
 	
@@ -36,7 +37,7 @@ public class AugDrawBase implements AugmentedViewFeature {
         }
 	}
 	
-	public AugDrawBase(AugmentedView v, SharedPreferences p) {
+	public AugDrawBase(AugieView v, SharedPreferences p) {
 		super();
 		augview = v;
 		prefs = p;
@@ -60,26 +61,31 @@ public class AugDrawBase implements AugmentedViewFeature {
         return xcloseToEdge(e) || ycloseToEdge(e);
     }
     
+    @Override
 	public boolean onTouch(View v, MotionEvent event) {
 	    // TODO Auto-generated method stub
 	    return false;
     }
 
+    @Override
 	public void updateBmp() {
 	    // TODO Auto-generated method stub
 	    
     }
 
+    @Override
 	public void clear() {
 	    // TODO Auto-generated method stub
 	    
     }
 
+    @Override
 	public void stop() {
 	    // TODO Auto-generated method stub
 	    
     }
 
+    @Override
 	public void resume() {
 	    // TODO Auto-generated method stub
 	    

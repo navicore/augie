@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.onextent.augie.AugDrawFeature;
-import com.onextent.augie.AugmentedView;
+import com.onextent.augie.AugieView;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
@@ -22,7 +22,7 @@ import android.view.View;
 
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
-    final AugmentedView augview;
+    final AugieView augview;
     final List<ScribleHolder> focus_areas, meter_areas;
     final int max_focus_areas;
     final int max_metering_areas;
@@ -35,7 +35,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                                     AugCamera c, 
                                     AugDrawFeature d, 
                                     SharedPreferences p,
-                                    AugmentedView v) {
+                                    AugieView v) {
         super(ctx, c, d, p);
         augview = v;
         focus_areas = new ArrayList<ScribleHolder>();
@@ -48,7 +48,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
     
     private class ScribleHolder {
-        AugScrible scrible;
+        //AugScrible scrible;
         Rect rect;
     }
 
@@ -69,7 +69,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	}
 	private void saveArea(AugScrible s, List<ScribleHolder> areas) {
         ScribleHolder h = new ScribleHolder();
-        h.scrible = s;
+        //h.scrible = s;
         h.rect = new Rect(s.getMinX(), s.getMinY(), s.getMaxX(), s.getMaxY());
         areas.add(h);
         augdraw.undoCurrentScrible();
@@ -110,6 +110,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         augdraw.undoCurrentScrible();
     }
 	
+	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
 		try {
@@ -156,6 +157,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	    return true;
     }
 
+	@Override
 	public void resume() {
         Log.d(TAG, "TouchFocusShutterFeature resume");
 		//noop
