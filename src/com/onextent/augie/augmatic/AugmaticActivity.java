@@ -9,6 +9,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.onextent.augie.AugDrawFeature;
+import com.onextent.augie.AugieView;
 import com.onextent.augie.AugieViewImpl;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -42,7 +43,7 @@ import android.os.Bundle;
  */
 public class AugmaticActivity extends SherlockActivity {
 	
-	private AugieViewImpl augmentedView;
+	private AugieView augmentedView;
 	
 	static final String TAG = Augiement.TAG;
     Button menu_btn;
@@ -78,19 +79,16 @@ public class AugmaticActivity extends SherlockActivity {
             AugDrawFeature drawer = new AugDrawFeature();
             augmentedView.addFeature(drawer);
 
-            HorizonFeature horizon = new HorizonFeature();
-            augmentedView.addFeature(horizon);
+            augmentedView.addFeature(new HorizonFeature());
             
             //todo: reimpl horizonChecker as CheckedHorizon so that red lines
             // are painted under white lines and only if 'correcting'
 
-            Augiement horizonChecker = new HorizonCheckFeature();
-            augmentedView.addFeature(horizonChecker);
-            Augiement frameLeveler = new FrameLevelerFeature();
-            augmentedView.addFeature(frameLeveler);
+            augmentedView.addFeature(new HorizonCheckFeature());
+            
+            augmentedView.addFeature(new FrameLevelerFeature());
 
-            Augiement shutter = CameraShutterFeature.getInstance(augcamera, drawer, augmentedView);
-            augmentedView.addFeature(shutter);
+            augmentedView.addFeature(CameraShutterFeature.getInstance(augcamera, drawer, augmentedView));
 
             ShakeResetFeature shakeReseter = new ShakeResetFeature();
             augmentedView.addFeature(shakeReseter);
@@ -98,7 +96,7 @@ public class AugmaticActivity extends SherlockActivity {
 
             RelativeLayout layout = (RelativeLayout) findViewById(R.id.camera_preview);
             layout.addView(camPreview); //bottom layer
-            layout.addView(augmentedView); //transparent top layer
+            layout.addView((View) augmentedView); //transparent top layer
             layout.setOnTouchListener(augmentedView);
 
             menu_btn=new Button(this);

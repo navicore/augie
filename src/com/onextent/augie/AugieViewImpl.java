@@ -3,7 +3,6 @@
  */
 package com.onextent.augie;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import android.content.Context;
@@ -26,7 +25,7 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     final SharedPreferences prefs;
 
     Set<Augiement> features;
-    Set<OnTouchListener> touchListeners;
+    Set<Augiement> touchListeners;
 
     public AugieViewImpl(Context context) {
         super(context);
@@ -40,8 +39,8 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
 
         paint.setColor(Color.WHITE);
         paint.setAlpha(Color.WHITE);
-        features = new LinkedHashSet<Augiement>();
-        touchListeners = new LinkedHashSet<OnTouchListener>();
+        features = new AugiementRegistryImpl();
+        touchListeners = new AugiementRegistryImpl();
     }
 
     @Override
@@ -58,10 +57,15 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
         return canvas;
     }
 
+    public boolean removeFeature(Augiement f) throws AugiementException {
+        touchListeners.remove(f);
+        return features.remove(f);
+    }
+    
     public void addFeature(Augiement f) throws AugiementException {
         f.onCreate(this, features);
         features.add(f);
-        if ( f instanceof OnTouchListener ) touchListeners.add( (OnTouchListener) f );
+        if ( f instanceof OnTouchListener ) touchListeners.add( f );
     }
 
     @Override
@@ -90,8 +94,6 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     }
 
     public boolean initBmp(int w, int h) {
-        //int w = getWidth();
-        //int h = getHeight();
         if (w <= 0 || h <= 0) return false;
         Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas();
@@ -121,15 +123,14 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
 
         boolean handled = false;
         try {
-            for (OnTouchListener f : touchListeners) {
-                boolean b = f.onTouch(v, event);
+            for (Augiement f : touchListeners) {
+                boolean b = ((OnTouchListener)f).onTouch(v, event);
                 if (b) handled = true;
             }
             if (handled) invalidate();
         } catch (Exception e) {
             Log.e(TAG, e.toString(), e);
         }
-        //return handled;
         return true;
     }
 }
