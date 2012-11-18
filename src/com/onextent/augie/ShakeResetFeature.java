@@ -30,9 +30,6 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     Calendar last, now;
     boolean doing_double = false;
 
-    public ShakeResetFeature() {
-    }
-    
     @Override
     public Set<String> listDependencies() {
         return null;

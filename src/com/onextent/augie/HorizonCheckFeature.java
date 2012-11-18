@@ -14,10 +14,6 @@ import android.graphics.Paint;
 
 public class HorizonCheckFeature extends LevelerBase {
 
-    public HorizonCheckFeature(HorizonFeature h) {
-        super(h);
-    }
-   
     @Override
     public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
         super.onCreate(av, helpers);

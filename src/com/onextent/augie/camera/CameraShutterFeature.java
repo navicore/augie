@@ -22,9 +22,9 @@ public abstract class CameraShutterFeature implements Augiement {
         int sdkVersion = Build.VERSION.SDK_INT;
         Log.d(TAG, "CameraShutterFeature sdkVersion=" + sdkVersion);
         if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
-            sInstance = new SimpleCameraShutterFeature(c, d);
+            sInstance = new SimpleCameraShutterFeature();
         } else  {
-            sInstance = new TouchFocusShutterFeature(c, d);
+            sInstance = new TouchFocusShutterFeature();
         }
         return sInstance;
     }

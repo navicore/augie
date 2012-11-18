@@ -32,13 +32,6 @@ public class HorizonFeature extends AugDrawBase {
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
     
-    public HorizonFeature(AugDrawFeature augdraw) {
-        super();
-        this.lines = new ArrayList<AugLineImpl>();
-        this.augdraw = augdraw;
-        this.movingLine = null;
-    }
-    
     @Override
     public Set<String> listDependencies() {
         return deps;
@@ -53,6 +46,8 @@ public class HorizonFeature extends AugDrawBase {
             }
         }
         if (augdraw == null) throw new AugiementException("draw feature is null");
+        this.lines = new ArrayList<AugLineImpl>();
+        this.movingLine = null;
     }
     
     public AugLineImpl getLine(MotionEvent e) {

@@ -21,10 +21,6 @@ public class FrameLevelerFeature extends LevelerBase {
     private List<AugLine> frameLines;
     private boolean isInitialized = false;
 
-    public FrameLevelerFeature(HorizonFeature h) {
-        super(h);
-    }    
-    
     public static final String AUGIE_NAME = "AUGIE/FEATURES/FRAME_LEVELER";
     @Override
     public String getAugieName() {

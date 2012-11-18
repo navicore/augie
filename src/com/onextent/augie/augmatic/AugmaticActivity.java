@@ -78,14 +78,16 @@ public class AugmaticActivity extends SherlockActivity {
             AugDrawFeature drawer = new AugDrawFeature();
             augmentedView.addFeature(drawer);
 
-            HorizonFeature horizon = new HorizonFeature(drawer);
+            HorizonFeature horizon = new HorizonFeature();
+            augmentedView.addFeature(horizon);
+            
+            //todo: reimpl horizonChecker as CheckedHorizon so that red lines
+            // are painted under white lines and only if 'correcting'
 
-            Augiement horizonChecker = new HorizonCheckFeature(horizon);
+            Augiement horizonChecker = new HorizonCheckFeature();
             augmentedView.addFeature(horizonChecker);
-            Augiement frameLeveler = new FrameLevelerFeature(horizon);
+            Augiement frameLeveler = new FrameLevelerFeature();
             augmentedView.addFeature(frameLeveler);
-
-            augmentedView.addFeature(horizon); //paint over checker
 
             Augiement shutter = CameraShutterFeature.getInstance(augcamera, drawer, augmentedView);
             augmentedView.addFeature(shutter);

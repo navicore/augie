@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -30,11 +29,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     private ScribleHolder movingRect;
     private Point startP;
     
-    public TouchFocusShutterFeature(AugCamera c, 
-                                    AugDrawFeature d) {
-        super(c, d);
-    }
-	
 	@TargetApi(14)
 	@Override
     public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {

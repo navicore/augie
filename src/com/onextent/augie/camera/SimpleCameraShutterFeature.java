@@ -49,12 +49,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
 
-	public SimpleCameraShutterFeature(AugCamera c, AugDrawFeature d) {
-	    super();
-	    augcamera = c;
-	    augdraw = d;
-    }
-	
 	@Override
     public Set<String> listDependencies() {
         return deps;

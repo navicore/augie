@@ -56,14 +56,6 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
         deps.add(HorizonFeature.AUGIE_NAME);
     }
 
-    public LevelerBase(HorizonFeature h) {
-        super();
-        lastUpdateTime  = 0;
-        mAngle          = 0;
-        horizonFeature   = h;
-
-    }
-    
     @Override
     public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
 
@@ -78,6 +70,9 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
         prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
         mSensorManager  = (SensorManager) av.getContext().getSystemService(Context.SENSOR_SERVICE);
         registerSensorListeners();
+        
+        lastUpdateTime  = 0;
+        mAngle          = 0;
     }
 
     @Override

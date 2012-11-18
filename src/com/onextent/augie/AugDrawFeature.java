@@ -24,9 +24,6 @@ public class AugDrawFeature extends AugDrawBase {
     List<AugScrible> scribles;
     AugScrible currentScrible;
 
-	public AugDrawFeature() {
-	}
-	
 	@Override
     public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
     

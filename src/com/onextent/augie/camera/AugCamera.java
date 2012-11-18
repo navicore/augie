@@ -17,9 +17,6 @@ public class AugCamera implements Augiement {
 	private Camera camera;
 	private int camera_id;
 	
-	public AugCamera() {
-	}
-	
 	public Camera getCamera() {
     	if (camera != null && camera_id == -1) return camera;
     	
