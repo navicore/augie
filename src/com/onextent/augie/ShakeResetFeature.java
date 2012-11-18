@@ -31,7 +31,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     boolean doing_double = false;
 
     @Override
-    public Set<String> listDependencies() {
+    public Set<String> getDependencyNames() {
         return null;
     }
      

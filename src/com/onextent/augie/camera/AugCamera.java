@@ -94,7 +94,7 @@ public class AugCamera implements Augiement {
     }
 
     @Override
-    public Set<String> listDependencies() {
+    public Set<String> getDependencyNames() {
         return null;
     }
 }

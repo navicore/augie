@@ -25,7 +25,6 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     final SharedPreferences prefs;
 
     Set<Augiement> features;
-    Set<Augiement> touchListeners;
 
     public AugieViewImpl(Context context) {
         super(context);
@@ -39,8 +38,7 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
 
         paint.setColor(Color.WHITE);
         paint.setAlpha(Color.WHITE);
-        features = new AugiementRegistryImpl();
-        touchListeners = new AugiementRegistryImpl();
+        features = new AugiementRegistryImpl(this);
     }
 
     @Override
@@ -58,14 +56,11 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     }
 
     public boolean removeFeature(Augiement f) throws AugiementException {
-        touchListeners.remove(f);
         return features.remove(f);
     }
     
     public void addFeature(Augiement f) throws AugiementException {
-        f.onCreate(this, features);
         features.add(f);
-        if ( f instanceof OnTouchListener ) touchListeners.add( f );
     }
 
     @Override
@@ -123,9 +118,11 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
 
         boolean handled = false;
         try {
-            for (Augiement f : touchListeners) {
-                boolean b = ((OnTouchListener)f).onTouch(v, event);
-                if (b) handled = true;
+            for (Augiement f : features) {
+                if (f instanceof OnTouchListener) {
+                    boolean b = ((OnTouchListener)f).onTouch(v, event);
+                    if (b) handled = true;
+                }
             }
             if (handled) invalidate();
         } catch (Exception e) {

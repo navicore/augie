@@ -115,6 +115,7 @@ public class AugmaticActivity extends SherlockActivity {
             });
             getSupportActionBar().setBackgroundDrawable(null);
             getSupportActionBar().hide();
+            
         } catch (AugiementException e) {
             Log.e(TAG, "can not create augmatic", e);
             e.printStackTrace();

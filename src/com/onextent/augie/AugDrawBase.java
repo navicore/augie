@@ -45,7 +45,7 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 	}
 	
 	@Override
-    public Set<String> listDependencies() {
+    public Set<String> getDependencyNames() {
         return null;
     }    
 	

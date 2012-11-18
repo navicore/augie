@@ -33,7 +33,7 @@ public class HorizonFeature extends AugDrawBase {
     }
     
     @Override
-    public Set<String> listDependencies() {
+    public Set<String> getDependencyNames() {
         return deps;
     }
 

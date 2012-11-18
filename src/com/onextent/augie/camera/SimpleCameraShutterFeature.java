@@ -50,7 +50,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 
 	@Override
-    public Set<String> listDependencies() {
+    public Set<String> getDependencyNames() {
         return deps;
     }
 	    

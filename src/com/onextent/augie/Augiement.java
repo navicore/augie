@@ -36,7 +36,7 @@ public interface Augiement {
 	//called after default no arg constructor
 	void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException;
 	
-	Set<String> listDependencies();
+	Set<String> getDependencyNames();
 	
 	//todo:
 	// first list dependencies by name

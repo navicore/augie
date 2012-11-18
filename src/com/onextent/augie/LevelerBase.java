@@ -76,7 +76,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     }
 
     @Override
-    public Set<String> listDependencies() {
+    public Set<String> getDependencyNames() {
         return deps;
     }
 
