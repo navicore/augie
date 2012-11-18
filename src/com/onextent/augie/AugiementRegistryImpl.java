@@ -1,0 +1,135 @@
+package com.onextent.augie;
+
+import java.util.AbstractSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import android.util.Log;
+
+public class AugiementRegistryImpl extends AbstractSet<Augiement> implements AugiementRegistry {
+    
+    private final Map<String, Augiement> active;
+    private final Map<String, Augiement> waiting;
+    private final AugieView augview;
+    
+    public AugiementRegistryImpl(AugieView av) {
+        active = new LinkedHashMap<String, Augiement>();
+        waiting = new LinkedHashMap<String, Augiement>();
+        augview = av;
+    }
+
+    private void create(Augiement a) {
+        try {
+            a.onCreate(augview, this);
+        } catch (AugiementException e) {
+            Log.e(TAG, "augiement onCreate error", e);
+            //todo: make error visible in ui
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
+    
+    public void tryWaiting() {
+        Set<Augiement> trymes = new HashSet<Augiement>();
+        for (Augiement a : waiting.values()) {
+            trymes.add(a);
+        }
+        for (Augiement a : trymes) {
+            waiting.values().remove(a);
+            add(a);
+        }
+    }
+
+    @Override
+    public boolean add(Augiement object) {
+
+        assert(object != null);
+
+        boolean dependsAllmet = true;
+        Set<String> dependencyNames = object.getDependencyNames();
+        
+        if (dependencyNames == null) {
+            
+            active.put(object.getAugieName(), object);
+            create(object);
+            Log.d(TAG, "augiement " + object.getAugieName() + " registered w/no deps");
+            tryWaiting();
+            
+        } else {
+
+            for (String dname : dependencyNames) {
+                if (!active.containsKey(dname)) {
+                    Log.d(TAG, "augiement " + object.getAugieName() + " waiting for " + dname);
+                    waiting.put(object.getAugieName(), object);
+                    dependsAllmet = false;
+                    break;
+                }
+            }
+
+            if (dependsAllmet) {
+                active.put(object.getAugieName(), object);
+                create(object);
+                Log.d(TAG, "augiement " + object.getAugieName() + " registered w/deps");
+                tryWaiting();
+            }
+        }
+        
+        return dependsAllmet;
+    }
+
+    private class ARIterator implements Iterator<Augiement> {
+       
+        final Iterator<Augiement> actives;
+        Augiement last;
+        
+        ARIterator() {
+            
+            actives = active.values().iterator();
+            last = null;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return actives.hasNext();
+        }
+
+        @Override
+        public Augiement next() {
+            last = actives.next();
+            return last;
+        }
+
+        @Override
+        public void remove() {
+            Augiement a = active.remove(last);
+            if (a != null) {
+                //move dependencies to waiting
+                
+            }
+        }
+    }
+    
+    @Override
+    public Iterator<Augiement> iterator() {
+        return new ARIterator();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    
+    @Override
+    public int size() {
+        return active.size();
+    }
+
+    @Override
+    public boolean contains(Object object) {
+        return active.values().contains(object);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return active.isEmpty();
+    }
+}
