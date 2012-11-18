@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -33,8 +34,15 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
     
     @Override
-    public void init() throws AugiementException {
-        mSensorManager = (SensorManager) augview.getContext().getSystemService(Context.SENSOR_SERVICE);        registerSensorListeners();
+    public Set<String> listDependencies() {
+        return null;
+    }
+     
+    @Override
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+        augview = av;
+        
+        mSensorManager = (SensorManager) av.getContext().getSystemService(Context.SENSOR_SERVICE);        registerSensorListeners();
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -137,9 +145,5 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-    @Override
-    public void setAugieView(AugieView av) {
-        augview = av;
-    }
 }
 

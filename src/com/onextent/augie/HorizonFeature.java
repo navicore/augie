@@ -4,7 +4,9 @@
 package com.onextent.augie;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
@@ -22,7 +24,13 @@ public class HorizonFeature extends AugDrawBase {
     private AugLineImpl movingLine;
     private Point startP;
     private List<AugLineImpl> lines;
-    private final AugDrawFeature augdraw;
+    private AugDrawFeature augdraw;
+    
+    private final static Set<String> deps;
+    static {
+        deps = new HashSet<String>();
+        deps.add(AugDrawFeature.AUGIE_NAME);
+    }
     
     public HorizonFeature(AugDrawFeature augdraw) {
         super();
@@ -30,10 +38,21 @@ public class HorizonFeature extends AugDrawBase {
         this.augdraw = augdraw;
         this.movingLine = null;
     }
+    
+    @Override
+    public Set<String> listDependencies() {
+        return deps;
+    }
 
     @Override
-    public void init() throws AugiementException {
-        super.init();
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+        super.onCreate(av, helpers);
+        for (Augiement a : helpers) {
+            if (a instanceof AugDrawFeature) {
+                augdraw = (AugDrawFeature) a;
+            }
+        }
+        if (augdraw == null) throw new AugiementException("draw feature is null");
     }
     
     public AugLineImpl getLine(MotionEvent e) {

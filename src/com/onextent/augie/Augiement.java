@@ -3,6 +3,8 @@
  */
 package com.onextent.augie;
 
+import java.util.Set;
+
 /**
  * An Augiement is an Augmented Reality feature, maybe some local
  * info like weather and tides, maybe some astronomy markers, maybe
@@ -31,11 +33,10 @@ public interface Augiement {
 	//key by which dependency manager orders calls.  see listDependencyAugiementNames
 	String getAugieName();
 	
-	//called after default no arg constructor, setAugieView, and setDependencyAugiements
-	void init() throws AugiementException;
-	
 	//called after default no arg constructor
-	void setAugieView(AugieView av);
+	void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException;
+	
+	Set<String> listDependencies();
 	
 	//todo:
 	// first list dependencies by name
@@ -51,7 +52,4 @@ public interface Augiement {
 	//  else adds it to the waiting reg
 	//  UNREG
 	//  removes module and any modules that depend on it and puts 'em in inactive reg
-	
-	//List<String> listDependencies()
-	//void setAugiements(List<AugieFeature>) throws AugieFeatureException;
 }

@@ -5,6 +5,7 @@ package com.onextent.augie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.onextent.augie.AugDrawBase.HLine;
 import com.onextent.augie.AugDrawBase.VLine;
@@ -23,7 +24,7 @@ public class FrameLevelerFeature extends LevelerBase {
     public FrameLevelerFeature(HorizonFeature h) {
         super(h);
     }    
-   
+    
     public static final String AUGIE_NAME = "AUGIE/FEATURES/FRAME_LEVELER";
     @Override
     public String getAugieName() {
@@ -31,8 +32,8 @@ public class FrameLevelerFeature extends LevelerBase {
     }
     
     @Override
-    public void init() throws AugiementException {
-        super.init();
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+        super.onCreate(av, helpers);
         frameLines = new ArrayList<AugLine>();
     }
     
@@ -81,5 +82,6 @@ public class FrameLevelerFeature extends LevelerBase {
         p.setColor(old_color);
         p.setStrokeWidth(orig_w);
     }
+
 
 }

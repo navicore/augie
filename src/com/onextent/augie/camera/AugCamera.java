@@ -3,6 +3,8 @@
  */
 package com.onextent.augie.camera;
 
+import java.util.Set;
+
 import android.hardware.Camera;
 import android.util.Log;
 
@@ -90,13 +92,13 @@ public class AugCamera implements Augiement {
     }
 
     @Override
-    public void init() throws AugiementException {
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
 		camera_id = -1;  //default to first front facing camera
     }
 
     @Override
-    public void setAugieView(AugieView av) {
-        // TODO Auto-generated method stub
+    public Set<String> listDependencies() {
+        return null;
     }
 }
 

@@ -2,15 +2,16 @@ package com.onextent.augie.camera;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugieView;
+import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -22,7 +23,6 @@ import android.view.View;
 
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
-    AugieView augview;
     List<ScribleHolder> focus_areas, meter_areas;
     int max_focus_areas;
     int max_metering_areas;
@@ -30,19 +30,15 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     private ScribleHolder movingRect;
     private Point startP;
     
-    public TouchFocusShutterFeature(Context ctx, 
-                                    AugCamera c, 
-                                    AugDrawFeature d, 
-                                    AugieView v) {
-        super(ctx, c, d);
-        augview = v;
-        
+    public TouchFocusShutterFeature(AugCamera c, 
+                                    AugDrawFeature d) {
+        super(c, d);
     }
 	
 	@TargetApi(14)
 	@Override
-    public void init() throws AugiementException {
-	    super.init();
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+	    super.onCreate(av, helpers);
         focus_areas = new ArrayList<ScribleHolder>();
         meter_areas = new ArrayList<ScribleHolder>();
 	    Camera cam = augcamera.getCamera();

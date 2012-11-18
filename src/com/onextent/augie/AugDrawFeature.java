@@ -5,6 +5,7 @@ package com.onextent.augie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
@@ -27,13 +28,13 @@ public class AugDrawFeature extends AugDrawBase {
 	}
 	
 	@Override
-    public void init() throws AugiementException {
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
     
-        super.init();
+        super.onCreate(av, helpers);
 	    scribles = new ArrayList<AugScrible>();
 	    currentScrible = null;
     }
-	    
+	
 	public AugScrible getCurrentScrible() {
 	    return currentScrible;
 	}
@@ -121,4 +122,6 @@ public class AugDrawFeature extends AugDrawBase {
     public String getAugieName() {
         return AUGIE_NAME;
     }
+
+
 }

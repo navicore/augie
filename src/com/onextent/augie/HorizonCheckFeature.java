@@ -3,6 +3,8 @@
  */
 package com.onextent.augie;
 
+import java.util.Set;
+
 import com.onextent.augie.AugDrawBase.HLine;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
@@ -17,8 +19,8 @@ public class HorizonCheckFeature extends LevelerBase {
     }
    
     @Override
-    public void init() throws AugiementException {
-        super.init();
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+        super.onCreate(av, helpers);
     }
     
     @Override
@@ -29,7 +31,7 @@ public class HorizonCheckFeature extends LevelerBase {
         float orig_w = p.getStrokeWidth();
         int old_color = p.getColor();
         p.setColor(Color.RED);
-        for (AugLineImpl line : horizonFeture.getLines()) {
+        for (AugLineImpl line : horizonFeature.getLines()) {
             float temp_w = line.getBorderWidth();
             p.setStrokeWidth( temp_w );
             AugLine cline;
@@ -50,5 +52,4 @@ public class HorizonCheckFeature extends LevelerBase {
     public String getAugieName() {
         return AUGIE_NAME;
     }
-
 }

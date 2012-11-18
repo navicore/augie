@@ -5,7 +5,9 @@ package com.onextent.augie;
  * 
  */
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.MarkerFactory;
@@ -39,7 +41,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     protected SharedPreferences prefs;
     protected SensorManager mSensorManager;
     protected AugieView augview;
-    protected HorizonFeature horizonFeture;
+    protected HorizonFeature horizonFeature;
     private float[] mGravs = new float[3];
     private float[] mGeoMags = new float[3];
     private float[] mOrientation = new float[3];
@@ -47,24 +49,40 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     private float[] mRemapedRotationM = new float[9];
     protected double mAngle;
     protected long lastUpdateTime;
+    
+    private final static Set<String> deps;
+    static {
+        deps = new HashSet<String>();
+        deps.add(HorizonFeature.AUGIE_NAME);
+    }
 
     public LevelerBase(HorizonFeature h) {
         super();
         lastUpdateTime  = 0;
         mAngle          = 0;
-        horizonFeture   = h;
+        horizonFeature   = h;
+
     }
     
     @Override
-    public void setAugieView(AugieView v) {
-        augview         = v;
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+
+        for (Augiement a : helpers) {
+            if (a instanceof HorizonFeature) {
+                horizonFeature = (HorizonFeature) a;
+            }
+        }
+        if (horizonFeature == null) throw new AugiementException("horizonFeature is null");
+        
+        augview = av;
+        prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
+        mSensorManager  = (SensorManager) av.getContext().getSystemService(Context.SENSOR_SERVICE);
+        registerSensorListeners();
     }
 
     @Override
-    public void init() throws AugiementException {
-        prefs           = PreferenceManager.getDefaultSharedPreferences(augview.getContext());
-        mSensorManager  = (SensorManager) augview.getContext().getSystemService(Context.SENSOR_SERVICE);
-        registerSensorListeners();
+    public Set<String> listDependencies() {
+        return deps;
     }
 
     protected double getTan(double angle) {
@@ -149,7 +167,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     public void onSensorChanged(SensorEvent event) {
     
-        if (horizonFeture.getLines() == null) return;
+        if (horizonFeature.getLines() == null) return;
     
         switch (event.sensor.getType()) { 
         case Sensor.TYPE_ACCELEROMETER:

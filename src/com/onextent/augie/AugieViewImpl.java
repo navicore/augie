@@ -3,8 +3,8 @@
  */
 package com.onextent.augie;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,8 +25,8 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     final Paint paint;
     final SharedPreferences prefs;
 
-    List<Augiement> features;
-    List<OnTouchListener> touchListeners;
+    Set<Augiement> features;
+    Set<OnTouchListener> touchListeners;
 
     public AugieViewImpl(Context context) {
         super(context);
@@ -40,8 +40,8 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
 
         paint.setColor(Color.WHITE);
         paint.setAlpha(Color.WHITE);
-        features = new ArrayList<Augiement>();
-        touchListeners = new ArrayList<OnTouchListener>();
+        features = new LinkedHashSet<Augiement>();
+        touchListeners = new LinkedHashSet<OnTouchListener>();
     }
 
     @Override
@@ -59,8 +59,7 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     }
 
     public void addFeature(Augiement f) throws AugiementException {
-        f.setAugieView(this);
-        f.init();
+        f.onCreate(this, features);
         features.add(f);
         if ( f instanceof OnTouchListener ) touchListeners.add( (OnTouchListener) f );
     }

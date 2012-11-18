@@ -3,6 +3,8 @@
  */
 package com.onextent.augie;
 
+import java.util.Set;
+
 import com.onextent.augie.marker.impl.AugLineImpl;
 
 import android.content.SharedPreferences;
@@ -42,14 +44,15 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 		super();
 	}
 	
+	@Override
+    public Set<String> listDependencies() {
+        return null;
+    }    
+	
     @Override
-    public void setAugieView(AugieView v) {
-		augview = v;
-    }
- 
-    @Override
-    public void init() throws AugiementException {
-		prefs = PreferenceManager.getDefaultSharedPreferences(augview.getContext());
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+		augview = av;
+		prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
     }
 
     protected boolean xcloseToEdge(MotionEvent e) {

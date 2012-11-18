@@ -8,10 +8,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugieView;
+import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 
 public class SimpleCameraShutterFeature extends CameraShutterFeature implements OnTouchListener {
 	
+    protected AugieView augview;
 	protected SharedPreferences prefs;
 	protected AugCamera augcamera;
 	protected AugDrawFeature augdraw;
@@ -38,15 +42,41 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	private PictureCallback jpgCb;
 	private PictureCallback rawCb;
 	
-	public SimpleCameraShutterFeature(Context ctx, AugCamera c, AugDrawFeature d) {
+    private final static Set<String> deps;
+    static {
+        deps = new HashSet<String>();
+        deps.add(AugCamera.AUGIE_NAME);
+        deps.add(AugDrawFeature.AUGIE_NAME);
+    }
+
+	public SimpleCameraShutterFeature(AugCamera c, AugDrawFeature d) {
 	    super();
-	    context = ctx;
 	    augcamera = c;
 	    augdraw = d;
     }
 	
 	@Override
-    public void init() throws AugiementException {
+    public Set<String> listDependencies() {
+        return deps;
+    }
+	    
+	@Override
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+	    
+	    augview = av;
+	    
+        for (Augiement a : helpers) {
+            if (a instanceof AugCamera) {
+                augcamera = (AugCamera) a;
+            }
+            else if (a instanceof AugDrawFeature) {
+                augdraw = (AugDrawFeature) a;
+            }
+        }
+        if (augcamera == null) throw new AugiementException("camera feature is null");
+        if (augdraw == null) throw new AugiementException("draw feature is null");
+        
+	    context = av.getContext();
 	    jpgCb = new CameraPictureCallback(".jpg");
 	    rawCb = new CameraPictureCallback(".raw");
         prefs = PreferenceManager.getDefaultSharedPreferences(context); //todo: stop doing this
@@ -192,10 +222,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	@Override
     public String getAugieName() {
         return AUGIE_NAME;
-    }
-
-    @Override
-    public void setAugieView(AugieView av) {
     }
 
 }
