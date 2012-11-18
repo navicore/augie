@@ -58,7 +58,9 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
         return canvas;
     }
 
-    public void addFeature(Augiement f) {
+    public void addFeature(Augiement f) throws AugiementException {
+        f.setAugieView(this);
+        f.init();
         features.add(f);
         if ( f instanceof OnTouchListener ) touchListeners.add( (OnTouchListener) f );
     }
@@ -68,7 +70,7 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
         boolean succ = initBmp(getWidth(), getHeight());
         if (succ) {
             for (Augiement f : features) {
-                f.updateBmp();
+                f.updateCanvas();
             }
             invalidate();
         }

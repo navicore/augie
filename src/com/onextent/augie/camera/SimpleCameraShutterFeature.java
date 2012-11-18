@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.onextent.augie.AugDrawFeature;
+import com.onextent.augie.AugieView;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
@@ -19,6 +21,7 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,26 +30,30 @@ import android.widget.Toast;
 
 public class SimpleCameraShutterFeature extends CameraShutterFeature implements OnTouchListener {
 	
-	protected final SharedPreferences prefs;
-	protected final AugCamera augcamera;
-	protected final AugDrawFeature augdraw;
+	protected SharedPreferences prefs;
+	protected AugCamera augcamera;
+	protected AugDrawFeature augdraw;
 	
-	private final Context context;
-	private final PictureCallback jpgCb;
-	private final PictureCallback rawCb;
+	private Context context;
+	private PictureCallback jpgCb;
+	private PictureCallback rawCb;
 	
-	public SimpleCameraShutterFeature(Context ctx, AugCamera c, AugDrawFeature d, SharedPreferences p) {
+	public SimpleCameraShutterFeature(Context ctx, AugCamera c, AugDrawFeature d) {
 	    super();
-	    prefs = p;
 	    context = ctx;
 	    augcamera = c;
 	    augdraw = d;
-	    jpgCb = new CameraPictureCallback(".jpg");
-	    rawCb = new CameraPictureCallback(".raw");
     }
 	
 	@Override
-	public void updateBmp() {
+    public void init() throws AugiementException {
+	    jpgCb = new CameraPictureCallback(".jpg");
+	    rawCb = new CameraPictureCallback(".raw");
+        prefs = PreferenceManager.getDefaultSharedPreferences(context); //todo: stop doing this
+    }
+	
+	@Override
+	public void updateCanvas() {
 		//noop	
 	}
 
@@ -180,4 +187,15 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	public void clear() {
 		//noop
     }
+	
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/SIMPLE_SHUTTER";
+	@Override
+    public String getAugieName() {
+        return AUGIE_NAME;
+    }
+
+    @Override
+    public void setAugieView(AugieView av) {
+    }
+
 }

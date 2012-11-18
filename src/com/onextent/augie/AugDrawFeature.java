@@ -10,9 +10,7 @@ import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
 
-import android.app.Activity;
 import android.graphics.Point;
-import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,19 +20,20 @@ public class AugDrawFeature extends AugDrawBase {
 
 	int lastX;
 	int lastY;
-    final AugieView augview;
-    final List<AugScrible> scribles;
+    List<AugScrible> scribles;
     AugScrible currentScrible;
 
-	public AugDrawFeature(AugieView v, Activity activity) {
-		
-		super(v, PreferenceManager.getDefaultSharedPreferences(activity));
-		augview = v;
-	    lastX = -1;
-	    scribles = new ArrayList<AugScrible>();
-	    currentScrible = null;
+	public AugDrawFeature() {
 	}
 	
+	@Override
+    public void init() throws AugiementException {
+    
+        super.init();
+	    scribles = new ArrayList<AugScrible>();
+	    currentScrible = null;
+    }
+	    
 	public AugScrible getCurrentScrible() {
 	    return currentScrible;
 	}
@@ -104,7 +103,7 @@ public class AugDrawFeature extends AugDrawBase {
 	}
 
     @Override
-	public void updateBmp() {
+	public void updateCanvas() {
         if (!prefs.getBoolean("ETCHA_ENABLED", false) && lastX == -1) {
         //if (lastX == -1) {
             if (currentScrible != null) currentScrible.clear();
@@ -116,4 +115,10 @@ public class AugDrawFeature extends AugDrawBase {
     		}
     	}
 	}
+
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/DRAW";
+    @Override
+    public String getAugieName() {
+        return AUGIE_NAME;
+    }
 }

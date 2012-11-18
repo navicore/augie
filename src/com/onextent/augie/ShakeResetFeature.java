@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -20,21 +19,22 @@ import android.util.Log;
 public class ShakeResetFeature implements Augiement, SensorEventListener {
 
     protected static final String TAG = AugieView.TAG;
-    private final SensorManager mSensorManager;
+    private SensorManager mSensorManager;
     private float mAccel; 			// acceleration apart from gravity
     private float mAccelCurrent; 	// current acceleration including gravity
     private float mAccelLast; 		// last acceleration including gravity
-    final AugieView augview;
-    final List<Augiement> oneShakeRegistry;
-    final List<Augiement> twoShakeRegistry;
-    final Calendar last, now;
+    private AugieView augview;
+    List<Augiement> oneShakeRegistry;
+    List<Augiement> twoShakeRegistry;
+    Calendar last, now;
     boolean doing_double = false;
 
-    public ShakeResetFeature(AugieView v, Activity activity) {
-
-        augview = v;
-        mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-        registerSensorListeners();
+    public ShakeResetFeature() {
+    }
+    
+    @Override
+    public void init() throws AugiementException {
+        mSensorManager = (SensorManager) augview.getContext().getSystemService(Context.SENSOR_SERVICE);        registerSensorListeners();
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -43,6 +43,15 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
         last = Calendar.getInstance(); 
         last.setTime(new Date()); 
         now = Calendar.getInstance(); 
+    }
+     
+    //todo: think about callback api for this sort of feature.  the shaker shouldn't care if
+    // it is for a reset or something else
+    
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/SHAKE_RESET";
+    @Override
+    public String getAugieName() {
+        return AUGIE_NAME;
     }
 
     private void registerSensorListeners() {
@@ -59,7 +68,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
         twoShakeRegistry.add(f);
     }
 
-    public void updateBmp() {
+    public void updateCanvas() {
         //noop
     }
 
@@ -126,6 +135,11 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    @Override
+    public void setAugieView(AugieView av) {
+        augview = av;
     }
 }
 

@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugieView;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -22,22 +22,27 @@ import android.view.View;
 
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
-    final AugieView augview;
-    final List<ScribleHolder> focus_areas, meter_areas;
-    final int max_focus_areas;
-    final int max_metering_areas;
+    AugieView augview;
+    List<ScribleHolder> focus_areas, meter_areas;
+    int max_focus_areas;
+    int max_metering_areas;
     
     private ScribleHolder movingRect;
     private Point startP;
     
-	@TargetApi(14)
     public TouchFocusShutterFeature(Context ctx, 
                                     AugCamera c, 
                                     AugDrawFeature d, 
-                                    SharedPreferences p,
                                     AugieView v) {
-        super(ctx, c, d, p);
+        super(ctx, c, d);
         augview = v;
+        
+    }
+	
+	@TargetApi(14)
+	@Override
+    public void init() throws AugiementException {
+	    super.init();
         focus_areas = new ArrayList<ScribleHolder>();
         meter_areas = new ArrayList<ScribleHolder>();
 	    Camera cam = augcamera.getCamera();
@@ -164,7 +169,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	}
 
     @Override
-    public void updateBmp() {
+    public void updateCanvas() {
         Paint p = augview.getPaint();
         float orig_w = p.getStrokeWidth();
         int old_color = p.getColor();
@@ -203,5 +208,11 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
     protected boolean closeToEdge(MotionEvent e) {
         return xcloseToEdge(e) || ycloseToEdge(e);
+    }
+    
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER";
+	@Override
+    public String getAugieName() {
+        return AUGIE_NAME;
     }
 }

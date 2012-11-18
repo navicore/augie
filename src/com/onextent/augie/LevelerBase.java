@@ -17,6 +17,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
         /** X1 = 0 
@@ -35,10 +36,10 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
         hlineCache = new HashMap<String, AugLine>();
         vlineCache = new HashMap<String, AugLine>();
     }
-    protected final SharedPreferences prefs;
-    protected final SensorManager mSensorManager;
-    protected final AugieView augview;
-    protected final HorizonFeature horizonFeture;
+    protected SharedPreferences prefs;
+    protected SensorManager mSensorManager;
+    protected AugieView augview;
+    protected HorizonFeature horizonFeture;
     private float[] mGravs = new float[3];
     private float[] mGeoMags = new float[3];
     private float[] mOrientation = new float[3];
@@ -47,14 +48,22 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     protected double mAngle;
     protected long lastUpdateTime;
 
-    public LevelerBase(AugieView v, HorizonFeature h, Context activity, SharedPreferences p) {
+    public LevelerBase(HorizonFeature h) {
         super();
-        prefs           = p;
         lastUpdateTime  = 0;
         mAngle          = 0;
-        augview         = v;
         horizonFeture   = h;
-        mSensorManager  = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+    }
+    
+    @Override
+    public void setAugieView(AugieView v) {
+        augview         = v;
+    }
+
+    @Override
+    public void init() throws AugiementException {
+        prefs           = PreferenceManager.getDefaultSharedPreferences(augview.getContext());
+        mSensorManager  = (SensorManager) augview.getContext().getSystemService(Context.SENSOR_SERVICE);
         registerSensorListeners();
     }
 

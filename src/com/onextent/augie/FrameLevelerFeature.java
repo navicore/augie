@@ -11,22 +11,32 @@ import com.onextent.augie.AugDrawBase.VLine;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 
 public class FrameLevelerFeature extends LevelerBase {
     
-    private final List<AugLine> frameLines;
+    private List<AugLine> frameLines;
     private boolean isInitialized = false;
 
-    public FrameLevelerFeature(AugieView v, HorizonFeature h, Context context, SharedPreferences p) {
-        super(v, h, context, p);
+    public FrameLevelerFeature(HorizonFeature h) {
+        super(h);
+    }    
+   
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/FRAME_LEVELER";
+    @Override
+    public String getAugieName() {
+        return AUGIE_NAME;
+    }
+    
+    @Override
+    public void init() throws AugiementException {
+        super.init();
         frameLines = new ArrayList<AugLine>();
     }
-    private boolean init() {
+    
+    public boolean initFrame() {
         //warning, buggy mess, redo, needs to be able to have view resized during life
         if (isInitialized) return true;
         Bitmap bmp = augview.getBitmap();
@@ -47,10 +57,10 @@ public class FrameLevelerFeature extends LevelerBase {
     }
     
     @Override
-    public void updateBmp() {
+    public void updateCanvas() {
         
         if (!prefs.getBoolean("FRAME_LEVELER_ENABLED", false)) return;
-        if (!init()) return;
+        if (!initFrame()) return;
 
         Paint p = augview.getPaint();
         float orig_w = p.getStrokeWidth();
@@ -71,4 +81,5 @@ public class FrameLevelerFeature extends LevelerBase {
         p.setColor(old_color);
         p.setStrokeWidth(orig_w);
     }
+
 }

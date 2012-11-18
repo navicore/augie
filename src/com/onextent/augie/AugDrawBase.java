@@ -7,15 +7,16 @@ import com.onextent.augie.marker.impl.AugLineImpl;
 
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class AugDrawBase implements Augiement, OnTouchListener {
+public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
     protected static final String TAG = AugieView.TAG;
-    protected final AugieView augview;
-    protected final SharedPreferences prefs;
+    protected AugieView augview;
+    protected SharedPreferences prefs;
     public static float CLOSE_PIXELS = 25;
 	
 	static class VLine extends AugLineImpl {
@@ -37,11 +38,19 @@ public class AugDrawBase implements Augiement, OnTouchListener {
         }
 	}
 	
-	public AugDrawBase(AugieView v, SharedPreferences p) {
+	public AugDrawBase() {
 		super();
-		augview = v;
-		prefs = p;
 	}
+	
+    @Override
+    public void setAugieView(AugieView v) {
+		augview = v;
+    }
+ 
+    @Override
+    public void init() throws AugiementException {
+		prefs = PreferenceManager.getDefaultSharedPreferences(augview.getContext());
+    }
 
     protected boolean xcloseToEdge(MotionEvent e) {
         float x = e.getX();
@@ -68,7 +77,7 @@ public class AugDrawBase implements Augiement, OnTouchListener {
     }
 
     @Override
-	public void updateBmp() {
+	public void updateCanvas() {
 	    // TODO Auto-generated method stub
 	    
     }

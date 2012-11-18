@@ -4,6 +4,7 @@ Augmented reality Tools, Libraries, and Applications
 ----------------------------------------------------
 
 ### TODO
+1. Splash Screen
 1. ~~Draw~~
   * ~~Etchasketch-like~~
   * ~~Shake Clear~~

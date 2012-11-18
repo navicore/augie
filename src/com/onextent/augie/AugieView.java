@@ -1,5 +1,6 @@
 package com.onextent.augie;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,12 +13,14 @@ public interface AugieView {
     
     public int getHeight();
     
-    public abstract Paint getPaint();
+    public Paint getPaint();
 
-    public abstract Bitmap getBitmap();
+    public Bitmap getBitmap();
 
-    public abstract Canvas getCanvas();
+    public Canvas getCanvas();
+    
+    public Context getContext();
 
-    public abstract void reset();
+    public void reset();
 
 }

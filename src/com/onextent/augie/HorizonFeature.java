@@ -11,7 +11,6 @@ import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.augie.marker.impl.AugLineImpl;
 
 
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
@@ -25,13 +24,18 @@ public class HorizonFeature extends AugDrawBase {
     private List<AugLineImpl> lines;
     private final AugDrawFeature augdraw;
     
-    public HorizonFeature(AugieView augview, AugDrawFeature augdraw, SharedPreferences p) {
-        super(augview, p);
+    public HorizonFeature(AugDrawFeature augdraw) {
+        super();
         this.lines = new ArrayList<AugLineImpl>();
         this.augdraw = augdraw;
         this.movingLine = null;
     }
 
+    @Override
+    public void init() throws AugiementException {
+        super.init();
+    }
+    
     public AugLineImpl getLine(MotionEvent e) {
         if (closeToEdge(e)) return null;
         for (AugLineImpl l : lines) {
@@ -147,7 +151,7 @@ public class HorizonFeature extends AugDrawBase {
     }
     
     @Override
-    public void updateBmp() {
+    public void updateCanvas() {
         Paint p = augview.getPaint();
         float orig_w = p.getStrokeWidth();
         for (AugLineImpl l : lines) {
@@ -162,4 +166,11 @@ public class HorizonFeature extends AugDrawBase {
     public void clear() {
         lines.clear();
     }
+    
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/HORIZON_DRAW";
+    @Override
+    public String getAugieName() {
+        return AUGIE_NAME;
+    }
+
 }

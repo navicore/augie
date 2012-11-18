@@ -6,7 +6,9 @@ package com.onextent.augie.camera;
 import android.hardware.Camera;
 import android.util.Log;
 
+import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 
 public class AugCamera implements Augiement {
 
@@ -14,7 +16,6 @@ public class AugCamera implements Augiement {
 	private int camera_id;
 	
 	public AugCamera() {
-		camera_id = -1;  //default to first front facing camera
 	}
 	
 	public Camera getCamera() {
@@ -56,7 +57,7 @@ public class AugCamera implements Augiement {
         	}
 	}
 
-	public void updateBmp() {
+	public void updateCanvas() {
 		// TODO Auto-generated method stub
 
 	}
@@ -77,5 +78,25 @@ public class AugCamera implements Augiement {
 
 	}
 
+	//todo: make front camera, rear camera, etc... someday tethering...
+	//todo: make front camera, rear camera, etc... someday tethering...
+	//todo: make front camera, rear camera, etc... someday tethering...
+	//todo: make front camera, rear camera, etc... someday tethering...
+	//todo: make front camera, rear camera, etc... someday tethering...
+    public static final String AUGIE_NAME = "AUGIE/FEATURES/CAMERA";
+    @Override
+    public String getAugieName() {
+        return AUGIE_NAME;
+    }
+
+    @Override
+    public void init() throws AugiementException {
+		camera_id = -1;  //default to first front facing camera
+    }
+
+    @Override
+    public void setAugieView(AugieView av) {
+        // TODO Auto-generated method stub
+    }
 }
 

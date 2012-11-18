@@ -3,8 +3,6 @@
  */
 package com.onextent.augie.camera;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
@@ -17,19 +15,16 @@ import com.onextent.augie.Augiement;
  */
 public abstract class CameraShutterFeature implements Augiement {
 
-    public static CameraShutterFeature getInstance(Context ctx, 
-            AugCamera c, 
-            AugDrawFeature d, 
-            SharedPreferences p,
-            AugieView v) {
+    public static CameraShutterFeature getInstance( AugCamera c, AugDrawFeature d, AugieView v ) {
+        
         CameraShutterFeature sInstance;
 
         int sdkVersion = Build.VERSION.SDK_INT;
         Log.d(TAG, "CameraShutterFeature sdkVersion=" + sdkVersion);
         if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
-            sInstance = new SimpleCameraShutterFeature(ctx, c, d, p);
+            sInstance = new SimpleCameraShutterFeature(v.getContext(), c, d);
         } else  {
-            sInstance = new TouchFocusShutterFeature(ctx, c, d, p, v);
+            sInstance = new TouchFocusShutterFeature(v.getContext(), c, d, v);
         }
         return sInstance;
     }
