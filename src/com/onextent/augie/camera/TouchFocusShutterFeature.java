@@ -15,7 +15,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.hardware.Camera;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,7 +34,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	    super.onCreate(av, helpers);
         focus_areas = new ArrayList<ScribleHolder>();
         meter_areas = new ArrayList<ScribleHolder>();
-	    Camera cam = augcamera.getCamera();
+	    AugCamera cam = cameraFactory.getCamera(null);
 	    max_focus_areas = cam.getParameters().getMaxNumFocusAreas();
 	    max_metering_areas = cam.getParameters().getMaxNumMeteringAreas();
 	    Log.d(TAG, "focus areas: " + max_focus_areas);
@@ -49,7 +48,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     protected void takePicture() {
 	    Log.d(TAG, "trying to focus...");
-	    Camera c = augcamera.getCamera();
+	    /*
+	    AugCamera c = cameraFactory.getCamera(null);
 	    if (c == null)  return;
 	    if (max_focus_areas > 0 && prefs.getBoolean("TOUCH_FOCUS_ENABLED", true)) {
 	        if (focus_areas.size() == 0) {
@@ -61,6 +61,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	    } else {
 	        super.takePicture();
 	    }
+	     */
+	    super.takePicture();
 	}
 	private void saveArea(AugScrible s, List<ScribleHolder> areas) {
         ScribleHolder h = new ScribleHolder();
@@ -70,7 +72,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         augdraw.undoCurrentScrible();
 	}
     private void saveFocusArea(AugScrible s) {
-        if (max_focus_areas <= focus_areas.size()) {
+        if (max_focus_areas > 0 && max_focus_areas <= focus_areas.size()) {
             focus_areas.remove(0);
         }
         saveArea(s, focus_areas);
@@ -78,7 +80,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	}
 	
     private void saveMeterArea(AugScrible s) {
-        if (max_metering_areas <= meter_areas.size()) {
+        if (max_metering_areas > 0 && max_metering_areas <= meter_areas.size()) {
             meter_areas.remove(0);
         }
         saveArea(s, meter_areas);
@@ -154,7 +156,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
 	@Override
 	public void resume() {
-        Log.d(TAG, "TouchFocusShutterFeature resume");
 		//noop
 	}
 

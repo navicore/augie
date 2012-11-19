@@ -3,12 +3,8 @@
  */
 package com.onextent.augie.camera;
 
-import java.io.IOException;
-
 import com.onextent.augie.Augiement;
-
 import android.content.Context;
-import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
@@ -16,21 +12,22 @@ import android.util.Log;
 enum TOUCH_STATE {NOSTATE, SHOOTING, ZOOMING};
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+
+    protected final String TAG = Augiement.TAG;
+
     private final SurfaceHolder holder;
     private final AugCamera augcamera;
-    
-    protected final String TAG = Augiement.TAG;
 
     public CameraPreview(Context context) {
         super(context);
         throw new java.lang.UnsupportedOperationException(); // ha ha
     }
-    
+
     @SuppressWarnings("deprecation")
-    public CameraPreview(Context context, AugCamera c) {
+    public CameraPreview(Context context, AugCamera ac) {
         super(context);
-        augcamera = c;
-        
+        augcamera = ac;
+
         holder = getHolder();
         holder.addCallback(this);
         //@#%#! documentation is wroooong.  you need this for 2.x
@@ -40,57 +37,36 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-        	Camera c = augcamera.getCamera();
-            c.setPreviewDisplay(holder);
-            c.startPreview();
-        } catch (IOException e) {
-            
-            //failing here
-            
-            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+            augcamera.open();
+            augcamera.setPreviewDisplay(holder);
+        } catch (AugCameraException e) {
+            Log.e(TAG, "Error surfaceCreated: " + e.getMessage());
         }
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        	Camera c = augcamera.getCamera();
-        	if (c != null) {
-        		c.stopPreview();
-        		augcamera.releaseCamera();
-        	}
+        if (augcamera != null) {
+            try {
+                augcamera.stopPreview();
+                augcamera.close();
+            } catch (AugCameraException e) {
+                Log.e(TAG, "Error surfaceDestroyed: " + e.getMessage());
+            }
+        }
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        try {
+            augcamera.startPreview();
+        } catch (AugCameraException e) {
+            Log.e(TAG, "Error surfaceChanged: " + e.getMessage());
+        }
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
 
         if (holder.getSurface() == null){
-          // preview surface does not exist
-          return;
-        }
-
-        Camera c = augcamera.getCamera();
-        // stop preview before making changes
-        if (c != null)
-        try {
-            c.stopPreview();
-        // start preview with new settings
-        try {
-        	// set preview size and make any resize, rotate or
-        	// reformatting changes here
-        	Camera.Parameters p = c.getParameters();
-        	//p.setPreviewSize(w, h);  // like the changed w h are nonsense, 
-        	//need to check supported preview sizes List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
-
-        	c.setParameters(p);
-
-            c.setPreviewDisplay(holder);
-            c.startPreview();
-
-        } catch (Exception e){
-            Log.d(TAG, "Error starting camera preview: " + e.getMessage());
-        }
-        } catch (Exception e){
-          // ignore: tried to stop a non-existent preview
+            // preview surface does not exist
+            return;
         }
     }
 }

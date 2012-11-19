@@ -1,4 +1,4 @@
-package com.onextent.augie;
+package com.onextent.augie.impl;
 
 /**
  * subclasses must implemented updateBmp
@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.onextent.augie.AugieView;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.MarkerFactory;
 
@@ -147,7 +150,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     @Override
     public void stop() {
-        Log.d(TAG, "stopping " + HorizonCheckFeature.class.getName());
+        Log.d(TAG, "stopping " + getClass().getName());
         unregisterSensorListeners();
         if (vlineCache.size() > 1000)  vlineCache.clear();
         if (hlineCache.size() > 1000)  hlineCache.clear();
@@ -156,7 +159,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     @Override
     public void resume() {
-        Log.d(TAG, "resuming " + HorizonCheckFeature.class.getName());
+        Log.d(TAG, "resuming " + getClass().getName());
         registerSensorListeners();
     }
 

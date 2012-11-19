@@ -1,12 +1,15 @@
 /**
  * copyright Ed Sweeney, 2012, all rights reserved
  */
-package com.onextent.augie;
+package com.onextent.augie.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.onextent.augie.AugieView;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
@@ -17,7 +20,7 @@ import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
 	
-    protected static final String TAG = AugieView.TAG;
+    protected static final String TAG = Augiement.TAG;
 
 	int lastX;
 	int lastY;
@@ -30,6 +33,7 @@ public class AugDrawFeature extends AugDrawBase {
         super.onCreate(av, helpers);
 	    scribles = new ArrayList<AugScrible>();
 	    currentScrible = null;
+	    lastX = -1;
     }
 	
 	public AugScrible getCurrentScrible() {
@@ -119,6 +123,4 @@ public class AugDrawFeature extends AugDrawBase {
     public String getAugieName() {
         return AUGIE_NAME;
     }
-
-
 }

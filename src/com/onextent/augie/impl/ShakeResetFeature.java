@@ -1,7 +1,7 @@
 /**
  * copyright Ed Sweeney, 2012, all rights reserved
  */
-package com.onextent.augie;
+package com.onextent.augie.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +15,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import java.lang.Math;
+
+import com.onextent.augie.AugieView;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
+
 import android.util.Log;
 
 public class ShakeResetFeature implements Augiement, SensorEventListener {
@@ -82,12 +87,12 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     public void stop() {
-        Log.d(TAG, "stopping " + ShakeResetFeature.class.getName());
+        Log.d(TAG, "stopping " + getClass().getName());
         unregisterSensorListeners();
     }
 
     public void resume() {
-        Log.d(TAG, "resuming " + ShakeResetFeature.class.getName());
+        Log.d(TAG, "resuming " + getClass().getName());
         registerSensorListeners();
     }
 

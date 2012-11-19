@@ -77,7 +77,8 @@ Augmented reality Tools, Libraries, and Applications
   * Temp
 
 ### BUGS
-1. release camera on suspend better, why does prev freeze?
+1. camera does not update preview when resumed after 
+   power button (but does if 'home' is hit first
 1. detect boarders more reliably
 1. horizon gets confused if device is oriented diff
 

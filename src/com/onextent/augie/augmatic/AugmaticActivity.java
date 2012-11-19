@@ -8,18 +8,23 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugieView;
-import com.onextent.augie.AugieViewImpl;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.FrameLevelerFeature;
-import com.onextent.augie.HorizonCheckFeature;
-import com.onextent.augie.HorizonFeature;
-import com.onextent.augie.ShakeResetFeature;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
+import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraPreview;
 import com.onextent.augie.camera.CameraShutterFeature;
+import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
+import com.onextent.augie.camera.impl.BackCamera;
+import com.onextent.augie.camera.impl.FrontCamera;
+import com.onextent.augie.impl.AugDrawFeature;
+import com.onextent.augie.impl.AugieViewImpl;
+import com.onextent.augie.impl.FrameLevelerFeature;
+import com.onextent.augie.impl.HorizonCheckFeature;
+import com.onextent.augie.impl.HorizonFeature;
+import com.onextent.augie.impl.ShakeResetFeature;
 import com.onextent.augie.augmatic.R;
 
 import android.content.Intent;
@@ -42,19 +47,21 @@ import android.os.Bundle;
  * 
  */
 public class AugmaticActivity extends SherlockActivity {
-	
-	private AugieView augmentedView;
-	
-	static final String TAG = Augiement.TAG;
+
+    private AugieView augmentedView;
+    private CameraPreview camPreview;
+    private AugCameraFactory cameraFactory;
+
+    static final String TAG = Augiement.TAG;
     Button menu_btn;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
@@ -63,32 +70,29 @@ public class AugmaticActivity extends SherlockActivity {
 
         augmentedView = new AugieViewImpl(this);
 
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        //todo: think about camera, how to hide tethering vs front vs back vs streamer api
-        AugCamera augcamera = new AugCamera();
+        cameraFactory = new AugCameraFactoryImpl();
+        cameraFactory.registerCamera(BackCamera.class, BackCamera.AUGIE_NAME);
+        cameraFactory.registerCamera(FrontCamera.class, FrontCamera.AUGIE_NAME);
         try {
-            augmentedView.addFeature(augcamera);
-            CameraPreview camPreview = new CameraPreview(this, augcamera);
+            augmentedView.addFeature(cameraFactory);
+            //ejs, temporary, you will have to recreate CameraPreview when camera is changed
+            //ejs, temporary, need to get camera name from UI
+            AugCamera augcamera = cameraFactory.getCamera(null); 
+            camPreview = new CameraPreview(this, augcamera);
 
             AugDrawFeature drawer = new AugDrawFeature();
             augmentedView.addFeature(drawer);
 
             augmentedView.addFeature(new HorizonFeature());
-            
+
             //todo: reimpl horizonChecker as CheckedHorizon so that red lines
             // are painted under white lines and only if 'correcting'
 
             augmentedView.addFeature(new HorizonCheckFeature());
-            
+
             augmentedView.addFeature(new FrameLevelerFeature());
 
-            augmentedView.addFeature(CameraShutterFeature.getInstance(augcamera, drawer, augmentedView));
+            augmentedView.addFeature(CameraShutterFeature.getInstance(cameraFactory, drawer, augmentedView));
 
             ShakeResetFeature shakeReseter = new ShakeResetFeature();
             augmentedView.addFeature(shakeReseter);
@@ -115,56 +119,54 @@ public class AugmaticActivity extends SherlockActivity {
             });
             getSupportActionBar().setBackgroundDrawable(null);
             getSupportActionBar().hide();
-            
+
         } catch (AugiementException e) {
             Log.e(TAG, "can not create augmatic", e);
-            e.printStackTrace();
-            //todo: how to fail???
         } catch (Throwable err) {
             Log.e(TAG, "can not create augmatic", err);
-            err.printStackTrace();
-            //todo: how to fail???
         }
     }
-    
+
     @Override
-	protected void onPause() {
-		super.onPause();
-		augmentedView.stop();
-	}
+    protected void onPause() {
+        Log.d(TAG, getClass().getName() + " onPause");
+        super.onPause();
+        augmentedView.stop();
+    }
 
     @Override
     protected void onResume() {
-      super.onResume();
-      augmentedView.resume();
+        Log.d(TAG, getClass().getName() + " onResume");
+        super.onResume();
+        augmentedView.resume();
     }
 
     @Override
     protected void onStop() {
-      augmentedView.stop();
-      super.onStop();
+        Log.d(TAG, getClass().getName() + " onStop");
+        super.onStop();
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.menu_mode:
-                return true;
-            case R.id.menu_settings:
-                startActivity(new Intent(this, AugmaticPreferences.class));
-                return true;
-            case R.id.menu_overlays:
-                return true;
-            case R.id.menu_hide:
-                getSupportActionBar().hide();
-                menu_btn.setVisibility(View.VISIBLE);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        case R.id.menu_mode:
+            return true;
+        case R.id.menu_settings:
+            startActivity(new Intent(this, AugmaticPreferences.class));
+            return true;
+        case R.id.menu_overlays:
+            return true;
+        case R.id.menu_hide:
+            getSupportActionBar().hide();
+            menu_btn.setVisibility(View.VISIBLE);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();

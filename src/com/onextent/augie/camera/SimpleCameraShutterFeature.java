@@ -12,17 +12,16 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import com.onextent.augie.AugDrawFeature;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
+import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -35,17 +34,17 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	
     protected AugieView augview;
 	protected SharedPreferences prefs;
-	protected AugCamera augcamera;
+	protected AugCameraFactory cameraFactory;
 	protected AugDrawFeature augdraw;
 	
 	private Context context;
-	private PictureCallback jpgCb;
-	private PictureCallback rawCb;
+	private AugPictureCallback jpgCb;
+	private AugPictureCallback rawCb;
 	
     private final static Set<String> deps;
     static {
         deps = new HashSet<String>();
-        deps.add(AugCamera.AUGIE_NAME);
+        deps.add(AugCameraFactoryImpl.AUGIE_NAME);
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
 
@@ -60,14 +59,14 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	    augview = av;
 	    
         for (Augiement a : helpers) {
-            if (a instanceof AugCamera) {
-                augcamera = (AugCamera) a;
+            if (a instanceof AugCameraFactoryImpl) {
+                cameraFactory = (AugCameraFactory) a;
             }
             else if (a instanceof AugDrawFeature) {
                 augdraw = (AugDrawFeature) a;
             }
         }
-        if (augcamera == null) throw new AugiementException("camera feature is null");
+        if (cameraFactory == null) throw new AugiementException("camera factory feature is null");
         if (augdraw == null) throw new AugiementException("draw feature is null");
         
 	    context = av.getContext();
@@ -83,14 +82,17 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 
 	protected void takePicture() {
 	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
-	    Camera c = augcamera.getCamera();
-	    if (c != null)  {
+	    AugCamera augcamera = null;
+	    //todo: get name of current camera from ui
+	    augcamera = cameraFactory.getCamera(null);
+	    if (augcamera != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
-	            c.takePicture(null, rawCb, jpgCb);
+	            augcamera.takePicture(null, rawCb, jpgCb);
 	        else
-	            c.takePicture(null, null, jpgCb);
+	            augcamera.takePicture(null, null, jpgCb);
 	        augdraw.undoLastScrible();
 	    } else {
+	        Log.e(TAG, "camera not found");
 	        Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
 	    }
 	}
@@ -126,7 +128,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-    private class CameraPictureCallback implements PictureCallback {
+    private class CameraPictureCallback implements AugPictureCallback {
         
         private final String suffix;
         
@@ -134,7 +136,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
             this.suffix = suffix;
         }
 
-        public void onPictureTaken(byte[] data, Camera camera) {
+        public void onPictureTaken(byte[] data, AugCamera camera) {
 
             if (data == null){
                 Log.d(TAG, suffix + " data is null");
@@ -155,13 +157,20 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
                 fos.close();
                 Toast.makeText(context, "file saved as " + pictureFile.getName(), Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
+                Log.e(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
+                Log.e(TAG, "Error accessing file: " + e.getMessage());
             }
-            Camera c = augcamera.getCamera();
-            if (c != null)
-            	c.startPreview();
+        
+            if (camera != null)
+                try {
+                    //ejs todo: it is wrong to do this for both callbacks
+                    Log.d(TAG, "restarting preview after taking pic");
+                    camera.startPreview();
+                    Log.d(TAG, "restarted preview after taking pic");
+                } catch (AugCameraException e) {
+                    Log.e(TAG, "Error starting preview after taking picture: " + e.getMessage(), e);
+                }
         }
     }
     
@@ -203,7 +212,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 
 	@Override
 	public void resume() {
-        Log.d(TAG, "SimpleCameraShutterFeature resume");
 		//noop
 	}
 
