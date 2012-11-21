@@ -49,10 +49,6 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
     public Paint getPaint() {
         return paint;
     }
-    @Override
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
 
     @Override
     public Canvas getCanvas() {

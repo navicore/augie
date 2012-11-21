@@ -11,7 +11,6 @@ import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
@@ -114,5 +113,23 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
             cameraClasses.put(AUGIE_DEFAULT_CAMERA, camclass);
         }
         cameraClasses.put(name, camclass);
+    }
+
+    @Override
+    public Object getState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setState(Object state) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void edit(EditCallback cb) {
+        // TODO Auto-generated method stub
+        if (cb != null) cb.done();
     }
 }

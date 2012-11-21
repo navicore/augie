@@ -2,13 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/menu_mode" android:title="Mode" 
     	android:showAsAction="always"
-    	></item>
+    	>
+    	<menu>
+            <item android:id="@+id/default_mode"
+                  android:title="Default" />
+            <item android:id="@+id/create_new_mode"
+                  android:title="New" />
+        </menu>
+    </item>
     <item android:id="@+id/menu_camera" android:title="Camera" 
     	android:showAsAction="ifRoom"
-    	></item>
+    	>
+    	<!--  todo: settings dialog with drop down choice of cameras from camera factory-->
+    	<!--  settings dialog changes according to camera choice -->
+    	<!--  camera settings stored in mode json -->
+    	
+    </item>
     <item android:id="@+id/menu_overlays" android:title="Augielays"
     	android:showAsAction="ifRoom"
-    	></item>
+    	>
+    	<!--  todo: checkbox dialog -->
+    	
+    </item>
     <item android:id="@+id/menu_settings" android:title="Settings"
     	android:showAsAction="ifRoom"
     	></item>

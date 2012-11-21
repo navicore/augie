@@ -226,4 +226,20 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         return AUGIE_NAME;
     }
 
+    @Override
+    public Object getState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setState(Object state) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void edit(EditCallback cb) {
+        // TODO Auto-generated method stub
+        if (cb != null) cb.done();
+    }
 }

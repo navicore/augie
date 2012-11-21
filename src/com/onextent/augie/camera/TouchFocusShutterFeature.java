@@ -166,11 +166,11 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         int old_color = p.getColor();
         for (ScribleHolder h : meter_areas) {
             p.setColor(Color.GRAY);
-            augview.getCanvas().drawRect(h.rect, augview.getPaint());
+            augview.getCanvas().drawRect(h.rect, p);
         }
         for (ScribleHolder h : focus_areas) {
             p.setColor(Color.GREEN);
-            augview.getCanvas().drawRect(h.rect, augview.getPaint());
+            augview.getCanvas().drawRect(h.rect, p);
         }
         p.setStrokeWidth(orig_w);
         p.setColor(old_color);

@@ -16,7 +16,7 @@ public interface AugieView extends OnTouchListener {
     
     public Paint    getPaint();
 
-    public Bitmap   getBitmap();
+    //public Bitmap   getBitmap();
 
     public Canvas   getCanvas();
     

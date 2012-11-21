@@ -1,9 +1,9 @@
 package com.onextent.augie;
 
-public class AugiementException extends AugieException {
+public class AugiementException extends AugieableException {
 
-    private static final long serialVersionUID = -7732087428568992319L;
-    
+    private static final long serialVersionUID = -6017682270983713439L;
+
     public AugiementException() {
         super();
     }

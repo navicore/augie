@@ -2,13 +2,12 @@ package com.onextent.augie.camera;
 
 import android.view.SurfaceHolder;
 
+import com.onextent.augie.Augieable;
 import com.onextent.augie.Augiement;
 
-public interface AugCamera {
+public interface AugCamera extends Augieable {
 
     public static final String TAG = Augiement.TAG;
-    
-    public String getAugieName();
     
     public void open() throws AugCameraException;
     

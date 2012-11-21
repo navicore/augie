@@ -13,7 +13,7 @@ import java.util.Set;
  * @author esweeney
  *
  */
-public interface Augiement {
+public interface Augiement extends Augieable {
 
 	public static final String TAG = "AUGIE";  //for logging
 	
@@ -29,9 +29,6 @@ public interface Augiement {
     
 	//called if activity is resumed
 	void resume();
-	
-	//key by which dependency manager orders calls.  see listDependencyAugiementNames
-	String getAugieName();
 	
 	//called after default no arg constructor
 	void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException;

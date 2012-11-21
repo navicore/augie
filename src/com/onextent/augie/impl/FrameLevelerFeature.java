@@ -10,6 +10,7 @@ import java.util.Set;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.impl.AugDrawBase.VLine;
+import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
@@ -39,8 +40,8 @@ public class FrameLevelerFeature extends LevelerBase {
     public boolean initFrame() {
         //warning, buggy mess, redo, needs to be able to have view resized during life
         if (isInitialized) return true;
-        Bitmap bmp = augview.getBitmap();
-        if (bmp == null) return false;
+        //Bitmap bmp = augview.getBitmap();
+        //if (bmp == null) return false;
         float vwidth = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
         float hwidth = Float.parseFloat(prefs.getString("HORIZONTAL_LINE_WIDTH", "18"));
         AugLineImpl top = new HLine(0, augview.getWidth(), 0, hwidth);
@@ -80,6 +81,24 @@ public class FrameLevelerFeature extends LevelerBase {
         }
         p.setColor(old_color);
         p.setStrokeWidth(orig_w);
+    }
+
+    @Override
+    public Object getState() throws AugieableException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setState(Object state) throws AugieableException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void edit(EditCallback cb) throws AugieableException {
+        // TODO Auto-generated method stub
+        
     }
 
 

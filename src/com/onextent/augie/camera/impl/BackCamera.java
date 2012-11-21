@@ -2,6 +2,7 @@ package com.onextent.augie.camera.impl;
 
 import android.view.SurfaceHolder;
 
+import com.onextent.augie.AugieableException;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
@@ -69,5 +70,23 @@ public class BackCamera implements AugCamera {
     @Override
     public AugCameraParameters getParameters() {
         return augcamera.getParameters();
+    }
+
+    @Override
+    public Object getState() throws AugieableException {
+        // TODO Auto-generated method stub
+        return augcamera.getState();
+    }
+
+    @Override
+    public void setState(Object state) throws AugieableException {
+        // TODO Auto-generated method stub
+        augcamera.setState(state);
+    }
+
+    @Override
+    public void edit(EditCallback cb) throws AugieableException {
+        // TODO Auto-generated method stub
+        augcamera.edit(cb);
     }
 }

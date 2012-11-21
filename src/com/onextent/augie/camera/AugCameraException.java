@@ -1,10 +1,11 @@
 package com.onextent.augie.camera;
 
-import com.onextent.augie.AugieException;
+import com.onextent.augie.AugieableException;
 
-public class AugCameraException extends AugieException {
+public class AugCameraException extends AugieableException {
 
-    private static final long serialVersionUID = 8034238771379599164L;
+    private static final long serialVersionUID = 1826487587520709511L;
+
     public AugCameraException() {
         super();
     }

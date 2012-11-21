@@ -54,4 +54,22 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
 
     @Override
     protected abstract int getId();
+    
+    @Override
+    public Object getState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setState(Object state) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void edit(EditCallback cb) {
+        // TODO Auto-generated method stub
+        
+    }
 }

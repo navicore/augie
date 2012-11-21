@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
@@ -122,5 +123,23 @@ public class AugDrawFeature extends AugDrawBase {
     @Override
     public String getAugieName() {
         return AUGIE_NAME;
+    }
+
+    @Override
+    public Object getState() throws AugieableException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setState(Object state) throws AugieableException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void edit(EditCallback cb) throws AugieableException {
+        // TODO Auto-generated method stub
+        
     }
 }
