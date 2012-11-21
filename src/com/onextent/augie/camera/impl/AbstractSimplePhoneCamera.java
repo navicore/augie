@@ -5,6 +5,9 @@ package com.onextent.augie.camera.impl;
 
 import java.io.IOException;
 
+import org.json.JSONObject;
+
+import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -125,20 +128,26 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
     }
 
     @Override
-    public Object getState() {
+    public JSONObject getState() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(Object state) {
+    public void setState(JSONObject state) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void edit(EditCallback cb) {
+    public void edit(Context context, EditCallback cb) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

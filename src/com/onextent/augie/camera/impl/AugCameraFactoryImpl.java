@@ -6,6 +6,10 @@ package com.onextent.augie.camera.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.json.JSONObject;
+
+import android.content.Context;
 import android.util.Log;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
@@ -116,20 +120,26 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Object getState() {
+    public JSONObject getState() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(Object state) {
+    public void setState(JSONObject state) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void edit(EditCallback cb) {
+    public void edit(Context context, EditCallback cb) {
         // TODO Auto-generated method stub
         if (cb != null) cb.done();
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

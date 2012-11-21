@@ -77,8 +77,9 @@ Augmented reality Tools, Libraries, and Applications
   * Temp
 
 ### BUGS
-1. camera does not update preview when resumed after 
-   power button (but does if 'home' is hit first
+1. ~~camera does not update preview when resumed after 
+   power button (but does if 'home' is hit first~~
 1. detect boarders more reliably
 1. horizon gets confused if device is oriented diff
+1. when action bar is pulled down preview resizes
 

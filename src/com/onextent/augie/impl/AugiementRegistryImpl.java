@@ -14,6 +14,10 @@ import com.onextent.augie.AugiementRegistry;
 
 import android.util.Log;
 
+	//todo:
+	//  UNREG
+	//  removes module and any modules that depend on it and puts 'em in inactive reg
+
 public class AugiementRegistryImpl extends AbstractSet<Augiement> implements AugiementRegistry {
     
     private final Map<String, Augiement> active;
@@ -34,9 +38,8 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
             //todo: make error visible in ui
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////
     
-    public void tryWaiting() {
+    private void tryWaiting() {
         Set<Augiement> trymes = new HashSet<Augiement>();
         for (Augiement a : waiting.values()) {
             trymes.add(a);
@@ -121,8 +124,6 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
         return new ARIterator();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    
     @Override
     public int size() {
         return active.size();

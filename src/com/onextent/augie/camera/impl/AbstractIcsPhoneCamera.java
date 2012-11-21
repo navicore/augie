@@ -1,6 +1,9 @@
 package com.onextent.augie.camera.impl;
 
+import org.json.JSONObject;
+
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
@@ -56,19 +59,19 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
     protected abstract int getId();
     
     @Override
-    public Object getState() {
+    public JSONObject getState() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(Object state) {
+    public void setState(JSONObject state) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void edit(EditCallback cb) {
+    public void edit(Context context, EditCallback cb) {
         // TODO Auto-generated method stub
         
     }

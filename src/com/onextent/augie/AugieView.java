@@ -1,7 +1,6 @@
 package com.onextent.augie;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View.OnTouchListener;
@@ -15,8 +14,6 @@ public interface AugieView extends OnTouchListener {
     public int      getHeight();
     
     public Paint    getPaint();
-
-    //public Bitmap   getBitmap();
 
     public Canvas   getCanvas();
     

@@ -1,5 +1,8 @@
 package com.onextent.augie.camera.impl;
 
+import org.json.JSONObject;
+
+import android.content.Context;
 import android.view.SurfaceHolder;
 
 import com.onextent.augie.AugieableException;
@@ -73,20 +76,26 @@ public class BackCamera implements AugCamera {
     }
 
     @Override
-    public Object getState() throws AugieableException {
+    public JSONObject getState() throws AugieableException {
         // TODO Auto-generated method stub
         return augcamera.getState();
     }
 
     @Override
-    public void setState(Object state) throws AugieableException {
+    public void setState(JSONObject state) throws AugieableException {
         // TODO Auto-generated method stub
         augcamera.setState(state);
     }
 
     @Override
-    public void edit(EditCallback cb) throws AugieableException {
+    public void edit(Context context, EditCallback cb) throws AugieableException {
         // TODO Auto-generated method stub
-        augcamera.edit(cb);
+        augcamera.edit(null, cb);
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

@@ -12,7 +12,6 @@ import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraPreview;
 import com.onextent.augie.camera.CameraShutterFeature;
@@ -99,6 +98,7 @@ public class AugmaticActivity extends SherlockActivity {
             shakeReseter.registerTwoShakeReset(drawer);
 
             RelativeLayout layout = (RelativeLayout) findViewById(R.id.camera_preview);
+            //FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
             layout.addView(camPreview); //bottom layer
             layout.addView((View) augmentedView); //transparent top layer
             layout.setOnTouchListener(augmentedView);
@@ -106,10 +106,13 @@ public class AugmaticActivity extends SherlockActivity {
             menu_btn=new Button(this);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            menu_btn.setLayoutParams(params);
+            //FrameLayout.LayoutParams fl_params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            //fl_params.addRule(FrameLayout.ALIGN_PARENT_RIGHT, FrameLayout.TRUE);
+            //menu_btn.setLayoutParams(fl_params);
             menu_btn.setMinimumHeight(30);
             menu_btn.setMinimumWidth(30);
             menu_btn.setBackgroundResource(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
-            menu_btn.setLayoutParams(params);
             layout.addView(menu_btn);
             menu_btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -173,4 +176,17 @@ public class AugmaticActivity extends SherlockActivity {
         inflater.inflate(R.menu.options, menu);
         return true;
     }
+
+    /*
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        int sdkVersion = Build.VERSION.SDK_INT;
+        if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
+            startActivity(new Intent(this, AugmaticPreferences.class));
+            return super.onPrepareOptionsMenu(menu);
+        } else  {
+            return super.onPrepareOptionsMenu(menu);
+        }
+    }
+     */
 }

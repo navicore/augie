@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * An Augiement is an Augmented Reality feature, maybe some local
  * info like weather and tides, maybe some astronomy markers, maybe
- * some face recog, maybe some camera features, etc...
+ * some face recog, maybe some camera controls, etc...
  * 
  * @author esweeney
  *
@@ -34,19 +34,4 @@ public interface Augiement extends Augieable {
 	void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException;
 	
 	Set<String> getDependencyNames();
-	
-	//todo:
-	// first list dependencies by name
-	// then implement setAugiements for each with 'if instanceof'
-	// check for nulls after the for () loop
-	
-	//THEN implement a depencency reg.
-	//
-	//  3 registries:  ACTIVE, WAITING, INACTIVE
-	//  REG
-	//  reg puts modules whose deps have keys in active reg (a tree map?) in active reg
-	//  then checks waiting reg to see which of the modules waiting can now reg
-	//  else adds it to the waiting reg
-	//  UNREG
-	//  removes module and any modules that depend on it and puts 'em in inactive reg
 }

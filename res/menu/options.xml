@@ -13,21 +13,17 @@
     <item android:id="@+id/menu_camera" android:title="Camera" 
     	android:showAsAction="ifRoom"
     	>
-    	<!--  todo: settings dialog with drop down choice of cameras from camera factory-->
-    	<!--  settings dialog changes according to camera choice -->
-    	<!--  camera settings stored in mode json -->
-    	
     </item>
     <item android:id="@+id/menu_overlays" android:title="Augielays"
     	android:showAsAction="ifRoom"
     	>
-    	<!--  todo: checkbox dialog -->
-    	
     </item>
     <item android:id="@+id/menu_settings" android:title="Settings"
     	android:showAsAction="ifRoom"
-    	></item>
+    	>
+    </item>
     <item android:id="@+id/menu_hide" android:title="Close Menu"
     	android:showAsAction="always"
-    	></item>
+    	>
+    </item>
 </menu>

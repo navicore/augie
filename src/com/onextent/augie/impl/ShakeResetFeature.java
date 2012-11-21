@@ -16,6 +16,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import java.lang.Math;
 
+import org.json.JSONObject;
+
 import com.onextent.augie.AugieView;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
@@ -149,20 +151,26 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     @Override
-    public Object getState() throws AugieableException {
+    public JSONObject getState() throws AugieableException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(Object state) throws AugieableException {
+    public void setState(JSONObject state) throws AugieableException {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void edit(EditCallback cb) throws AugieableException {
+    public void edit(Context context, EditCallback cb) throws AugieableException {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }
