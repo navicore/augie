@@ -48,7 +48,6 @@ import android.os.Bundle;
 public class AugmaticActivity extends SherlockActivity {
 
     private AugieView augmentedView;
-    private CameraPreview camPreview;
     private AugCameraFactory cameraFactory;
 
     static final String TAG = Augiement.TAG;
@@ -60,7 +59,7 @@ public class AugmaticActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
@@ -69,24 +68,17 @@ public class AugmaticActivity extends SherlockActivity {
 
         augmentedView = new AugieViewImpl(this);
 
-        cameraFactory = new AugCameraFactoryImpl();
-        cameraFactory.registerCamera(BackCamera.class, BackCamera.AUGIE_NAME);
-        cameraFactory.registerCamera(FrontCamera.class, FrontCamera.AUGIE_NAME);
+        configCameraFactory();
+
         try {
             augmentedView.addFeature(cameraFactory);
-            //ejs, temporary, you will have to recreate CameraPreview when camera is changed
-            //ejs, temporary, need to get camera name from UI
-            AugCamera augcamera = cameraFactory.getCamera(null); 
-            camPreview = new CameraPreview(this, augcamera);
 
             AugDrawFeature drawer = new AugDrawFeature();
             augmentedView.addFeature(drawer);
 
-            augmentedView.addFeature(new HorizonFeature());
-
-            //todo: reimpl horizonChecker as CheckedHorizon so that red lines
+            //todo: reimpl HorizonFeature as CheckedHorizon so that red lines
             // are painted under white lines and only if 'correcting'
-
+            augmentedView.addFeature(new HorizonFeature());
             augmentedView.addFeature(new HorizonCheckFeature());
 
             augmentedView.addFeature(new FrameLevelerFeature());
@@ -98,28 +90,11 @@ public class AugmaticActivity extends SherlockActivity {
             shakeReseter.registerTwoShakeReset(drawer);
 
             RelativeLayout layout = (RelativeLayout) findViewById(R.id.camera_preview);
-            //FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
-            layout.addView(camPreview); //bottom layer
-            layout.addView((View) augmentedView); //transparent top layer
+            
+            configCamPreview( cameraFactory.getCamera(null) ); 
+            
             layout.setOnTouchListener(augmentedView);
 
-            menu_btn=new Button(this);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            menu_btn.setLayoutParams(params);
-            //FrameLayout.LayoutParams fl_params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            //fl_params.addRule(FrameLayout.ALIGN_PARENT_RIGHT, FrameLayout.TRUE);
-            //menu_btn.setLayoutParams(fl_params);
-            menu_btn.setMinimumHeight(30);
-            menu_btn.setMinimumWidth(30);
-            menu_btn.setBackgroundResource(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
-            layout.addView(menu_btn);
-            menu_btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    getSupportActionBar().show();
-                    menu_btn.setVisibility(View.GONE);
-                }
-            });
             getSupportActionBar().setBackgroundDrawable(null);
             getSupportActionBar().hide();
 
@@ -128,6 +103,61 @@ public class AugmaticActivity extends SherlockActivity {
         } catch (Throwable err) {
             Log.e(TAG, "can not create augmatic", err);
         }
+    }
+    
+    protected void configCamPreview(AugCamera augcamera) {
+    
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.camera_preview);
+    
+        layout.removeAllViewsInLayout(); //todo: check for leaks, no idea about views cleaning up
+    
+        CameraPreview camPreview = new CameraPreview(this, augcamera);
+    
+        layout.addView(camPreview); //bottom layer sees
+    
+        layout.addView((View) augmentedView); //transparent top layer
+    
+        configMenuButton();
+    }
+
+    protected void configCameraFactory() {
+
+        cameraFactory = new AugCameraFactoryImpl();
+    
+        cameraFactory.registerCamera(BackCamera.class, BackCamera.AUGIE_NAME);
+    
+        cameraFactory.registerCamera(FrontCamera.class, FrontCamera.AUGIE_NAME);
+    }
+
+    protected void configMenuButton() {
+
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.camera_preview);
+    
+        menu_btn=new Button(this);
+    
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+    
+        menu_btn.setLayoutParams(params);
+    
+        menu_btn.setMinimumHeight(30);
+    
+        menu_btn.setMinimumWidth(30);
+    
+        menu_btn.setBackgroundResource(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
+    
+        layout.addView(menu_btn);
+    
+        menu_btn.setOnClickListener(new View.OnClickListener() {
+    
+            public void onClick(View view) {
+    
+                getSupportActionBar().show();
+    
+                menu_btn.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -165,7 +195,12 @@ public class AugmaticActivity extends SherlockActivity {
             getSupportActionBar().hide();
             menu_btn.setVisibility(View.VISIBLE);
             return true;
+        case R.id.default_mode:
+            return true;
+        case R.id.create_new_mode:
+            return true;
         default:
+            Log.w(TAG, "menu default for id " + item.getItemId());
             return super.onOptionsItemSelected(item);
         }
     }

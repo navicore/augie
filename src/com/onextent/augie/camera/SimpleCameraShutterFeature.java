@@ -250,4 +250,10 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public Meta getMeta() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

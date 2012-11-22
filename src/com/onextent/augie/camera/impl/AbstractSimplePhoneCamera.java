@@ -150,4 +150,10 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public Meta getMeta() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

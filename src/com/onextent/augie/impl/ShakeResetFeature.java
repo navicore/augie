@@ -173,4 +173,10 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public Meta getMeta() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

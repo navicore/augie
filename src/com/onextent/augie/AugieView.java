@@ -18,7 +18,7 @@ public interface AugieView extends OnTouchListener {
     public Canvas   getCanvas();
     
     public Context  getContext();
-
+    
     public void     reset();
     
     public void     stop();

@@ -25,10 +25,13 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     public static final String AUGIE_NAME = "AUGIE/FEATURES/CAMERA/FACTORY";
     public static final String AUGIE_DEFAULT_CAMERA = "AUGIE/FEATURES/CAMERA/DEFAULT_CAMERA";
 	
+	private String currentCameraName;
+	
 	public AugCameraFactoryImpl() {
 	    
 	    cameras = new HashMap<String, AugCamera>();
 	    cameraClasses = new HashMap<String, Class<? extends AugCamera>>();
+	    currentCameraName = null;
 	}
 	
     @Override
@@ -36,8 +39,15 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         
         AugCamera camera = null;
        
-        //todo: check current camera name in UI
-        if (name == null) name = AUGIE_DEFAULT_CAMERA;
+        if (name == null)  {
+            
+            if (currentCameraName == null) {
+                //todo: if currentCameraName is null, run UI to select camera?
+                name = AUGIE_DEFAULT_CAMERA;
+            } else {
+                name = AUGIE_DEFAULT_CAMERA;
+            }
+        }
         
         if (cameras.containsKey(name)) {
             
@@ -48,6 +58,8 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
             camera = createCamera(name);
             if (camera != null) cameras.put(name, camera);
         }
+        
+        currentCameraName = name;
 
         return camera;
 	}
@@ -141,5 +153,11 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     public boolean isEditable() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public Meta getMeta() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

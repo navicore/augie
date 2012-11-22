@@ -14,8 +14,6 @@ import java.util.Set;
  *
  */
 public interface Augiement extends Augieable {
-
-	public static final String TAG = "AUGIE";  //for logging
 	
 	//the view calls this when bmp has been rebuilt from scratch
 	//and we need each feature to redraw

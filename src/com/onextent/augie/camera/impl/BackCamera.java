@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.view.SurfaceHolder;
 
+import com.onextent.augie.Augieable;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
@@ -29,7 +30,7 @@ public class BackCamera implements AugCamera {
 
     public BackCamera() {
         
-        this(AbstractPhoneCamera.BACK_CAMERA_NAME);
+        this(AUGIE_NAME);
     }
 
     @Override
@@ -97,5 +98,32 @@ public class BackCamera implements AugCamera {
     public boolean isEditable() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    static private final class BackMeta implements Augieable.Meta {
+
+        @Override
+        public String getTitle() {
+            return "Back Camera";
+        }
+
+        @Override
+        public String getDescription() {
+            return "Interal Camera Facing Away from You";
+        }
+
+        @Override
+        public String getCatagory() {
+            return "Camera";
+        }
+        
+    }
+    static private final Augieable.Meta mymeta;
+    static {
+        mymeta = new BackMeta();
+    }
+    @Override
+    public Meta getMeta() {
+        return mymeta;
     }
 }
