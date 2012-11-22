@@ -4,7 +4,6 @@ Augmented reality Tools, Libraries, and Applications
 ----------------------------------------------------
 
 ### TODO
-1. Splash Screen
 1. ~~Draw Horizons~~
   * ~~Horizon and Vertical~~
   * ~~Level~~
@@ -31,15 +30,6 @@ Augmented reality Tools, Libraries, and Applications
   * adjust position of rect to camera movement
   * adjust position of rect to faces (snap to nearby face)
   * rect should follow faces
-1. Pano Helper
-  * a begin/end
-      * button
-      * gesture
-  * remember horizon and adjust line as panning
-  * remember frame borders
-    * with marks on horizon line (easy)
-    * with frame (harder)
-  * stitcher
 1. Feature Dependancy Manager
   * unregister features 
       * when they are turned off
@@ -47,16 +37,7 @@ Augmented reality Tools, Libraries, and Applications
   * ~~register features~~
       * ~~when they are turned on~~
       * ~~with a set of required features~~
-1. GPS Tagging
-1. Photo Sharing
-1. Photo Post Editing
 1. Flat (or angle!) Compass Overlay with moon and sun path info
-1. Text Overlay for local info modules
-  * Sun (rise set compass angle) module
-  * Moon (rise set compass angle and size) module
-  * Tide info module
-  * Surf info module
-  * Temp
 
 ### BUGS
 1. ~~camera does not update preview when resumed after 
