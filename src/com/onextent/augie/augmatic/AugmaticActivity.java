@@ -71,6 +71,22 @@ public class AugmaticActivity extends SherlockActivity {
         configCameraFactory();
 
         try {
+            
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
+            //todo: move addFeature into factory calls done here so that registry / factory is visible to UI
             augmentedView.addFeature(cameraFactory);
 
             AugDrawFeature drawer = new AugDrawFeature();
@@ -186,6 +202,8 @@ public class AugmaticActivity extends SherlockActivity {
         switch (item.getItemId()) {
         case R.id.menu_mode:
             return true;
+        case R.id.menu_camera:
+            return true;
         case R.id.menu_settings:
             startActivity(new Intent(this, AugmaticPreferences.class));
             return true;
@@ -200,7 +218,8 @@ public class AugmaticActivity extends SherlockActivity {
         case R.id.create_new_mode:
             return true;
         default:
-            Log.w(TAG, "menu default for id " + item.getItemId());
+            Log.d(TAG, "menu default for id " + item.getItemId());
+            //todo: look up the id in the added items
             return super.onOptionsItemSelected(item);
         }
     }

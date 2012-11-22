@@ -10,7 +10,7 @@ import java.util.Set;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementRegistry;
+import com.onextent.augie.AugiementDependencyRegistry;
 
 import android.util.Log;
 
@@ -18,7 +18,7 @@ import android.util.Log;
 	//  UNREG
 	//  removes module and any modules that depend on it and puts 'em in inactive reg
 
-public class AugiementRegistryImpl extends AbstractSet<Augiement> implements AugiementRegistry {
+public class AugiementRegistryImpl extends AbstractSet<Augiement> implements AugiementDependencyRegistry {
     
     private final Map<String, Augiement> active;
     private final Map<String, Augiement> waiting;

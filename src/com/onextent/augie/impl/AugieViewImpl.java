@@ -55,6 +55,21 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
         return canvas;
     }
 
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
+    //todo: move out of here and call factory inside activity at init
     public boolean removeFeature(Augiement f) throws AugiementException {
         return features.remove(f);
     }

@@ -160,4 +160,10 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public Set<String> getCameraNames() {
+
+        return cameraClasses.keySet();
+    }
 }
