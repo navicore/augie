@@ -195,13 +195,13 @@ public class HorizonFeature extends AugDrawBase {
     }
 
     @Override
-    public JSONObject getState() throws AugieableException {
+    public JSONObject getCode() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(JSONObject state) throws AugieableException {
+    public void setCode(JSONObject state) {
         // TODO Auto-generated method stub
         
     }

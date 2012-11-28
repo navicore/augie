@@ -229,13 +229,13 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 
     @Override
-    public JSONObject getState() {
+    public JSONObject getCode() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(JSONObject state) {
+    public void setCode(JSONObject state) {
         // TODO Auto-generated method stub
     }
 

@@ -77,15 +77,15 @@ public class BackCamera implements AugCamera {
     }
 
     @Override
-    public JSONObject getState() throws AugieableException {
+    public JSONObject getCode() {
         // TODO Auto-generated method stub
-        return augcamera.getState();
+        return augcamera.getCode();
     }
 
     @Override
-    public void setState(JSONObject state) throws AugieableException {
+    public void setCode(JSONObject state) {
         // TODO Auto-generated method stub
-        augcamera.setState(state);
+        augcamera.setCode(state);
     }
 
     @Override

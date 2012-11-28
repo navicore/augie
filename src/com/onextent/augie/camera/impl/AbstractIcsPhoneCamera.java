@@ -50,6 +50,24 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
             }
             return 0;
         }
+
+        @Override
+        public JSONObject getCode() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void setCode(JSONObject code) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public String getAugieName() {
+            // TODO Auto-generated method stub
+            return null;
+        }
     }
 
     @Override
@@ -59,13 +77,13 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
     protected abstract int getId();
     
     @Override
-    public JSONObject getState() {
+    public JSONObject getCode() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setState(JSONObject state) {
+    public void setCode(JSONObject state) {
         // TODO Auto-generated method stub
         
     }

@@ -11,6 +11,21 @@ import android.util.Log;
 
 public class AugieStore {
     
+    /**
+     * 
+     * list mode augienames
+     * 
+     * get mode by augiename
+     * 
+     * a mode:
+     *   name
+     *   description
+     *   camera augiename
+     *   camera state
+     *   list of augiements enabled
+     * 
+     */
+    
     public static final String TAG = Augieable.TAG;
     
     public static final String DATABASE_NAME = "augiestore_main";
@@ -44,6 +59,20 @@ public class AugieStore {
         }
     }
     
+    public long replaceContent(String key, String content) throws SQLiteException {
+        
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, key);
+        values.put(CONTENT_NAME, content);
+    
+        try {
+            return db.replace(TABLE_NAME, null, values);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "can not insert", e);
+            throw e;
+        }
+    }
+    
     public long insertContent(String key, String content) throws SQLiteException {
         
         ContentValues values = new ContentValues();
@@ -58,12 +87,39 @@ public class AugieStore {
         }
     }
     
-    public Cursor getContent() throws SQLiteException {
+    public Cursor getAllContent() throws SQLiteException {
         
         try {
             Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
         
             return c;
+        } catch (SQLiteException e) {
+            Log.e(TAG, "can not get content", e);
+            throw e;
+        }
+    }
+    
+    public String getContentString(String key) throws SQLiteException {
+        Cursor c = getContent(key);
+        if (c != null && c.moveToFirst()) {
+            int i = c.getColumnIndex(CONTENT_NAME);
+            return c.getString(i);
+        }
+        return null;
+    }
+//                    KEY_ID + " = \"" + key + "\"",
+    public Cursor getContent(String key) throws SQLiteException {
+        
+        try {
+            return db.query(TABLE_NAME,
+                    new String[] {CONTENT_NAME},
+                    KEY_ID + " LIKE \"" + key + "\"",
+                    null,
+                    null,
+                    null,
+                    null
+                   );
+
         } catch (SQLiteException e) {
             Log.e(TAG, "can not get content", e);
             throw e;

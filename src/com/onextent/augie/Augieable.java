@@ -1,10 +1,9 @@
 package com.onextent.augie;
 
-import org.json.JSONObject;
-
+import com.onextent.augie.data.Codable;
 import android.content.Context;
 
-public interface Augieable {
+public interface Augieable extends Codable {
     
 	public static final String TAG = "AUGIE";  //for logging
 	
@@ -39,10 +38,6 @@ public interface Augieable {
 	
 	Meta getMeta();
 	
-    JSONObject getState() throws AugieableException;
-    
-    void setState(JSONObject state) throws AugieableException;
-    
     void edit(Context context, EditCallback cb) throws AugieableException;
     
     boolean isEditable();
