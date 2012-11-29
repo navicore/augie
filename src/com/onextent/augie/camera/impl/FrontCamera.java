@@ -1,10 +1,11 @@
 package com.onextent.augie.camera.impl;
 
 import com.onextent.augie.Augieable;
+import com.onextent.augie.camera.CameraName;
 
 public class FrontCamera extends BackCamera {
 
-    public static final String CAMERA_NAME = AbstractPhoneCamera.FRONT_CAMERA_NAME;
+    public static final CameraName CAMERA_NAME = AbstractPhoneCamera.FRONT_CAMERA_NAME;
     
     /*
      * wrapper to provide no-arg constructor for factory

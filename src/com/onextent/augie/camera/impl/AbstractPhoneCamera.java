@@ -5,16 +5,17 @@ package com.onextent.augie.camera.impl;
 
 import android.os.Build;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.CameraName;
 
 /*
  * factory to allow pre-icecreamsandwich touchfocus devices
  */
 public abstract class AbstractPhoneCamera implements AugCamera {
    
-    protected static final String BACK_CAMERA_NAME = "AUGIE/FEATURES/CAMERA/BACK_CAMERA";
-    protected static final String FRONT_CAMERA_NAME = "AUGIE/FEATURES/CAMERA/FRONT_CAMERA";
+    protected static final CameraName BACK_CAMERA_NAME = new CameraName("AUGIE/FEATURES/CAMERA/BACK_CAMERA");
+    protected static final CameraName FRONT_CAMERA_NAME = new CameraName("AUGIE/FEATURES/CAMERA/FRONT_CAMERA");
     
-    public static AbstractPhoneCamera getInstance(String name) {
+    public static AbstractPhoneCamera getInstance(CameraName name) {
         
         AbstractPhoneCamera sInstance;
 

@@ -6,6 +6,7 @@ import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.camera.CameraName;
 
 public class IcsBackPhoneCamera extends AbstractIcsPhoneCamera {
 
@@ -27,7 +28,7 @@ public class IcsBackPhoneCamera extends AbstractIcsPhoneCamera {
     }
 
     @Override
-    public String getCameraName() {
+    public CameraName getCameraName() {
         
         return AbstractPhoneCamera.BACK_CAMERA_NAME;
     }

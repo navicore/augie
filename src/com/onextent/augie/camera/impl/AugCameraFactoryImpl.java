@@ -19,21 +19,22 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.augie.camera.CameraName;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
-	private final Map<String, AugCamera> cameras;
-	private final Map<String, Class<? extends AugCamera>> cameraClasses;
+	private final Map<CameraName, AugCamera> cameras;
+	private final Map<CameraName, Class<? extends AugCamera>> cameraClasses;
 	
     public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/CAMERA/FACTORY");
-    public static final String AUGIE_DEFAULT_CAMERA = "AUGIE/FEATURES/CAMERA/DEFAULT_CAMERA";
+    public static final CameraName AUGIE_DEFAULT_CAMERA = new CameraName("AUGIE/FEATURES/CAMERA/DEFAULT_CAMERA");
 	
-	private String currentCameraName;
+	private CameraName currentCameraName;
 	
 	public AugCameraFactoryImpl() {
 	    
-	    cameras = new HashMap<String, AugCamera>();
-	    cameraClasses = new HashMap<String, Class<? extends AugCamera>>();
+	    cameras = new HashMap<CameraName, AugCamera>();
+	    cameraClasses = new HashMap<CameraName, Class<? extends AugCamera>>();
 	    currentCameraName = null;
        
 	    //prime with to default camera impls
@@ -42,7 +43,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
 	}
 	
     @Override
-	public AugCamera getCamera(String name) {
+	public AugCamera getCamera(CameraName name) {
         
         AugCamera camera = null;
        
@@ -71,7 +72,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         return camera;
 	}
 	
-    private AugCamera createCamera(String name) {
+    private AugCamera createCamera(CameraName name) {
         
         AugCamera camera = null;
         
@@ -131,7 +132,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
     
     @Override
-    public void registerCamera(Class<? extends AugCamera> camclass, String name) {
+    public void registerCamera(Class<? extends AugCamera> camclass, CameraName name) {
         if (cameraClasses.isEmpty()) {
             cameraClasses.put(AUGIE_DEFAULT_CAMERA, camclass);
         }
@@ -169,7 +170,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Set<String> getCameraNames() {
+    public Set<CameraName> getCameraNames() {
 
         return cameraClasses.keySet();
     }

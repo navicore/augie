@@ -18,6 +18,7 @@ import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
+import com.onextent.augie.camera.CameraName;
 
 public class BackCamera implements AugCamera {
     
@@ -25,11 +26,11 @@ public class BackCamera implements AugCamera {
      * wrapper to provide no-arg constructor for factory
      */
     
-    public static final String CAMERA_NAME = AbstractPhoneCamera.BACK_CAMERA_NAME;
+    public static final CameraName CAMERA_NAME = AbstractPhoneCamera.BACK_CAMERA_NAME;
     
     private final AugCamera augcamera;
     
-    protected BackCamera(String name) {
+    protected BackCamera(CameraName name) {
         
         augcamera = AbstractPhoneCamera.getInstance(name);
     }
@@ -154,7 +155,7 @@ public class BackCamera implements AugCamera {
     public Set<AugieName> getDependencyNames() { return null; }
 
     @Override
-    public String getCameraName() {
+    public CameraName getCameraName() {
         
         return CAMERA_NAME;
     }
