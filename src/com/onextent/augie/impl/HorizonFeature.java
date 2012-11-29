@@ -10,10 +10,12 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.augie.marker.impl.AugLineImpl;
@@ -28,19 +30,21 @@ import android.view.View;
 
 public class HorizonFeature extends AugDrawBase {
 
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_DRAW");
+    
     private AugLineImpl movingLine;
     private Point startP;
     private List<AugLineImpl> lines;
     private AugDrawFeature augdraw;
     
-    private final static Set<String> deps;
+    private final static Set<AugieName> deps;
     static {
-        deps = new HashSet<String>();
+        deps = new HashSet<AugieName>();
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
     
     @Override
-    public Set<String> getDependencyNames() {
+    public Set<AugieName> getDependencyNames() {
         return deps;
     }
 
@@ -188,9 +192,8 @@ public class HorizonFeature extends AugDrawBase {
         lines.clear();
     }
     
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/HORIZON_DRAW";
     @Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
 

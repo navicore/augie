@@ -31,5 +31,5 @@ public interface Augiement extends Augieable {
 	//called after default no arg constructor
 	void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException;
 	
-	Set<String> getDependencyNames();
+	Set<AugieName> getDependencyNames();
 }

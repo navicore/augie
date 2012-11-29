@@ -4,14 +4,14 @@ import com.onextent.augie.Augieable;
 
 public class FrontCamera extends BackCamera {
 
-    public static final String AUGIE_NAME = AbstractPhoneCamera.FRONT_CAMERA_NAME;
+    public static final String CAMERA_NAME = AbstractPhoneCamera.FRONT_CAMERA_NAME;
     
     /*
      * wrapper to provide no-arg constructor for factory
      */
     public FrontCamera() {
         
-        super(AUGIE_NAME);
+        super(CAMERA_NAME);
     }
     
     static private final class BackMeta implements Augieable.Meta {

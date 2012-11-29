@@ -5,6 +5,7 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -13,6 +14,7 @@ import com.onextent.augie.marker.impl.AugLineImpl;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -48,7 +50,7 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 	}
 	
 	@Override
-    public Set<String> getDependencyNames() {
+    public Set<AugieName> getDependencyNames() {
         return null;
     }    
 	
@@ -88,21 +90,22 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 	    
     }
 
-    @Override
-	public void clear() {
-	    // TODO Auto-generated method stub
-	    
-    }
-
-    @Override
+	@Override
 	public void stop() {
-	    // TODO Auto-generated method stub
-	    
-    }
-
-    @Override
+        Log.d(TAG, "stopping " + getClass().getName());
+		//noop
+	}
+	
+	@Override
 	public void resume() {
-	    // TODO Auto-generated method stub
-	    
+        Log.d(TAG, "resuming " + getClass().getName());
+		//noop
+	}
+
+	@Override
+	public void clear() {
+        Log.d(TAG, "clearing " + getClass().getName());
+		//noop
     }
+	
 }

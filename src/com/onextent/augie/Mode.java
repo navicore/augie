@@ -7,19 +7,20 @@ import android.util.Log;
 
 public class Mode implements Codable {
     
-    static final String NAME = "name";
-    static final String AUGIENAME = "augieName";
-    static final String CAMERA = "camera";
-    static final String AUGIEMENTS = "augiements";
+    static final String KEY_NAME = "name";
+    static final String KEY_AUGIENAME = "augieName";
+    static final String KEY_CAMERA = "camera";
+    static final String KEY_AUGIEMENTS = "augiements";
 
-    private String name, augieName;
+    private String name;
+    private AugieName augieName;
 
     @Override
     public JSONObject getCode() {
         JSONObject json = new JSONObject();
         try {
-            json.put(NAME, name);
-            json.put(AUGIENAME, augieName);
+            json.put(KEY_NAME, name);
+            json.put(KEY_AUGIENAME, augieName.toString());
         } catch (JSONException e) {
             Log.e(TAG, e.toString(), e);
         }
@@ -29,8 +30,8 @@ public class Mode implements Codable {
     @Override
     public void setCode(JSONObject code) {
         try {
-            name = code.getString(NAME);
-            augieName = code.getString(AUGIENAME);
+            name = code.getString(KEY_NAME);
+            augieName = new ModeName(code.getString(KEY_AUGIENAME));
         } catch (JSONException e) {
             Log.e(TAG, e.toString(), e);
         }
@@ -45,11 +46,11 @@ public class Mode implements Codable {
     }
 
     @Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return augieName;
     }
 
-    public void setAugieName(String augieName) {
+    public void setAugieName(AugieName augieName) {
         this.augieName = augieName;
     }
 }

@@ -1,12 +1,18 @@
 package com.onextent.augie.camera.impl;
 
+import java.util.Set;
+
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.view.SurfaceHolder;
 
+import com.onextent.augie.AugieName;
+import com.onextent.augie.AugieView;
 import com.onextent.augie.Augieable;
 import com.onextent.augie.AugieableException;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
@@ -19,7 +25,7 @@ public class BackCamera implements AugCamera {
      * wrapper to provide no-arg constructor for factory
      */
     
-    public static final String AUGIE_NAME = AbstractPhoneCamera.BACK_CAMERA_NAME;
+    public static final String CAMERA_NAME = AbstractPhoneCamera.BACK_CAMERA_NAME;
     
     private final AugCamera augcamera;
     
@@ -30,12 +36,12 @@ public class BackCamera implements AugCamera {
 
     public BackCamera() {
         
-        this(AUGIE_NAME);
+        this(CAMERA_NAME);
     }
 
     @Override
-    public String getAugieName() {
-        return augcamera.getAugieName();
+    public AugieName getAugieName() {
+        return AUGIENAME;
     }
 
     @Override
@@ -125,5 +131,31 @@ public class BackCamera implements AugCamera {
     @Override
     public Meta getMeta() {
         return mymeta;
+    }
+
+    //NOOP stubs just here so that dependency manager can 
+    // give cameras to shutter and config augiements
+    @Override
+    public void updateCanvas() { }
+
+    @Override
+    public void clear() { }
+
+    @Override
+    public void stop() { }
+
+    @Override
+    public void resume() { }
+
+    @Override
+    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException { }
+
+    @Override
+    public Set<AugieName> getDependencyNames() { return null; }
+
+    @Override
+    public String getCameraName() {
+        
+        return CAMERA_NAME;
     }
 }

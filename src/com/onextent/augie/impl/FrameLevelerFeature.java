@@ -12,9 +12,11 @@ import org.json.JSONObject;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.impl.AugDrawBase.VLine;
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
 
@@ -27,9 +29,10 @@ public class FrameLevelerFeature extends LevelerBase {
     private List<AugLine> frameLines;
     private boolean isInitialized = false;
 
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/FRAME_LEVELER";
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/FRAME_LEVELER");
+    
     @Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
     

@@ -1,5 +1,7 @@
 package com.onextent.augie.camera.impl;
 
+import java.util.Set;
+
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 
@@ -64,14 +67,13 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
         }
 
         @Override
-        public String getAugieName() {
-            // TODO Auto-generated method stub
-            return null;
+        public AugieName getAugieName() {
+            throw new java.lang.UnsupportedOperationException("abstract");
         }
     }
 
     @Override
-    public abstract String getAugieName();
+    public abstract AugieName getAugieName();
 
     @Override
     protected abstract int getId();
@@ -93,4 +95,21 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
         // TODO Auto-generated method stub
         
     }
+    
+        //NOOP stubs just here so that dependency manager can 
+    // give cameras to shutter and config augiements
+    @Override
+    public void updateCanvas() { }
+
+    @Override
+    public void clear() { }
+
+    @Override
+    public void stop() { }
+
+    @Override
+    public void resume() { }
+
+    @Override
+    public Set<AugieName> getDependencyNames() { return null; }
 }

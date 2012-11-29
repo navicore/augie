@@ -35,20 +35,32 @@ public class AugieStore {
     public static final String CONTENT_NAME = "content";
     
     private SQLiteDatabase db;
-    private final AugieDbHelper dbhelper;
+    private AugieDbHelper dbhelper;
+    
+    private final Context context;
     
     public AugieStore(Context c) {
-        dbhelper = new AugieDbHelper(c, DATABASE_NAME, null, DATABASE_VERSION);
+        context = c;
     }
     
     public void close() {
-        db.close();
+        if (db != null)  {
+            db.close();
+            db = null;
+        }
+        if (dbhelper != null) {
+            dbhelper.close();
+            dbhelper = null;
+        }
     }
     
     public void open() throws SQLiteException {
+    
+        if (dbhelper != null) throw new SQLiteException("dbhelper already init");
+        dbhelper = new AugieDbHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
         
+        if (db != null) throw new SQLiteException("db already init");
         try {
-            
             db = dbhelper.getWritableDatabase();
             
         } catch (SQLiteException e) {
@@ -56,6 +68,19 @@ public class AugieStore {
             Log.e(TAG, "error getting writable db", e);
             
             db = dbhelper.getReadableDatabase();
+        }
+    }
+    
+    public long remove(String key) throws SQLiteException {
+        
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, key);
+    
+        try {
+            return db.delete(TABLE_NAME, KEY_ID + " = \"" + key + "\"", null);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "can not insert", e);
+            throw e;
         }
     }
     
@@ -100,14 +125,18 @@ public class AugieStore {
     }
     
     public String getContentString(String key) throws SQLiteException {
+        String ret = null;
         Cursor c = getContent(key);
-        if (c != null && c.moveToFirst()) {
-            int i = c.getColumnIndex(CONTENT_NAME);
-            return c.getString(i);
+        if (c != null) {
+            if (c != null && c.moveToFirst()) {
+                int i = c.getColumnIndex(CONTENT_NAME);
+                ret = c.getString(i);
+            }
+            c.close();
         }
-        return null;
+        return ret;
     }
-//                    KEY_ID + " = \"" + key + "\"",
+
     public Cursor getContent(String key) throws SQLiteException {
         
         try {

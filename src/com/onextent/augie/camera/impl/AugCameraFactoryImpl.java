@@ -11,9 +11,12 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraFactory;
 
@@ -22,7 +25,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
 	private final Map<String, AugCamera> cameras;
 	private final Map<String, Class<? extends AugCamera>> cameraClasses;
 	
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/CAMERA/FACTORY";
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/CAMERA/FACTORY");
     public static final String AUGIE_DEFAULT_CAMERA = "AUGIE/FEATURES/CAMERA/DEFAULT_CAMERA";
 	
 	private String currentCameraName;
@@ -32,6 +35,10 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
 	    cameras = new HashMap<String, AugCamera>();
 	    cameraClasses = new HashMap<String, Class<? extends AugCamera>>();
 	    currentCameraName = null;
+       
+	    //prime with to default camera impls
+	    registerCamera(BackCamera.class, BackCamera.CAMERA_NAME);
+        registerCamera(FrontCamera.class, FrontCamera.CAMERA_NAME);
 	}
 	
     @Override
@@ -84,7 +91,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
 
@@ -119,7 +126,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Set<String> getDependencyNames() {
+    public Set<AugieName> getDependencyNames() {
         return null;
     }
     

@@ -5,17 +5,16 @@ package com.onextent.augie.camera;
 
 import android.os.Build;
 import android.util.Log;
+import android.view.View.OnTouchListener;
 
-import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
-import com.onextent.augie.impl.AugDrawFeature;
 
 /*
  * factory to allow pre-icecreamsandwich touchfocus devices
  */
-public abstract class CameraShutterFeature implements Augiement {
+public abstract class CameraShutterFeature implements Augiement, OnTouchListener {
 
-    public static CameraShutterFeature getInstance( AugCameraFactory c, AugDrawFeature d, AugieView v ) {
+    public static CameraShutterFeature getInstance( ) {
         
         CameraShutterFeature sInstance;
 

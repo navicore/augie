@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
@@ -20,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
+    
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
 
     List<ScribleHolder> focus_areas, meter_areas;
     int max_focus_areas;
@@ -34,9 +38,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	    super.onCreate(av, helpers);
         focus_areas = new ArrayList<ScribleHolder>();
         meter_areas = new ArrayList<ScribleHolder>();
-	    AugCamera cam = cameraFactory.getCamera(null);
-	    max_focus_areas = cam.getParameters().getMaxNumFocusAreas();
-	    max_metering_areas = cam.getParameters().getMaxNumMeteringAreas();
+	    max_focus_areas = camera.getParameters().getMaxNumFocusAreas();
+	    max_metering_areas = camera.getParameters().getMaxNumMeteringAreas();
 	    Log.d(TAG, "focus areas: " + max_focus_areas);
 	    Log.d(TAG, "metering areas: " + max_metering_areas);
     }
@@ -155,7 +158,14 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
 
 	@Override
+	public void stop() {
+        Log.d(TAG, "stopping " + getClass().getName());
+		//noop
+	}
+	
+	@Override
 	public void resume() {
+        Log.d(TAG, "resuming " + getClass().getName());
 		//noop
 	}
 
@@ -201,9 +211,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         return xcloseToEdge(e) || ycloseToEdge(e);
     }
     
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER";
 	@Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
 }

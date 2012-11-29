@@ -14,10 +14,11 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
@@ -34,24 +35,26 @@ import android.widget.Toast;
 
 public class SimpleCameraShutterFeature extends CameraShutterFeature implements OnTouchListener {
 	
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SIMPLE_SHUTTER");
+    
     protected AugieView augview;
 	protected SharedPreferences prefs;
-	protected AugCameraFactory cameraFactory;
+	protected AugCamera camera;
 	protected AugDrawFeature augdraw;
 	
 	private Context context;
 	private AugPictureCallback jpgCb;
 	private AugPictureCallback rawCb;
 	
-    private final static Set<String> deps;
+    private final static Set<AugieName> deps;
     static {
-        deps = new HashSet<String>();
-        deps.add(AugCameraFactoryImpl.AUGIE_NAME);
+        deps = new HashSet<AugieName>();
+        deps.add(AugCamera.AUGIENAME);
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
 
 	@Override
-    public Set<String> getDependencyNames() {
+    public Set<AugieName> getDependencyNames() {
         return deps;
     }
 	    
@@ -61,14 +64,14 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	    augview = av;
 	    
         for (Augiement a : helpers) {
-            if (a instanceof AugCameraFactoryImpl) {
-                cameraFactory = (AugCameraFactory) a;
+            if (a instanceof AugCamera) {
+                camera = (AugCamera) a;
             }
             else if (a instanceof AugDrawFeature) {
                 augdraw = (AugDrawFeature) a;
             }
         }
-        if (cameraFactory == null) throw new AugiementException("camera factory feature is null");
+        if (camera == null) throw new AugiementException("camera feature is null");
         if (augdraw == null) throw new AugiementException("draw feature is null");
         
 	    context = av.getContext();
@@ -84,14 +87,11 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 
 	protected void takePicture() {
 	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
-	    AugCamera augcamera = null;
-	    //todo: get name of current camera from ui
-	    augcamera = cameraFactory.getCamera(null);
-	    if (augcamera != null)  {
+	    if (camera != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
-	            augcamera.takePicture(null, rawCb, jpgCb);
+	            camera.takePicture(null, rawCb, jpgCb);
 	        else
-	            augcamera.takePicture(null, null, jpgCb);
+	            camera.takePicture(null, null, jpgCb);
 	        augdraw.undoLastScrible();
 	    } else {
 	        Log.e(TAG, "camera not found");
@@ -209,22 +209,24 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     
 	@Override
 	public void stop() {
+        Log.d(TAG, "stopping " + getClass().getName());
 		//noop
 	}
-
+	
 	@Override
 	public void resume() {
+        Log.d(TAG, "resuming " + getClass().getName());
 		//noop
 	}
 
 	@Override
 	public void clear() {
+        Log.d(TAG, "clearing " + getClass().getName());
 		//noop
     }
 	
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/SIMPLE_SHUTTER";
 	@Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
 

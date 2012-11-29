@@ -33,9 +33,7 @@ public interface Augieable extends Codable {
         String getDescription();
         String getCatagory();
     }
-  
-	String getAugieName();
-	
+ 
 	Meta getMeta();
 	
     void edit(Context context, EditCallback cb) throws AugieableException;

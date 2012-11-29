@@ -2,26 +2,30 @@ package com.onextent.augie.camera;
 
 import android.view.SurfaceHolder;
 
-import com.onextent.augie.Augieable;
+import com.onextent.augie.AugieName;
 import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementName;
 
-public interface AugCamera extends Augieable {
+public interface AugCamera extends Augiement {
 
-    public static final String TAG = Augiement.TAG;
+    static final String TAG = Augiement.TAG;
+    public static final AugieName AUGIENAME = new AugiementName("AUGIE/FEATURES/CAMERA");
     
-    public void open() throws AugCameraException;
+    String getCameraName();
     
-    public void close() throws AugCameraException;
+    void open() throws AugCameraException;
     
-    public void setPreviewDisplay(SurfaceHolder holder) throws AugCameraException;
+    void close() throws AugCameraException;
     
-    public void startPreview() throws AugCameraException;
+    void setPreviewDisplay(SurfaceHolder holder) throws AugCameraException;
     
-    public void stopPreview() throws AugCameraException;
+    void startPreview() throws AugCameraException;
     
-    public void takePicture(AugShutterCallback shutter, 
+    void stopPreview() throws AugCameraException;
+    
+    void takePicture(AugShutterCallback shutter, 
                             AugPictureCallback raw, 
                             AugPictureCallback jpeg);
     
-    public AugCameraParameters getParameters();
+    AugCameraParameters getParameters();
 }

@@ -9,13 +9,14 @@ package com.onextent.augie.data;
  */
 import org.json.JSONObject;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.Augiement;
 
 public interface Codable {
     
     static final String TAG = Augiement.TAG;
     
-    String getAugieName();
+    AugieName getAugieName();
     
     JSONObject getCode();
 

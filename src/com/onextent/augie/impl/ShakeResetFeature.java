@@ -18,10 +18,12 @@ import java.lang.Math;
 
 import org.json.JSONObject;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
 
 import android.util.Log;
 
@@ -39,7 +41,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     boolean doing_double = false;
 
     @Override
-    public Set<String> getDependencyNames() {
+    public Set<AugieName> getDependencyNames() {
         return null;
     }
      
@@ -61,9 +63,9 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     //todo: think about callback api for this sort of feature.  the shaker shouldn't care if
     // it is for a reset or something else
     
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/SHAKE_RESET";
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHAKE_RESET");
     @Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
 

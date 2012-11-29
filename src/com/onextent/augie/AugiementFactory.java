@@ -6,16 +6,10 @@ public interface AugiementFactory {
     
     static final String TAG = Augiement.TAG;
     
-    Augieable.Meta getMeta(String augieName);
-
-    void registerAugiement(Class<? extends Augiement> augclass, String name) throws AugiementException;
+    void registerAugiement(Class<? extends Augiement> augclass, AugieName augieName) throws AugiementException;
     
-    void activate(String name) throws AugiementException;
+    Augiement newInstance(AugieName augieName);
     
-    void deactivate(String name) throws AugiementException;
-    
-    boolean isActive(String name);
-
-    public Set<String> getAugieNames();
+    public Set<AugieName> getAugieNames();
     
 }

@@ -9,16 +9,19 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -105,6 +108,7 @@ public class AugDrawFeature extends AugDrawBase {
     
     @Override
 	public void clear() {
+        Log.d(TAG, "clearing " + getClass().getName());
     	scribles.clear();
 	}
 
@@ -122,9 +126,9 @@ public class AugDrawFeature extends AugDrawBase {
     	}
 	}
 
-    public static final String AUGIE_NAME = "AUGIE/FEATURES/DRAW";
+    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
     @Override
-    public String getAugieName() {
+    public AugieName getAugieName() {
         return AUGIE_NAME;
     }
 
@@ -157,4 +161,16 @@ public class AugDrawFeature extends AugDrawBase {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    @Override
+	public void stop() {
+        Log.d(TAG, "stopping " + getClass().getName());
+		//noop
+	}
+	
+	@Override
+	public void resume() {
+        Log.d(TAG, "resuming " + getClass().getName());
+		//noop
+	}
 }

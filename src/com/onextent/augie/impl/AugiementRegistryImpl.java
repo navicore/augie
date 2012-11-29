@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieView;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -20,13 +21,13 @@ import android.util.Log;
 
 public class AugiementRegistryImpl extends AbstractSet<Augiement> implements AugiementDependencyRegistry {
     
-    private final Map<String, Augiement> active;
-    private final Map<String, Augiement> waiting;
+    private final Map<AugieName, Augiement> active;
+    private final Map<AugieName, Augiement> waiting;
     private final AugieView augview;
     
     public AugiementRegistryImpl(AugieView av) {
-        active = new LinkedHashMap<String, Augiement>();
-        waiting = new LinkedHashMap<String, Augiement>();
+        active = new LinkedHashMap<AugieName, Augiement>();
+        waiting = new LinkedHashMap<AugieName, Augiement>();
         augview = av;
     }
 
@@ -56,7 +57,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
         assert(object != null);
 
         boolean dependsAllmet = true;
-        Set<String> dependencyNames = object.getDependencyNames();
+        Set<AugieName> dependencyNames = object.getDependencyNames();
         
         if (dependencyNames == null) {
             
@@ -67,7 +68,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
             
         } else {
 
-            for (String dname : dependencyNames) {
+            for (AugieName dname : dependencyNames) {
                 if (!active.containsKey(dname)) {
                     Log.d(TAG, "augiement " + object.getAugieName() + " waiting for " + dname);
                     waiting.put(object.getAugieName(), object);
