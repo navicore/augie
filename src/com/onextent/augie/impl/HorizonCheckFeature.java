@@ -22,7 +22,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class HorizonCheckFeature extends LevelerBase {
-
+    
     @Override
     public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
         super.onCreate(av, helpers);
@@ -30,7 +30,6 @@ public class HorizonCheckFeature extends LevelerBase {
     
     @Override
     public void updateCanvas() {
-        if (!prefs.getBoolean("HORIZON_CHECKER_ENABLED", true)) return;
 
         Paint p = augview.getPaint();
         float orig_w = p.getStrokeWidth();

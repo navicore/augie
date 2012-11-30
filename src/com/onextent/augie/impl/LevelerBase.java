@@ -57,7 +57,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     private final static Set<AugieName> deps;
     static {
         deps = new HashSet<AugieName>();
-        deps.add(HorizonFeature.AUGIE_NAME);
+        //deps.add(HorizonFeature.AUGIE_NAME);
     }
 
     @Override
