@@ -6,7 +6,7 @@ package com.onextent.augie.impl;
 import java.util.Set;
 
 import com.onextent.augie.AugieName;
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.impl.AugLineImpl;
@@ -21,8 +21,8 @@ import android.view.View.OnTouchListener;
 
 public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
-    protected static final String TAG = AugieView.TAG;
-    protected AugieView augview;
+    protected static final String TAG = AugieScape.TAG;
+    protected AugieScape augview;
     protected SharedPreferences prefs;
     public static float CLOSE_PIXELS = 25;
 	
@@ -55,7 +55,7 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
     }    
 	
     @Override
-    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+    public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 		augview = av;
 		prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
     }

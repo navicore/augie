@@ -6,7 +6,7 @@ import java.util.Collection;
 import android.graphics.Point;
 import android.util.Log;
 
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
@@ -19,7 +19,7 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
     
     private static final long serialVersionUID = 1L;
     
-    private final AugieView augview;
+    private final AugieScape augview;
     
     private GESTURE_TYPE gtype;
     private boolean gtype_is_set;
@@ -28,7 +28,7 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
     private int minX, maxX, minY, maxY, sumOfEdges;
     private Point prevPnt;
 
-    public AugScribleImpl(AugieView v) {
+    public AugScribleImpl(AugieScape v) {
         augview = v;
         gtype_is_set = false;
         ends_are_close = false;

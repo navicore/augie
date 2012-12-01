@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.onextent.augie.AugieName;
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -87,7 +87,7 @@ public class TouchShutter implements Augiement, OnTouchListener {
     }
 
     @Override
-    public void onCreate(AugieView av, Set<Augiement> helpers)
+    public void onCreate(AugieScape av, Set<Augiement> helpers)
             throws AugiementException {
 
         shutter.onCreate(av, helpers);

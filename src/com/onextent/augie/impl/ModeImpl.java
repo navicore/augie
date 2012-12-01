@@ -8,13 +8,14 @@ import org.json.JSONObject;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieName;
 import com.onextent.augie.Augiement;
-import com.onextent.augie.AugiementFactory;
+import com.onextent.augie.RealityScape;
 import com.onextent.augie.Mode;
+import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.data.Codable;
+
 import android.util.Log;
 
 public class ModeImpl implements Codable, Mode {
@@ -32,18 +33,14 @@ public class ModeImpl implements Codable, Mode {
     
     private AugCamera camera;
     
-    private final AugCameraFactory cameraFactory;
-    private final AugiementFactory augiementFactory;
+    private final ModeManager modeManager;
     
-    public ModeImpl(AugCameraFactory cf, AugiementFactory af) {
-        
-        cameraFactory = cf;
-        augiementFactory = af;
+
+
+    public ModeImpl(ModeManager mm) {
+        modeManager = mm;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#getCode()
-     */
     @Override
     public JSONObject getCode() {
         JSONObject json = new JSONObject();
@@ -62,9 +59,6 @@ public class ModeImpl implements Codable, Mode {
         return json;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#setCode(org.json.JSONObject)
-     */
     @Override
     public void setCode(JSONObject code) {
         try {
@@ -74,7 +68,7 @@ public class ModeImpl implements Codable, Mode {
                 JSONObject cameraJson = code.getJSONObject(KEY_CAMERA);
                 CameraName cameraName = new CameraName(cameraJson.getString(KEY_AUGIENAME));
                 JSONObject cameraCode = cameraJson.getJSONObject(KEY_CODE);
-                camera = cameraFactory.getCamera(cameraName);
+                camera = modeManager.getCameraFactory().getCamera(cameraName);
                 if (camera != null && cameraCode != null) {
                     camera.setCode(cameraCode);
                 }
@@ -157,7 +151,6 @@ public class ModeImpl implements Codable, Mode {
     @Override
     public void activate() throws AugieException {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -165,4 +158,5 @@ public class ModeImpl implements Codable, Mode {
         // TODO Auto-generated method stub
         
     }
+    
 }

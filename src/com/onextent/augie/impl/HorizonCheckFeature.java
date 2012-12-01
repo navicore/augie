@@ -8,7 +8,7 @@ import java.util.Set;
 import org.json.JSONObject;
 
 import com.onextent.augie.AugieName;
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -24,7 +24,7 @@ import android.graphics.Paint;
 public class HorizonCheckFeature extends LevelerBase {
     
     @Override
-    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+    public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
         super.onCreate(av, helpers);
     }
     

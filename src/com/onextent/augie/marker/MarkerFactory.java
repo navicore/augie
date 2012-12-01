@@ -1,6 +1,6 @@
 package com.onextent.augie.marker;
 
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.marker.impl.AugLineImpl;
 import com.onextent.augie.marker.impl.AugRectImpl;
 import com.onextent.augie.marker.impl.AugScribleImpl;
@@ -14,7 +14,7 @@ public class MarkerFactory {
         return new AugLineImpl(p1, p2);
     }
 
-    public static AugScrible createScrible(AugieView v) {
+    public static AugScrible createScrible(AugieScape v) {
         
         return new AugScribleImpl(v);
     }

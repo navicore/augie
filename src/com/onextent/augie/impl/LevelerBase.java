@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.onextent.augie.AugieName;
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
@@ -44,7 +44,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     }
     protected SharedPreferences prefs;
     protected SensorManager mSensorManager;
-    protected AugieView augview;
+    protected AugieScape augview;
     protected HorizonFeature horizonFeature;
     private float[] mGravs = new float[3];
     private float[] mGeoMags = new float[3];
@@ -61,7 +61,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     }
 
     @Override
-    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+    public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 
         for (Augiement a : helpers) {
             if (a instanceof HorizonFeature) {

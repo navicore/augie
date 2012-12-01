@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.impl.AugDrawBase.VLine;
 import com.onextent.augie.AugieName;
@@ -37,7 +37,7 @@ public class FrameLevelerFeature extends LevelerBase {
     }
     
     @Override
-    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException {
+    public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
         super.onCreate(av, helpers);
         frameLines = new ArrayList<AugLine>();
     }

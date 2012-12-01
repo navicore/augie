@@ -29,7 +29,7 @@ public interface Augiement extends Augieable {
 	void resume();
 	
 	//called after default no arg constructor
-	void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException;
+	void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException;
 	
 	Set<AugieName> getDependencyNames();
 }

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import android.util.Log;
 
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
@@ -16,7 +16,7 @@ public class AugiementFactoryImpl implements AugiementFactory {
 
 	private final Map<AugieName, Class<? extends Augiement>> augieClasses;
 	
-    public AugiementFactoryImpl(AugieView av) {
+    public AugiementFactoryImpl(AugieScape av) {
 	    
         augieClasses = new HashMap<AugieName, Class<? extends Augiement>>();
     }

@@ -8,7 +8,7 @@ import android.content.Context;
 import android.view.SurfaceHolder;
 
 import com.onextent.augie.AugieName;
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augieable;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
@@ -149,7 +149,7 @@ public class BackCamera implements AugCamera {
     public void resume() { }
 
     @Override
-    public void onCreate(AugieView av, Set<Augiement> helpers) throws AugiementException { }
+    public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException { }
 
     @Override
     public Set<AugieName> getDependencyNames() { return null; }

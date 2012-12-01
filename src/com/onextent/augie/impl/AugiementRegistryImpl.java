@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.onextent.augie.AugieName;
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementDependencyRegistry;
@@ -23,9 +23,9 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
     
     private final Map<AugieName, Augiement> active;
     private final Map<AugieName, Augiement> waiting;
-    private final AugieView augview;
+    private final AugieScape augview;
     
-    public AugiementRegistryImpl(AugieView av) {
+    public AugiementRegistryImpl(AugieScape av) {
         active = new LinkedHashMap<AugieName, Augiement>();
         waiting = new LinkedHashMap<AugieName, Augiement>();
         augview = av;

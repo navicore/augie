@@ -5,7 +5,7 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
-import com.onextent.augie.AugieView;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 
@@ -19,9 +19,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 
-public class AugieViewImpl extends View implements OnTouchListener, AugieView {
+public class AugieScapeImpl extends View implements AugieScape {
 
     Bitmap bitmap;
     Canvas canvas;
@@ -30,7 +29,7 @@ public class AugieViewImpl extends View implements OnTouchListener, AugieView {
 
     Set<Augiement> features;
 
-    public AugieViewImpl(Context context) {
+    public AugieScapeImpl(Context context) {
         super(context);
         prefs = PreferenceManager.getDefaultSharedPreferences(context); //todo: stop doing this
 

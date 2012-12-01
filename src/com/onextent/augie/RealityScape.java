@@ -1,9 +1,11 @@
 /**
  * copyright Ed Sweeney, 2012, all rights reserved
  */
-package com.onextent.augie.camera;
+package com.onextent.augie;
 
-import com.onextent.augie.Augiement;
+import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
+
 import android.content.Context;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -11,20 +13,20 @@ import android.util.Log;
 
 enum TOUCH_STATE {NOSTATE, SHOOTING, ZOOMING};
 
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class RealityScape extends SurfaceView implements SurfaceHolder.Callback {
 
     protected final String TAG = Augiement.TAG;
 
     private final SurfaceHolder holder;
     private final AugCamera augcamera;
 
-    public CameraPreview(Context context) {
+    public RealityScape(Context context) {
         super(context);
         throw new java.lang.UnsupportedOperationException(); // ha ha
     }
 
     @SuppressWarnings("deprecation")
-    public CameraPreview(Context context, AugCamera ac) {
+    public RealityScape(Context context, AugCamera ac) {
         super(context);
         augcamera = ac;
 

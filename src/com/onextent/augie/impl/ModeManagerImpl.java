@@ -6,14 +6,17 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
 import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieStoreException;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementFactory;
+import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCameraFactory;
@@ -23,74 +26,63 @@ public class ModeManagerImpl implements ModeManager {
     private static final String TAG = Augiement.TAG;
     AugieStore store;
     private static final String CURRENT_MODE_KEY_KEY = "CURRENT/MODE_KEY";
-    public static final String MODE_KEY_DEFAULT = "MODE/SYSTEM/DEFAULT";
     private static final String MODE_KEY_FLASH = "MODE/SYSTEM/FLASH";
 
-    private ModeImpl currentMode;
-    private List<ModeImpl> allModes;
+    private Mode currentMode;
+    private List<Mode> allModes;
     
     private final AugCameraFactory cameraFactory;
     private final AugiementFactory augiementFactory;
+    private final Activity activity;
+    private final AugieScape augview;
     
-    public ModeManagerImpl(AugCameraFactory cf, AugiementFactory af) {
-        
+    public ModeManagerImpl(Activity a, AugieScape av, AugCameraFactory cf, AugiementFactory af) {
+       
+        activity = a;
+        augview = av;
         cameraFactory = cf;
         augiementFactory = af;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#onCreate(android.content.Context)
-     */
     @Override
     public void onCreate(Context context) throws AugieStoreException {
 
         if (store != null) throw new AugieStoreException("store already init");
         store = new AugieStore(context);
         store.open();
-        initCurrentMode();
+        init();
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#stop()
-     */
     @Override
     public void stop() {
         if (store != null) {
             store.close();
             store = null;
         }
+        allModes = null;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#setCurrentMode(com.onextent.augie.Mode)
-     */
     @Override
-    public void setCurrentMode(ModeImpl mode) {
+    public void setCurrentMode(Mode mode) {
         currentMode = mode;
         store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getAugieName().toString());
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#getCurrentMode()
-     */
     @Override
-    public ModeImpl getCurrentMode() {
+    public Mode getCurrentMode() {
         return currentMode;
     }
     
     @Override
-    public ModeImpl newMode() {
+    public Mode newMode() {
         
-        return new ModeImpl(cameraFactory, augiementFactory);
+        return new ModeImpl(this);
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#getMode(com.onextent.augie.AugieName)
-     */
     @Override
-    public ModeImpl getMode(AugieName augieName) {
+    public Mode getMode(AugieName augieName) {
         
-        ModeImpl m = new ModeImpl(cameraFactory, augiementFactory);
+        Mode m = new ModeImpl(this);
         String m_ser = store.getContentString(augieName.toString());
         if (m_ser != null) {
             try {
@@ -103,7 +95,7 @@ public class ModeManagerImpl implements ModeManager {
         return null;
     }
 
-    private void initCurrentMode() throws AugieStoreException {
+    private void init() throws AugieStoreException {
 
         String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY);
         if (currentMode_key == null) {
@@ -116,19 +108,16 @@ public class ModeManagerImpl implements ModeManager {
         currentMode = getMode(new ModeName(currentMode_key));
     }
     
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#getModes()
-     */
     @Override
-    public List<ModeImpl> getModes() throws AugieStoreException {
+    public List<Mode> getModes() throws AugieStoreException {
         
         if (allModes != null) return allModes;
        
-        List<ModeImpl> list = new ArrayList<ModeImpl>();
+        List<Mode> list = new ArrayList<Mode>();
         Cursor c = store.getContent("MODE/%");
         if (c.moveToFirst()) {
             do {
-                ModeImpl mode = new ModeImpl(cameraFactory, augiementFactory);
+                Mode mode = new ModeImpl(this);
                 String codeStr = c.getString(0);
                 try {
                     JSONObject code = new JSONObject(codeStr);
@@ -153,22 +142,19 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     private void primeDefaultMode() {
-        ModeImpl mode = new ModeImpl(cameraFactory, augiementFactory);
+        Mode mode = new ModeImpl(this);
         mode.setName("Default");
         mode.setAugieName(new ModeName(MODE_KEY_DEFAULT));
         addMode(mode);
     }
 
     private void primeFlashMode() {
-        ModeImpl mode = new ModeImpl(cameraFactory, augiementFactory);
+        ModeImpl mode = new ModeImpl(this);
         mode.setName("Flash");
         mode.setAugieName(new ModeName(MODE_KEY_FLASH));
         addMode(mode);       
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#deleteMode(com.onextent.augie.AugieName)
-     */
     @Override
     public void deleteMode(AugieName augieName) {
         if (getCurrentMode().equals(augieName)) {
@@ -178,11 +164,8 @@ public class ModeManagerImpl implements ModeManager {
         allModes = null;
     }
     
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#addMode(com.onextent.augie.Mode)
-     */
     @Override
-    public void addMode(ModeImpl mode) {
+    public void addMode(Mode mode) {
         allModes = null;
         String mode_ser = mode.getCode().toString();
         Log.d(TAG, mode_ser);
@@ -190,17 +173,14 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     //ugh
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.ModeManager#getCurrentModeIdx()
-     */
     @Override
     public int getCurrentModeIdx() {
         int idx = 0;
         try {
             int sz = getModes().size();
             for (int i = 0; i < sz; i++) {
-                ModeImpl m = getModes().get(i);
-                ModeImpl c = getCurrentMode();
+                Mode m = getModes().get(i);
+                Mode c = getCurrentMode();
                 if (m != null && 
                     c != null &&
                     m.getAugieName().equals(c.getAugieName())) return i;
@@ -209,5 +189,18 @@ public class ModeManagerImpl implements ModeManager {
             Log.e(TAG, e.toString(), e);
         }
         return idx;
+    }
+
+    public AugCameraFactory getCameraFactory() {
+        return cameraFactory;
+    }
+    public Activity getActivity() {
+        return activity;
+    }
+    public AugieScape getAugview() {
+        return augview;
+    }
+    public AugiementFactory getAugiementFactory() {
+        return augiementFactory;
     }
 }
