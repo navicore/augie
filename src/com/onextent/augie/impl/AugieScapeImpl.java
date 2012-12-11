@@ -54,23 +54,12 @@ public class AugieScapeImpl extends View implements AugieScape {
         return canvas;
     }
 
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
-    //todo: move out of here and call factory inside activity at init
     public boolean removeFeature(Augiement f) throws AugiementException {
-        return features.remove(f);
+        
+        if (f == null) {
+            features.clear();
+            return true;
+        } else return features.remove(f);
     }
     
     public void addFeature(Augiement f) throws AugiementException {

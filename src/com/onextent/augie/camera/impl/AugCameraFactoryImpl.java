@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -20,6 +18,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.util.codeable.Code;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
@@ -140,18 +139,6 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public JSONObject getCode() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setCode(JSONObject state) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void edit(Context context, EditCallback cb) {
         // TODO Auto-generated method stub
         if (cb != null) cb.done();
@@ -173,5 +160,17 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     public Set<CameraName> getCameraNames() {
 
         return cameraClasses.keySet();
+    }
+
+    @Override
+    public Code getCode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setCode(Code code) {
+        // TODO Auto-generated method stub
+        
     }
 }

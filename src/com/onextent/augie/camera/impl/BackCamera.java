@@ -2,8 +2,6 @@ package com.onextent.augie.camera.impl;
 
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.view.SurfaceHolder;
 
@@ -19,6 +17,7 @@ import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.util.codeable.Code;
 
 public class BackCamera implements AugCamera {
     
@@ -84,14 +83,12 @@ public class BackCamera implements AugCamera {
     }
 
     @Override
-    public JSONObject getCode() {
-        // TODO Auto-generated method stub
+    public Code getCode() {
         return augcamera.getCode();
     }
 
     @Override
-    public void setCode(JSONObject state) {
-        // TODO Auto-generated method stub
+    public void setCode(Code state) {
         augcamera.setCode(state);
     }
 

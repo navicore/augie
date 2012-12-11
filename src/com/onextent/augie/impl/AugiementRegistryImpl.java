@@ -139,4 +139,11 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
     public boolean isEmpty() {
         return active.isEmpty();
     }
+    
+    @Override
+    public void clear() {
+        super.clear();
+        active.clear();
+        waiting.clear();
+    }
 }

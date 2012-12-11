@@ -2,7 +2,6 @@ package com.onextent.augie.camera;
 
 import java.util.Set;
 
-import org.json.JSONObject;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +13,7 @@ import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.util.codeable.Code;
 
 public class TouchShutter implements Augiement, OnTouchListener {
     
@@ -51,13 +51,13 @@ public class TouchShutter implements Augiement, OnTouchListener {
     }
 
     @Override
-    public JSONObject getCode() {
+    public Code getCode() {
         
         return shutter.getCode();
     }
 
     @Override
-    public void setCode(JSONObject code) {
+    public void setCode(Code code) {
         
         shutter.setCode(code);
     }

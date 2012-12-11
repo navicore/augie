@@ -12,6 +12,16 @@ import android.widget.Button;
  *   - realityscape (camera preview)
  *   - augiescape (stacks of augiements)
  *   - ui button
+ *   
+ *   - usage (by Mode):
+ *       construct
+ *       add augiements
+ *       activate
+ *       ...
+ *       ...
+ *       ...
+ *       deactivate
+ *     
  */
 public class SuperScape {
 
@@ -29,7 +39,7 @@ public class SuperScape {
     }
 
     public void activate(AugCamera camera) {
-        
+       
         configCamPreview(camera);
     }
 

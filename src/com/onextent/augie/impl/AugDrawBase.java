@@ -23,7 +23,6 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
     protected static final String TAG = AugieScape.TAG;
     protected AugieScape augview;
-    protected SharedPreferences prefs;
     public static float CLOSE_PIXELS = 25;
 	
 	static class VLine extends AugLineImpl {
@@ -31,7 +30,6 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 		VLine(int top, int bottom, int x, float width) {
 		    super(new Point(x, top), new Point(x, bottom));
 		    setCenter(new Point(x, bottom / 2));
-	        //this.width = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
 	        setWidth(width);
         }
 	}
@@ -40,7 +38,6 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 		HLine(int left, int right, int y, float width) {
 		    super(new Point(left, y), new Point(right, y));
 		    setCenter ( new Point(right / 2, y) );
-	        //this.width = Float.parseFloat(prefs.getString("HORIZON_LINE_WIDTH", "9"));
 	        setWidth ( width );
         }
 	}
@@ -57,7 +54,6 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 		augview = av;
-		prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
     }
 
     protected boolean xcloseToEdge(MotionEvent e) {

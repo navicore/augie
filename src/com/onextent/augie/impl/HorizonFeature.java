@@ -8,17 +8,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.augie.marker.impl.AugLineImpl;
+import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.CodeArray;
+import com.onextent.util.codeable.CodeableException;
+import com.onextent.util.codeable.JSONCoder;
 
 
 import android.content.Context;
@@ -128,8 +131,10 @@ public class HorizonFeature extends AugDrawBase {
         }
         
         AugLineImpl line;
-        float vwidth = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
-        float hwidth = Float.parseFloat(prefs.getString("HORIZONTAL_LINE_WIDTH", "18"));
+        //float vwidth = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
+        float vwidth = 9;
+        //float hwidth = Float.parseFloat(prefs.getString("HORIZONTAL_LINE_WIDTH", "18"));
+        float hwidth = 18;
         switch (lt) {
         case HORIZONTAL_LINE:
             line = new HLine(0, augview.getWidth(), startP.y, hwidth);
@@ -189,7 +194,7 @@ public class HorizonFeature extends AugDrawBase {
 
     @Override
     public void clear() {
-        lines.clear();
+        if (lines != null) lines.clear();
     }
     
     @Override
@@ -198,13 +203,40 @@ public class HorizonFeature extends AugDrawBase {
     }
 
     @Override
-    public JSONObject getCode() {
-        // TODO Auto-generated method stub
-        return null;
+    public Code getCode() {
+
+        Code code = JSONCoder.newCode();
+        try {
+            if (lines != null && !lines.isEmpty()) {
+                CodeArray<Code> linesCode = JSONCoder.newArrayOfCode();
+                code.put("lines", linesCode);
+                for (AugLine l : lines) {
+                    Code lcode = JSONCoder.newCode();
+                    linesCode.add(lcode);
+                    /**
+                     * TODO make lines all one codable impl (idiot)
+                     */
+                    /*
+                    if (l instanceof VLine) {
+                        //VLine(int top, int bottom, int x, float width) {
+                        lcode.put("type", "VLINE");
+                        lcode.put("top", "");
+                    } else {
+                        //HLine(int left, int right, int y, float width) {
+                        lcode.put("type", "HLINE");
+                    }
+                     */
+                }
+            }
+        } catch (CodeableException e) {
+            Log.e(TAG, e.toString(), e);
+        }
+        
+        return code;
     }
 
     @Override
-    public void setCode(JSONObject state) {
+    public void setCode(Code code) {
         // TODO Auto-generated method stub
         
     }

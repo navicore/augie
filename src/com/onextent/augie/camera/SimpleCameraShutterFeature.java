@@ -12,8 +12,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -22,6 +20,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.util.codeable.Code;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -231,17 +230,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 
     @Override
-    public JSONObject getCode() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setCode(JSONObject state) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void edit(Context context, EditCallback cb) {
         // TODO Auto-generated method stub
         if (cb != null) cb.done();
@@ -257,5 +245,17 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     public Meta getMeta() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Code getCode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setCode(Code code) {
+        // TODO Auto-generated method stub
+        
     }
 }

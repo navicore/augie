@@ -5,8 +5,6 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
@@ -16,6 +14,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
+import com.onextent.util.codeable.Code;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -58,18 +57,6 @@ public class HorizonCheckFeature extends LevelerBase {
     }
 
     @Override
-    public JSONObject getCode() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setCode(JSONObject state) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void edit(Context context, EditCallback cb) throws AugieableException {
         // TODO Auto-generated method stub
         
@@ -85,5 +72,17 @@ public class HorizonCheckFeature extends LevelerBase {
     public Meta getMeta() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Code getCode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setCode(Code code) {
+        // TODO Auto-generated method stub
+        
     }
 }

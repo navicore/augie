@@ -6,6 +6,8 @@ import com.onextent.augie.camera.AugCameraFactory;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 
 public interface ModeManager {
@@ -16,7 +18,7 @@ public interface ModeManager {
 
     public abstract void stop();
 
-    public abstract void setCurrentMode(Mode mode);
+    public abstract void setCurrentMode(Mode mode) throws AugieException;
 
     public abstract Mode getCurrentMode();
 
@@ -37,8 +39,14 @@ public interface ModeManager {
 
     public Activity getActivity();
 
-    public AugieScape getAugview();
+    public AugieScape getAugieScape();
 
     public AugiementFactory getAugiementFactory();
+    
+    //this is extremely evil, get rid of these calls
+    //this is extremely evil, get rid of these calls
+    //this is extremely evil, get rid of these calls
+    public ViewGroup getCamPrevLayout();
+    public Button getButton();
     
 }

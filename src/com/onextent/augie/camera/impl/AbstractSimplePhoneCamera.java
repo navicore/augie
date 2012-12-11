@@ -5,8 +5,6 @@ package com.onextent.augie.camera.impl;
 
 import java.io.IOException;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
@@ -17,6 +15,7 @@ import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
+import com.onextent.util.codeable.Code;
 
 public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
 
@@ -129,13 +128,13 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
         }
 
         @Override
-        public JSONObject getCode() {
+        public Code getCode() {
             // TODO Auto-generated method stub
             return null;
         }
 
         @Override
-        public void setCode(JSONObject code) {
+        public void setCode(Code code) {
             // TODO Auto-generated method stub
             
         }
@@ -147,13 +146,13 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
     }
 
     @Override
-    public JSONObject getCode() {
+    public Code getCode() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setCode(JSONObject state) {
+    public void setCode(Code state) {
         // TODO Auto-generated method stub
         
     }

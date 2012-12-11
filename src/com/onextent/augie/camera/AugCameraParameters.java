@@ -1,6 +1,6 @@
 package com.onextent.augie.camera;
 
-import com.onextent.augie.data.Codable;
+import com.onextent.util.codeable.Codable;
 
 public interface AugCameraParameters extends Codable {
     

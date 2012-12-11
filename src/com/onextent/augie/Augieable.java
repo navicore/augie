@@ -1,6 +1,7 @@
 package com.onextent.augie;
 
-import com.onextent.augie.data.Codable;
+import com.onextent.util.codeable.Codable;
+
 import android.content.Context;
 
 public interface Augieable extends Codable {

@@ -2,23 +2,14 @@ package com.onextent.augie;
 
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.util.codeable.Codable;
 
-public interface Mode {
-
-    JSONObject getCode();
-
-    void setCode(JSONObject code);
+public interface Mode extends Codable {
 
     String getName();
 
     void setName(String name);
-
-    AugieName getAugieName();
-
-    void setAugieName(AugieName augieName);
 
     AugCamera getCamera();
 
@@ -30,6 +21,8 @@ public interface Mode {
 
     Set<Augiement> getAugiements();
     
-    void activate() throws AugieException;
+    void activate() throws AugieException; //create and config SuperScape
     void deactivate() throws AugieException;
+
+    void setAugieName(ModeName modeName);
 }

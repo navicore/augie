@@ -6,7 +6,6 @@ import java.util.Set;
 
 import android.util.Log;
 
-import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
@@ -16,7 +15,7 @@ public class AugiementFactoryImpl implements AugiementFactory {
 
 	private final Map<AugieName, Class<? extends Augiement>> augieClasses;
 	
-    public AugiementFactoryImpl(AugieScape av) {
+    public AugiementFactoryImpl() {
 	    
         augieClasses = new HashMap<AugieName, Class<? extends Augiement>>();
     }
@@ -37,9 +36,15 @@ public class AugiementFactoryImpl implements AugiementFactory {
     @Override
     public Augiement newInstance(AugieName augieName) {
         
+        Log.d(TAG, "newInstance " + augieName);
+        
         Class<? extends Augiement> c = augieClasses.get(augieName);
         
-        if (c != null)
+        if (c == null) {
+            throw new java.lang.NullPointerException("no class for " + augieName + " found");
+            
+        } else
+        
             try {
                 return c.newInstance();
             } catch (InstantiationException e) {
@@ -47,6 +52,6 @@ public class AugiementFactoryImpl implements AugiementFactory {
             } catch (IllegalAccessException e) {
                 Log.e(TAG, e.toString(), e);
             }
-        return null;
+        throw new java.lang.NullPointerException("no instance for " + augieName);
     }
 }

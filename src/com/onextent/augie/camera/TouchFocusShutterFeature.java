@@ -141,6 +141,11 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 		        movingRect = null;
 		    } else {
 		        AugScrible scrible = augdraw.getCurrentScrible();
+		        if (scrible == null)  {
+		            Log.e(TAG, "no current scrible / gesture");
+		            break;
+		        }
+		            
                 if (scrible.getGestureType() == GESTURE_TYPE.TAP) takePicture();
                 if (scrible.getGestureType() == GESTURE_TYPE.CLOCKWISE_AREA) saveFocusArea(scrible);
                 if (scrible.getGestureType() == GESTURE_TYPE.COUNTER_CLOCKWISE_AREA) saveMeterArea(scrible);

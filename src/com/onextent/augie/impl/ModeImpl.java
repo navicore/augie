@@ -1,20 +1,24 @@
 package com.onextent.augie.impl;
 
+import java.util.HashSet;
 import java.util.Set;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieName;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
-import com.onextent.augie.RealityScape;
+import com.onextent.augie.AugiementName;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
+import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.augie.data.Codable;
+import com.onextent.util.codeable.Codable;
+import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.CodeArray;
+import com.onextent.util.codeable.CodeableException;
+import com.onextent.util.codeable.JSONCoder;
 
 import android.util.Log;
 
@@ -35,128 +39,154 @@ public class ModeImpl implements Codable, Mode {
     
     private final ModeManager modeManager;
     
+    private final Set<Augiement> augiements;
 
 
     public ModeImpl(ModeManager mm) {
         modeManager = mm;
+        augiements = new HashSet<Augiement>();
     }
 
     @Override
-    public JSONObject getCode() {
-        JSONObject json = new JSONObject();
+    public Code getCode() {
+        Code code = JSONCoder.newCode();
         try {
-            json.put(KEY_NAME, name);
-            json.put(KEY_AUGIENAME, augieName.toString());
+            code.put(KEY_NAME, name);
+            code.put(KEY_AUGIENAME, augieName.toString());
             if (camera != null) {
-                JSONObject cameraJson = new JSONObject();
-                json.put(KEY_CAMERA, cameraJson);
+                Code cameraJson = JSONCoder.newCode();
+                code.put(KEY_CAMERA, cameraJson);
                 cameraJson.put(KEY_AUGIENAME, camera.getCameraName().toString());
                 cameraJson.put(KEY_CODE, camera.getCode());
             }
-        } catch (JSONException e) {
+            if (!augiements.isEmpty()) {
+                CodeArray<Code> features = JSONCoder.newArrayOfCode();
+                code.put(KEY_AUGIEMENTS, features);
+                
+                for (Augiement f : augiements) {
+                    Code fjson = JSONCoder.newCode();
+                    features.add(fjson);
+                    fjson.put(KEY_AUGIENAME, f.getAugieName().toString());
+                    Code fcode = f.getCode();
+                    if (fcode != null)
+                        fjson.put(KEY_CODE, fcode);
+                }
+                
+            }
+        } catch (CodeableException e) {
             Log.e(TAG, e.toString(), e);
         }
-        return json;
+        return code;
     }
 
     @Override
-    public void setCode(JSONObject code) {
+    public void setCode(Code code) {
         try {
             name = code.getString(KEY_NAME);
             augieName = new ModeName(code.getString(KEY_AUGIENAME));
             if (code.has(KEY_CAMERA)) {
-                JSONObject cameraJson = code.getJSONObject(KEY_CAMERA);
+                Code cameraJson = code.get(KEY_CAMERA);
                 CameraName cameraName = new CameraName(cameraJson.getString(KEY_AUGIENAME));
-                JSONObject cameraCode = cameraJson.getJSONObject(KEY_CODE);
+                Code cameraCode = cameraJson.get(KEY_CODE);
                 camera = modeManager.getCameraFactory().getCamera(cameraName);
                 if (camera != null && cameraCode != null) {
                     camera.setCode(cameraCode);
                 }
             }
-        } catch (JSONException e) {
+            if (code.has(KEY_AUGIEMENTS)) {
+                @SuppressWarnings("unchecked")
+                CodeArray<Code> features = (CodeArray<Code>) code.getCodeArray(KEY_AUGIEMENTS);
+                for (int i = 0; i < features.length(); i++) {
+                    Code acode = features.get(i);
+                    AugieName fName = new AugiementName(acode.getString(KEY_AUGIENAME));
+                    Augiement f = modeManager.getAugiementFactory().newInstance(fName);
+                    if (f == null) throw new java.lang.NullPointerException("no feature from augiment factory");
+                    if (acode.has(KEY_CODE)) {
+                        Code fCode = acode.get(KEY_CODE);
+                        if (fCode != null) f.setCode(fCode);
+                    }
+                    augiements.add(f);
+                }
+            }
+        } catch (CodeableException e) {
             Log.e(TAG, e.toString(), e);
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#getName()
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#setName(java.lang.String)
-     */
     @Override
     public void setName(String name) {
         this.name = name;
     }
-
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#getAugieName()
-     */
     @Override
     public AugieName getAugieName() {
         return augieName;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#setAugieName(com.onextent.augie.AugieName)
-     */
     @Override
-    public void setAugieName(AugieName augieName) {
+    public void setAugieName(ModeName augieName) {
         this.augieName = augieName;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#getCamera()
-     */
     @Override
     public AugCamera getCamera() {
-        return camera;
+        if (camera != null) return camera;
+        return modeManager.getCameraFactory().getCamera(null);
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#setCamera(com.onextent.augie.camera.AugCamera)
-     */
     @Override
     public void setCamera(AugCamera camera) {
         this.camera = camera;
     }
     
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#removeAugiement(com.onextent.augie.Augiement)
-     */
     @Override
     public void removeAugiement(Augiement a) {
-        throw new java.lang.UnsupportedOperationException();
+        if (a == null) {
+            augiements.clear();
+        } else {
+            augiements.remove(a);
+        }
     }      
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#addAugiement(com.onextent.augie.Augiement)
-     */
     @Override
     public void addAugiement(Augiement a) {
-        throw new java.lang.UnsupportedOperationException();
+        assert(a != null);
+        augiements.add(a);
     }   
-    /* (non-Javadoc)
-     * @see com.onextent.augie.impl.Mode#getAugiements()
-     */
     @Override
     public Set<Augiement> getAugiements() {
-        throw new java.lang.UnsupportedOperationException();
+        return augiements;
     }
 
     @Override
     public void activate() throws AugieException {
-        // TODO Auto-generated method stub
+        
+        Log.d(TAG, "activating mode " + getAugieName());
+        
+        ModeManager mm = modeManager;
+        AugieScape v = mm.getAugieScape();
+        v.stop();
+        v.removeFeature(null);
+        for (Augiement f : augiements) {
+            Log.d(TAG, "    activate node add feature " + f.getAugieName());
+            v.addFeature(f);
+        }
+        AugCamera c = getCamera();
+        v.addFeature(c);
+        v.resume();
+        
+        SuperScape superScape = new SuperScape(mm.getActivity(), v, mm.getButton(), mm.getCamPrevLayout());
+        superScape.activate(c);
     }
 
     @Override
     public void deactivate() throws AugieException {
-        // TODO Auto-generated method stub
-        
+        Log.d(TAG, "deactivate node " + getAugieName());
+        //todo release camera, clear augiescape
+        AugieScape v = modeManager.getAugieScape();
+        v.removeFeature(null);
     }
-    
 }

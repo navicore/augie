@@ -14,7 +14,7 @@ public abstract class AugieName {
     @Override
     public int hashCode() {
         
-        return name.hashCode() + super.hashCode();
+        return name.hashCode() + AugieName.class.hashCode();
     }
 
     @Override
