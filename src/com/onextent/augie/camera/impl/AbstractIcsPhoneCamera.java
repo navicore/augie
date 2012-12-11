@@ -7,9 +7,9 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -66,13 +66,13 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
         }
 
         @Override
-        public AugieName getAugieName() {
+        public CodeableName getCodeableName() {
             throw new java.lang.UnsupportedOperationException("abstract");
         }
     }
 
     @Override
-    public abstract AugieName getAugieName();
+    public abstract CodeableName getCodeableName();
 
     @Override
     protected abstract int getId();
@@ -110,5 +110,5 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
     public void resume() { }
 
     @Override
-    public Set<AugieName> getDependencyNames() { return null; }
+    public Set<CodeableName> getDependencyNames() { return null; }
 }

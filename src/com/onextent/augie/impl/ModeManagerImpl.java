@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.onextent.augie.AugieException;
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -21,6 +20,7 @@ import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.TouchShutter;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.JSONCoder;
@@ -93,12 +93,12 @@ public class ModeManagerImpl implements ModeManager {
 
     @Override
     public void setCurrentMode(Mode mode) throws AugieException {
-        Log.d(TAG, "setCurrentMode " + mode.getAugieName());
+        Log.d(TAG, "setCurrentMode " + mode.getCodeableName());
         if (currentMode != null) {
            currentMode.deactivate(); 
         }
         currentMode = mode;
-        store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getAugieName().toString());
+        store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getCodeableName().toString());
         currentMode.activate();
     }
 
@@ -114,7 +114,7 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     @Override
-    public Mode getMode(AugieName augieName) {
+    public Mode getMode(CodeableName augieName) {
         
         Mode m = new ModeImpl(this);
         String m_ser = store.getContentString(augieName.toString());
@@ -226,7 +226,7 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     @Override
-    public void deleteMode(AugieName augieName) {
+    public void deleteMode(CodeableName augieName) {
         if (getCurrentMode().equals(augieName)) {
             try {
                 setCurrentMode(getMode(new ModeName(MODE_KEY_DEFAULT)));
@@ -251,7 +251,7 @@ public class ModeManagerImpl implements ModeManager {
     }
     private void saveMode(Mode mode) {
         String mode_ser = mode.getCode().toString();
-        store.replaceContent(mode.getAugieName().toString(), mode_ser);       
+        store.replaceContent(mode.getCodeableName().toString(), mode_ser);       
     }
 
     //ugh
@@ -265,7 +265,7 @@ public class ModeManagerImpl implements ModeManager {
                 Mode c = getCurrentMode();
                 if (m != null && 
                     c != null &&
-                    m.getAugieName().equals(c.getAugieName())) return i;
+                    m.getCodeableName().equals(c.getCodeableName())) return i;
             }
         } catch (AugieStoreException e) {
             Log.e(TAG, e.toString(), e);

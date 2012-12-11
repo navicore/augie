@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.util.codeable.CodeableName;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;
@@ -23,7 +23,7 @@ import android.view.View;
 
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
 
     List<ScribleHolder> focus_areas, meter_areas;
     int max_focus_areas;
@@ -217,7 +217,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
     
 	@Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
 }

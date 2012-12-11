@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -20,6 +19,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 import android.content.Context;
@@ -34,7 +34,7 @@ import android.widget.Toast;
 
 public class SimpleCameraShutterFeature extends CameraShutterFeature implements OnTouchListener {
 	
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SIMPLE_SHUTTER");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SIMPLE_SHUTTER");
     
     protected AugieScape augview;
 	protected SharedPreferences prefs;
@@ -45,15 +45,15 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	private AugPictureCallback jpgCb;
 	private AugPictureCallback rawCb;
 	
-    private final static Set<AugieName> deps;
+    private final static Set<CodeableName> deps;
     static {
-        deps = new HashSet<AugieName>();
+        deps = new HashSet<CodeableName>();
         deps.add(AugCamera.AUGIENAME);
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
 
 	@Override
-    public Set<AugieName> getDependencyNames() {
+    public Set<CodeableName> getDependencyNames() {
         return deps;
     }
 	    
@@ -225,7 +225,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 	
 	@Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
 

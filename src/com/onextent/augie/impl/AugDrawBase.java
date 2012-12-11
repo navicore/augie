@@ -5,11 +5,11 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.impl.AugLineImpl;
+import com.onextent.util.codeable.CodeableName;
 
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -47,7 +47,7 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 	}
 	
 	@Override
-    public Set<AugieName> getDependencyNames() {
+    public Set<CodeableName> getDependencyNames() {
         return null;
     }    
 	

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
@@ -16,6 +15,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 import android.content.Context;
@@ -114,9 +114,10 @@ public class AugDrawFeature extends AugDrawBase {
     @Override
 	public void updateCanvas() {
         //if (!prefs.getBoolean("ETCHA_ENABLED", false) && lastX == -1) {
-        //    if (currentScrible != null) currentScrible.clear();
-        //    scribles.clear();
-        //}
+        if (lastX == -1) {
+            if (currentScrible != null) currentScrible.clear();
+            scribles.clear();
+        }
     	for (AugScrible s : scribles) {
     		for (AugLine l : s) {
     			augview.getCanvas().drawLine(l.getP1().x, l.getP1().y, l.getP2().x, l.getP2().y, augview.getPaint());
@@ -124,9 +125,9 @@ public class AugDrawFeature extends AugDrawBase {
     	}
 	}
 
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
 

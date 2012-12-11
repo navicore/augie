@@ -1,8 +1,8 @@
 package com.onextent.augie.camera;
 
-import com.onextent.augie.AugieName;
+import com.onextent.util.codeable.CodeableName;
 
-public class CameraName extends AugieName {
+public class CameraName extends CodeableName {
 
     public CameraName(String name) {
         super(name);

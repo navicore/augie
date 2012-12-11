@@ -2,14 +2,16 @@ package com.onextent.augie;
 
 import java.util.Set;
 
+import com.onextent.util.codeable.CodeableName;
+
 public interface AugiementFactory {
     
     static final String TAG = Augiement.TAG;
     
-    void registerAugiement(Class<? extends Augiement> augclass, AugieName augieName) throws AugiementException;
+    void registerAugiement(Class<? extends Augiement> augclass, CodeableName augieName) throws AugiementException;
     
-    Augiement newInstance(AugieName augieName);
+    Augiement newInstance(CodeableName augieName);
     
-    public Set<AugieName> getAugieNames();
+    public Set<CodeableName> getAugieNames();
     
 }

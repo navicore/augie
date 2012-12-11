@@ -5,7 +5,6 @@ import java.util.Set;
 import android.content.Context;
 import android.view.SurfaceHolder;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augieable;
 import com.onextent.augie.AugieableException;
@@ -17,6 +16,7 @@ import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 public class BackCamera implements AugCamera {
@@ -40,7 +40,7 @@ public class BackCamera implements AugCamera {
     }
 
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIENAME;
     }
 
@@ -149,7 +149,7 @@ public class BackCamera implements AugCamera {
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException { }
 
     @Override
-    public Set<AugieName> getDependencyNames() { return null; }
+    public Set<CodeableName> getDependencyNames() { return null; }
 
     @Override
     public CameraName getCameraName() {

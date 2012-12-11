@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.onextent.augie.AugieException;
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementName;
@@ -14,6 +13,7 @@ import com.onextent.augie.ModeName;
 import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Codable;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeArray;
@@ -33,7 +33,7 @@ public class ModeImpl implements Codable, Mode {
     static final String KEY_AUGIEMENTS = "augiements";
 
     private String name;
-    private AugieName augieName;
+    private CodeableName augieName;
     
     private AugCamera camera;
     
@@ -66,7 +66,7 @@ public class ModeImpl implements Codable, Mode {
                 for (Augiement f : augiements) {
                     Code fjson = JSONCoder.newCode();
                     features.add(fjson);
-                    fjson.put(KEY_AUGIENAME, f.getAugieName().toString());
+                    fjson.put(KEY_AUGIENAME, f.getCodeableName().toString());
                     Code fcode = f.getCode();
                     if (fcode != null)
                         fjson.put(KEY_CODE, fcode);
@@ -98,7 +98,7 @@ public class ModeImpl implements Codable, Mode {
                 CodeArray<Code> features = (CodeArray<Code>) code.getCodeArray(KEY_AUGIEMENTS);
                 for (int i = 0; i < features.length(); i++) {
                     Code acode = features.get(i);
-                    AugieName fName = new AugiementName(acode.getString(KEY_AUGIENAME));
+                    CodeableName fName = new AugiementName(acode.getString(KEY_AUGIENAME));
                     Augiement f = modeManager.getAugiementFactory().newInstance(fName);
                     if (f == null) throw new java.lang.NullPointerException("no feature from augiment factory");
                     if (acode.has(KEY_CODE)) {
@@ -123,7 +123,7 @@ public class ModeImpl implements Codable, Mode {
         this.name = name;
     }
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return augieName;
     }
 
@@ -164,14 +164,14 @@ public class ModeImpl implements Codable, Mode {
     @Override
     public void activate() throws AugieException {
         
-        Log.d(TAG, "activating mode " + getAugieName());
+        Log.d(TAG, "activating mode " + getCodeableName());
         
         ModeManager mm = modeManager;
         AugieScape v = mm.getAugieScape();
         v.stop();
         v.removeFeature(null);
         for (Augiement f : augiements) {
-            Log.d(TAG, "    activate node add feature " + f.getAugieName());
+            Log.d(TAG, "    activate node add feature " + f.getCodeableName());
             v.addFeature(f);
         }
         AugCamera c = getCamera();
@@ -184,7 +184,7 @@ public class ModeImpl implements Codable, Mode {
 
     @Override
     public void deactivate() throws AugieException {
-        Log.d(TAG, "deactivate node " + getAugieName());
+        Log.d(TAG, "deactivate node " + getCodeableName());
         //todo release camera, clear augiescape
         AugieScape v = modeManager.getAugieScape();
         v.removeFeature(null);

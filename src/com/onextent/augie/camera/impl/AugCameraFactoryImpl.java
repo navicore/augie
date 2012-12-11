@@ -10,7 +10,6 @@ import java.util.Set;
 import android.content.Context;
 import android.util.Log;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -18,6 +17,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
@@ -25,7 +25,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
 	private final Map<CameraName, AugCamera> cameras;
 	private final Map<CameraName, Class<? extends AugCamera>> cameraClasses;
 	
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/CAMERA/FACTORY");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/CAMERA/FACTORY");
     public static final CameraName AUGIE_DEFAULT_CAMERA = new CameraName("AUGIE/FEATURES/CAMERA/DEFAULT_CAMERA");
 	
 	private CameraName currentCameraName;
@@ -91,7 +91,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
 
@@ -126,7 +126,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Set<AugieName> getDependencyNames() {
+    public Set<CodeableName> getDependencyNames() {
         return null;
     }
     

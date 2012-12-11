@@ -1,6 +1,8 @@
 package com.onextent.augie;
 
-public class ModeName extends AugieName {
+import com.onextent.util.codeable.CodeableName;
+
+public class ModeName extends CodeableName {
 
     public ModeName(String name) {
         super(name);

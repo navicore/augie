@@ -5,7 +5,6 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
@@ -14,6 +13,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 import android.content.Context;
@@ -50,9 +50,9 @@ public class HorizonCheckFeature extends LevelerBase {
         p.setStrokeWidth(orig_w);
     }
     
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_LEVEL");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_LEVEL");
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
 

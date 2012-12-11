@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
@@ -18,6 +17,7 @@ import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.augie.marker.impl.AugLineImpl;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeArray;
 import com.onextent.util.codeable.CodeableException;
@@ -33,21 +33,21 @@ import android.view.View;
 
 public class HorizonFeature extends AugDrawBase {
 
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_DRAW");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_DRAW");
     
     private AugLineImpl movingLine;
     private Point startP;
     private List<AugLineImpl> lines;
     private AugDrawFeature augdraw;
     
-    private final static Set<AugieName> deps;
+    private final static Set<CodeableName> deps;
     static {
-        deps = new HashSet<AugieName>();
+        deps = new HashSet<CodeableName>();
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
     
     @Override
-    public Set<AugieName> getDependencyNames() {
+    public Set<CodeableName> getDependencyNames() {
         return deps;
     }
 
@@ -198,7 +198,7 @@ public class HorizonFeature extends AugDrawBase {
     }
     
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
 

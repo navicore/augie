@@ -9,12 +9,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.MarkerFactory;
+import com.onextent.util.codeable.CodeableName;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -54,9 +54,9 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     protected double mAngle;
     protected long lastUpdateTime;
     
-    private final static Set<AugieName> deps;
+    private final static Set<CodeableName> deps;
     static {
-        deps = new HashSet<AugieName>();
+        deps = new HashSet<CodeableName>();
         deps.add(HorizonFeature.AUGIE_NAME);
     }
 
@@ -80,7 +80,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     }
 
     @Override
-    public Set<AugieName> getDependencyNames() {
+    public Set<CodeableName> getDependencyNames() {
         return deps;
     }
 

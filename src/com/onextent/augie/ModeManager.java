@@ -3,6 +3,7 @@ package com.onextent.augie;
 import java.util.List;
 
 import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.util.codeable.CodeableName;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,11 +23,11 @@ public interface ModeManager {
 
     public abstract Mode getCurrentMode();
 
-    public abstract Mode getMode(AugieName augieName);
+    public abstract Mode getMode(CodeableName augieName);
 
     public abstract List<Mode> getModes() throws AugieStoreException;
 
-    public abstract void deleteMode(AugieName augieName);
+    public abstract void deleteMode(CodeableName augieName);
 
     public abstract void addMode(Mode mode);
     

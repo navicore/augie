@@ -5,6 +5,8 @@ package com.onextent.augie;
 
 import java.util.Set;
 
+import com.onextent.util.codeable.CodeableName;
+
 /**
  * An Augiement is an Augmented Reality feature, maybe some local
  * info like weather and tides, maybe some astronomy markers, maybe
@@ -31,5 +33,5 @@ public interface Augiement extends Augieable {
 	//called after default no arg constructor
 	void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException;
 	
-	Set<AugieName> getDependencyNames();
+	Set<CodeableName> getDependencyNames();
 }

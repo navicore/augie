@@ -9,32 +9,32 @@ import android.util.Log;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
-import com.onextent.augie.AugieName;
+import com.onextent.util.codeable.CodeableName;
 
 public class AugiementFactoryImpl implements AugiementFactory {
 
-	private final Map<AugieName, Class<? extends Augiement>> augieClasses;
+	private final Map<CodeableName, Class<? extends Augiement>> augieClasses;
 	
     public AugiementFactoryImpl() {
 	    
-        augieClasses = new HashMap<AugieName, Class<? extends Augiement>>();
+        augieClasses = new HashMap<CodeableName, Class<? extends Augiement>>();
     }
 
     @Override
-    public void registerAugiement(Class<? extends Augiement> augclass, AugieName name)
+    public void registerAugiement(Class<? extends Augiement> augclass, CodeableName name)
             throws AugiementException {
         
         augieClasses.put(name, augclass);
     }
 
     @Override
-    public Set<AugieName> getAugieNames() {
+    public Set<CodeableName> getAugieNames() {
 
         return augieClasses.keySet();
     }
 
     @Override
-    public Augiement newInstance(AugieName augieName) {
+    public Augiement newInstance(CodeableName augieName) {
         
         Log.d(TAG, "newInstance " + augieName);
         

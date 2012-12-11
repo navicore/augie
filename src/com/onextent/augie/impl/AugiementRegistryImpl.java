@@ -7,11 +7,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementDependencyRegistry;
+import com.onextent.util.codeable.CodeableName;
 
 import android.util.Log;
 
@@ -21,13 +21,13 @@ import android.util.Log;
 
 public class AugiementRegistryImpl extends AbstractSet<Augiement> implements AugiementDependencyRegistry {
     
-    private final Map<AugieName, Augiement> active;
-    private final Map<AugieName, Augiement> waiting;
+    private final Map<CodeableName, Augiement> active;
+    private final Map<CodeableName, Augiement> waiting;
     private final AugieScape augview;
     
     public AugiementRegistryImpl(AugieScape av) {
-        active = new LinkedHashMap<AugieName, Augiement>();
-        waiting = new LinkedHashMap<AugieName, Augiement>();
+        active = new LinkedHashMap<CodeableName, Augiement>();
+        waiting = new LinkedHashMap<CodeableName, Augiement>();
         augview = av;
     }
 
@@ -57,30 +57,30 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
         assert(object != null);
 
         boolean dependsAllmet = true;
-        Set<AugieName> dependencyNames = object.getDependencyNames();
+        Set<CodeableName> dependencyNames = object.getDependencyNames();
         
         if (dependencyNames == null) {
             
-            active.put(object.getAugieName(), object);
+            active.put(object.getCodeableName(), object);
             create(object);
-            Log.d(TAG, "augiement " + object.getAugieName() + " registered w/no deps");
+            Log.d(TAG, "augiement " + object.getCodeableName() + " registered w/no deps");
             tryWaiting();
             
         } else {
 
-            for (AugieName dname : dependencyNames) {
+            for (CodeableName dname : dependencyNames) {
                 if (!active.containsKey(dname)) {
-                    Log.d(TAG, "augiement " + object.getAugieName() + " waiting for " + dname);
-                    waiting.put(object.getAugieName(), object);
+                    Log.d(TAG, "augiement " + object.getCodeableName() + " waiting for " + dname);
+                    waiting.put(object.getCodeableName(), object);
                     dependsAllmet = false;
                     break;
                 }
             }
 
             if (dependsAllmet) {
-                active.put(object.getAugieName(), object);
+                active.put(object.getCodeableName(), object);
                 create(object);
-                Log.d(TAG, "augiement " + object.getAugieName() + " registered w/deps");
+                Log.d(TAG, "augiement " + object.getCodeableName() + " registered w/deps");
                 tryWaiting();
             }
         }

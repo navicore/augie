@@ -10,11 +10,11 @@ import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
@@ -41,7 +41,7 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
 	}
 	
     @Override
-    public abstract AugieName getAugieName();
+    public abstract CodeableName getCodeableName();
     
     protected abstract int getId();
 
@@ -140,7 +140,7 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
         }
 
         @Override
-        public AugieName getAugieName() {
+        public CodeableName getCodeableName() {
             throw new java.lang.UnsupportedOperationException("abstract");
         }
     }

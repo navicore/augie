@@ -7,17 +7,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.onextent.augie.AugieName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 public class TouchShutter implements Augiement, OnTouchListener {
     
-    public static final AugieName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_SHUTTER");
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_SHUTTER");
     
     private final CameraShutterFeature shutter;
     
@@ -26,7 +26,7 @@ public class TouchShutter implements Augiement, OnTouchListener {
     }
 
     @Override
-    public AugieName getAugieName() {
+    public CodeableName getCodeableName() {
         
         return AUGIE_NAME;
     }
@@ -94,7 +94,7 @@ public class TouchShutter implements Augiement, OnTouchListener {
     }
 
     @Override
-    public Set<AugieName> getDependencyNames() {
+    public Set<CodeableName> getDependencyNames() {
 
         return shutter.getDependencyNames();
     }
