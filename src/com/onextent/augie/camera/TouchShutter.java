@@ -12,6 +12,7 @@ import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
@@ -51,13 +52,13 @@ public class TouchShutter implements Augiement, OnTouchListener {
     }
 
     @Override
-    public Code getCode() {
+    public Code getCode() throws CodeableException {
         
         return shutter.getCode();
     }
 
     @Override
-    public void setCode(Code code) {
+    public void setCode(Code code) throws CodeableException {
         
         shutter.setCode(code);
     }

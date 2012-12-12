@@ -10,9 +10,7 @@ import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
-import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.marker.AugLine;
-import com.onextent.augie.marker.impl.AugLineImpl;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
@@ -34,11 +32,11 @@ public class HorizonCheckFeature extends LevelerBase {
         float orig_w = p.getStrokeWidth();
         int old_color = p.getColor();
         p.setColor(Color.RED);
-        for (AugLineImpl line : horizonFeature.getLines()) {
-            float temp_w = line.getBorderWidth();
+        for (AugLine line : horizonFeature.getLines()) {
+            float temp_w = line.getWidth();
             p.setStrokeWidth( temp_w );
             AugLine cline;
-            if (line instanceof HLine) {
+            if (!AugDrawBase.isVerticalLine(line)) {
                 cline = correctHorizontal(line);
             } else {
                 cline = correctVertical(line);

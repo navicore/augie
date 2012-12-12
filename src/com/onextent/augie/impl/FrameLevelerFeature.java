@@ -72,7 +72,7 @@ public class FrameLevelerFeature extends LevelerBase {
         int old_color = p.getColor();
         p.setColor(Color.RED);
         for (AugLine line : frameLines) {
-            float temp_w = line.getBorderWidth();
+            float temp_w = line.getWidth();
             p.setStrokeWidth( temp_w );
             AugLine cline;
             if (line instanceof HLine) {

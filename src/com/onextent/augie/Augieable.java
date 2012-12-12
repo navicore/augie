@@ -1,10 +1,10 @@
 package com.onextent.augie;
 
-import com.onextent.util.codeable.Codable;
+import com.onextent.util.codeable.Codeable;
 
 import android.content.Context;
 
-public interface Augieable extends Codable {
+public interface Augieable extends Codeable {
     
 	public static final String TAG = "AUGIE";  //for logging
 	

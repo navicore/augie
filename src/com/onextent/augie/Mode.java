@@ -3,9 +3,12 @@ package com.onextent.augie;
 import java.util.Set;
 
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.util.codeable.Codable;
+import com.onextent.util.codeable.Codeable;
+import com.onextent.util.codeable.CodeableName;
 
-public interface Mode extends Codable {
+public interface Mode extends Codeable {
+    
+    static final String KEY_MODE_UI_NAME = "uiname";
 
     String getName();
 
@@ -24,5 +27,5 @@ public interface Mode extends Codable {
     void activate() throws AugieException; //create and config SuperScape
     void deactivate() throws AugieException;
 
-    void setAugieName(ModeName modeName);
+    void setCodeableName(CodeableName modeName);
 }

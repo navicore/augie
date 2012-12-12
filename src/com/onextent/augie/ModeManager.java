@@ -3,6 +3,8 @@ package com.onextent.augie;
 import java.util.List;
 
 import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
 
 import android.app.Activity;
@@ -13,41 +15,42 @@ import android.widget.Button;
 
 public interface ModeManager {
 
-    public static final String MODE_KEY_DEFAULT = "MODE/SYSTEM/DEFAULT";
+    static final String MODE_KEY_DEFAULT = "MODE/SYSTEM/DEFAULT";
     
-    public abstract void onCreate(Context context) throws AugieStoreException;
+    abstract void onCreate(Context context) throws AugieStoreException, CodeableException;
 
-    public abstract void stop();
+    abstract void stop();
 
-    public abstract void setCurrentMode(Mode mode) throws AugieException;
+    abstract void setCurrentMode(Mode mode) throws AugieException;
 
-    public abstract Mode getCurrentMode();
+    abstract Mode getCurrentMode();
 
-    public abstract Mode getMode(CodeableName augieName);
+    abstract Mode getMode(CodeableName augieName);
 
-    public abstract List<Mode> getModes() throws AugieStoreException;
+    abstract List<Code> getAllModeCode() throws AugieStoreException;
 
-    public abstract void deleteMode(CodeableName augieName);
+    abstract void deleteMode(CodeableName augieName);
 
-    public abstract void addMode(Mode mode);
+    abstract void addMode(Mode mode) throws CodeableException;
     
-    public abstract Mode newMode();
+    abstract Mode newMode();
+    
+    void saveMode(Mode mode) throws CodeableException;
 
     //ugh
-    public abstract int getCurrentModeIdx();
+    abstract int getCurrentModeIdx();
 
-    public AugCameraFactory getCameraFactory();
+    AugCameraFactory getCameraFactory();
 
-    public Activity getActivity();
+    Activity getActivity();
 
-    public AugieScape getAugieScape();
+    AugieScape getAugieScape();
 
-    public AugiementFactory getAugiementFactory();
+    AugiementFactory getAugiementFactory();
     
     //this is extremely evil, get rid of these calls
     //this is extremely evil, get rid of these calls
     //this is extremely evil, get rid of these calls
-    public ViewGroup getCamPrevLayout();
-    public Button getButton();
-    
+    ViewGroup getCamPrevLayout();
+    Button getButton();
 }

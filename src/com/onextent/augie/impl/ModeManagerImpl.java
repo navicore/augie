@@ -20,6 +20,7 @@ import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.TouchShutter;
+import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
@@ -33,7 +34,7 @@ public class ModeManagerImpl implements ModeManager {
     private static final String MODE_KEY_FLASH = "MODE/SYSTEM/FLASH";
 
     private Mode currentMode;
-    private List<Mode> allModes;
+    private List<Code> allModeCode;
     
     private final AugCameraFactory cameraFactory;
     private final AugiementFactory augiementFactory;
@@ -68,7 +69,7 @@ public class ModeManagerImpl implements ModeManager {
     }   
 
     @Override
-    public void onCreate(Context context) throws AugieStoreException {
+    public void onCreate(Context context) throws AugieStoreException, CodeableException {
 
         if (store != null) throw new AugieStoreException("store already init");
         store = new AugieStore(context);
@@ -79,16 +80,18 @@ public class ModeManagerImpl implements ModeManager {
     @Override
     public void stop() {
         Log.d(TAG, "ModeManager.stop");
-        try {
-            saveAllModes();
-        } catch (AugieStoreException e) {
-            Log.e(TAG, e.toString(), e);
+        if (currentMode != null) {
+            try {
+                currentMode.deactivate();
+            } catch (AugieException e) {
+                Log.d(TAG, e.toString(), e);
+            } 
         }
         if (store != null) {
             store.close();
             store = null;
         }
-        allModes = null;
+        allModeCode = null;
     }
 
     @Override
@@ -109,7 +112,6 @@ public class ModeManagerImpl implements ModeManager {
     
     @Override
     public Mode newMode() {
-        
         return new ModeImpl(this);
     }
 
@@ -121,7 +123,6 @@ public class ModeManagerImpl implements ModeManager {
         if (m_ser != null) {
             Log.d(TAG, "initializing mode from store");
             try {
-                //m.setCode(new JSONObject(m_ser));
                 m.setCode(JSONCoder.newCode(m_ser));
                 return m;
             } catch (CodeableException e) {
@@ -132,7 +133,7 @@ public class ModeManagerImpl implements ModeManager {
         return null;
     }
 
-    private void init() throws AugieStoreException {
+    private void init() throws AugieStoreException, CodeableException {
 
         String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY);
         if (currentMode_key == null) {
@@ -146,23 +147,23 @@ public class ModeManagerImpl implements ModeManager {
     }
     
     @Override
-    public List<Mode> getModes() throws AugieStoreException {
-        
+    public List<Code> getAllModeCode() throws AugieStoreException {
+       
+        /**
+         * THIS IS BAD, make a name meta list, don't instantiate all modes ever
+         */
         if (store == null) return null;
         
-        if (allModes != null) return allModes;
+        if (allModeCode != null) return allModeCode;
        
-        List<Mode> list = new ArrayList<Mode>();
+        List<Code> list = new ArrayList<Code>();
         Cursor c = store.getContent("MODE/%");
         if (c.moveToFirst()) {
             do {
-                Mode mode = new ModeImpl(this);
                 String codeStr = c.getString(0);
                 try {
-                    //JSONObject code = new JSONObject(codeStr);
                     Code code = JSONCoder.newCode(codeStr);
-                    mode.setCode(code);
-                    list.add(mode);
+                    list.add(code);
                 } catch (CodeableException e) {
                     Log.e(TAG, e.toString(), e);
                     c.close();
@@ -172,19 +173,18 @@ public class ModeManagerImpl implements ModeManager {
             } while (c.moveToNext());
         }
         c.close();
-        allModes = list;
+        allModeCode = list;
         return list;
     }
 
-    private void primeDbWithModes() throws AugieStoreException {
+    private void primeDbWithModes() throws AugieStoreException, CodeableException {
         primeDefaultMode();
         primeFlashMode();
     }
 
-    private void primeDefaultMode() {
-        ModeImpl mode = new ModeImpl(this);
+    private void primeDefaultMode() throws CodeableException {
+        ModeImpl mode = new ModeImpl(this, MODE_KEY_DEFAULT);
         mode.setName("Default");
-        mode.setAugieName(new ModeName(MODE_KEY_DEFAULT));
         
         AugDrawFeature drawer = new AugDrawFeature();
         mode.addAugiement(drawer);
@@ -203,10 +203,9 @@ public class ModeManagerImpl implements ModeManager {
         addMode(mode);
     }
 
-    private void primeFlashMode() {
-        ModeImpl mode = new ModeImpl(this);
+    private void primeFlashMode() throws CodeableException {
+        ModeImpl mode = new ModeImpl(this, MODE_KEY_FLASH);
         mode.setName("Flash");
-        mode.setAugieName(new ModeName(MODE_KEY_FLASH));
         
         AugDrawFeature drawer = new AugDrawFeature();
         mode.addAugiement(drawer);
@@ -235,21 +234,25 @@ public class ModeManagerImpl implements ModeManager {
             }
         }
         store.remove(augieName.toString());
-        allModes = null;
+        allModeCode = null;
     }
     
     @Override
-    public void addMode(Mode mode) {
-        allModes = null;
+    public void addMode(Mode mode) throws CodeableException {
+        allModeCode = null;
         saveMode(mode);
     }
-   
-    private void saveAllModes() throws AugieStoreException {
+  
+    /*
+    private void saveAllModes() throws AugieStoreException, CodeableException {
         for (Mode m : getModes()) {
             saveMode(m);
         }
     }
-    private void saveMode(Mode mode) {
+     */
+    @Override
+    public void saveMode(Mode mode) throws CodeableException {
+        if (store == null) return; //too late
         String mode_ser = mode.getCode().toString();
         store.replaceContent(mode.getCodeableName().toString(), mode_ser);       
     }
@@ -259,15 +262,19 @@ public class ModeManagerImpl implements ModeManager {
     public int getCurrentModeIdx() {
         int idx = 0;
         try {
-            int sz = getModes().size();
+            int sz = getAllModeCode().size();
             for (int i = 0; i < sz; i++) {
-                Mode m = getModes().get(i);
+                Code code = getAllModeCode().get(i);
+                CodeableName icn = code.getCodeableName(Codeable.CODEABLE_NAME_KEY);
                 Mode c = getCurrentMode();
-                if (m != null && 
-                    c != null &&
-                    m.getCodeableName().equals(c.getCodeableName())) return i;
+                CodeableName ccn = c.getCodeableName();
+                if (icn != null && 
+                    ccn != null &&
+                    icn.equals(ccn)) return i;
             }
         } catch (AugieStoreException e) {
+            Log.e(TAG, e.toString(), e);
+        } catch (CodeableException e) {
             Log.e(TAG, e.toString(), e);
         }
         return idx;

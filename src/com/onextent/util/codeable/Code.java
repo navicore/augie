@@ -10,6 +10,8 @@ public interface Code {
     
     void put(String key, String value) throws CodeableException;
     
+    void put(String key, CodeableName value) throws CodeableException;
+    
     void put(String key, int value) throws CodeableException;
     
     void put(String key, long value) throws CodeableException; 
@@ -23,6 +25,7 @@ public interface Code {
     CodeArray<?> getCodeArray(String key) throws CodeableException;
     
     String getString(String key) throws CodeableException;
+    CodeableName getCodeableName(String key) throws CodeableException;
     
     int getInt(String key) throws CodeableException;
     long getLong(String key) throws CodeableException;

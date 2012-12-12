@@ -35,15 +35,19 @@ public class HorizonFeature extends AugDrawBase {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_DRAW");
     
-    private AugLineImpl movingLine;
+    private AugLine movingLine;
     private Point startP;
-    private List<AugLineImpl> lines;
+    private final List<AugLine> lines;
     private AugDrawFeature augdraw;
     
     private final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
         deps.add(AugDrawFeature.AUGIE_NAME);
+    }
+    
+    public HorizonFeature() {
+        lines = new ArrayList<AugLine>();
     }
     
     @Override
@@ -60,13 +64,12 @@ public class HorizonFeature extends AugDrawBase {
             }
         }
         if (augdraw == null) throw new AugiementException("draw feature is null");
-        this.lines = new ArrayList<AugLineImpl>();
         this.movingLine = null;
     }
     
-    public AugLineImpl getLine(MotionEvent e) {
+    public AugLine getLine(MotionEvent e) {
         if (closeToEdge(e)) return null;
-        for (AugLineImpl l : lines) {
+        for (AugLine l : lines) {
             float diffx = l.getP1().x - e.getX();
             float diffy = l.getP1().y - e.getY();
             if ( Math.abs(diffx) < CLOSE_PIXELS ) {
@@ -109,23 +112,18 @@ public class HorizonFeature extends AugDrawBase {
     }
 
     private void paintLine(MotionEvent event, boolean moving) {
-        //Point endP;
         AugScrible.GESTURE_TYPE lt;
         if (movingLine != null) {
-            if (movingLine instanceof HLine) {
-                lt = AugScrible.GESTURE_TYPE.HORIZONTAL_LINE;
-                int newy = (int) event.getY();
-                startP = new Point(movingLine.getP1().x, newy);
-            } else if (movingLine instanceof VLine) {
+            if (isVerticalLine(movingLine)) {
                 lt = AugScrible.GESTURE_TYPE.VERTICAL_LINE;
                 int newx = (int) event.getX();
                 startP = new Point(newx, movingLine.getP1().y);
             } else {
-                Log.e(TAG, "moving line is bad line !!!!!");
-                lt = AugScrible.GESTURE_TYPE.NONE;
+                lt = AugScrible.GESTURE_TYPE.HORIZONTAL_LINE;
+                int newy = (int) event.getY();
+                startP = new Point(movingLine.getP1().x, newy);
             }
         } else {
-            //endP = new Point((int) event.getX(), (int) event.getY());
             AugScrible s = augdraw.getCurrentScrible();
             lt = s == null ? GESTURE_TYPE.NONE : augdraw.getCurrentScrible().getGestureType();
         }
@@ -176,7 +174,7 @@ public class HorizonFeature extends AugDrawBase {
         lines.add(l);
     }
 
-    public List<AugLineImpl> getLines() {
+    public List<AugLine> getLines() {
         return lines;
     }
     
@@ -184,8 +182,9 @@ public class HorizonFeature extends AugDrawBase {
     public void updateCanvas() {
         Paint p = augview.getPaint();
         float orig_w = p.getStrokeWidth();
-        for (AugLineImpl l : lines) {
-            float temp_w = l.getBorderWidth();
+        //Log.d(TAG, "ejs update HF: " + lines.size() + " hc: " + hashCode());
+        for (AugLine l : lines) {
+            float temp_w = l.getWidth();
             p.setStrokeWidth( temp_w );
             augview.getCanvas().drawLine(l.getP1().x, l.getP1().y, l.getP2().x, l.getP2().y, augview.getPaint());
         }
@@ -211,21 +210,7 @@ public class HorizonFeature extends AugDrawBase {
                 CodeArray<Code> linesCode = JSONCoder.newArrayOfCode();
                 code.put("lines", linesCode);
                 for (AugLine l : lines) {
-                    Code lcode = JSONCoder.newCode();
-                    linesCode.add(lcode);
-                    /**
-                     * TODO make lines all one codable impl (idiot)
-                     */
-                    /*
-                    if (l instanceof VLine) {
-                        //VLine(int top, int bottom, int x, float width) {
-                        lcode.put("type", "VLINE");
-                        lcode.put("top", "");
-                    } else {
-                        //HLine(int left, int right, int y, float width) {
-                        lcode.put("type", "HLINE");
-                    }
-                     */
+                    linesCode.add(l.getCode());
                 }
             }
         } catch (CodeableException e) {
@@ -236,9 +221,17 @@ public class HorizonFeature extends AugDrawBase {
     }
 
     @Override
-    public void setCode(Code code) {
-        // TODO Auto-generated method stub
-        
+    public void setCode(Code code) throws CodeableException {
+        lines.clear();
+        if (code.has("lines")) {
+            @SuppressWarnings("unchecked")
+            CodeArray<Code> linesCode = (CodeArray<Code>) code.getCodeArray("lines");
+            for (Code lcode : linesCode) {
+                AugLine l = new AugLineImpl();
+                l.setCode(lcode);
+                lines.add(l);
+            }
+        }
     }
 
     @Override

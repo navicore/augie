@@ -2,7 +2,7 @@ package com.onextent.util.codeable;
 
 import java.util.Iterator;
 
-public interface CodeArray<E> {
+public interface CodeArray<E> extends Iterable<E> {
 
     void add(E value) throws CodeableException;
     

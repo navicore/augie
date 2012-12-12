@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONCoder {
-
+    
     public static Code newCode() {
         return new CodeImpl();
     }
@@ -87,8 +87,40 @@ public class JSONCoder {
 
         @Override
         public Iterator<E> iterator() {
-            // TODO Auto-generated method stub
-            return null;
+            return new Iterator<E>() {
+                
+                int pos = 0;
+
+                @Override
+                public boolean hasNext() {
+                    return pos < jarray.length();
+                }
+
+                @SuppressWarnings({ "unchecked", "rawtypes" })
+                @Override
+                public E next() {
+                    try {
+                        Object o = jarray.get(pos);
+                        pos++;
+                        if (o instanceof JSONArray) {
+                            JSONArray ja = (JSONArray) o;
+                            return (E) new CodeArrayImpl(ja);
+                        }
+                        if (o instanceof JSONObject) {
+                            JSONObject jo = (JSONObject) o;
+                            return (E) new CodeImpl(jo);
+                        }
+                        return (E) o;
+                    } catch (JSONException e) {
+                        throw new java.lang.NullPointerException("iterator error: " + e);
+                    }
+                }
+
+                @Override
+                public void remove() {
+                    throw new java.lang.UnsupportedOperationException("read only");
+                }
+            };
         }
         @Override
         public int length() {
@@ -254,6 +286,16 @@ public class JSONCoder {
         @Override
         public String toString() {
             return json.toString();
+        }
+        @Override
+        public void put(String key, CodeableName value)
+                throws CodeableException {
+            put(key, value.toString());
+        }
+        @Override
+        public CodeableName getCodeableName(String key)
+                throws CodeableException {
+            return new CodeableName(getString(key)) {};
         }
     }
 }

@@ -16,6 +16,7 @@ import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
@@ -83,12 +84,12 @@ public class BackCamera implements AugCamera {
     }
 
     @Override
-    public Code getCode() {
+    public Code getCode() throws CodeableException {
         return augcamera.getCode();
     }
 
     @Override
-    public void setCode(Code state) {
+    public void setCode(Code state) throws CodeableException {
         augcamera.setCode(state);
     }
 

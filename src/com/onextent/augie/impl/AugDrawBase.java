@@ -8,12 +8,11 @@ import java.util.Set;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
 import com.onextent.util.codeable.CodeableName;
 
-import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,7 +28,6 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
 		VLine(int top, int bottom, int x, float width) {
 		    super(new Point(x, top), new Point(x, bottom));
-		    setCenter(new Point(x, bottom / 2));
 	        setWidth(width);
         }
 	}
@@ -37,13 +35,18 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
 		HLine(int left, int right, int y, float width) {
 		    super(new Point(left, y), new Point(right, y));
-		    setCenter ( new Point(right / 2, y) );
 	        setWidth ( width );
         }
 	}
 	
 	public AugDrawBase() {
 		super();
+	}
+	
+	static public boolean isVerticalLine(AugLine l) {
+	    
+	    if (l.getP1().x == l.getP2().x) return true;
+	    return false;
 	}
 	
 	@Override

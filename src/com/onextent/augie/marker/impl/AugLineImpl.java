@@ -1,6 +1,10 @@
 package com.onextent.augie.marker.impl;
 
 import com.onextent.augie.marker.AugLine;
+import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.CodeableException;
+import com.onextent.util.codeable.CodeableName;
+import com.onextent.util.codeable.JSONCoder;
 
 import android.graphics.Point;
 
@@ -16,7 +20,9 @@ public class AugLineImpl implements AugLine {
         this.center = null;
         this.width = 9;
     }
-    public float getBorderWidth() {
+    public AugLineImpl() {
+    }
+    public float getWidth() {
         return width;
     }
     public void setWidth(float width) {
@@ -40,7 +46,30 @@ public class AugLineImpl implements AugLine {
         }
         return center;
     }
-    public void setCenter(Point center) {
-        this.center = center;
+    
+    //begin Codable
+    static final private CodeableName cname = new CodeableName("AUGIE/PARTS/LINE") { };
+    @Override
+    public CodeableName getCodeableName() {
+        return cname;
+    }
+    @Override
+    public Code getCode() throws CodeableException {
+        Code code = JSONCoder.newCode();
+        code.put(CODEABLE_NAME_KEY, cname);
+        code.put("p1.x", getP1().x);
+        code.put("p1.y", getP1().y);
+        code.put("p2.x", getP2().x);
+        code.put("p2.y", getP2().y);
+        code.put("width", getWidth());
+        return code;
+    }
+    @Override
+    public void setCode(Code code) throws CodeableException {
+        center = null;
+        if (!code.has(CODEABLE_NAME_KEY) || !code.getCodeableName(CODEABLE_NAME_KEY).equals(cname)) throw new CodeableException("no p1.x");
+        setP1(new Point(code.getInt("p1.x"), code.getInt("p1.y")));
+        setP2(new Point(code.getInt("p2.x"), code.getInt("p2.y")));
+        setWidth(code.getInt("width"));
     }
 }

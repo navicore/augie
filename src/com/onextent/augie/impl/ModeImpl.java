@@ -14,7 +14,7 @@ import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Codable;
+import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeArray;
 import com.onextent.util.codeable.CodeableException;
@@ -22,10 +22,10 @@ import com.onextent.util.codeable.JSONCoder;
 
 import android.util.Log;
 
-public class ModeImpl implements Codable, Mode {
+public class ModeImpl implements Codeable, Mode {
     
-    static final String KEY_NAME = "name";
-    static final String KEY_AUGIENAME = "augieName";
+    static final String KEY_NAME = Mode.KEY_MODE_UI_NAME;
+    static final String KEY_AUGIENAME = Codeable.CODEABLE_NAME_KEY;
     
     static final String KEY_CAMERA = "camera";
     static final String KEY_CODE = "code";
@@ -43,8 +43,13 @@ public class ModeImpl implements Codable, Mode {
 
 
     public ModeImpl(ModeManager mm) {
+        this(mm, null);
+    }
+
+    public ModeImpl(ModeManager mm, String cn) {
         modeManager = mm;
         augiements = new HashSet<Augiement>();
+        augieName = new CodeableName(cn){};
     }
 
     @Override
@@ -71,7 +76,6 @@ public class ModeImpl implements Codable, Mode {
                     if (fcode != null)
                         fjson.put(KEY_CODE, fcode);
                 }
-                
             }
         } catch (CodeableException e) {
             Log.e(TAG, e.toString(), e);
@@ -128,11 +132,6 @@ public class ModeImpl implements Codable, Mode {
     }
 
     @Override
-    public void setAugieName(ModeName augieName) {
-        this.augieName = augieName;
-    }
-
-    @Override
     public AugCamera getCamera() {
         if (camera != null) return camera;
         return modeManager.getCameraFactory().getCamera(null);
@@ -153,7 +152,6 @@ public class ModeImpl implements Codable, Mode {
     }      
     @Override
     public void addAugiement(Augiement a) {
-        assert(a != null);
         augiements.add(a);
     }   
     @Override
@@ -185,8 +183,20 @@ public class ModeImpl implements Codable, Mode {
     @Override
     public void deactivate() throws AugieException {
         Log.d(TAG, "deactivate node " + getCodeableName());
+        try {
+            modeManager.saveMode(this);
+        } catch (CodeableException e) {
+            throw new AugieException(e) {
+                private static final long serialVersionUID = 660929239042327743L;};
+        }
         //todo release camera, clear augiescape
         AugieScape v = modeManager.getAugieScape();
         v.removeFeature(null);
+    }
+
+    @Override
+    public void setCodeableName(CodeableName modeName) {
+       
+        augieName = modeName;
     }
 }
