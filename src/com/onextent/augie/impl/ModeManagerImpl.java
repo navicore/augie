@@ -79,6 +79,9 @@ public class ModeManagerImpl implements ModeManager {
 
     @Override
     public void stop() {
+        if (store == null) {
+            throw new java.lang.IllegalStateException("already stopped");
+        }
         Log.d(TAG, "ModeManager.stop");
         if (currentMode != null) {
             try {
@@ -243,17 +246,11 @@ public class ModeManagerImpl implements ModeManager {
         saveMode(mode);
     }
   
-    /*
-    private void saveAllModes() throws AugieStoreException, CodeableException {
-        for (Mode m : getModes()) {
-            saveMode(m);
-        }
-    }
-     */
     @Override
     public void saveMode(Mode mode) throws CodeableException {
-        if (store == null) return; //too late
+        if (store == null || mode == null) return; //too late
         String mode_ser = mode.getCode().toString();
+        if (mode_ser == null) return;
         store.replaceContent(mode.getCodeableName().toString(), mode_ser);       
     }
 
