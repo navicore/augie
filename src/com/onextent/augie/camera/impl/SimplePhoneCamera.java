@@ -4,12 +4,16 @@
 package com.onextent.augie.camera.impl;
 
 import java.io.IOException;
+import java.util.Set;
 
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.onextent.augie.AugieScape;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
@@ -17,14 +21,17 @@ import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
-public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
+public class SimplePhoneCamera extends AbstractPhoneCamera {
 
 	protected Camera camera;
 	
+	protected final int cameraId;
+	
 	private final Params params;
 	
-	AbstractSimplePhoneCamera() {
+	SimplePhoneCamera(int id) {
 	    params = new Params();
+	    cameraId = id;
 	}
 
     @Override
@@ -41,9 +48,13 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
 	}
 	
     @Override
-    public abstract CodeableName getCodeableName();
+    public CodeableName getCodeableName() {
+        throw new java.lang.UnsupportedOperationException();
+    }
     
-    protected abstract int getId();
+    public final int getId() {
+        return cameraId;
+    }
 
     @Override
     public void close() throws AugCameraException {
@@ -96,14 +107,14 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
             
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
-                if (raw != null) raw.onPictureTaken(data, AbstractSimplePhoneCamera.this);
+                if (raw != null) raw.onPictureTaken(data, SimplePhoneCamera.this);
             }
         };
         Camera.PictureCallback jcb = new Camera.PictureCallback() {
             
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
-                if (jpeg != null) jpeg.onPictureTaken(data, AbstractSimplePhoneCamera.this);
+                if (jpeg != null) jpeg.onPictureTaken(data, SimplePhoneCamera.this);
             }
         };
         camera.takePicture(scb, rcb, jcb);
@@ -171,6 +182,48 @@ public abstract class AbstractSimplePhoneCamera extends AbstractPhoneCamera {
 
     @Override
     public Meta getMeta() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        throw new java.lang.UnsupportedOperationException();
+    }
+
+    @Override
+    public void updateCanvas() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void stop() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onCreate(AugieScape av, Set<Augiement> helpers)
+            throws AugiementException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Set<CodeableName> getDependencyNames() {
         // TODO Auto-generated method stub
         return null;
     }

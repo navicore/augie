@@ -3,6 +3,7 @@ package com.onextent.augie;
 import java.util.Set;
 
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableName;
 
@@ -16,7 +17,7 @@ public interface Mode extends Codeable {
 
     AugCamera getCamera();
 
-    void setCamera(AugCamera camera);
+    void setCamera(AugCamera camera) throws AugCameraException;
 
     void removeAugiement(Augiement a);
 

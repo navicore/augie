@@ -19,6 +19,7 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
@@ -248,13 +249,13 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 
     @Override
-    public Code getCode() {
+    public Code getCode() throws CodeableException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setCode(Code code) {
+    public void setCode(Code code) throws CodeableException {
         // TODO Auto-generated method stub
         
     }

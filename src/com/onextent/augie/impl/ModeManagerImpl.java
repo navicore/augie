@@ -18,6 +18,8 @@ import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
+import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.TouchShutter;
 import com.onextent.util.codeable.Codeable;
@@ -186,7 +188,14 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     private void primeDefaultMode() throws CodeableException {
-        ModeImpl mode = new ModeImpl(this, MODE_KEY_DEFAULT);
+        AugCamera camera;
+        try {
+            camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
+        } catch (AugCameraException e) {
+            throw new CodeableException(e);
+        }
+        if (camera == null) throw new CodeableException("no camera");
+        ModeImpl mode = new ModeImpl(this, MODE_KEY_DEFAULT, camera);
         mode.setName("Default");
         
         AugDrawFeature drawer = new AugDrawFeature();
@@ -207,7 +216,14 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     private void primeFlashMode() throws CodeableException {
-        ModeImpl mode = new ModeImpl(this, MODE_KEY_FLASH);
+        AugCamera camera;
+        try {
+            camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
+        } catch (AugCameraException e) {
+            throw new CodeableException(e);
+        }
+        if (camera == null) throw new CodeableException("no camera");
+        ModeImpl mode = new ModeImpl(this, MODE_KEY_FLASH, camera);
         mode.setName("Flash");
         
         AugDrawFeature drawer = new AugDrawFeature();

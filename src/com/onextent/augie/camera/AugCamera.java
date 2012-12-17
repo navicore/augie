@@ -10,8 +10,7 @@ public interface AugCamera extends Augiement {
 
     static final String TAG = Augiement.TAG;
     public static final CodeableName AUGIENAME = new AugiementName("AUGIE/FEATURES/CAMERA");
-    
-    CameraName getCameraName();
+    public static final String CAMERA_ID_KEY = "camera_id";
     
     void open() throws AugCameraException;
     
@@ -28,4 +27,8 @@ public interface AugCamera extends Augiement {
                             AugPictureCallback jpeg);
     
     AugCameraParameters getParameters();
+    
+    int getId();
+    
+    String getName(); //ui name
 }

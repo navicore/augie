@@ -12,6 +12,7 @@ import com.onextent.augie.ModeManager;
 import com.onextent.augie.ModeName;
 import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Codeable;
@@ -43,13 +44,18 @@ public class ModeImpl implements Codeable, Mode {
 
 
     public ModeImpl(ModeManager mm) {
-        this(mm, null);
-    }
-
-    public ModeImpl(ModeManager mm, String cn) {
         modeManager = mm;
         augiements = new HashSet<Augiement>();
-        augieName = new CodeableName(cn){};
+        augieName = null;
+        camera = null;
+    }
+
+    public ModeImpl(ModeManager mm, String cn, AugCamera c) {
+        if (c == null) throw new java.lang.NullPointerException("no camera");
+        modeManager = mm;
+        augiements = new HashSet<Augiement>();
+        if (cn != null) augieName = new CodeableName(cn){};
+        camera = c;
     }
 
     @Override
@@ -58,12 +64,13 @@ public class ModeImpl implements Codeable, Mode {
         try {
             code.put(KEY_NAME, name);
             code.put(KEY_AUGIENAME, augieName.toString());
-            if (camera != null) {
-                Code cameraJson = JSONCoder.newCode();
-                code.put(KEY_CAMERA, cameraJson);
-                cameraJson.put(KEY_AUGIENAME, camera.getCameraName().toString());
-                cameraJson.put(KEY_CODE, camera.getCode());
-            }
+            
+            Code cameraJson = JSONCoder.newCode();
+            code.put(KEY_CAMERA, cameraJson);
+            cameraJson.put(KEY_AUGIENAME, camera.getCodeableName().toString());
+            cameraJson.put(KEY_CODE, camera.getCode());
+            Log.d(TAG, "ejs getCode cameraCode: " + cameraJson);
+            
             if (!augiements.isEmpty()) {
                 CodeArray<Code> features = JSONCoder.newArrayOfCode();
                 code.put(KEY_AUGIEMENTS, features);
@@ -84,18 +91,20 @@ public class ModeImpl implements Codeable, Mode {
     }
 
     @Override
-    public void setCode(Code code) {
+    public void setCode(Code code) throws CodeableException {
         try {
             name = code.getString(KEY_NAME);
             augieName = new ModeName(code.getString(KEY_AUGIENAME));
-            if (code.has(KEY_CAMERA)) {
-                Code cameraJson = code.get(KEY_CAMERA);
-                CameraName cameraName = new CameraName(cameraJson.getString(KEY_AUGIENAME));
-                Code cameraCode = cameraJson.get(KEY_CODE);
-                camera = modeManager.getCameraFactory().getCamera(cameraName);
-                if (camera != null && cameraCode != null) {
-                    camera.setCode(cameraCode);
-                }
+            if (!code.has(KEY_CAMERA)) throw new CodeableException("no camera");
+            Code cameraJson = code.get(KEY_CAMERA);
+            Log.d(TAG, "ejs setCode cameraCode: " + cameraJson);
+            CameraName cameraName = new CameraName(cameraJson.getString(KEY_AUGIENAME));
+            Code cameraCode = cameraJson.get(KEY_CODE);
+            camera = modeManager.getCameraFactory().getCamera(cameraName);
+            Log.d(TAG, "ejs setCode cameraCode (got camera): " + cameraName);
+            if (camera != null && cameraCode != null) {
+                camera.setCode(cameraCode);
+                Log.d(TAG, "ejs setCode cameraCode (done): " + cameraJson);
             }
             if (code.has(KEY_AUGIEMENTS)) {
                 @SuppressWarnings("unchecked")
@@ -112,8 +121,8 @@ public class ModeImpl implements Codeable, Mode {
                     augiements.add(f);
                 }
             }
-        } catch (CodeableException e) {
-            Log.e(TAG, e.toString(), e);
+        } catch (AugCameraException e) {
+            throw new CodeableException(e);
         }
     }
 
@@ -133,12 +142,15 @@ public class ModeImpl implements Codeable, Mode {
 
     @Override
     public AugCamera getCamera() {
-        if (camera != null) return camera;
-        return modeManager.getCameraFactory().getCamera(null);
+        if (camera == null) throw new java.lang.NullPointerException("no camera");
+        return camera;
     }
 
     @Override
-    public void setCamera(AugCamera camera) {
+    public void setCamera(AugCamera camera) throws AugCameraException {
+        if (this.camera != null) {
+            camera.close();
+        }
         this.camera = camera;
     }
     
@@ -184,6 +196,7 @@ public class ModeImpl implements Codeable, Mode {
     public void deactivate() throws AugieException {
         Log.d(TAG, "deactivate node " + getCodeableName());
         try {
+            camera.close();
             modeManager.saveMode(this);
         } catch (CodeableException e) {
             throw new AugieException(e) {

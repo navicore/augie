@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.SurfaceHolder;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.Augieable;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -19,30 +18,30 @@ import com.onextent.augie.camera.CameraName;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.JSONCoder;
 
-public class BackCamera implements AugCamera {
+public class CameraImpl implements AugCamera {
     
-    /*
-     * wrapper to provide no-arg constructor for factory
-     */
+    private AugCamera augcamera;
+    private CodeableName augname;
+    private String name;
+  
+    public CameraImpl(int id, CameraName augname, String name) {
     
-    public static final CameraName CAMERA_NAME = AbstractPhoneCamera.BACK_CAMERA_NAME;
-    
-    private final AugCamera augcamera;
-    
-    protected BackCamera(CameraName name) {
-        
-        augcamera = AbstractPhoneCamera.getInstance(name);
+        this.augname = augname;
+        this.name = name;
+        //if no valid id, the camera will be created by setCode(code)
+        if (id >= 0) augcamera = AbstractPhoneCamera.getInstance(id);
     }
 
-    public BackCamera() {
+    public CameraImpl() {
         
-        this(CAMERA_NAME);
+        this(-1, null, null);
     }
 
     @Override
     public CodeableName getCodeableName() {
-        return AUGIENAME;
+        return augname;
     }
 
     @Override
@@ -85,51 +84,39 @@ public class BackCamera implements AugCamera {
 
     @Override
     public Code getCode() throws CodeableException {
-        return augcamera.getCode();
+        Code code = augcamera.getCode();
+        if (code == null) {
+            code = JSONCoder.newCode();
+        }
+        code.put(CODEABLE_NAME_KEY, augname);
+        code.put("name", name);
+        code.put(CAMERA_ID_KEY, getId());
+        return code;
     }
 
     @Override
-    public void setCode(Code state) throws CodeableException {
-        augcamera.setCode(state);
+    public void setCode(Code code) throws CodeableException {
+        int id = code.getInt(CAMERA_ID_KEY);
+        if (augcamera != null) augcamera.setCode(code);
+        else {
+            augcamera = AbstractPhoneCamera.getInstance(id);
+            if (augcamera == null) {
+                throw new CodeableException("camera not found");
+            }
+        }
+        augname = code.getCodeableName(CODEABLE_NAME_KEY);
+        name = code.getString("name");
     }
 
     @Override
     public void edit(Context context, EditCallback cb) throws AugieableException {
-        // TODO Auto-generated method stub
-        augcamera.edit(null, cb);
+    
+        throw new java.lang.UnsupportedOperationException();
     }
 
     @Override
     public boolean isEditable() {
-        // TODO Auto-generated method stub
         return false;
-    }
-
-    static private final class BackMeta implements Augieable.Meta {
-
-        @Override
-        public String getTitle() {
-            return "Back Camera";
-        }
-
-        @Override
-        public String getDescription() {
-            return "Interal Camera Facing Away from You";
-        }
-
-        @Override
-        public String getCatagory() {
-            return "Camera";
-        }
-        
-    }
-    static private final Augieable.Meta mymeta;
-    static {
-        mymeta = new BackMeta();
-    }
-    @Override
-    public Meta getMeta() {
-        return mymeta;
     }
 
     //NOOP stubs just here so that dependency manager can 
@@ -153,8 +140,20 @@ public class BackCamera implements AugCamera {
     public Set<CodeableName> getDependencyNames() { return null; }
 
     @Override
-    public CameraName getCameraName() {
+    public String getName() {
         
-        return CAMERA_NAME;
+        return name;
+    }
+
+    @Override
+    public int getId() {
+        
+        return augcamera.getId();
+    }
+
+    @Override
+    public Meta getMeta() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

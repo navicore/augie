@@ -5,6 +5,7 @@ public abstract class CodeableName {
     protected final String name;
     
     protected CodeableName(String name) {
+        if (name == null) throw new java.lang.NullPointerException("no name");
         this.name = name;
     }
 

@@ -13,11 +13,12 @@ import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
+public class IcsPhoneCamera extends SimplePhoneCamera {
 
     private final AugCameraParameters params;
     
-    public AbstractIcsPhoneCamera() {
+    public IcsPhoneCamera(int id) {
+        super(id);
         params = new IcsParams();
     }
     
@@ -32,7 +33,7 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
         @Override
         public int getMaxNumFocusAreas() {
             try {
-                AbstractIcsPhoneCamera.this.open();
+                IcsPhoneCamera.this.open();
                 int n = camera.getParameters().getMaxNumFocusAreas();
                 return n;
             } catch (AugCameraException e) {
@@ -44,7 +45,7 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
         @Override
         public int getMaxNumMeteringAreas() {
             try {
-                AbstractIcsPhoneCamera.this.open();
+                IcsPhoneCamera.this.open();
                 int n = camera.getParameters().getMaxNumMeteringAreas();
                 return n;
             } catch (AugCameraException e) {
@@ -72,21 +73,39 @@ public abstract class AbstractIcsPhoneCamera extends AbstractSimplePhoneCamera {
     }
 
     @Override
-    public abstract CodeableName getCodeableName();
-
-    @Override
-    protected abstract int getId();
-    
-    @Override
     public Code getCode() {
+        Code code = super.getCode();
         // TODO Auto-generated method stub
-        return null;
+        // TODO add ics stuff
+        //todo: override augiename
+        //ARGH!!!!!!!!!!!!!!!!
+        //ARGH!!!!!!!!!!!!!!!!
+        //ARGH!!!!!!!!!!!!!!!!
+        //ARGH!!!!!!!!!!!!!!!!
+        //ARGH!!!!!!!!!!!!!!!!
+        //ARGH!!!!!!!!!!!!!!!!
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        // need a single instanciatable impl
+        
+        //create helper impls
+        
+        return code;
     }
 
     @Override
-    public void setCode(Code state) {
+    public void setCode(Code code) {
+        super.setCode(code);
         // TODO Auto-generated method stub
-        
+        // TODO add ics stuff
     }
 
     @Override

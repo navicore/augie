@@ -10,7 +10,12 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.CodeArray;
+import com.onextent.util.codeable.Codeable;
+import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
+import com.onextent.util.codeable.JSONCoder;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;
@@ -25,28 +30,57 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
 
-    List<ScribleHolder> focus_areas, meter_areas;
+    final List<ScribleHolder> focus_areas, meter_areas;
     int max_focus_areas;
     int max_metering_areas;
     
     private ScribleHolder movingRect;
     private Point startP;
     
+    public TouchFocusShutterFeature() {
+        
+        focus_areas = new ArrayList<ScribleHolder>();
+        meter_areas = new ArrayList<ScribleHolder>();
+    }
+    
 	@TargetApi(14)
 	@Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 	    super.onCreate(av, helpers);
-        focus_areas = new ArrayList<ScribleHolder>();
-        meter_areas = new ArrayList<ScribleHolder>();
 	    max_focus_areas = camera.getParameters().getMaxNumFocusAreas();
 	    max_metering_areas = camera.getParameters().getMaxNumMeteringAreas();
 	    Log.d(TAG, "focus areas: " + max_focus_areas);
 	    Log.d(TAG, "metering areas: " + max_metering_areas);
     }
     
-    private class ScribleHolder {
+    private class ScribleHolder implements Codeable {
         //AugScrible scrible;
         Rect rect;
+
+        @Override
+        public CodeableName getCodeableName() { return new CodeableName("AUGIE/UTIL/RECT") {}; }
+
+        @Override
+        public Code getCode() throws CodeableException {
+            Code code = JSONCoder.newCode();
+            code.put( CODEABLE_NAME_KEY, getCodeableName() );
+            code.put("top", rect.top);
+            code.put("bottom", rect.bottom);
+            code.put("left", rect.left);
+            code.put("right", rect.right);
+            return code;
+        }
+
+        @Override
+        public void setCode(Code code) throws CodeableException {
+            if (!code.getCodeableName(CODEABLE_NAME_KEY).equals(getCodeableName())) throw new CodeableException("not a rect");
+            int top, bottom, left, right;
+            top = code.getInt("top");
+            bottom = code.getInt("bottom");
+            left = code.getInt("left");
+            right = code.getInt("right");
+            rect = new Rect(left, top, right, bottom);
+        }
     }
 
     protected void takePicture() {
@@ -67,6 +101,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	     */
 	    super.takePicture();
 	}
+    
 	private void saveArea(AugScrible s, List<ScribleHolder> areas) {
         ScribleHolder h = new ScribleHolder();
         //h.scrible = s;
@@ -74,20 +109,31 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         areas.add(h);
         augdraw.undoCurrentScrible();
 	}
+	
     private void saveFocusArea(AugScrible s) {
         if (max_focus_areas > 0 && max_focus_areas <= focus_areas.size()) {
             focus_areas.remove(0);
         }
         saveArea(s, focus_areas);
-        //todo: set focus area(s) after converting to -1000 x 1000 system
+        updateCameraFocusAreas();
 	}
 	
+    private void updateCameraMeterAreas() {
+        // TODO Auto-generated method stub
+        //todo: set meter area(s) after converting to -1000 x 1000 system
+    }
+
+    private void updateCameraFocusAreas() {
+        // TODO Auto-generated method stub
+        //todo: set focus area(s) after converting to -1000 x 1000 system
+    }
+
     private void saveMeterArea(AugScrible s) {
         if (max_metering_areas > 0 && max_metering_areas <= meter_areas.size()) {
             meter_areas.remove(0);
         }
         saveArea(s, meter_areas);
-        //todo: set meter area(s) after converting to -1000 x 1000 system
+        updateCameraMeterAreas();
 	}
     
     private ScribleHolder getRect(Point p) {
@@ -219,5 +265,47 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	@Override
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
+    }
+    @Override
+    public Code getCode() throws CodeableException {
+        Code code = super.getCode();
+        if (code == null) code = JSONCoder.newCode();
+        CodeArray<Code> faScribleCode= JSONCoder.newArrayOfCode();
+        code.put("focusAreas", faScribleCode);
+        for (ScribleHolder sh : focus_areas) {
+            faScribleCode.add(sh.getCode());
+        }
+        CodeArray<Code> maScribleCode= JSONCoder.newArrayOfCode();
+        code.put("meterAreas", maScribleCode);
+        for (ScribleHolder sh : meter_areas) {
+            maScribleCode.add(sh.getCode());
+        }
+        
+        return code;
+    }
+
+    @Override
+    public void setCode(Code code) throws CodeableException {
+        super.setCode(code);
+        if (code.has("focusAreas")) {
+            @SuppressWarnings("unchecked")
+            CodeArray<Code> faCodeArray = (CodeArray<Code>) code.getCodeArray("focusAreas");
+            for (Code c : faCodeArray) {
+                ScribleHolder sh = new ScribleHolder();
+                sh.setCode(c);
+                focus_areas.add(sh);
+                updateCameraFocusAreas();
+            }
+        }
+        if (code.has("meterAreas")) {
+            @SuppressWarnings("unchecked")
+            CodeArray<Code> maCodeArray = (CodeArray<Code>) code.getCodeArray("meterAreas");
+            for (Code c : maCodeArray) {
+                ScribleHolder sh = new ScribleHolder();
+                sh.setCode(c);
+                meter_areas.add(sh);
+                updateCameraMeterAreas();
+            }
+        }
     }
 }

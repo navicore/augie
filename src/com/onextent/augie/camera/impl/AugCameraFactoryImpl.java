@@ -3,6 +3,7 @@
  */
 package com.onextent.augie.camera.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,8 +14,8 @@ import android.util.Log;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.util.codeable.CodeableName;
@@ -22,56 +23,42 @@ import com.onextent.util.codeable.Code;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
-	private final Map<CameraName, AugCamera> cameras;
-	private final Map<CameraName, Class<? extends AugCamera>> cameraClasses;
-	
-    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/CAMERA/FACTORY");
-    public static final CameraName AUGIE_DEFAULT_CAMERA = new CameraName("AUGIE/FEATURES/CAMERA/DEFAULT_CAMERA");
-	
-	private CameraName currentCameraName;
+	private final Map<CodeableName, AugCamera> cameras;
+	private final Map<CodeableName, Class<? extends AugCamera>> cameraClasses;
 	
 	public AugCameraFactoryImpl() {
 	    
-	    cameras = new HashMap<CameraName, AugCamera>();
-	    cameraClasses = new HashMap<CameraName, Class<? extends AugCamera>>();
-	    currentCameraName = null;
-       
-	    //prime with to default camera impls
-	    registerCamera(BackCamera.class, BackCamera.CAMERA_NAME);
-        registerCamera(FrontCamera.class, FrontCamera.CAMERA_NAME);
+	    cameras = new HashMap<CodeableName, AugCamera>();
+	    cameraClasses = new HashMap<CodeableName, Class<? extends AugCamera>>();
 	}
 	
     @Override
-	public AugCamera getCamera(CameraName name) {
+	public AugCamera getCamera(CodeableName name) throws AugCameraException {
+        
+        if (name == null)  {
+            throw new AugCameraException("no camera name");
+        }
         
         AugCamera camera = null;
-       
-        if (name == null)  {
-            
-            if (currentCameraName == null) {
-                //todo: if currentCameraName is null, run UI to select camera?
-                name = AUGIE_DEFAULT_CAMERA;
-            } else {
-                name = AUGIE_DEFAULT_CAMERA;
-            }
-        }
         
         if (cameras.containsKey(name)) {
             
+            Log.d(TAG, "getting already instantiated camera");
             camera = cameras.get(name);
             
         } else {
             
+            Log.d(TAG, "constructing new camera instance");
             camera = createCamera(name);
             if (camera != null) cameras.put(name, camera);
         }
         
-        currentCameraName = name;
+        if (camera == null) throw new AugCameraException("no camera");
 
         return camera;
 	}
 	
-    private AugCamera createCamera(CameraName name) {
+    private AugCamera createCamera(CodeableName name) {
         
         AugCamera camera = null;
         
@@ -131,10 +118,17 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
     
     @Override
+    public void registerCamera(int id, CameraName augname, String name) {
+        AugCamera c = new CameraImpl(id, augname, name);
+        cameras.put(augname, c);
+    }
+   
+    /**
+     * warnging, this isn't baked at all, cameras registered by class don't
+     * show up in the getCameras set yet
+     */
+    @Override
     public void registerCamera(Class<? extends AugCamera> camclass, CameraName name) {
-        if (cameraClasses.isEmpty()) {
-            cameraClasses.put(AUGIE_DEFAULT_CAMERA, camclass);
-        }
         cameraClasses.put(name, camclass);
     }
 
@@ -157,7 +151,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Set<CameraName> getCameraNames() {
+    public Set<CodeableName> getCameraNames() {
 
         return cameraClasses.keySet();
     }
@@ -172,5 +166,11 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     public void setCode(Code code) {
         // TODO Auto-generated method stub
         
+    }
+    
+    @Override
+    public Collection<AugCamera> getCameras() {
+        
+        return cameras.values();
     }
 }
