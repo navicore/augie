@@ -31,8 +31,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
 
     final List<ScribleHolder> focus_areas, meter_areas;
-    int max_focus_areas;
-    int max_metering_areas;
     
     private ScribleHolder movingRect;
     private Point startP;
@@ -47,10 +45,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	@Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 	    super.onCreate(av, helpers);
-	    max_focus_areas = camera.getParameters().getMaxNumFocusAreas();
-	    max_metering_areas = camera.getParameters().getMaxNumMeteringAreas();
-	    Log.d(TAG, "focus areas: " + max_focus_areas);
-	    Log.d(TAG, "metering areas: " + max_metering_areas);
+	    //AugCameraParameters cp = camera.getParameters();
+	    //if (cp == null) throw new AugiementException("");
     }
     
     private class ScribleHolder implements Codeable {
@@ -111,6 +107,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	}
 	
     private void saveFocusArea(AugScrible s) {
+	    int max_focus_areas = camera.getParameters().getMaxNumFocusAreas();
         if (max_focus_areas > 0 && max_focus_areas <= focus_areas.size()) {
             focus_areas.remove(0);
         }
@@ -129,6 +126,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
 
     private void saveMeterArea(AugScrible s) {
+	    int max_metering_areas = camera.getParameters().getMaxNumMeteringAreas();
         if (max_metering_areas > 0 && max_metering_areas <= meter_areas.size()) {
             meter_areas.remove(0);
         }

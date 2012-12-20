@@ -23,5 +23,7 @@ public interface AugCameraParameters extends Codeable {
     int getMaxNumFocusAreas();
 
     int getMaxNumMeteringAreas();
-
+    
+    String getFlashMode();
+    void setFlashMode(String flashmode);
 }

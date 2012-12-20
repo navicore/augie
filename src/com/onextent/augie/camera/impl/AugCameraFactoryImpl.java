@@ -18,22 +18,22 @@ import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
+import com.onextent.util.codeable.CodeableName;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
-	private final Map<CodeableName, AugCamera> cameras;
-	private final Map<CodeableName, Class<? extends AugCamera>> cameraClasses;
+	private final Map<CameraName, AugCamera> cameras;
+	private final Map<CameraName, Class<? extends AugCamera>> cameraClasses;
 	
 	public AugCameraFactoryImpl() {
 	    
-	    cameras = new HashMap<CodeableName, AugCamera>();
-	    cameraClasses = new HashMap<CodeableName, Class<? extends AugCamera>>();
+	    cameras = new HashMap<CameraName, AugCamera>();
+	    cameraClasses = new HashMap<CameraName, Class<? extends AugCamera>>();
 	}
 	
     @Override
-	public AugCamera getCamera(CodeableName name) throws AugCameraException {
+	public AugCamera getCamera(CameraName name) throws AugCameraException {
         
         if (name == null)  {
             throw new AugCameraException("no camera name");
@@ -43,12 +43,12 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         
         if (cameras.containsKey(name)) {
             
-            Log.d(TAG, "getting already instantiated camera");
+            Log.d(TAG, "getting already instantiated camera: " + name);
             camera = cameras.get(name);
             
         } else {
             
-            Log.d(TAG, "constructing new camera instance");
+            Log.d(TAG, "constructing new camera instance: " + name);
             camera = createCamera(name);
             if (camera != null) cameras.put(name, camera);
         }
@@ -58,7 +58,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         return camera;
 	}
 	
-    private AugCamera createCamera(CodeableName name) {
+    private AugCamera createCamera(CameraName name) {
         
         AugCamera camera = null;
         
@@ -151,7 +151,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Set<CodeableName> getCameraNames() {
+    public Set<CameraName> getCameraNames() {
 
         return cameraClasses.keySet();
     }

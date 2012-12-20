@@ -67,7 +67,7 @@ public class ModeImpl implements Codeable, Mode {
             
             Code cameraJson = JSONCoder.newCode();
             code.put(KEY_CAMERA, cameraJson);
-            cameraJson.put(KEY_AUGIENAME, camera.getCodeableName().toString());
+            cameraJson.put(KEY_AUGIENAME, camera.getCameraName().toString());
             cameraJson.put(KEY_CODE, camera.getCode());
             Log.d(TAG, "ejs getCode cameraCode: " + cameraJson);
             
@@ -202,7 +202,6 @@ public class ModeImpl implements Codeable, Mode {
             throw new AugieException(e) {
                 private static final long serialVersionUID = 660929239042327743L;};
         }
-        //todo release camera, clear augiescape
         AugieScape v = modeManager.getAugieScape();
         v.removeFeature(null);
     }

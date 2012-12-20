@@ -16,9 +16,9 @@ public interface AugCameraFactory extends Augiement {
 	
     public String TAG = Augiement.TAG;
     
-    AugCamera getCamera(CodeableName cn) throws AugCameraException;
+    AugCamera getCamera(CameraName cn) throws AugCameraException;
     
-    Set<CodeableName> getCameraNames();
+    Set<CameraName> getCameraNames();
     
     void registerCamera(Class<? extends AugCamera> camclass, CameraName name);
     

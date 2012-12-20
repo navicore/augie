@@ -23,12 +23,12 @@ import com.onextent.util.codeable.JSONCoder;
 public class CameraImpl implements AugCamera {
     
     private AugCamera augcamera;
-    private CodeableName augname;
+    private CameraName cameraName;
     private String name;
   
     public CameraImpl(int id, CameraName augname, String name) {
     
-        this.augname = augname;
+        this.cameraName = augname;
         this.name = name;
         //if no valid id, the camera will be created by setCode(code)
         if (id >= 0) augcamera = AbstractPhoneCamera.getInstance(id);
@@ -40,8 +40,8 @@ public class CameraImpl implements AugCamera {
     }
 
     @Override
-    public CodeableName getCodeableName() {
-        return augname;
+    public CameraName getCameraName() {
+        return cameraName;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CameraImpl implements AugCamera {
         if (code == null) {
             code = JSONCoder.newCode();
         }
-        code.put(CODEABLE_NAME_KEY, augname);
+        code.put("cameraName", cameraName);
         code.put("name", name);
         code.put(CAMERA_ID_KEY, getId());
         return code;
@@ -104,7 +104,7 @@ public class CameraImpl implements AugCamera {
                 throw new CodeableException("camera not found");
             }
         }
-        augname = code.getCodeableName(CODEABLE_NAME_KEY);
+        cameraName = new CameraName(code.getString("cameraName"));
         name = code.getString("name");
     }
 
@@ -155,5 +155,15 @@ public class CameraImpl implements AugCamera {
     public Meta getMeta() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void applyParameters() {
+        augcamera.applyParameters();
+    }
+
+    @Override
+    public CodeableName getCodeableName() {
+        return augcamera.getCodeableName();
     }
 }
