@@ -32,10 +32,12 @@ public interface AugCamera extends Augiement {
     //  1 - updates camera with whatever is in code
     //  2 - refreshes code with the real/final camera settings in case
     //      camera impl overrides
-    void applyParameters();
+    void applyParameters() throws AugCameraException;
     
     int getId();
     
     String getName(); //ui name
     CameraName getCameraName(); //camera factory name
+
+    void initParams();
 }

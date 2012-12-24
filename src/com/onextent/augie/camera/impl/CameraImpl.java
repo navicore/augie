@@ -158,12 +158,17 @@ public class CameraImpl implements AugCamera {
     }
 
     @Override
-    public void applyParameters() {
+    public void applyParameters() throws AugCameraException {
         augcamera.applyParameters();
     }
 
     @Override
     public CodeableName getCodeableName() {
         return augcamera.getCodeableName();
+    }
+
+    @Override
+    public void initParams() {
+        augcamera.initParams();
     }
 }

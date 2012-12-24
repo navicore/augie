@@ -147,16 +147,22 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             Params p = new Params();
             return p;
     }
-    protected void initParams() {
+    @Override
+    public void initParams() {
         try {
             params = newParams();
             Camera.Parameters cp = camera.getParameters();
+            
+            //todo: update each setting
             String flashMode = cp.getFlashMode();
-            Log.d(TAG, "flashMode: " + flashMode);
-            if (flashMode != null) {
-                params.setFlashMode(flashMode);
-            }
-            //todo: init other 2.3 stuff
+            if (flashMode != null) params.setFlashMode(flashMode);
+            
+            String colorMode = cp.getColorEffect();
+            if (colorMode != null) params.setColorMode(colorMode);
+            
+            String wb = cp.getWhiteBalance();
+            if (wb != null) params.setWhiteBalMode(wb);
+            
         } catch (Throwable err) {
             params = null;
             Log.e(TAG, err.toString(), err);
@@ -165,7 +171,8 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 
     protected class Params implements AugCameraParameters {
         
-        private String flashMode;
+        private String flashMode, colorMode, whiteBalMode, sceneMode;
+        private Code initCode;
 
         //
         // Codeable ifc
@@ -174,6 +181,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         public Code getCode() throws CodeableException {
             Code code = JSONCoder.newCode();
             if (getFlashMode() != null) code.put("flashMode", getFlashMode());
+            if (getColorMode() != null) code.put("colorMode", getColorMode());
+            if (getWhiteBalMode() != null) code.put("whiteBal", getWhiteBalMode());
+            if (getSceneMode() != null) code.put("sceneMode", getSceneMode());
             //todo: update each setting
             return code;
         }
@@ -181,8 +191,13 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         public void setCode(Code code) throws CodeableException {
             if (code != null) {
                 if (code.has("flashMode")) setFlashMode(code.getString("flashMode"));
+                if (code.has("colorMode")) setColorMode(code.getString("colorMode"));
+                if (code.has("whiteBal")) setWhiteBalMode(code.getString("whiteBal"));
+                //warning: scene mode changes other params
+                if (code.has("sceneMode")) setSceneMode(code.getString("sceneMode"));
                 //todo: update each setting
             }
+            initCode = code; //for rollback
         }
         @Override
         public CodeableName getCodeableName() {
@@ -200,17 +215,52 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         public int getMaxNumMeteringAreas() {
             return 0;
         }
+        @Override
+        public void rollback() throws CodeableException {
+            if (initCode != null) {
+                setCode(initCode);
+            }
+        }
         
         //
         // ifc
         //
         @Override
         public String getFlashMode() {
+            if (flashMode == null) flashMode = Camera.Parameters.FLASH_MODE_AUTO;
             return flashMode;
         }
         @Override
-        public void setFlashMode(String flashmode) {
-            this.flashMode = flashmode;
+        public void setFlashMode(String m) {
+            this.flashMode = m;
+        }
+        
+        @Override
+        public String getColorMode() {
+            if (colorMode == null) colorMode = Camera.Parameters.EFFECT_NONE;
+            return colorMode;
+        }
+        @Override
+        public void setColorMode(String m) {
+            this.colorMode = m;
+        }
+        
+        @Override
+        public String getWhiteBalMode() {
+            if (whiteBalMode == null) whiteBalMode = Camera.Parameters.WHITE_BALANCE_AUTO;
+            return whiteBalMode;
+        }
+        @Override
+        public void setWhiteBalMode(String m) {
+            this.whiteBalMode = m;
+        }
+        @Override
+        public String getSceneMode() {
+            return sceneMode;
+        }
+        @Override
+        public void setSceneMode(String m) {
+           sceneMode = m; 
         }
     }
 
@@ -289,9 +339,16 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             if (p != null && cp != null) {
                 //todo: update with each 2.3 setting
                 String fm = p.getFlashMode();
-                if (fm != null) {
-                    cp.setFlashMode(fm);
-                }
+                if (fm != null) cp.setFlashMode(fm);
+                
+                String cm = p.getColorMode();
+                if (cm != null) cp.setColorEffect(cm);
+                
+                String wb = p.getWhiteBalMode();
+                if (wb != null) cp.setWhiteBalance(wb);
+                
+                String sm = p.getSceneMode();
+                if (sm != null) cp.setSceneMode(sm);
             }
         } catch (Throwable err) {
             Log.e(TAG, err.toString(), err);
@@ -300,10 +357,20 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         return cp;
     }
     @Override
-    public void applyParameters() {
+    public void applyParameters() throws AugCameraException {
         Camera.Parameters cp = getUpdatedCameraParameters();
         if (cp != null) {
-            camera.setParameters(getUpdatedCameraParameters());
+            try {
+                camera.setParameters(getUpdatedCameraParameters());
+            } catch (Throwable err) {
+                Log.w(TAG, "can not set camera parameters");
+                try {
+                    getParameters().rollback();
+                } catch (CodeableException e) {
+                    throw new AugCameraException(e);
+                }
+                throw new AugCameraException("can not set camera parameter");
+            }
         }
     }
 }

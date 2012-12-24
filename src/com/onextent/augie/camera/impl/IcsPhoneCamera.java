@@ -72,9 +72,9 @@ public class IcsPhoneCamera extends SimplePhoneCamera {
         
     }
     
-    protected void initParams() {
+    public void initParams() {
         super.initParams();
-        // TODO Auto-generated method stub
+        //todo: update with each ics setting
     }
 
     protected Camera.Parameters getUpdatedCameraParameters() {
