@@ -143,9 +143,13 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         return params;
     }
     
+    protected Params newParams() {
+            Params p = new Params();
+            return p;
+    }
     protected void initParams() {
         try {
-            params = new Params();
+            params = newParams();
             Camera.Parameters cp = camera.getParameters();
             String flashMode = cp.getFlashMode();
             Log.d(TAG, "flashMode: " + flashMode);
@@ -225,7 +229,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     @Override
     public void setCode(Code code) throws CodeableException {
         if (code.has("params")) {
-            params = new Params();
+            params = newParams();
             Code pcode = code.get("params");
             params.setCode(pcode);
         }
@@ -285,9 +289,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             if (p != null && cp != null) {
                 //todo: update with each 2.3 setting
                 String fm = p.getFlashMode();
-                if (fm == null) {
-                    Log.e(TAG, "ejs why is flashMode null?");
-                } else {
+                if (fm != null) {
                     cp.setFlashMode(fm);
                 }
             }
