@@ -4,6 +4,8 @@
 package com.onextent.augie.camera.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
@@ -20,6 +22,7 @@ import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.augie.camera.ImageFmt;
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
@@ -154,14 +157,28 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             Camera.Parameters cp = camera.getParameters();
             
             //todo: update each setting
-            String flashMode = cp.getFlashMode();
-            if (flashMode != null) params.setFlashMode(flashMode);
+            String m = cp.getFlashMode();
+            if (m != null) params.setFlashMode(m);
             
-            String colorMode = cp.getColorEffect();
-            if (colorMode != null) params.setColorMode(colorMode);
+            m = cp.getColorEffect();
+            if (m != null) params.setColorMode(m);
             
-            String wb = cp.getWhiteBalance();
-            if (wb != null) params.setWhiteBalMode(wb);
+            m = cp.getWhiteBalance();
+            if (m != null) params.setWhiteBalance(m);
+            
+            m = cp.getFocusMode();
+            if (m != null) params.setFocusMode(m);
+            
+            m = cp.getAntibanding();
+            if (m != null) params.setAntibanding(m);
+            
+            int v = cp.getPictureFormat();
+            ImageFmt f = new ImageFmt(v);
+            params.setPictureFmt(f);
+            
+            v = cp.getPreviewFormat();
+            f = new ImageFmt(v);
+            params.setPreviewFmt(f);
             
         } catch (Throwable err) {
             params = null;
@@ -171,7 +188,8 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 
     protected class Params implements AugCameraParameters {
         
-        private String flashMode, colorMode, whiteBalMode, sceneMode;
+        private String flashMode, colorMode, whiteBalMode, sceneMode, focusMode, antibanding;
+        private ImageFmt pictureFmt, previewFmt;
         private Code initCode;
 
         //
@@ -180,24 +198,31 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         @Override
         public Code getCode() throws CodeableException {
             Code code = JSONCoder.newCode();
+            //todo: update each setting
             if (getFlashMode() != null) code.put("flashMode", getFlashMode());
             if (getColorMode() != null) code.put("colorMode", getColorMode());
-            if (getWhiteBalMode() != null) code.put("whiteBal", getWhiteBalMode());
+            if (getWhiteBalance() != null) code.put("whiteBal", getWhiteBalance());
             if (getSceneMode() != null) code.put("sceneMode", getSceneMode());
-            //todo: update each setting
+            if (getFocusMode() != null) code.put("focusMode", getFocusMode());
+            if (getAntibanding() != null) code.put("antibanding", getAntibanding());
+            if (getPictureFmt() != null) code.put("pictureFmt", getPictureFmt().toInt());
+            if (getPreviewFmt() != null) code.put("previewFmt", getPreviewFmt().toInt());
             return code;
         }
         @Override
         public void setCode(Code code) throws CodeableException {
             if (code != null) {
+                //todo: update each setting
                 if (code.has("flashMode")) setFlashMode(code.getString("flashMode"));
                 if (code.has("colorMode")) setColorMode(code.getString("colorMode"));
-                if (code.has("whiteBal")) setWhiteBalMode(code.getString("whiteBal"));
-                //warning: scene mode changes other params
+                if (code.has("whiteBal")) setWhiteBalance(code.getString("whiteBal"));
                 if (code.has("sceneMode")) setSceneMode(code.getString("sceneMode"));
-                //todo: update each setting
+                if (code.has("focusMode")) setFocusMode(code.getString("focusMode"));
+                if (code.has("antibanding")) setAntibanding(code.getString("antibanding"));
+                if (code.has("pictureFmt")) setPictureFmt(new ImageFmt(code.getInt("antibanding")));
+                if (code.has("previewFmt")) setPreviewFmt(new ImageFmt(code.getInt("previewFmt")));
             }
-            initCode = code; //for rollback
+            initCode = code; //save for rollback
         }
         @Override
         public CodeableName getCodeableName() {
@@ -227,33 +252,43 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         //
         @Override
         public String getFlashMode() {
-            if (flashMode == null) flashMode = Camera.Parameters.FLASH_MODE_AUTO;
             return flashMode;
         }
         @Override
         public void setFlashMode(String m) {
             this.flashMode = m;
         }
+        @Override
+        public List<String> getSupportedFlashModes() {
+            return camera.getParameters().getSupportedFlashModes();
+        }
         
         @Override
         public String getColorMode() {
-            if (colorMode == null) colorMode = Camera.Parameters.EFFECT_NONE;
             return colorMode;
         }
         @Override
         public void setColorMode(String m) {
             this.colorMode = m;
         }
+        @Override
+        public List<String> getSupportedColorModes() {
+            return camera.getParameters().getSupportedColorEffects();
+        }
         
         @Override
-        public String getWhiteBalMode() {
-            if (whiteBalMode == null) whiteBalMode = Camera.Parameters.WHITE_BALANCE_AUTO;
+        public String getWhiteBalance() {
             return whiteBalMode;
         }
         @Override
-        public void setWhiteBalMode(String m) {
+        public void setWhiteBalance(String m) {
             this.whiteBalMode = m;
         }
+        @Override
+        public List<String> getSupportedWhiteBalances() {
+            return camera.getParameters().getSupportedWhiteBalance();
+        }
+        
         @Override
         public String getSceneMode() {
             return sceneMode;
@@ -261,6 +296,74 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         @Override
         public void setSceneMode(String m) {
            sceneMode = m; 
+        }
+        @Override
+        public List<String> getSupportedSceneModes() {
+            return camera.getParameters().getSupportedSceneModes();
+        }
+        
+        @Override
+        public String getFocusMode() {
+            return focusMode;
+        }
+        @Override
+        public void setFocusMode(String m) {
+           focusMode = m; 
+        }
+        @Override
+        public List<String> getSupportedFocusModes() {
+            return camera.getParameters().getSupportedFocusModes();
+        }
+        
+        @Override
+        public String getAntibanding() {
+            return antibanding;
+        }
+        @Override
+        public void setAntibanding(String m) {
+            antibanding = m; 
+        }
+        @Override
+        public List<String> getSupportedAntibanding() {
+            return camera.getParameters().getSupportedAntibanding();
+        }
+        
+        @Override
+        public ImageFmt getPictureFmt() {
+            return pictureFmt;
+        }
+        @Override
+        public void setPictureFmt(ImageFmt f) {
+            pictureFmt = f;
+        }
+        @Override
+        public List<ImageFmt> getSupportedPictureFmts() {
+            List<Integer> cfmts = camera.getParameters().getSupportedPictureFormats();
+            List<ImageFmt> list = new ArrayList<ImageFmt>();
+            for (int i : cfmts) {
+                ImageFmt f = new ImageFmt(i);
+                list.add(f);
+            }
+            return list;
+        }
+        
+        @Override
+        public ImageFmt getPreviewFmt() {
+            return previewFmt;
+        }
+        @Override
+        public void setPreviewFmt(ImageFmt f) {
+            previewFmt = f;            
+        }
+        @Override
+        public List<ImageFmt> getSupportedPreviewFmts() {
+            List<Integer> cfmts = camera.getParameters().getSupportedPreviewFormats();
+            List<ImageFmt> list = new ArrayList<ImageFmt>();
+            for (int i : cfmts) {
+                ImageFmt f = new ImageFmt(i);
+                list.add(f);
+            }
+            return list;
         }
     }
 
@@ -272,7 +375,6 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             code.put(Codeable.CODEABLE_NAME_KEY, getCodeableName());
             code.put("params", pcode);
         }
-        Log.d(TAG, "ejs simple phone code: " + code);
         return code;
     }
 
@@ -338,17 +440,30 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             AugCameraParameters p = getParameters();
             if (p != null && cp != null) {
                 //todo: update with each 2.3 setting
-                String fm = p.getFlashMode();
-                if (fm != null) cp.setFlashMode(fm);
+                String m;
+                m = p.getFlashMode();
+                if (m != null) cp.setFlashMode(m);
                 
-                String cm = p.getColorMode();
-                if (cm != null) cp.setColorEffect(cm);
+                m = p.getColorMode();
+                if (m != null) cp.setColorEffect(m);
                 
-                String wb = p.getWhiteBalMode();
-                if (wb != null) cp.setWhiteBalance(wb);
+                m = p.getWhiteBalance();
+                if (m != null) cp.setWhiteBalance(m);
                 
-                String sm = p.getSceneMode();
-                if (sm != null) cp.setSceneMode(sm);
+                m = p.getSceneMode();
+                if (m != null) cp.setSceneMode(m);
+                
+                m = p.getFocusMode();
+                if (m != null) cp.setFocusMode(m);
+                
+                m = p.getAntibanding();
+                if (m != null) cp.setAntibanding(m);
+                
+                ImageFmt f = p.getPictureFmt();
+                if (f != null) cp.setPictureFormat(f.toInt());
+                
+                f = p.getPreviewFmt();
+                if (f != null) cp.setPreviewFormat(f.toInt());
             }
         } catch (Throwable err) {
             Log.e(TAG, err.toString(), err);
