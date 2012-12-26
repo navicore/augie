@@ -9,6 +9,12 @@ public class ModeName extends CodeableName {
     }
     
     @Override
+    public int hashCode() {
+        
+        return name.hashCode() + ModeName.class.hashCode();
+    }
+    
+    @Override
     public boolean equals(Object o) {
         
         if (o instanceof ModeName) {

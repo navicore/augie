@@ -178,6 +178,14 @@ public class JSONCoder {
             }
         }
         @Override
+        public void put(String key, boolean value) throws CodeableException {
+            try {
+                json.put(key, value);
+            } catch (JSONException e) {
+                throw new CodeableException(e);
+            }           
+        }
+        @Override
         public void put(String key, int value) throws CodeableException {
             try {
                 json.put(key, value);
@@ -234,6 +242,14 @@ public class JSONCoder {
         public String getString(String key) throws CodeableException {
             try {
                 return json.getString(key);
+            } catch (JSONException e) {
+                throw new CodeableException(e);
+            }
+        }
+        @Override
+        public boolean getBoolean(String key) throws CodeableException {
+            try {
+                return json.getBoolean(key);
             } catch (JSONException e) {
                 throw new CodeableException(e);
             }

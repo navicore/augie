@@ -2,12 +2,16 @@ package com.onextent.augie.camera;
 
 import android.graphics.ImageFormat;
 
-public class ImageFmt {
+public class ImageFmt implements NamedInt {
 
     final int format;
     public ImageFmt(int f) {
         format = f;
     }
+    /* (non-Javadoc)
+     * @see com.onextent.augie.camera.NamedInt#toInt()
+     */
+    @Override
     public int toInt() {
         return format;
     }
@@ -36,7 +40,7 @@ public class ImageFmt {
         if (o == null || !(o instanceof ImageFmt)) {
             return false;
         }
-        ImageFmt that = (ImageFmt) o;
+        NamedInt that = (NamedInt) o;
         return toInt() == that.toInt();
     }
 }

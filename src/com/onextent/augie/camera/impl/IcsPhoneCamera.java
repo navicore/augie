@@ -8,6 +8,7 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
+import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
@@ -89,5 +90,17 @@ public class IcsPhoneCamera extends SimplePhoneCamera {
         }
         
         return cp;
+    }
+
+    @Override
+    public void applyParameters() throws AugCameraException {
+        // TODO Auto-generated method stub
+        super.applyParameters();
+        
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(getId(), info);
+        //todo: ICS 17+ only
+        //if (info.canDisableShutterSound) {
+        //}
     }
 }

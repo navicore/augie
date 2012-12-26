@@ -6,6 +6,7 @@ import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
+import com.onextent.util.store.CodeStore;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,11 +26,11 @@ public interface ModeManager {
 
     abstract Mode getCurrentMode();
 
-    abstract Mode getMode(CodeableName augieName);
+    abstract Mode getMode(CodeableName augieName) throws CodeableException;
 
     abstract List<Code> getAllModeCode() throws AugieStoreException;
 
-    abstract void deleteMode(CodeableName augieName);
+    abstract void deleteMode(CodeableName augieName) throws CodeableException;
 
     abstract void addMode(Mode mode) throws CodeableException;
     
@@ -47,6 +48,8 @@ public interface ModeManager {
     AugieScape getAugieScape();
 
     AugiementFactory getAugiementFactory();
+    
+    CodeStore getStore();
     
     //this is extremely evil, get rid of these calls
     //this is extremely evil, get rid of these calls

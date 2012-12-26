@@ -1,9 +1,9 @@
 package com.onextent.augie.camera;
 
 import java.util.List;
-
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableException;
+import com.onextent.util.codeable.Size;
 
 public interface AugCameraParameters extends Codeable {
     
@@ -37,11 +37,33 @@ public interface AugCameraParameters extends Codeable {
     void setAntibanding(String m);
     List<String> getSupportedAntibanding();
     
-    ImageFmt getPictureFmt();
-    void setPictureFmt(ImageFmt f);
-    List<ImageFmt> getSupportedPictureFmts();
+    NamedInt getPictureFmt();
+    void setPictureFmt(NamedInt f);
+    List<NamedInt> getSupportedPictureFmts();
     
-    ImageFmt getPreviewFmt();
-    void setPreviewFmt(ImageFmt f);
-    List<ImageFmt> getSupportedPreviewFmts();
+    String getXPictureFmt();
+    void setXPictureFmt(String f);
+    List<String> getXSupportedPictureFmts();
+    
+    NamedInt getPreviewFmt();
+    void setPreviewFmt(NamedInt f);
+    List<NamedInt> getSupportedPreviewFmts();
+    
+    boolean getShutterSound();
+    void setShutterSound(boolean enable);
+
+    Size getPictureSize();
+    void setPictureSize(Size sz);
+    List<Size> getSupportedPictureSizes();
+
+    Size getPreviewSize();
+    void setPreviewSize(Size sz);
+    List<Size> getSupportedPreviewSizes();
+    
+    int getJpegQuality();
+    void setJpegQuality(int q);
+
+    int getJpegThumbnailQuality();
+
+    void setJpegThumbnailQuality(int q);
 }

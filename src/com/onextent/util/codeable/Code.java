@@ -12,6 +12,8 @@ public interface Code {
     
     void put(String key, CodeableName value) throws CodeableException;
     
+    void put(String key, boolean value) throws CodeableException;
+    
     void put(String key, int value) throws CodeableException;
     
     void put(String key, long value) throws CodeableException; 
@@ -27,6 +29,7 @@ public interface Code {
     String getString(String key) throws CodeableException;
     CodeableName getCodeableName(String key) throws CodeableException;
     
+    boolean getBoolean(String key) throws CodeableException;
     int getInt(String key) throws CodeableException;
     long getLong(String key) throws CodeableException;
     float getFloat(String key) throws CodeableException;

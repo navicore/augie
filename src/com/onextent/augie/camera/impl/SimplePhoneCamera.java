@@ -10,6 +10,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -23,11 +24,13 @@ import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.camera.ImageFmt;
+import com.onextent.augie.camera.NamedInt;
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.JSONCoder;
+import com.onextent.util.codeable.Size;
 
 public class SimplePhoneCamera extends AbstractPhoneCamera {
     
@@ -173,12 +176,29 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             if (m != null) params.setAntibanding(m);
             
             int v = cp.getPictureFormat();
-            ImageFmt f = new ImageFmt(v);
+            NamedInt f = new ImageFmt(v);
             params.setPictureFmt(f);
             
             v = cp.getPreviewFormat();
             f = new ImageFmt(v);
             params.setPreviewFmt(f);
+            
+            m = cp.get("picture-format");
+            if (m != null) {
+                params.setPictureFmt(null);
+                params.setXPictureFmt(m);
+            }
+            Camera.Size sz = cp.getPictureSize();
+            if (sz != null) params.setPictureSize(new Size(sz));
+            
+            sz = cp.getPreviewSize();
+            if (sz != null) params.setPreviewSize(new Size(sz));
+            
+            int i = cp.getJpegQuality();
+            if (i > 0) params.setJpegQuality(i);
+            
+            i = cp.getJpegThumbnailQuality();
+            if (i > 0) params.setJpegThumbnailQuality(i);
             
         } catch (Throwable err) {
             params = null;
@@ -189,8 +209,13 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     protected class Params implements AugCameraParameters {
         
         private String flashMode, colorMode, whiteBalMode, sceneMode, focusMode, antibanding;
-        private ImageFmt pictureFmt, previewFmt;
+        private String xpictureFmt;
+        private NamedInt pictureFmt, previewFmt;
+        private Size pictureSize, previewSize;
         private Code initCode;
+        private boolean shutterSnd = true;
+        private int jpegQuality = 0;
+        private int jpegThumbnailQuality = 0;
 
         //
         // Codeable ifc
@@ -205,11 +230,16 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             if (getSceneMode() != null) code.put("sceneMode", getSceneMode());
             if (getFocusMode() != null) code.put("focusMode", getFocusMode());
             if (getAntibanding() != null) code.put("antibanding", getAntibanding());
-            if (getPictureFmt() != null) code.put("pictureFmt", getPictureFmt().toInt());
+            if (getPictureFmt() != null && getXPictureFmt() == null) code.put("pictureFmt", getPictureFmt().toInt());
             if (getPreviewFmt() != null) code.put("previewFmt", getPreviewFmt().toInt());
+            if (getXPictureFmt() != null) code.put("xpictureFmt", getXPictureFmt());
+            code.put("shutterSnd", shutterSnd);
+            if (getPictureSize() != null) code.put("pictureSize", getPictureSize().getCode());
+            if (getPreviewSize() != null) code.put("previewSize", getPreviewSize().getCode());
+            if (getJpegQuality() != 0) code.put("jpegQuality", getJpegQuality());
+            if (getJpegThumbnailQuality() != 0) code.put("jpegThumbnailQuality", getJpegThumbnailQuality());
             return code;
         }
-        @Override
         public void setCode(Code code) throws CodeableException {
             if (code != null) {
                 //todo: update each setting
@@ -219,8 +249,22 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 if (code.has("sceneMode")) setSceneMode(code.getString("sceneMode"));
                 if (code.has("focusMode")) setFocusMode(code.getString("focusMode"));
                 if (code.has("antibanding")) setAntibanding(code.getString("antibanding"));
-                if (code.has("pictureFmt")) setPictureFmt(new ImageFmt(code.getInt("antibanding")));
+                if (code.has("pictureFmt")) setPictureFmt(new ImageFmt(code.getInt("pictureFmt")));
                 if (code.has("previewFmt")) setPreviewFmt(new ImageFmt(code.getInt("previewFmt")));
+                if (code.has("shutterSnd")) setShutterSound(code.getBoolean("shutterSnd"));
+                if (code.has("xpictureFmt")) setXPictureFmt(code.getString("xpictureFmt"));
+                if (code.has("pictureSize")) {
+                    Size sz = new Size();
+                    sz.setCode(code.get("pictureSize"));
+                    setPictureSize(sz);
+                }
+                if (code.has("previewSize")) {
+                    Size sz = new Size();
+                    sz.setCode(code.get("previewSize"));
+                    setPreviewSize(sz);
+                }
+                if (code.has("jpegQuality")) setJpegQuality(code.getInt("jpegQuality"));
+                if (code.has("jpegThumbnailQuality")) setJpegThumbnailQuality(code.getInt("jpegThumbnailQuality"));
             }
             initCode = code; //save for rollback
         }
@@ -329,44 +373,137 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         }
         
         @Override
-        public ImageFmt getPictureFmt() {
+        public NamedInt getPictureFmt() {
             return pictureFmt;
         }
         @Override
-        public void setPictureFmt(ImageFmt f) {
+        public void setPictureFmt(NamedInt f) {
             pictureFmt = f;
         }
         @Override
-        public List<ImageFmt> getSupportedPictureFmts() {
+        public List<NamedInt> getSupportedPictureFmts() {
             List<Integer> cfmts = camera.getParameters().getSupportedPictureFormats();
-            List<ImageFmt> list = new ArrayList<ImageFmt>();
+            List<NamedInt> list = new ArrayList<NamedInt>();
             for (int i : cfmts) {
-                ImageFmt f = new ImageFmt(i);
+                NamedInt f = new ImageFmt(i);
                 list.add(f);
             }
             return list;
         }
         
         @Override
-        public ImageFmt getPreviewFmt() {
+        public NamedInt getPreviewFmt() {
             return previewFmt;
         }
         @Override
-        public void setPreviewFmt(ImageFmt f) {
+        public void setPreviewFmt(NamedInt f) {
             previewFmt = f;            
         }
         @Override
-        public List<ImageFmt> getSupportedPreviewFmts() {
+        public List<NamedInt> getSupportedPreviewFmts() {
             List<Integer> cfmts = camera.getParameters().getSupportedPreviewFormats();
-            List<ImageFmt> list = new ArrayList<ImageFmt>();
+            List<NamedInt> list = new ArrayList<NamedInt>();
             for (int i : cfmts) {
-                ImageFmt f = new ImageFmt(i);
+                NamedInt f = new ImageFmt(i);
                 list.add(f);
             }
             return list;
         }
+        @Override
+        public void setShutterSound(boolean enable) {
+            shutterSnd = enable;
+        }
+        @Override
+        public boolean getShutterSound() {
+            return shutterSnd;
+        }
+        
+        //
+        //begin X methods... 
+        // warning: these keys are not android api safe and may change in the future
+        //
+        @Override
+        public String getXPictureFmt() {
+            return xpictureFmt;
+        }
+        @Override
+        public void setXPictureFmt(String f) {
+            xpictureFmt = f;
+        }
+        @Override
+        public List<String> getXSupportedPictureFmts() {
+            String sl = camera.getParameters().get("picture-format-values");
+            return split(sl, ',');
+        }
+       
+        @Override
+        public Size getPictureSize() {
+           return pictureSize; 
+        }
+        @Override
+        public void setPictureSize(Size sz) {
+            pictureSize = sz;
+        }
+        @Override
+        public List<Size> getSupportedPictureSizes() {
+            List<Camera.Size> csz = camera.getParameters().getSupportedPictureSizes();
+            List<Size> l = new ArrayList<Size>();
+            for (Camera.Size s : csz) {
+                Size sz = new Size(s);
+                l.add(sz);
+            }
+            return l;
+        }
+        
+        @Override
+        public Size getPreviewSize() {
+           return previewSize; 
+        }
+        @Override
+        public void setPreviewSize(Size sz) {
+            previewSize = sz;
+        }
+        @Override
+        public List<Size> getSupportedPreviewSizes() {
+            List<Camera.Size> csz = camera.getParameters().getSupportedPreviewSizes();
+            List<Size> l = new ArrayList<Size>();
+            for (Camera.Size s : csz) {
+                Size sz = new Size(s);
+                l.add(sz);
+            }
+            return l;
+        }
+        
+        @Override
+        public int getJpegQuality() {
+            return jpegQuality;
+        }
+        @Override
+        public void setJpegQuality(int q) {
+           jpegQuality = q;
+        }
+        
+        @Override
+        public int getJpegThumbnailQuality() {
+            return jpegThumbnailQuality;
+        }
+        @Override
+        public void setJpegThumbnailQuality(int q) {
+           jpegThumbnailQuality = q;
+        }
     }
 
+    private static ArrayList<String> split(String str, Character c) {
+        if (str == null) return null;
+        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(c);
+        splitter.setString(str);
+        ArrayList<String> substrings = new ArrayList<String>();
+        for (String s : splitter) {
+            substrings.add(s);
+        }
+        return substrings;
+    }
+    
     @Override
     public Code getCode() throws CodeableException {
         Code code = JSONCoder.newCode();
@@ -459,12 +596,28 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 m = p.getAntibanding();
                 if (m != null) cp.setAntibanding(m);
                 
-                ImageFmt f = p.getPictureFmt();
+                NamedInt f = p.getPictureFmt();
                 if (f != null) cp.setPictureFormat(f.toInt());
                 
                 f = p.getPreviewFmt();
                 if (f != null) cp.setPreviewFormat(f.toInt());
+                
+                m = p.getXPictureFmt();
+                if (m != null) cp.set("picture-format", m);
+                
+                Size sz = p.getPictureSize();
+                if (sz != null) cp.setPictureSize(sz.getWidth(), sz.getHeight());
+                
+                sz = p.getPreviewSize();
+                if (sz != null) cp.setPreviewSize(sz.getWidth(), sz.getHeight());
+                
+                int i = p.getJpegQuality();
+                if (i > 0) cp.setJpegQuality(i);
+                
+                i = p.getJpegThumbnailQuality();
+                if (i > 0) cp.setJpegThumbnailQuality(i);
             }
+            
         } catch (Throwable err) {
             Log.e(TAG, err.toString(), err);
         }
@@ -476,6 +629,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         Camera.Parameters cp = getUpdatedCameraParameters();
         if (cp != null) {
             try {
+                Log.d(TAG, "ejs flattened params: " + cp.flatten());
                 camera.setParameters(getUpdatedCameraParameters());
             } catch (Throwable err) {
                 Log.w(TAG, "can not set camera parameters");
@@ -487,5 +641,10 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 throw new AugCameraException("can not set camera parameter");
             }
         }
+    }
+
+    @Override
+    public String flatten() {
+        return camera.getParameters().flatten();
     }
 }

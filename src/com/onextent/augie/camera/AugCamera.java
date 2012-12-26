@@ -40,4 +40,6 @@ public interface AugCamera extends Augiement {
     CameraName getCameraName(); //camera factory name
 
     void initParams();
+    
+    String flatten();
 }

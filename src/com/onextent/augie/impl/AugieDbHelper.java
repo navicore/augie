@@ -1,6 +1,7 @@
 package com.onextent.augie.impl;
 
 import com.onextent.augie.Augieable;
+import com.onextent.util.store.CodeStoreSqliteImpl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,7 +16,7 @@ public class AugieDbHelper extends SQLiteOpenHelper {
     
     private static final String TAG = Augieable.TAG;
     
-    private static final String CREATE_TABLE = "CREATE TABLE " + AugieStore.TABLE_NAME + " (" + AugieStore.KEY_ID + " STRING primary key, " + AugieStore.CONTENT_NAME + " TEXT not null );";
+    private static final String CREATE_TABLE = "CREATE TABLE " + CodeStoreSqliteImpl.TABLE_NAME + " (" + CodeStoreSqliteImpl.KEY_ID + " STRING primary key, " + CodeStoreSqliteImpl.CONTENT_NAME + " TEXT not null );";
 
     public AugieDbHelper(Context context, 
                          String name, 
@@ -42,7 +43,7 @@ public class AugieDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         
         Log.w(TAG, "re-create db for upgrade from version " + oldVersion + " to version " + newVersion);
-        db.execSQL("drop table if exists " + AugieStore.TABLE_NAME);
+        db.execSQL("drop table if exists " + CodeStoreSqliteImpl.TABLE_NAME);
         onCreate(db);
     }
 }

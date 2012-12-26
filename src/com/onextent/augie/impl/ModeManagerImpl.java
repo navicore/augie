@@ -27,11 +27,13 @@ import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.JSONCoder;
+import com.onextent.util.store.CodeStore;
+import com.onextent.util.store.CodeStoreSqliteImpl;
 
 public class ModeManagerImpl implements ModeManager {
 
     private static final String TAG = Augiement.TAG;
-    AugieStore store;
+    CodeStore store;
     private static final String CURRENT_MODE_KEY_KEY = "CURRENT/MODE_KEY";
     private static final String MODE_KEY_FLASH = "MODE/SYSTEM/FLASH";
 
@@ -74,7 +76,7 @@ public class ModeManagerImpl implements ModeManager {
     public void onCreate(Context context) throws AugieStoreException, CodeableException {
 
         if (store != null) throw new AugieStoreException("store already init");
-        store = new AugieStore(context);
+        store = new CodeStoreSqliteImpl(context, "augie_store");
         store.open();
         init();
     }
@@ -121,21 +123,16 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     @Override
-    public Mode getMode(CodeableName augieName) {
+    public Mode getMode(CodeableName augieName) throws CodeableException {
         
         Mode m = new ModeImpl(this);
-        String m_ser = store.getContentString(augieName.toString());
-        if (m_ser != null) {
-            Log.d(TAG, "initializing mode from store");
-            try {
-                m.setCode(JSONCoder.newCode(m_ser));
-                return m;
-            } catch (CodeableException e) {
-                Log.e(TAG, e.toString(), e);
-            }
-        } 
-        Log.w(TAG, "no mode " + augieName);
-        return null;
+        Code code = store.getContentCode(augieName);
+        if (code == null) throw new CodeableException("mode not found") {
+            private static final long serialVersionUID = 7886435403395937189L;};
+            
+        Log.d(TAG, "initializing mode from store");
+        m.setCode(code);
+        return m;
     }
 
     private void init() throws AugieStoreException, CodeableException {
@@ -154,15 +151,12 @@ public class ModeManagerImpl implements ModeManager {
     @Override
     public List<Code> getAllModeCode() throws AugieStoreException {
        
-        /**
-         * THIS IS BAD, make a name meta list, don't instantiate all modes ever
-         */
         if (store == null) return null;
         
         if (allModeCode != null) return allModeCode;
        
         List<Code> list = new ArrayList<Code>();
-        Cursor c = store.getContent("MODE/%");
+        Cursor c = store.getContentCursor("MODE/%");
         if (c.moveToFirst()) {
             do {
                 String codeStr = c.getString(0);
@@ -244,7 +238,7 @@ public class ModeManagerImpl implements ModeManager {
     }
 
     @Override
-    public void deleteMode(CodeableName augieName) {
+    public void deleteMode(CodeableName augieName) throws CodeableException {
         if (getCurrentMode().equals(augieName)) {
             try {
                 setCurrentMode(getMode(new ModeName(MODE_KEY_DEFAULT)));
@@ -265,9 +259,9 @@ public class ModeManagerImpl implements ModeManager {
     @Override
     public void saveMode(Mode mode) throws CodeableException {
         if (store == null || mode == null) return; //too late
-        String mode_ser = mode.getCode().toString();
-        if (mode_ser == null) return;
-        store.replaceContent(mode.getCodeableName().toString(), mode_ser);       
+        Code code = mode.getCode();
+        store.replaceContent(mode.getCodeableName(), code);       
+        Log.d(TAG, "saved mode " + mode.getCodeableName());
     }
 
     //ugh
@@ -304,5 +298,10 @@ public class ModeManagerImpl implements ModeManager {
     }
     public AugiementFactory getAugiementFactory() {
         return augiementFactory;
+    }
+
+    @Override
+    public CodeStore getStore() {
+        return store;
     }
 }

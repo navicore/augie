@@ -171,4 +171,9 @@ public class CameraImpl implements AugCamera {
     public void initParams() {
         augcamera.initParams();
     }
+
+    @Override
+    public String flatten() {
+        return augcamera.flatten();
+    }
 }

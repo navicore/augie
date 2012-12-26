@@ -75,8 +75,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         if (augdraw == null) throw new AugiementException("draw feature is null");
         
 	    context = av.getContext();
-	    jpgCb = new CameraPictureCallback(".jpg");
-	    rawCb = new CameraPictureCallback(".raw");
+	    jpgCb = new JpgCameraPictureCallback();
+	    rawCb = new RawCameraPictureCallback();
         prefs = PreferenceManager.getDefaultSharedPreferences(context); //todo: stop doing this
     }
 	
@@ -130,10 +130,19 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-    private class CameraPictureCallback implements AugPictureCallback {
-        
-        private final String suffix;
-        
+    class RawCameraPictureCallback extends CameraPictureCallback {
+        public RawCameraPictureCallback() {
+            super(".raw");
+        }
+    }
+    class JpgCameraPictureCallback extends CameraPictureCallback {
+        public JpgCameraPictureCallback() {
+            super(".jpg");
+        }
+    }
+    class CameraPictureCallback implements AugPictureCallback {
+       
+        final String suffix;
         CameraPictureCallback(String suffix) {
             this.suffix = suffix;
         }
@@ -141,8 +150,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         public void onPictureTaken(byte[] data, AugCamera camera) {
 
             if (data == null){
-                Log.d(TAG, suffix + " data is null");
-                Toast.makeText(context, "this device does not support " + suffix, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "error: no image data", Toast.LENGTH_LONG).show();
                 return;
             }
             File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, suffix);
@@ -177,7 +185,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
     
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type, String suf){
+    private static File getOutputMediaFile(int type, String suffix){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -196,10 +204,10 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "IMG_"+ timeStamp + suf);
-        } else if(type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "VID_"+ timeStamp + suf);
+            "IMG_"+ timeStamp + suffix);
+        //} else if(type == MEDIA_TYPE_VIDEO) {
+        //    mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+        //    "VID_"+ timeStamp + suf);
         } else {
             return null;
         }
