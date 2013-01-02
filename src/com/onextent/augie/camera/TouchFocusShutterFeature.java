@@ -22,10 +22,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.Camera;
+import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
@@ -45,8 +48,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 	@Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 	    super.onCreate(av, helpers);
-	    //AugCameraParameters cp = camera.getParameters();
-	    //if (cp == null) throw new AugiementException("");
     }
     
     private class ScribleHolder implements Codeable {
@@ -78,25 +79,118 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             rect = new Rect(left, top, right, bottom);
         }
     }
+    protected void stakePicture() throws AugCameraException {
+            super.takePicture();
+    }
 
-    protected void takePicture() {
-	    Log.d(TAG, "trying to focus...");
+    protected void takePicture() throws AugCameraException {
+	    //see if there is a selected focus area
+	    //  if yes, 
+	    //    set it in camera and 
+	    //    redraw what the camera decides/overrules
+	    //  else 
+	    //    draw the in-camera settings
+	    
 	    /*
-	    AugCamera c = cameraFactory.getCamera(null);
-	    if (c == null)  return;
-	    if (max_focus_areas > 0 && prefs.getBoolean("TOUCH_FOCUS_ENABLED", true)) {
-	        if (focus_areas.size() == 0) {
-	            //todo: focus then take pic
-	            super.takePicture();
-	        } else {
-	            super.takePicture();
+	    AugCameraParameters p = camera.getParameters();
+	    List<Camera.Area> fareas = p.getFocusAreas();
+	    if (fareas != null)
+	        for (Camera.Area a : fareas) {
+	            Log.d(TAG, "focus area left: " + a.rect.left +
+	                       " right: "          + a.rect.right + 
+	                       " top: "            + a.rect.top + 
+	                       " bottom: "         + a.rect.bottom + 
+	                       " weight: "         + a.weight);
 	        }
-	    } else {
-	        super.takePicture();
-	    }
 	     */
-	    super.takePicture();
+       
+        String focusmode =  camera.getParameters().getFocusMode();
+        Log.d(TAG, "focus mode: " + focusmode);
+        if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
+            
+            _setFocusAreas();
+
+            camera.focus(new AugFocusCallback() {
+
+                @Override
+                public void onFocus(boolean success) {
+                    Log.d(TAG, "auto focused: " + success);
+
+                    List<Camera.Area> fa = _getFocusAreas();
+                    Log.d(TAG, "ejs focus areas: " + fa);
+                    try {
+                        stakePicture();
+                    } catch (AugCameraException e) {
+                        Log.d(TAG, e.toString(), e);
+                    }
+                }
+            });
+
+        } else {
+            Log.d(TAG, "skip auto focus");
+            stakePicture();
+        }
 	}
+    
+    private boolean _setMeterAreas() {
+        return false;
+	}
+    private boolean _setFocusAreas() throws AugCameraException {
+        
+        if (augview == null) return false;
+        
+        List<Camera.Area> fa = new ArrayList<Camera.Area>();
+        for (ScribleHolder sh : focus_areas) {
+            int weight = 1;
+            Rect rect = getRelCoord(sh.rect);
+            Camera.Area a = new Camera.Area(rect, weight);
+            fa.add(a);
+            Log.d(TAG, "setting focus area: " + rect);
+        }
+        boolean success = fa.size() > 0;
+        if (success) camera.getParameters().setFocusAreas(fa);
+        camera.applyParameters();
+        return success;
+    }
+
+    private int getRelNum(double p, double sz) {
+        double result;
+        double m = sz / 2;
+        if (p <= m)
+            result = (p / m) * 1000 * -1;
+        result = ((p - m) / m) * 1000;
+        return (int) result;
+    }
+    private Rect getRelCoord(Rect r) {
+        int w = augview.getWidth();
+        int h = augview.getHeight();
+        Rect relr = new Rect(
+                getRelNum(r.left, w), 
+                getRelNum(r.top, h), 
+                getRelNum(r.bottom, h), 
+                getRelNum(r.right, w) );
+        return relr;
+    }
+
+    private List<Camera.Area> _getFocusAreas() {
+        List<Camera.Area> areas = null;
+        try {
+
+            AugCameraParameters p = camera.getParameters();
+            areas = p.getFocusAreas();
+            if (areas != null)
+                for (Camera.Area a : areas) {
+                    Log.d(TAG, "focus area left: " + a.rect.left +
+                            " right: "          + a.rect.right + 
+                            " top: "            + a.rect.top + 
+                            " bottom: "         + a.rect.bottom + 
+                            " weight: "         + a.weight);
+                }
+        } catch (Throwable e) {
+            Log.e(TAG, "can not get focus areas: " + e);
+        }
+        return areas;
+    }
     
 	private void saveArea(AugScrible s, List<ScribleHolder> areas) {
         ScribleHolder h = new ScribleHolder();
@@ -106,32 +200,22 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         augdraw.undoCurrentScrible();
 	}
 	
-    private void saveFocusArea(AugScrible s) {
+    private void saveFocusArea(AugScrible s) throws AugCameraException {
 	    int max_focus_areas = camera.getParameters().getMaxNumFocusAreas();
         if (max_focus_areas > 0 && max_focus_areas <= focus_areas.size()) {
             focus_areas.remove(0);
         }
         saveArea(s, focus_areas);
-        updateCameraFocusAreas();
+        _setFocusAreas();
 	}
 	
-    private void updateCameraMeterAreas() {
-        // TODO Auto-generated method stub
-        //todo: set meter area(s) after converting to -1000 x 1000 system
-    }
-
-    private void updateCameraFocusAreas() {
-        // TODO Auto-generated method stub
-        //todo: set focus area(s) after converting to -1000 x 1000 system
-    }
-
     private void saveMeterArea(AugScrible s) {
 	    int max_metering_areas = camera.getParameters().getMaxNumMeteringAreas();
         if (max_metering_areas > 0 && max_metering_areas <= meter_areas.size()) {
             meter_areas.remove(0);
         }
         saveArea(s, meter_areas);
-        updateCameraMeterAreas();
+        _setMeterAreas();
 	}
     
     private ScribleHolder getRect(Point p) {
@@ -292,7 +376,11 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                 ScribleHolder sh = new ScribleHolder();
                 sh.setCode(c);
                 focus_areas.add(sh);
-                updateCameraFocusAreas();
+                try {
+                    _setFocusAreas();
+                } catch (AugCameraException e) {
+                    throw new CodeableException(e);
+                }
             }
         }
         if (code.has("meterAreas")) {
@@ -302,7 +390,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                 ScribleHolder sh = new ScribleHolder();
                 sh.setCode(c);
                 meter_areas.add(sh);
-                updateCameraMeterAreas();
+                _setMeterAreas();
             }
         }
     }

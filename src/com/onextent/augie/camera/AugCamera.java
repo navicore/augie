@@ -42,4 +42,6 @@ public interface AugCamera extends Augiement {
     void initParams();
     
     String flatten();
+
+    void focus(AugFocusCallback cb);
 }

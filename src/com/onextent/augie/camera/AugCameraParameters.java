@@ -1,6 +1,9 @@
 package com.onextent.augie.camera;
 
 import java.util.List;
+
+import android.hardware.Camera;
+
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.Size;
@@ -66,4 +69,10 @@ public interface AugCameraParameters extends Codeable {
     int getJpegThumbnailQuality();
 
     void setJpegThumbnailQuality(int q);
+    
+    List<Camera.Area> getFocusAreas();
+    void setFocusAreas(List<Camera.Area> areas);
+    
+    List<Camera.Area> getMeteringAreas();
+    void setMeteringAreas(List<Camera.Area> areas);
 }

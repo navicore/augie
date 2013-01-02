@@ -85,7 +85,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 		//noop	
 	}
 
-	protected void takePicture() {
+	protected void takePicture() throws AugCameraException {
 	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
 	    if (camera != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))

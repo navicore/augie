@@ -69,7 +69,6 @@ public class ModeImpl implements Codeable, Mode {
             code.put(KEY_CAMERA, cameraJson);
             cameraJson.put(KEY_AUGIENAME, camera.getCameraName().toString());
             cameraJson.put(KEY_CODE, camera.getCode());
-            Log.d(TAG, "ejs getCode cameraCode: " + cameraJson);
             
             if (!augiements.isEmpty()) {
                 CodeArray<Code> features = JSONCoder.newArrayOfCode();
@@ -97,14 +96,11 @@ public class ModeImpl implements Codeable, Mode {
             augieName = new ModeName(code.getString(KEY_AUGIENAME));
             if (!code.has(KEY_CAMERA)) throw new CodeableException("no camera");
             Code cameraJson = code.get(KEY_CAMERA);
-            Log.d(TAG, "ejs setCode cameraCode: " + cameraJson);
             CameraName cameraName = new CameraName(cameraJson.getString(KEY_AUGIENAME));
             Code cameraCode = cameraJson.get(KEY_CODE);
             camera = modeManager.getCameraFactory().getCamera(cameraName);
-            Log.d(TAG, "ejs setCode cameraCode (got camera): " + cameraName);
             if (camera != null && cameraCode != null) {
                 camera.setCode(cameraCode);
-                Log.d(TAG, "ejs setCode cameraCode (done): " + cameraJson);
             }
             if (code.has(KEY_AUGIEMENTS)) {
                 @SuppressWarnings("unchecked")

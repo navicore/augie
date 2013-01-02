@@ -12,6 +12,7 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
+import com.onextent.augie.camera.AugFocusCallback;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
@@ -175,5 +176,10 @@ public class CameraImpl implements AugCamera {
     @Override
     public String flatten() {
         return augcamera.flatten();
+    }
+
+    @Override
+    public void focus(AugFocusCallback cb) {
+        augcamera.focus(cb);
     }
 }
