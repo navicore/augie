@@ -37,11 +37,14 @@ public class IcsPhoneCamera extends SimplePhoneCamera {
 
     @Override
     protected Parameters getUpdatedCameraParameters() {
+        
         Parameters p = super.getUpdatedCameraParameters();
         
-        //todo: check for ics-only params
         List<Camera.Area> fa = getParameters().getFocusAreas();
         if (fa != null) p.setFocusAreas(fa);
+        
+        List<Camera.Area> ma = getParameters().getMeteringAreas();
+        if (ma != null) p.setMeteringAreas(ma);
         
         return p;
     }

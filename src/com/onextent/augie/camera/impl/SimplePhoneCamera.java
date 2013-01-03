@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -299,7 +297,6 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     }
 
     protected Camera.Parameters getUpdatedCameraParameters() {
-        Log.d(TAG, "ejs updating 2.3 params");
         Camera.Parameters cp = null;
         try {
             cp = camera.getParameters();

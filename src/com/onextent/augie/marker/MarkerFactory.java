@@ -28,6 +28,7 @@ public class MarkerFactory {
         
         Point p1 = new Point(s.getMinX(), s.getMinY());
         Point p2 = new Point(s.getMaxX(), s.getMaxY());
+        //Point p2 = new Point(s.getMaxX(), s.getMinY() + (s.getMaxX() - s.getMinX())); //test with forced square area
         return createRect(p1, p2);
     }
 }
