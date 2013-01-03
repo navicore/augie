@@ -26,14 +26,17 @@ class CamParams implements AugCameraParameters {
         augcamera = simplePhoneCamera;
     }
     
-    private String flashMode, colorMode, whiteBalMode, sceneMode, focusMode, antibanding;
-    private String xpictureFmt;
-    private NamedInt pictureFmt, previewFmt;
-    private Size pictureSize, previewSize;
-    private Code initCode;
-    private boolean shutterSnd = true;
-    private int jpegQuality = 0;
-    private int jpegThumbnailQuality = 0;
+    private String      flashMode, colorMode, whiteBalMode, 
+                        sceneMode, focusMode, antibanding;
+    private String      xpictureFmt;
+    private NamedInt    pictureFmt, previewFmt;
+    private Size        pictureSize, previewSize;
+    private Code        initCode;
+    private boolean     shutterSnd = true;
+    private int         jpegQuality = 0;
+    private int         exposureCompensation = 0;
+    private int         jpegThumbnailQuality = 0;
+    
     private List<Camera.Area> focusAreas; //transient, not codeable
     private List<Camera.Area> meterAreas; //transient, not codeable
 
@@ -58,6 +61,7 @@ class CamParams implements AugCameraParameters {
         if (getPreviewSize() != null) code.put("previewSize", getPreviewSize().getCode());
         if (getJpegQuality() != 0) code.put("jpegQuality", getJpegQuality());
         if (getJpegThumbnailQuality() != 0) code.put("jpegThumbnailQuality", getJpegThumbnailQuality());
+        if (getExposureCompensation() != 0) code.put("expComp", getExposureCompensation());
         return code;
     }
     public void setCode(Code code) throws CodeableException {
@@ -85,6 +89,7 @@ class CamParams implements AugCameraParameters {
             }
             if (code.has("jpegQuality")) setJpegQuality(code.getInt("jpegQuality"));
             if (code.has("jpegThumbnailQuality")) setJpegThumbnailQuality(code.getInt("jpegThumbnailQuality"));
+            if (code.has("expComp")) setExposureCompensation(code.getInt("expComp"));
         }
         initCode = code; //save for rollback
     }
@@ -328,5 +333,25 @@ class CamParams implements AugCameraParameters {
     public void setMeteringAreas(List<Area> areas) {
         if (areas != null && areas.isEmpty()) areas = null;
         meterAreas = areas;
+    }
+    @Override
+    public int getMinExposureCompensation() {
+        return augcamera.camera.getParameters().getMinExposureCompensation();
+    }
+    @Override
+    public int getMaxExposureCompensation() {
+        return augcamera.camera.getParameters().getMaxExposureCompensation();
+    }
+    @Override
+    public int getExposureCompensation() {
+        return exposureCompensation;
+    }
+    @Override
+    public float getExposureCompensationStep() {
+        return augcamera.camera.getParameters().getExposureCompensationStep();
+    }
+    @Override
+    public void setExposureCompensation(int ec) {
+        exposureCompensation = ec;
     }
 }

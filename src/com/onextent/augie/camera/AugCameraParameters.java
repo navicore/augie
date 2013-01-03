@@ -75,4 +75,10 @@ public interface AugCameraParameters extends Codeable {
     
     List<Camera.Area> getMeteringAreas();
     void setMeteringAreas(List<Camera.Area> areas);
+    
+    int getMinExposureCompensation();
+    int getMaxExposureCompensation();
+    int getExposureCompensation();
+    float getExposureCompensationStep();
+    void setExposureCompensation(int ec);
 }

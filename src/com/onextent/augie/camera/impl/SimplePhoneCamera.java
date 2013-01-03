@@ -217,6 +217,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             i = cp.getJpegThumbnailQuality();
             if (i > 0) params.setJpegThumbnailQuality(i);
             
+            i = cp.getExposureCompensation();
+            if (i != 0) params.setExposureCompensation(i);
+            
         } catch (Throwable err) {
             params = null;
             Log.e(TAG, err.toString(), err);
@@ -342,6 +345,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 
                 i = p.getJpegThumbnailQuality();
                 if (i > 0) cp.setJpegThumbnailQuality(i);
+                
+                i = p.getExposureCompensation();
+                if (i != 0) cp.setExposureCompensation(i);
             }
             
         } catch (Throwable err) {
