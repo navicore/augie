@@ -8,6 +8,7 @@ import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.util.codeable.Code;
@@ -87,11 +88,14 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     protected void takePicture() throws AugCameraException {
 
         String focusmode =  camera.getParameters().getFocusMode();
-        Log.d(TAG, "focus mode: " + focusmode);
         if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
 
-            _setFocusAreas();
             _setMeterAreas();
+            if (focus_areas.isEmpty()) {
+                _setTouchFocusArea();
+            } else {
+                _setFocusAreas();
+            }
             camera.applyParameters();
 
             camera.focus(new AugFocusCallback() {
@@ -114,9 +118,24 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             });
 
         } else {
-            Log.d(TAG, "skip auto focus");
             stakePicture();
         }
+    }
+
+    static final int TOUCH_FOCUS_SZ = 10;
+    private void _setTouchFocusArea() {
+        AugScrible scrible = augdraw.getCurrentScrible();
+        if (scrible == null || scrible.size() == 0) return;
+        AugLine l = scrible.get(scrible.size() -1);
+        if (l == null) return;
+        Point p = l.getP2();
+        if (p == null) return;
+        List<Camera.Area> fa = new ArrayList<Camera.Area>();
+        Rect rect = new Rect(p.x - TOUCH_FOCUS_SZ, p.y - TOUCH_FOCUS_SZ, 
+                             p.x + TOUCH_FOCUS_SZ, p.y + TOUCH_FOCUS_SZ);
+        Camera.Area ca = new Camera.Area(rect, 500);
+        fa.add(ca);
+        camera.getParameters().setFocusAreas(fa);
     }
 
     private List<Camera.Area> _scribleToArea(List<ScribleHolder> scribles) {
@@ -137,7 +156,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
         List<Camera.Area> ma = _scribleToArea(meter_areas);
         boolean success = ma.size() > 0;
-        if (success) camera.getParameters().setMeteringAreas(ma);
+        camera.getParameters().setMeteringAreas(ma);
         return success;
     }
 
@@ -147,7 +166,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
         List<Camera.Area> fa = _scribleToArea(focus_areas);
         boolean success = fa.size() > 0;
-        if (success) camera.getParameters().setFocusAreas(fa);
+        camera.getParameters().setFocusAreas(fa);
         return success;
     }
 
@@ -181,7 +200,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     private void saveFocusArea(AugScrible s) throws AugCameraException {
         int max_focus_areas = camera.getParameters().getMaxNumFocusAreas();
-        if (max_focus_areas > 0 && max_focus_areas <= focus_areas.size()) {
+        if (max_focus_areas > 0 && max_focus_areas == focus_areas.size()) {
             focus_areas.remove(0);
         }
         saveArea(s, focus_areas);
@@ -190,7 +209,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     private void saveMeterArea(AugScrible s) throws AugCameraException {
         int max_metering_areas = camera.getParameters().getMaxNumMeteringAreas();
-        if (max_metering_areas > 0 && max_metering_areas <= meter_areas.size()) {
+        if (max_metering_areas > 0 && max_metering_areas == meter_areas.size()) {
             meter_areas.remove(0);
         }
         saveArea(s, meter_areas);
@@ -253,9 +272,10 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                         break;
                     }
 
-                    if (scrible.getGestureType() == GESTURE_TYPE.TAP) takePicture();
-                    if (scrible.getGestureType() == GESTURE_TYPE.CLOCKWISE_AREA) saveFocusArea(scrible);
-                    if (scrible.getGestureType() == GESTURE_TYPE.COUNTER_CLOCKWISE_AREA) saveMeterArea(scrible);
+                    GESTURE_TYPE g_type = scrible.getGestureType();
+                    if (g_type == GESTURE_TYPE.TAP) takePicture();
+                    if (g_type == GESTURE_TYPE.CLOCKWISE_AREA) saveFocusArea(scrible);
+                    if (g_type == GESTURE_TYPE.COUNTER_CLOCKWISE_AREA) saveMeterArea(scrible);
                 }
                 break;
             case MotionEvent.ACTION_POINTER_UP:

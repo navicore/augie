@@ -317,7 +317,8 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public void setFocusAreas(List<Area> areas) {
-       focusAreas = areas;
+        if (areas != null && areas.isEmpty()) areas = null;
+        focusAreas = areas;
     }
     @Override
     public List<Area> getMeteringAreas() {
@@ -325,6 +326,7 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public void setMeteringAreas(List<Area> areas) {
+        if (areas != null && areas.isEmpty()) areas = null;
         meterAreas = areas;
     }
 }
