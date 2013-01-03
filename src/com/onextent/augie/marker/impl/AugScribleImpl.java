@@ -121,6 +121,7 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
             points.add(l.getP2());
         }
         int c = 0;
+        int j = 0;
         int n = points.size();
 
         if (n < 3) {
@@ -128,11 +129,13 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
             return;
         }
 
-        for (int i=0; i < (n - 1); i++) {
+        for (int i=0; i < n; i++) {
           
-            int j = i + 1;
+            j = i + 1;
+            if (j == n) j = 0;
             c += (points.get(j).x - points.get(i).x) * (points.get(j).y + points.get(i).y);
         }
+        
         sumOfEdges = c;
     }
 
