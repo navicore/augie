@@ -81,4 +81,9 @@ public interface AugCameraParameters extends Codeable {
     int getExposureCompensation();
     float getExposureCompensationStep();
     void setExposureCompensation(int ec);
+    
+    int getMaxZoom();
+    int getZoom();
+    void setZoom(int z);
+    boolean isZoomSupported();
 }

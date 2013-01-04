@@ -21,6 +21,7 @@ import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.augie.camera.PinchZoom;
 import com.onextent.augie.camera.TouchShutter;
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableName;
@@ -203,6 +204,8 @@ public class ModeManagerImpl implements ModeManager {
 
         mode.addAugiement(new TouchShutter());
 
+        mode.addAugiement(new PinchZoom());
+        
         ShakeResetFeature shakeReseter = new ShakeResetFeature();
         mode.addAugiement(shakeReseter);
         
@@ -228,6 +231,8 @@ public class ModeManagerImpl implements ModeManager {
         mode.addAugiement(new HorizonCheckFeature());
 
         //mode.addAugiement(new FrameLevelerFeature());
+        
+        mode.addAugiement(new PinchZoom());
 
         mode.addAugiement(new TouchShutter());
 

@@ -36,6 +36,7 @@ class CamParams implements AugCameraParameters {
     private int         jpegQuality = 0;
     private int         exposureCompensation = 0;
     private int         jpegThumbnailQuality = 0;
+    private int         zoom = 0;
     
     private List<Camera.Area> focusAreas; //transient, not codeable
     private List<Camera.Area> meterAreas; //transient, not codeable
@@ -353,5 +354,21 @@ class CamParams implements AugCameraParameters {
     @Override
     public void setExposureCompensation(int ec) {
         exposureCompensation = ec;
+    }
+    @Override
+    public int getMaxZoom() {
+        return augcamera.camera.getParameters().getMaxZoom();
+    }
+    @Override
+    public int getZoom() {
+        return zoom;
+    }
+    @Override
+    public void setZoom(int z) {
+        zoom = z;
+    }
+    @Override
+    public boolean isZoomSupported() {
+        return augcamera.camera.getParameters().isZoomSupported();
     }
 }

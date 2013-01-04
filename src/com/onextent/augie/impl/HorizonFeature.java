@@ -84,27 +84,27 @@ public class HorizonFeature extends AugDrawBase {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
-        	
-        switch(event.getAction() & MotionEvent.ACTION_MASK) {
-        case MotionEvent.ACTION_DOWN:
-          
-            movingLine = getLine(event);
-            startP = new Point((int) event.getX(), (int) event.getY());
-            break;
 
-        case MotionEvent.ACTION_MOVE:
-            
-            if (movingLine != null)  {
-                paintLine(event, true);
+            switch(event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+
+                movingLine = getLine(event);
+                startP = new Point((int) event.getX(), (int) event.getY());
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+
+                if (movingLine != null)  {
+                    paintLine(event, true);
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+
+                paintLine(event, false);
+                movingLine = null;
+            default:
             }
-            break;
-        	
-        case MotionEvent.ACTION_UP:
-
-            paintLine(event, false);
-            movingLine = null;
-        default:
-        }
         } catch (Exception e) {
             Log.e(TAG, e.toString(), e);
         }

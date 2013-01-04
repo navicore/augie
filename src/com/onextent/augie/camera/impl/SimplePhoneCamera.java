@@ -220,6 +220,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             i = cp.getExposureCompensation();
             if (i != 0) params.setExposureCompensation(i);
             
+            i = cp.getZoom();
+            if (i != 0) params.setZoom(i);
+            
         } catch (Throwable err) {
             params = null;
             Log.e(TAG, err.toString(), err);
@@ -348,6 +351,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 
                 i = p.getExposureCompensation();
                 if (i != 0) cp.setExposureCompensation(i);
+                
+                i = p.getZoom();
+                if (i != 0) cp.setZoom(i);
             }
             
         } catch (Throwable err) {
