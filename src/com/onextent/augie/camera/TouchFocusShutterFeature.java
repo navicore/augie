@@ -39,6 +39,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     private ScribleHolder movingRect;
     private Point startP;
+    private ScribleHolder touchFocusArea;
 
     public TouchFocusShutterFeature() {
 
@@ -86,6 +87,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
 
     protected void takePicture() throws AugCameraException {
+        
+        try {
 
         String focusmode =  camera.getParameters().getFocusMode();
         if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
@@ -111,8 +114,11 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
                     try {
                         stakePicture();
+                        
                     } catch (AugCameraException e) {
                         Log.d(TAG, e.toString(), e);
+                    } finally {
+                        clearTouchFocusArea();
                     }
                 }
             });
@@ -120,9 +126,28 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         } else {
             stakePicture();
         }
+        }  catch (AugCameraException e) {
+            clearTouchFocusArea();
+            throw e;
+        }
+    }
+    
+    void clearTouchFocusArea() {
+        
+            if (touchFocusArea != null) {
+                focus_areas.remove(touchFocusArea);
+                touchFocusArea = null;
+            }
     }
 
+    //todo: setting 
     static final int TOUCH_FOCUS_SZ = 10;
+    
+    private Rect getTouchFocusRect(Point p) {
+        int xadj = augview.getWidth() / TOUCH_FOCUS_SZ;
+        int yadj = augview.getHeight() / TOUCH_FOCUS_SZ;
+        return new Rect(p.x - xadj, p.y - yadj, p.x + xadj, p.y + yadj);
+    }
     private void _setTouchFocusArea() {
         AugScrible scrible = augdraw.getCurrentScrible();
         if (scrible == null || scrible.size() == 0) return;
@@ -131,11 +156,15 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         Point p = l.getP2();
         if (p == null) return;
         List<Camera.Area> fa = new ArrayList<Camera.Area>();
-        Rect rect = new Rect(p.x - TOUCH_FOCUS_SZ, p.y - TOUCH_FOCUS_SZ, 
-                             p.x + TOUCH_FOCUS_SZ, p.y + TOUCH_FOCUS_SZ);
+        Rect rect = getTouchFocusRect(p);
         Camera.Area ca = new Camera.Area(rect, 500);
         fa.add(ca);
         camera.getParameters().setFocusAreas(fa);
+        
+        ScribleHolder h = new ScribleHolder();
+        touchFocusArea = h;
+        h.rect = rect;
+        focus_areas.add(h);
     }
 
     private List<Camera.Area> _scribleToArea(List<ScribleHolder> scribles) {

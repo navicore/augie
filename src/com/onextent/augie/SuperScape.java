@@ -56,7 +56,7 @@ public class SuperScape {
         layout.addView(camPreview); //bottom layer sees
     
         layout.addView((View) augieScape); //transparent top layer
-    
-        layout.addView(button);
+   
+        if (button != null) layout.addView(button);
     }
 }

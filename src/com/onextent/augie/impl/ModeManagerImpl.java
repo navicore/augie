@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.onextent.augie.AugieException;
+import com.onextent.augie.AugieStore;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -29,7 +30,6 @@ import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.JSONCoder;
 import com.onextent.util.store.CodeStore;
-import com.onextent.util.store.CodeStoreSqliteImpl;
 
 public class ModeManagerImpl implements ModeManager {
 
@@ -76,9 +76,9 @@ public class ModeManagerImpl implements ModeManager {
     @Override
     public void onCreate(Context context) throws AugieStoreException, CodeableException {
 
-        if (store != null) throw new AugieStoreException("store already init");
-        store = new CodeStoreSqliteImpl(context, "augie_store");
-        store.open();
+        if (store != null) 
+            throw new java.lang.IllegalStateException("already init");
+        store = AugieStore.getCodeStore();
         init();
     }
 
@@ -86,6 +86,7 @@ public class ModeManagerImpl implements ModeManager {
     public void stop() {
         if (store == null) {
             throw new java.lang.IllegalStateException("already stopped");
+            //return;
         }
         Log.d(TAG, "ModeManager.stop");
         if (currentMode != null) {
@@ -95,20 +96,20 @@ public class ModeManagerImpl implements ModeManager {
                 Log.d(TAG, e.toString(), e);
             } 
         }
-        if (store != null) {
-            store.close();
-            store = null;
-        }
         allModeCode = null;
     }
 
     @Override
     public void setCurrentMode(Mode mode) throws AugieException {
-        Log.d(TAG, "setCurrentMode " + mode.getCodeableName());
         if (currentMode != null) {
            currentMode.deactivate(); 
         }
         currentMode = mode;
+        if (mode == null) {
+            throw new AugieException("mode is null") {
+                private static final long serialVersionUID = 3508820766680012985L;};
+        }
+        Log.d(TAG, "setCurrentMode " + mode.getCodeableName());
         store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getCodeableName().toString());
         currentMode.activate();
     }

@@ -92,7 +92,6 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     @Override
 	public void stop() {
 
-        /*
 	    for (AugCamera c : cameras.values()) {
 	        try {
                 c.close();
@@ -100,7 +99,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
                 Log.e(TAG, "can not close camera", e);
             }
 	    }
-         */
+	    cameras.clear();
 	}
 
     @Override

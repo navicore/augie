@@ -25,13 +25,12 @@ public class AugieScapeImpl extends View implements AugieScape {
     Bitmap bitmap;
     Canvas canvas;
     final Paint paint;
-    final SharedPreferences prefs;
 
     Set<Augiement> features;
 
     public AugieScapeImpl(Context context) {
         super(context);
-        prefs = PreferenceManager.getDefaultSharedPreferences(context); //todo: stop doing this
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE); 
