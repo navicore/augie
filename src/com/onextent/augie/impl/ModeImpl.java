@@ -144,12 +144,24 @@ public class ModeImpl implements Codeable, Mode {
 
     @Override
     public void setCamera(AugCamera camera) throws AugCameraException {
-        if (this.camera != null) {
-            camera.close();
+        try {
+            if (this.camera != null) {
+                camera.close();
+            }
+            this.camera = camera;
+            /*
+            Code code = modeManager.getModeCode(augieName);
+            if (code != null) {
+                Code ccode = code.get(KEY_CAMERA).get(KEY_CODE);;
+                Log.d(TAG, "setting camera code: " + ccode);
+                this.camera.setCode(ccode); //todo: buggy
+            }
+            */
+        } catch (Exception e) {
+            throw new AugCameraException(e);
         }
-        this.camera = camera;
     }
-    
+
     @Override
     public void removeAugiement(Augiement a) {
         if (a == null) {

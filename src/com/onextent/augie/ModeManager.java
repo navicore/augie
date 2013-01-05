@@ -18,28 +18,30 @@ public interface ModeManager {
 
     static final String MODE_KEY_DEFAULT = "MODE/SYSTEM/DEFAULT";
     
-    abstract void onCreate(Context context) throws AugieStoreException, CodeableException;
+    void onCreate(Context context) throws AugieStoreException, CodeableException;
 
-    abstract void stop();
+    void stop();
 
-    abstract void setCurrentMode(Mode mode) throws AugieException;
+    void setCurrentMode(Mode mode) throws AugieException;
 
-    abstract Mode getCurrentMode();
+    Mode getCurrentMode();
 
-    abstract Mode getMode(CodeableName augieName) throws CodeableException;
+    Mode getMode(CodeableName augieName) throws CodeableException;
 
-    abstract List<Code> getAllModeCode() throws AugieStoreException;
-
-    abstract void deleteMode(CodeableName augieName) throws CodeableException;
-
-    abstract void addMode(Mode mode) throws CodeableException;
+    List<Code> getAllModeCode() throws AugieStoreException;
     
-    abstract Mode newMode();
+    Code getModeCode(CodeableName augieName) throws AugieStoreException;
+
+    void deleteMode(CodeableName augieName) throws CodeableException;
+
+    void addMode(Mode mode) throws CodeableException;
+    
+    Mode newMode();
     
     void saveMode(Mode mode) throws CodeableException;
 
     //ugh
-    abstract int getCurrentModeIdx();
+    int getCurrentModeIdx();
 
     AugCameraFactory getCameraFactory();
 

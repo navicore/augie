@@ -89,8 +89,8 @@ public class CameraImpl implements AugCamera {
         if (code == null) {
             code = JSONCoder.newCode();
         }
-        code.put("cameraName", cameraName);
-        code.put("name", name);
+        code.put(CAMERA_NAME_KEY, cameraName);
+        code.put(CAMERA_UINAME_KEY, name);
         code.put(CAMERA_ID_KEY, getId());
         return code;
     }
@@ -98,15 +98,16 @@ public class CameraImpl implements AugCamera {
     @Override
     public void setCode(Code code) throws CodeableException {
         int id = code.getInt(CAMERA_ID_KEY);
-        if (augcamera != null) augcamera.setCode(code);
-        else {
+        if (augcamera != null) {
+            augcamera.setCode(code);
+        } else {
             augcamera = AbstractPhoneCamera.getInstance(id);
             if (augcamera == null) {
                 throw new CodeableException("camera not found");
             }
+            cameraName = new CameraName(code.getString(CAMERA_NAME_KEY));
+            name = code.getString(CAMERA_UINAME_KEY);
         }
-        cameraName = new CameraName(code.getString("cameraName"));
-        name = code.getString("name");
     }
 
     @Override

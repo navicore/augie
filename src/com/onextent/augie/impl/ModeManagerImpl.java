@@ -151,6 +151,18 @@ public class ModeManagerImpl implements ModeManager {
     }
     
     @Override
+    public Code getModeCode(CodeableName augieName) throws AugieStoreException {
+        
+        Code code;
+        try {
+            code = store.getContentCode(augieName);
+        } catch (CodeableException e) {
+            throw new AugieStoreException(e);
+        }
+        return code;
+    }
+    
+    @Override
     public List<Code> getAllModeCode() throws AugieStoreException {
        
         if (store == null) return null;
