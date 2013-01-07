@@ -22,6 +22,7 @@ import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.augie.camera.HistogramFeature;
 import com.onextent.augie.camera.PinchZoom;
 import com.onextent.augie.camera.TouchShutter;
 import com.onextent.util.codeable.Codeable;
@@ -214,6 +215,8 @@ public class ModeManagerImpl implements ModeManager {
         mode.addAugiement(new HorizonCheckFeature());
 
         //mode.addAugiement(new FrameLevelerFeature());
+        
+        mode.addAugiement(new HistogramFeature());
 
         mode.addAugiement(new TouchShutter());
 

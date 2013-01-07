@@ -2,14 +2,12 @@ package com.onextent.augie.camera;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
@@ -27,8 +25,6 @@ public class PinchZoom implements Augiement, OnTouchListener {
     private Point p1, p2;
     private AugCamera camera;
     double initDist = -1;
-    enum DIRECTION {NONE, IN, OUT};
-    DIRECTION direction = DIRECTION.NONE;
     
     @Override
     public Meta getMeta() {
@@ -101,37 +97,30 @@ public class PinchZoom implements Augiement, OnTouchListener {
 	
 	private void zoom(double dist) {
 	    /*
-	     * todo: fix VERY VERY buggy, barely works at all
+	     * todo: fix buggy, zoom is not smooth and jumps to max too easily
 	     */
-	    
+	   
 	    if (initDist < 0) {
 	        initDist = dist;
 	        return;
 	    }
-	    
-	    if (direction == DIRECTION.NONE) {
-	        if (dist < initDist) {
-	            direction = DIRECTION.IN;
-	        } else {
-	            direction = DIRECTION.OUT;
-	        }
-	    }
-	    
-	    if (dist < initDist && direction != DIRECTION.IN) {
-	        return;
-	    }
-	    
+	   
 	    try {
-	        int max = camera.getParameters().getMaxZoom(); 
-	        int czoom = camera.getParameters().getZoom(); 
-	        double change = Math.abs(dist - initDist);
-	        if (change < 50) return;
-	        double scale = change / augview.getHeight();
-	        double newzoom = 1 - (max * scale);
-	        int z = (int) Math.abs(newzoom);
-	        if (z > max) z = max;
-	        if ((max - czoom) - (max - z) > max / 2) return; //dom't make big adjustments
-	        camera.getParameters().setZoom(z);
+	        double max = camera.getParameters().getMaxZoom(); 
+	        double newzoom;
+	        double max20 = max / 20;
+	        if (dist < max20) newzoom = 0;
+	        else if (dist > (max - max20)) newzoom = max;
+	        else {
+	            double czoom = camera.getParameters().getZoom(); 
+	            double change = dist - initDist;
+	            double scale = change / augview.getHeight();
+	            double zoomchg = max * scale;
+	            newzoom = czoom + (zoomchg);
+	            if (newzoom > max) newzoom = max;
+	            if (newzoom < 0) newzoom = 0;
+	        }
+	        camera.getParameters().setZoom((int) newzoom);
 	        camera.applyParameters();
 	    } catch (Throwable e) {
 	        Log.e(TAG, e.toString(), e);

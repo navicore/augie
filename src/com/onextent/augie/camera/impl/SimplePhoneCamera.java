@@ -22,6 +22,7 @@ import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugFocusCallback;
 import com.onextent.augie.camera.AugPictureCallback;
+import com.onextent.augie.camera.AugPreviewCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.camera.ImageFmt;
@@ -40,6 +41,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 	
 	protected final int cameraId;
 	protected final CameraName cameraName;
+	protected AugPreviewCallback previewCb;
 	
 	private CamParams params;
 	
@@ -50,11 +52,13 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 
     @Override
 	public void open() throws AugCameraException {
-    	
+    
         if (camera != null) return;
         try {
             Log.d(TAG, "open camera with id: " + getId());
             camera = Camera.open(getId());
+            if (previewCb != null)
+                camera.setPreviewCallback(previewCb);
             if (params == null) {
                 initParams();
             } else {
@@ -83,6 +87,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     @Override
     public void close() throws AugCameraException {
         if (camera == null) return;
+        camera.setPreviewCallback(null);
         camera.release();
         camera = null;
     }
@@ -111,6 +116,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     public void stopPreview() throws AugCameraException {
         open();
         try {
+            camera.setPreviewCallback(null);
             camera.stopPreview();
         } catch (Exception e) {
             throw new AugCameraException(e);
@@ -390,4 +396,16 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     public String flatten() {
         return camera.getParameters().flatten();
     }
+
+    @Override
+    public boolean isOpen() {
+        return camera != null;
+    }
+    
+    @Override
+    public void setPreviewCallback(AugPreviewCallback cb) {
+        previewCb = cb;
+        if (camera != null) camera.setPreviewCallback(cb);
+    }
+    //todo: support preview callback buffers
 }

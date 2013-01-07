@@ -14,6 +14,7 @@ import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugFocusCallback;
 import com.onextent.augie.camera.AugPictureCallback;
+import com.onextent.augie.camera.AugPreviewCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.util.codeable.CodeableException;
@@ -182,5 +183,15 @@ public class CameraImpl implements AugCamera {
     @Override
     public void focus(AugFocusCallback cb) {
         augcamera.focus(cb);
+    }
+
+    @Override
+    public void setPreviewCallback(AugPreviewCallback cb) {
+        augcamera.setPreviewCallback(cb);
+    }
+
+    @Override
+    public boolean isOpen() {
+        return augcamera.isOpen();
     }
 }
