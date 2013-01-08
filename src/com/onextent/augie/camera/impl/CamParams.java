@@ -38,6 +38,8 @@ class CamParams implements AugCameraParameters {
     private int         exposureCompensation = 0;
     private int         jpegThumbnailQuality = 0;
     private int         zoom = 0;
+    private int         minPrevFPS = 0;
+    private int         maxPrevFPS = Integer.MAX_VALUE;
     
     private List<Camera.Area> focusAreas; //transient, not codeable
     private List<Camera.Area> meterAreas; //transient, not codeable
@@ -48,7 +50,7 @@ class CamParams implements AugCameraParameters {
     @Override
     public Code getCode() throws CodeableException {
         Code code = JSONCoder.newCode();
-        //todo: update each setting
+
         if (getFlashMode() != null) code.put("flashMode", getFlashMode());
         if (getColorMode() != null) code.put("colorMode", getColorMode());
         if (getWhiteBalance() != null) code.put("whiteBal", getWhiteBalance());
@@ -64,11 +66,14 @@ class CamParams implements AugCameraParameters {
         if (getJpegQuality() != 0) code.put("jpegQuality", getJpegQuality());
         if (getJpegThumbnailQuality() != 0) code.put("jpegThumbnailQuality", getJpegThumbnailQuality());
         if (getExposureCompensation() != 0) code.put("expComp", getExposureCompensation());
+        int[] r = getPreviewFPSRange();
+        code.put("minPrevFPS", r[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]);
+        code.put("maxPrevFPS", r[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
         return code;
     }
     public void setCode(Code code) throws CodeableException {
         if (code != null) {
-            //todo: update each setting
+            
             if (code.has("flashMode")) setFlashMode(code.getString("flashMode"));
             if (code.has("colorMode")) setColorMode(code.getString("colorMode"));
             if (code.has("whiteBal")) setWhiteBalance(code.getString("whiteBal"));
@@ -92,6 +97,11 @@ class CamParams implements AugCameraParameters {
             if (code.has("jpegQuality")) setJpegQuality(code.getInt("jpegQuality"));
             if (code.has("jpegThumbnailQuality")) setJpegThumbnailQuality(code.getInt("jpegThumbnailQuality"));
             if (code.has("expComp")) setExposureCompensation(code.getInt("expComp"));
+            if (code.has("minPrevFPS") && code.has("maxPrevFPS")) {
+                int min = code.getInt("minPrevFPS");
+                int max = code.getInt("maxPrevFPS");
+                setPreviewFPSRange(min, max);
+            }
         }
         initCode = code; //save for rollback
     }
@@ -374,5 +384,21 @@ class CamParams implements AugCameraParameters {
     @Override
     public boolean isZoomSupported() {
         return augcamera.camera.getParameters().isZoomSupported();
+    }
+    @Override
+    public List<int[]>getSupportedPreviewFPSRanges() {
+        return augcamera.camera.getParameters().getSupportedPreviewFpsRange();
+    }
+    @Override
+    public int[] getPreviewFPSRange() {
+        int[] range = new int[2];
+        range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX] = minPrevFPS;
+        range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX] = maxPrevFPS;
+        return range;
+    }
+    @Override 
+    public void setPreviewFPSRange(int min, int max) {
+        minPrevFPS = min;
+        maxPrevFPS = max;
     }
 }

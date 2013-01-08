@@ -268,6 +268,11 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             i = cp.getZoom();
             if (i != 0) params.setZoom(i);
             
+            int[] range = new int[2];
+            cp.getPreviewFpsRange(range);
+            params.setPreviewFPSRange(range[Parameters.PREVIEW_FPS_MIN_INDEX], 
+                                      range[Parameters.PREVIEW_FPS_MAX_INDEX]);
+            
         } catch (Throwable err) {
             params = null;
             Log.e(TAG, err.toString(), err);
@@ -399,6 +404,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 
                 i = p.getZoom();
                 if (i != 0) cp.setZoom(i);
+                
+                int[] r = p.getPreviewFPSRange();
+                if (r != null) p.setPreviewFPSRange(r[0], r[1]);
             }
             
         } catch (Throwable err) {

@@ -249,7 +249,6 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     @Override
     public void updateCanvas() {
 
-        Log.d(TAG, "ejs update histogram canvas");
         if (!camera.isOpen()) return;
 
         if (yyuvdata != null && hasData) {
@@ -368,9 +367,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        Log.d(TAG, "ejs update histogram prev frame 1");
         if (data == null || data.length == 0) return;
-        Log.d(TAG, "ejs update histogram prev frame 2");
         yyuvdata = data;
         hasData = true;
         //todo: make setting to reset for every frame (perf hit) or only

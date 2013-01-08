@@ -86,4 +86,10 @@ public interface AugCameraParameters extends Codeable {
     int getZoom();
     void setZoom(int z);
     boolean isZoomSupported();
+
+    List<int[]> getSupportedPreviewFPSRanges();
+
+    int[] getPreviewFPSRange();
+
+    void setPreviewFPSRange(int min, int max);
 }
