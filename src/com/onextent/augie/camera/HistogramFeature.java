@@ -45,16 +45,17 @@ import android.view.View;
 
 public class HistogramFeature extends AugDrawBase implements AugPreviewCallback {
 
-    //todo: fix performance hit!
-
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
+    
+    boolean hasData;
+    byte[] yyuvdata;
 
     double redHistogramSum, greenHistogramSum, blueHistogramSum;
 
-    int[] mRedHistogram;
-    int[] mGreenHistogram;
-    int[] mBlueHistogram;
-    double[] mBinSquared;
+    final int[] mRedHistogram;
+    final int[] mGreenHistogram;
+    final int[] mBlueHistogram;
+    final double[] mBinSquared;
 
     Paint mPaintBlack;
     Paint mPaintYellow;
@@ -62,9 +63,12 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     Paint mPaintGreen;
     Paint mPaintBlue;
 
-    byte[] yyuvdata;
     private AugDrawFeature augdraw;
     private AugCamera camera;
+
+    final RectF redRects[];
+    final RectF greenRects[];
+    final RectF blueRects[];
 
     private final static Set<CodeableName> deps;
     static {
@@ -73,7 +77,19 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
 
+    private RectF[] newRects() {
+
+        RectF[] r= new RectF[256];
+        for (int i = 0; i < 256; i++) {
+            r[i] = new RectF();
+        }
+        return r;
+    }
     public HistogramFeature() {
+        hasData = false;
+        redRects = newRects();
+        greenRects = newRects();
+        blueRects = newRects();
         mRedHistogram = new int[256];
         mGreenHistogram = new int[256];
         mBlueHistogram = new int[256];
@@ -115,7 +131,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
-
+        
         super.onCreate(av, helpers);
 
         for (Augiement a : helpers) {
@@ -128,9 +144,10 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         if (augdraw == null) throw new AugiementException("draw feature is null");
         if (camera == null) throw new AugiementException("camera is null");
 
-        camera.setPreviewCallback(this);
+        //camera.setPreviewCallback(this);
+        camera.setPreviewCallbackWithBuffer(this);
     }
-
+    
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
@@ -155,7 +172,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         return false;
     }
 
-    static public void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
+    static private void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
         final int frameSize = width * height;
 
         for (int j = 0, yp = 0; j < height; j++) {
@@ -182,7 +199,8 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         }
     }
 
-    static public void decodeYUV420SPGrayscale(int[] rgb, byte[] yuv420sp, int width, int height)
+    /*
+    static private void decodeYUV420SPGrayscale(int[] rgb, byte[] yuv420sp, int width, int height)
     {
         final int frameSize = width * height;
 
@@ -194,8 +212,9 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             rgb[pix] = 0xff000000 | (pixVal << 16) | (pixVal << 8) | pixVal;
         } // pix
     }
+     */
 
-    static public void calculateIntensityHistogram(int[] rgb, int[] histogram, int width, int height, int component)
+    static private void calculateIntensityHistogram(int[] rgb, int[] histogram, int width, int height, int component)
     {
         for (int bin = 0; bin < 256; bin++)
         {
@@ -229,94 +248,88 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
     @Override
     public void updateCanvas() {
-        
+
+        Log.d(TAG, "ejs update histogram canvas");
         if (!camera.isOpen()) return;
+
+        if (yyuvdata != null && hasData) {
+            
+            updateHistograms();
+
+            //add buffer back in
+            hasData = false;
+            camera.addCallbackBuffer(yyuvdata);
+            yyuvdata = null;
+        }
+        
+        updateCanvas(redRects, mPaintRed);
+        updateCanvas(greenRects, mPaintGreen);
+        updateCanvas(blueRects, mPaintBlue);
+    }
+
+    private void updateHistograms() {
         
         Canvas canvas = augview.getCanvas();
-        int canvasWidth = canvas.getWidth();
         int canvasHeight = canvas.getHeight();
-        int newImageWidth = canvasWidth;
-        //int newImageHeight = canvasHeight;
-        int marginWidth = (canvasWidth - newImageWidth)/2;
-
         Size prevSize = camera.getParameters().getPreviewSize();
-        int[] rgbdata = new int[prevSize.getWidth() * prevSize.getHeight()]; 
+        int w = prevSize.getWidth();
+        int h = prevSize.getHeight();
+        int[] rgbdata = new int[w * h]; 
 
-        if (yyuvdata != null) {
+        // Convert from YUV to RGB
+        decodeYUV420SP(rgbdata, yyuvdata, w, h);
+        //decodeYUV420SPGrayscale(rgbdata, yyuvdata, w, h);
 
-            // Convert from YUV to RGB
-            decodeYUV420SP(rgbdata, yyuvdata, prevSize.getWidth(), prevSize.getHeight());
+        calculateIntensityHistogram(rgbdata, mRedHistogram, w, h, 0);
+        calculateIntensityHistogram(rgbdata, mGreenHistogram, w, h, 1);
+        calculateIntensityHistogram(rgbdata, mBlueHistogram, w, h, 2);
 
-            // Calculate histogram
-            calculateIntensityHistogram(rgbdata, mRedHistogram, 
-                    prevSize.getWidth(), prevSize.getHeight(), 0);
-            calculateIntensityHistogram(rgbdata, mGreenHistogram, 
-                    prevSize.getWidth(), prevSize.getHeight(), 1);
-            calculateIntensityHistogram(rgbdata, mBlueHistogram, 
-                    prevSize.getWidth(), prevSize.getHeight(), 2);
-
-            // Calculate mean
-            redHistogramSum = 0; greenHistogramSum = 0; blueHistogramSum = 0;
-            for (int bin = 0; bin < 256; bin++)
-            {
-                redHistogramSum += mRedHistogram[bin];
-                greenHistogramSum += mGreenHistogram[bin];
-                blueHistogramSum += mBlueHistogram[bin];
-            } // bin
+        redHistogramSum = 0; greenHistogramSum = 0; blueHistogramSum = 0;
+        for (int bin = 0; bin < 256; bin++)
+        {
+            redHistogramSum += mRedHistogram[bin];
+            greenHistogramSum += mGreenHistogram[bin];
+            blueHistogramSum += mBlueHistogram[bin];
         }
 
-        // Draw red intensity histogram
+        updateHistogramRects(canvasHeight - 200, redHistogramSum, mRedHistogram, redRects);
+        updateHistogramRects(canvasHeight - 100, greenHistogramSum, mGreenHistogram, greenRects);
+        updateHistogramRects(canvasHeight, blueHistogramSum, mBlueHistogram, blueRects);
+    }
+
+    private void updateCanvas(RectF[] rects, Paint paint) {
+        Canvas canvas = augview.getCanvas();
+        for (RectF r : rects) {
+            canvas.drawRect(r, paint);
+        }
+    }
+
+    private void updateHistogramRects(int bottom, double sum, int[] histogram, RectF[] rects) {
+
+        Canvas canvas = augview.getCanvas();
+        int canvasWidth = canvas.getWidth();
         float barMaxHeight = 3000;
-        float barWidth = ((float)newImageWidth) / 256;
+        float barWidth = ((float)canvasWidth) / 256;
         float barMarginHeight = 2;
-        RectF barRect = new RectF();
-        barRect.bottom = canvasHeight - 200;
-        barRect.left = marginWidth;
-        barRect.right = barRect.left + barWidth;
-        for (int bin = 0; bin < 256; bin++)
-        {
-            float prob = (float)mRedHistogram[bin] / (float)redHistogramSum;
-            barRect.top = barRect.bottom - 
-                    Math.min(80,prob*barMaxHeight) - barMarginHeight;
-            canvas.drawRect(barRect, mPaintBlack);
-            barRect.top += barMarginHeight;
-            canvas.drawRect(barRect, mPaintRed);
-            barRect.left += barWidth;
-            barRect.right += barWidth;
-        } // bin
 
-        // Draw green intensity histogram
-        barRect.bottom = canvasHeight - 100;
-        barRect.left = marginWidth;
-        barRect.right = barRect.left + barWidth;
-        for (int bin = 0; bin < 256; bin++)
-        {
-            barRect.top = barRect.bottom - 
-                    Math.min(80, ((float)mGreenHistogram[bin])/((float)greenHistogramSum) * 
-                            barMaxHeight) - barMarginHeight;
-            canvas.drawRect(barRect, mPaintBlack);
-            barRect.top += barMarginHeight;
-            canvas.drawRect(barRect, mPaintGreen);
-            barRect.left += barWidth;
-            barRect.right += barWidth;
-        } // bin
+        float top;
+        float left = 0;
+        float right = left + barWidth;
 
-        // Draw blue intensity histogram
-        barRect.bottom = canvasHeight;
-        barRect.left = marginWidth;
-        barRect.right = barRect.left + barWidth;
-        for (int bin = 0; bin < 256; bin++)
-        {
-            barRect.top = barRect.bottom - 
-                    Math.min(80, ((float)mBlueHistogram[bin])/((float)blueHistogramSum) * 
-                            barMaxHeight) - barMarginHeight;
-            canvas.drawRect(barRect, mPaintBlack);
-            barRect.top += barMarginHeight;
-            canvas.drawRect(barRect, mPaintBlue);
-            barRect.left += barWidth;
-            barRect.right += barWidth;
+        for (int bin = 0; bin < 256; bin++) {
+
+            RectF barRect = rects[bin];
+            float prob = (float)histogram[bin] / (float)sum;
+            top = bottom - 
+                    Math.min(80, prob * barMaxHeight) - barMarginHeight;
+            top += barMarginHeight;
+            barRect.left = left;
+            barRect.top = top;
+            barRect.bottom = bottom;
+            barRect.right = right;
+            left += barWidth;
+            right += barWidth;
         }
-        yyuvdata = null;
     }
 
     @Override
@@ -355,10 +368,13 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+        Log.d(TAG, "ejs update histogram prev frame 1");
         if (data == null || data.length == 0) return;
-        yyuvdata = new byte[data.length]; 
-
-        System.arraycopy(data, 0, yyuvdata, 0, data.length);
-        augview.reset();
+        Log.d(TAG, "ejs update histogram prev frame 2");
+        yyuvdata = data;
+        hasData = true;
+        //todo: make setting to reset for every frame (perf hit) or only
+        // when some other augiement was a re-paint.
+        //augview.reset();
     }
 }

@@ -48,6 +48,8 @@ public interface AugCamera extends Augiement {
     void focus(AugFocusCallback cb);
     
     void setPreviewCallback(AugPreviewCallback cb);
+    void setPreviewCallbackWithBuffer(AugPreviewCallback cb);
+    void addCallbackBuffer(byte[] b);
 
     boolean isOpen();
 }

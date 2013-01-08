@@ -5,11 +5,14 @@ package com.onextent.augie.camera.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.Parameters;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -42,12 +45,40 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 	protected final int cameraId;
 	protected final CameraName cameraName;
 	protected AugPreviewCallback previewCb;
+	protected AugPreviewCallback previewCbWB;
 	
 	private CamParams params;
+	private List<byte[]> buffers;
 	
 	SimplePhoneCamera(int id) {
 	    cameraId = id;
         cameraName = new CameraName("/AUGIE/CAMERA_ID_" + getId());
+	}
+
+	private final static int NBUFFERS = 3;
+	private void initBuffers() {
+        Parameters p = camera.getParameters();
+                
+        android.hardware.Camera.Size sz = p.getPreviewSize();
+        int format = p.getPreviewFormat();
+        int bsz;
+        if (format == ImageFormat.YV12) {
+            int width = sz.width;
+            int height = sz.height;
+            int yStride   = (int) Math.ceil(width / 16.0) * 16;
+            int uvStride  = (int) Math.ceil( (yStride / 2) / 16.0) * 16;
+            int ySize     = yStride * height;
+            int uvSize    = uvStride * height / 2;
+            bsz = ySize + uvSize * 2;
+        } else {
+            float bpp = ImageFormat.getBitsPerPixel(format);
+            float bytepp = bpp / 8;
+            bsz = (int) (sz.width * sz.height * bytepp);
+        }
+        for (int i = 0; i < NBUFFERS; i++ ) {
+            byte b[] = new byte[bsz];
+            camera.addCallbackBuffer(b);
+        }
 	}
 
     @Override
@@ -57,8 +88,16 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         try {
             Log.d(TAG, "open camera with id: " + getId());
             camera = Camera.open(getId());
-            if (previewCb != null)
+
+            if (previewCbWB != null) {
+                initBuffers();
+                camera.setPreviewCallbackWithBuffer(previewCbWB);
+                previewCbWB = null;
+            }
+            if (previewCb != null) {
                 camera.setPreviewCallback(previewCb);
+                previewCb = null;
+            }
             if (params == null) {
                 initParams();
             } else {
@@ -404,8 +443,29 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     
     @Override
     public void setPreviewCallback(AugPreviewCallback cb) {
-        previewCb = cb;
-        if (camera != null) camera.setPreviewCallback(cb);
+        if (camera != null) {
+            camera.setPreviewCallback(cb);
+        } else {
+            previewCb = cb;
+        }
     }
-    //todo: support preview callback buffers
+
+    @Override
+    public void setPreviewCallbackWithBuffer(AugPreviewCallback cb) {
+        if (camera != null) {
+            camera.setPreviewCallbackWithBuffer(cb);
+        } else {
+            previewCbWB = cb;
+        }
+    }
+
+    @Override
+    public void addCallbackBuffer(byte[] b) {
+        if (camera == null) {
+            buffers = new ArrayList<byte[]>();
+            buffers.add(b);
+        } else {
+            camera.addCallbackBuffer(b);
+        }
+    }
 }

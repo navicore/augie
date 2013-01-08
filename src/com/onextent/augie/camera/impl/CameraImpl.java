@@ -194,4 +194,14 @@ public class CameraImpl implements AugCamera {
     public boolean isOpen() {
         return augcamera.isOpen();
     }
+
+    @Override
+    public void setPreviewCallbackWithBuffer(AugPreviewCallback cb) {
+        augcamera.setPreviewCallbackWithBuffer(cb);
+    }
+
+    @Override
+    public void addCallbackBuffer(byte[] b) {
+        augcamera.addCallbackBuffer(b);
+    }
 }

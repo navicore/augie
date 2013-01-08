@@ -14,6 +14,7 @@ import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.CameraName;
+import com.onextent.augie.camera.HistogramFeature;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.Code;
