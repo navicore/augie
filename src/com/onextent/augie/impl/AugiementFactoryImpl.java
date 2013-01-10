@@ -13,18 +13,18 @@ import com.onextent.util.codeable.CodeableName;
 
 public class AugiementFactoryImpl implements AugiementFactory {
 
-	private final Map<CodeableName, Class<? extends Augiement>> augieClasses;
+	private final Map<CodeableName, AugiementFactory.Meta> augieClasses;
 	
     public AugiementFactoryImpl() {
 	    
-        augieClasses = new HashMap<CodeableName, Class<? extends Augiement>>();
+        augieClasses = new HashMap<CodeableName, AugiementFactory.Meta>();
     }
 
     @Override
-    public void registerAugiement(Class<? extends Augiement> augclass, CodeableName name)
+    public void registerAugiement(AugiementFactory.Meta meta)
             throws AugiementException {
         
-        augieClasses.put(name, augclass);
+        augieClasses.put(meta.getCodeableName(), meta);
     }
 
     @Override
@@ -38,20 +38,26 @@ public class AugiementFactoryImpl implements AugiementFactory {
         
         Log.d(TAG, "newInstance " + augieName);
         
-        Class<? extends Augiement> c = augieClasses.get(augieName);
+        AugiementFactory.Meta m = augieClasses.get(augieName);
         
-        if (c == null) {
+        if (m == null) {
             throw new java.lang.NullPointerException("no class for " + augieName + " found");
             
         } else
         
             try {
-                return c.newInstance();
+                return m.getAugiementClass().newInstance();
             } catch (InstantiationException e) {
                 Log.e(TAG, e.toString(), e);
             } catch (IllegalAccessException e) {
                 Log.e(TAG, e.toString(), e);
             }
         throw new java.lang.NullPointerException("no instance for " + augieName);
+    }
+
+    @Override
+    public Map<CodeableName, Meta> getAllMeta() {
+
+        return augieClasses;
     }
 }

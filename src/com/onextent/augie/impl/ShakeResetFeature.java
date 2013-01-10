@@ -17,9 +17,9 @@ import android.hardware.SensorManager;
 import java.lang.Math;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
@@ -28,6 +28,9 @@ import android.util.Log;
 
 public class ShakeResetFeature implements Augiement, SensorEventListener {
 
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHAKE_RESET");
+    public static final String UI_NAME = "Shake Reset";
+    
     protected static final String TAG = AugieScape.TAG;
     private SensorManager mSensorManager;
     private float mAccel; 			// acceleration apart from gravity
@@ -62,7 +65,6 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     //todo: think about callback api for this sort of feature.  the shaker shouldn't care if
     // it is for a reset or something else
     
-    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHAKE_RESET");
     @Override
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
@@ -152,24 +154,6 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) throws AugieableException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Code getCode() {
         // TODO Auto-generated method stub
         return null;
@@ -179,5 +163,34 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     public void setCode(Code code) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public String getUIName() {
+
+        return UI_NAME;
+    }
+    
+    public static final AugiementFactory.Meta getMeta() {
+        return new AugiementFactory.Meta() {
+
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+    
+                return ShakeResetFeature.class;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                
+                return AUGIE_NAME;
+            }
+
+            @Override
+            public String getUIName() {
+
+                return UI_NAME;
+            }
+        };
     }
 }

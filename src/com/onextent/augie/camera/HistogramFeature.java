@@ -22,9 +22,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawBase;
 import com.onextent.augie.impl.AugDrawFeature;
@@ -33,7 +33,6 @@ import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.Size;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -46,6 +45,7 @@ import android.view.View;
 public class HistogramFeature extends AugDrawBase implements AugPreviewCallback {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
+    public static final String UI_NAME = "Histogram";
     
     boolean hasData;
     byte[] yyuvdata;
@@ -351,21 +351,6 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) throws AugieableException {
-
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    @Override
-    public Meta getMeta() {
-        return null;
-    }
-
-    @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (data == null || data.length == 0) return;
         yyuvdata = data;
@@ -373,5 +358,33 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         //todo: make setting to reset for every frame (perf hit) or only
         // when some other augiement was a re-paint.
         //augview.reset();
+    }
+    @Override
+    public String getUIName() {
+        
+        return UI_NAME;
+    }
+    
+    public static final AugiementFactory.Meta getMeta() {
+        return new AugiementFactory.Meta() {
+
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+    
+                return PinchZoom.class;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                
+                return AUGIE_NAME;
+            }
+
+            @Override
+            public String getUIName() {
+
+                return UI_NAME;
+            }
+        };
     }
 }

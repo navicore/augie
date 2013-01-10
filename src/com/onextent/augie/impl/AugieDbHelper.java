@@ -1,6 +1,6 @@
 package com.onextent.augie.impl;
 
-import com.onextent.augie.Augieable;
+import com.onextent.augie.Augiement;
 import com.onextent.util.store.CodeStoreSqliteImpl;
 
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class AugieDbHelper extends SQLiteOpenHelper {
     
-    private static final String TAG = Augieable.TAG;
+    private static final String TAG = Augiement.TAG;
     
     private static final String CREATE_TABLE = "CREATE TABLE " + CodeStoreSqliteImpl.TABLE_NAME + " (" + CodeStoreSqliteImpl.KEY_ID + " STRING primary key, " + CodeStoreSqliteImpl.CONTENT_NAME + " TEXT not null );";
 

@@ -239,24 +239,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) {
-        // TODO Auto-generated method stub
-        if (cb != null) cb.done();
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Code getCode() throws CodeableException {
         // TODO Auto-generated method stub
         return null;
@@ -266,5 +248,11 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     public void setCode(Code code) throws CodeableException {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public String getUIName() {
+
+        return "Camera Shutter";
     }
 }

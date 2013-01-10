@@ -9,8 +9,6 @@ import com.onextent.util.codeable.CodeableName;
 
 public interface Mode extends Codeable {
     
-    static final String KEY_MODE_UI_NAME = "uiname";
-
     String getName();
 
     void setName(String name);
@@ -23,6 +21,7 @@ public interface Mode extends Codeable {
 
     void addAugiement(Augiement a);
 
+    //ordered set (must maintain order, should have been a list)
     Set<Augiement> getAugiements();
     
     void activate() throws AugieException; //create and config SuperScape

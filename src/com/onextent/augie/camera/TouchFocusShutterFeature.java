@@ -423,4 +423,9 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             throw new CodeableException(e);
         }
     }
+    @Override
+    public String getUIName() {
+
+        return "Touch Focus Shutter";
+    }
 }

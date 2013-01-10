@@ -2,16 +2,15 @@ package com.onextent.augie.camera;
 
 import java.util.HashSet;
 import java.util.Set;
-import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.util.codeable.Code;
 import com.onextent.util.codeable.CodeableException;
@@ -20,28 +19,13 @@ import com.onextent.util.codeable.CodeableName;
 public class PinchZoom implements Augiement, OnTouchListener {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/PINCH_ZOOM");
+    public static final String UI_NAME = "Pinch Zoom";
     
     private AugieScape augview;
     private Point p1, p2;
     private AugCamera camera;
     double initDist = -1;
     
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void edit(Context context, EditCallback cb)
-            throws AugieableException {
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
     @Override
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
@@ -161,5 +145,34 @@ public class PinchZoom implements Augiement, OnTouchListener {
             Log.e(TAG, e.toString(), e);
         }
         return false;
+    }
+
+    @Override
+    public String getUIName() {
+
+        return UI_NAME;
+    }
+    
+    public static final AugiementFactory.Meta getMeta() {
+        return new AugiementFactory.Meta() {
+
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+    
+                return PinchZoom.class;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                
+                return AUGIE_NAME;
+            }
+
+            @Override
+            public String getUIName() {
+
+                return UI_NAME;
+            }
+        };
     }
 }

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.onextent.augie.AugieScape;
@@ -132,24 +131,6 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) {
-        // TODO Auto-generated method stub
-        if (cb != null) cb.done();
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Set<CameraName> getCameraNames() {
 
         return cameraClasses.keySet();
@@ -171,5 +152,11 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     public Collection<AugCamera> getCameras() {
         
         return cameras.values();
+    }
+
+    @Override
+    public String getUIName() {
+
+        return "Camera Factory";
     }
 }

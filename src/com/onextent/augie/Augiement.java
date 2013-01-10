@@ -5,6 +5,7 @@ package com.onextent.augie;
 
 import java.util.Set;
 
+import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableName;
 
 /**
@@ -15,7 +16,7 @@ import com.onextent.util.codeable.CodeableName;
  * @author esweeney
  *
  */
-public interface Augiement extends Augieable {
+public interface Augiement extends Codeable {
 	
 	//the view calls this when bmp has been rebuilt from scratch
 	//and we need each feature to redraw
@@ -34,4 +35,6 @@ public interface Augiement extends Augieable {
 	void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException;
 	
 	Set<CodeableName> getDependencyNames();
+
+    String getUIName();
 }

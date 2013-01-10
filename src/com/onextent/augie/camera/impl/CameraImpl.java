@@ -2,11 +2,9 @@ package com.onextent.augie.camera.impl;
 
 import java.util.Set;
 
-import android.content.Context;
 import android.view.SurfaceHolder;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
@@ -111,17 +109,6 @@ public class CameraImpl implements AugCamera {
         }
     }
 
-    @Override
-    public void edit(Context context, EditCallback cb) throws AugieableException {
-    
-        throw new java.lang.UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
     //NOOP stubs just here so that dependency manager can 
     // give cameras to shutter and config augiements
     @Override
@@ -152,12 +139,6 @@ public class CameraImpl implements AugCamera {
     public int getId() {
         
         return augcamera.getId();
-    }
-
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -203,5 +184,11 @@ public class CameraImpl implements AugCamera {
     @Override
     public void addCallbackBuffer(byte[] b) {
         augcamera.addCallbackBuffer(b);
+    }
+
+    @Override
+    public String getUIName() {
+
+        return augcamera.getUIName();
     }
 }

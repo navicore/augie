@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
@@ -24,7 +24,6 @@ import com.onextent.util.codeable.CodeableException;
 import com.onextent.util.codeable.JSONCoder;
 
 
-import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
@@ -34,6 +33,7 @@ import android.view.View;
 public class HorizonFeature extends AugDrawBase {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_DRAW");
+    private static final String UI_NAME = "Movable Horizon";
     
     private AugLine movingLine;
     private Point startP;
@@ -235,20 +235,31 @@ public class HorizonFeature extends AugDrawBase {
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) throws AugieableException {
-        // TODO Auto-generated method stub
-        
-    }
+    public String getUIName() {
 
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
+        return UI_NAME;
     }
+    
+    public static final AugiementFactory.Meta getMeta() {
+        return new AugiementFactory.Meta() {
 
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+    
+                return HorizonFeature.class;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                
+                return AUGIE_NAME;
+            }
+
+            @Override
+            public String getUIName() {
+
+                return UI_NAME;
+            }
+        };
     }
 }

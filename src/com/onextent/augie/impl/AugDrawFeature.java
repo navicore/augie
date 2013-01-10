@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieableException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
@@ -18,7 +18,6 @@ import com.onextent.augie.marker.MarkerFactory;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Code;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -124,8 +123,32 @@ public class AugDrawFeature extends AugDrawBase {
     		}
     	}
 	}
+    
+    public static final AugiementFactory.Meta getMeta() {
+        return new AugiementFactory.Meta() {
+
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+    
+                return AugDrawFeature.class;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                
+                return AUGIE_NAME;
+            }
+
+            @Override
+            public String getUIName() {
+
+                return UI_NAME;
+            }
+        };
+    }
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
+    public static final String UI_NAME = "Augie Draw";
     @Override
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
@@ -144,24 +167,6 @@ public class AugDrawFeature extends AugDrawBase {
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) throws AugieableException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Meta getMeta() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    @Override
 	public void stop() {
         Log.d(TAG, "stopping " + getClass().getName());
 		//noop
@@ -172,4 +177,10 @@ public class AugDrawFeature extends AugDrawBase {
         Log.d(TAG, "resuming " + getClass().getName());
 		//noop
 	}
+
+    @Override
+    public String getUIName() {
+
+        return "Augie Draw";
+    }
 }

@@ -14,7 +14,6 @@ import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.augie.camera.HistogramFeature;
 import com.onextent.util.codeable.CodeableName;
 import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.Code;
@@ -26,7 +25,7 @@ import android.util.Log;
 
 public class ModeImpl implements Codeable, Mode {
     
-    static final String KEY_NAME = Mode.KEY_MODE_UI_NAME;
+    static final String KEY_NAME = Codeable.UI_NAME_KEY;
     static final String KEY_AUGIENAME = Codeable.CODEABLE_NAME_KEY;
     
     static final String KEY_CAMERA = "camera";
@@ -45,14 +44,10 @@ public class ModeImpl implements Codeable, Mode {
 
 
     public ModeImpl(ModeManager mm) {
-        modeManager = mm;
-        augiements = new HashSet<Augiement>();
-        augieName = null;
-        camera = null;
+        this(mm, null, null);
     }
 
     public ModeImpl(ModeManager mm, String cn, AugCamera c) {
-        if (c == null) throw new java.lang.NullPointerException("no camera");
         modeManager = mm;
         augiements = new HashSet<Augiement>();
         if (cn != null) augieName = new CodeableName(cn){};

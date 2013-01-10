@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -311,21 +310,6 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     }
 
     @Override
-    public void edit(Context context, EditCallback cb) {
-        throw new java.lang.UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    @Override
-    public Meta getMeta() {
-        return null;
-    }
-
-    @Override
     public String getName() {
         throw new java.lang.UnsupportedOperationException();
     }
@@ -475,5 +459,11 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         } else {
             camera.addCallbackBuffer(b);
         }
+    }
+
+    @Override
+    public String getUIName() {
+
+        return "Phone Camera";
     }
 }

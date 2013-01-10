@@ -1,6 +1,6 @@
 package com.onextent.augie;
 
-public abstract class AugieException extends java.lang.Exception {
+public class AugieException extends java.lang.Exception {
 
     private static final long serialVersionUID = -828987509753604606L;
     
