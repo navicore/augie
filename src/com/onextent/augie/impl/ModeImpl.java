@@ -1,7 +1,7 @@
 package com.onextent.augie.impl;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
@@ -40,7 +40,7 @@ public class ModeImpl implements Codeable, Mode {
     
     private final ModeManager modeManager;
     
-    private final Set<Augiement> augiements;
+    private final Map<CodeableName, Augiement> augiements;
 
 
     public ModeImpl(ModeManager mm) {
@@ -49,7 +49,7 @@ public class ModeImpl implements Codeable, Mode {
 
     public ModeImpl(ModeManager mm, String cn, AugCamera c) {
         modeManager = mm;
-        augiements = new HashSet<Augiement>();
+        augiements = new HashMap<CodeableName, Augiement>();
         if (cn != null) augieName = new CodeableName(cn){};
         camera = c;
     }
@@ -70,7 +70,7 @@ public class ModeImpl implements Codeable, Mode {
                 CodeArray<Code> features = JSONCoder.newArrayOfCode();
                 code.put(KEY_AUGIEMENTS, features);
                 
-                for (Augiement f : augiements) {
+                for (Augiement f : augiements.values()) {
                     Code fjson = JSONCoder.newCode();
                     features.add(fjson);
                     fjson.put(KEY_AUGIENAME, f.getCodeableName().toString());
@@ -110,7 +110,7 @@ public class ModeImpl implements Codeable, Mode {
                         Code fCode = acode.get(KEY_CODE);
                         if (fCode != null) f.setCode(fCode);
                     }
-                    augiements.add(f);
+                    augiements.put(f.getCodeableName(), f);
                 }
             }
         } catch (AugCameraException e) {
@@ -163,15 +163,15 @@ public class ModeImpl implements Codeable, Mode {
         if (a == null) {
             augiements.clear();
         } else {
-            augiements.remove(a);
+            augiements.remove(a.getCodeableName());
         }
     }      
     @Override
     public void addAugiement(Augiement a) {
-        augiements.add(a);
+        augiements.put(a.getCodeableName(), a);
     }   
     @Override
-    public Set<Augiement> getAugiements() {
+    public Map<CodeableName, Augiement> getAugiements() {
         return augiements;
     }
 
@@ -184,7 +184,7 @@ public class ModeImpl implements Codeable, Mode {
         AugieScape v = mm.getAugieScape();
         v.stop();
         v.removeFeature(null);
-        for (Augiement f : augiements) {
+        for (Augiement f : augiements.values()) {
             Log.d(TAG, "    activate node add feature " + f.getCodeableName());
             v.addFeature(f);
         }

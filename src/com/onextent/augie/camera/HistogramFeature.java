@@ -371,7 +371,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
     
-                return PinchZoom.class;
+                return HistogramFeature.class;
             }
 
             @Override

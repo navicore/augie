@@ -1,5 +1,6 @@
 package com.onextent.augie;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.onextent.augie.camera.AugCamera;
@@ -22,7 +23,7 @@ public interface Mode extends Codeable {
     void addAugiement(Augiement a);
 
     //ordered set (must maintain order, should have been a list)
-    Set<Augiement> getAugiements();
+    Map<CodeableName, Augiement> getAugiements();
     
     void activate() throws AugieException; //create and config SuperScape
     void deactivate() throws AugieException;
