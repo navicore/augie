@@ -46,6 +46,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	private Context context;
 	private AugPictureCallback jpgCb;
 	private AugPictureCallback rawCb;
+	private AugPictureCallback userCb;
 	
     private final static Set<CodeableName> deps;
     static {
@@ -86,7 +87,20 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 		//noop	
 	}
 
+    protected void takePicture(AugPictureCallback userCb) throws AugCameraException {
+        this.userCb = userCb;
+        _takePicture();
+	}
     protected void takePicture() throws AugCameraException {
+        _takePicture();
+	}
+   
+    private void handleUserCb(byte[] data, AugCamera camera) {
+        if (userCb != null) userCb.onPictureTaken(null,  null);
+        userCb = null;
+    }
+    
+    protected void _takePicture() throws AugCameraException {
         
         try {
 
@@ -101,27 +115,29 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
                     if (!success) {
                         if (augview != null)
                         Toast.makeText(augview.getContext(), "can not focus", Toast.LENGTH_SHORT).show();
+                        handleUserCb(null, camera);
                         return;
                     }
 
                     try {
-                        _takePicture();
+                        __takePicture();
                         
                     } catch (AugCameraException e) {
+                        handleUserCb(null, camera);
                         Log.d(TAG, e.toString(), e);
                     } 
                 }
             });
 
         } else {
-            _takePicture();
+            __takePicture();
         }
         }  catch (AugCameraException e) {
             throw e;
         }
     }
     
-	protected void _takePicture() throws AugCameraException {
+	protected void __takePicture() throws AugCameraException {
 	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
 	    if (camera != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
@@ -130,6 +146,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	            camera.takePicture(null, null, jpgCb);
 	        augdraw.undoLastScrible();
 	    } else {
+	        handleUserCb(null, camera);
 	        Log.e(TAG, "camera not found");
 	        Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
 	    }
@@ -187,6 +204,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 
             if (data == null){
                 Toast.makeText(context, "error: no image data", Toast.LENGTH_LONG).show();
+                handleUserCb(data, camera);
                 return;
             }
             File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, suffix);
@@ -194,6 +212,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
                 String msg = "Error storing file, check storage permissions";
                 Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                 Log.d(TAG, msg);
+                handleUserCb(data, camera);
                 return;
             }
 
@@ -217,6 +236,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
                 } catch (AugCameraException e) {
                     Log.e(TAG, "Error starting preview after taking picture: " + e.getMessage(), e);
                 }
+
+            handleUserCb(data, camera);
         }
     }
     

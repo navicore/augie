@@ -84,7 +84,9 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
 
     protected void takePicture() throws AugCameraException {
-        
+
+        try {
+            
         String focusmode =  camera.getParameters().getFocusMode();
         if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
 
@@ -96,21 +98,32 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             }
             camera.applyParameters();
         }
-        
-        super.takePicture();
-    }
-    
-    void clearTouchFocusArea() {
-        
-            if (touchFocusArea != null) {
-                focus_areas.remove(touchFocusArea);
-                touchFocusArea = null;
+
+        super.takePicture(new AugPictureCallback() {
+
+            @Override
+            public void onPictureTaken(byte[] data, AugCamera c) {
+                clearTouchFocusArea();
             }
+        });
+        } catch (AugCameraException e) {
+            clearTouchFocusArea();
+            throw e;
+        }
+        
+    }
+
+    void clearTouchFocusArea() {
+
+        if (touchFocusArea != null) {
+            focus_areas.remove(touchFocusArea);
+            touchFocusArea = null;
+        }
     }
 
     //todo: setting 
     static final int TOUCH_FOCUS_SZ = 10;
-    
+
     private Rect getTouchFocusRect(Point p) {
         int xadj = augview.getWidth() / TOUCH_FOCUS_SZ;
         int yadj = augview.getHeight() / TOUCH_FOCUS_SZ;
@@ -128,7 +141,7 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         Camera.Area ca = new Camera.Area(rect, 500);
         fa.add(ca);
         camera.getParameters().setFocusAreas(fa);
-        
+
         ScribleHolder h = new ScribleHolder();
         touchFocusArea = h;
         h.rect = rect;
