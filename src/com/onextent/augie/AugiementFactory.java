@@ -3,12 +3,9 @@ package com.onextent.augie;
 import java.util.Map;
 import java.util.Set;
 
-import com.onextent.augie.camera.AugCamera;
 import com.onextent.util.codeable.CodeableName;
 
 public interface AugiementFactory {
-    
-    static final String TAG = AugCamera.TAG;
     
     void registerAugiement(Meta meta) throws AugiementException;
     

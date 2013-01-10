@@ -11,6 +11,7 @@ import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementDependencyRegistry;
+import com.onextent.util.codeable.Codeable;
 import com.onextent.util.codeable.CodeableName;
 
 import android.util.Log;
@@ -35,7 +36,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
         try {
             a.onCreate(augview, this);
         } catch (AugiementException e) {
-            Log.e(TAG, "augiement onCreate error", e);
+            Log.e(Codeable.TAG, "augiement onCreate error", e);
             //todo: make error visible in ui
         }
     }
@@ -63,14 +64,14 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
             
             active.put(object.getCodeableName(), object);
             create(object);
-            Log.d(TAG, "augiement " + object.getCodeableName() + " registered w/no deps");
+            Log.d(Codeable.TAG, "augiement " + object.getCodeableName() + " registered w/no deps");
             tryWaiting();
             
         } else {
 
             for (CodeableName dname : dependencyNames) {
                 if (!active.containsKey(dname)) {
-                    Log.d(TAG, "augiement " + object.getCodeableName() + " waiting for " + dname);
+                    Log.d(Codeable.TAG, "augiement " + object.getCodeableName() + " waiting for " + dname);
                     waiting.put(object.getCodeableName(), object);
                     dependsAllmet = false;
                     break;
@@ -80,7 +81,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
             if (dependsAllmet) {
                 active.put(object.getCodeableName(), object);
                 create(object);
-                Log.d(TAG, "augiement " + object.getCodeableName() + " registered w/deps");
+                Log.d(Codeable.TAG, "augiement " + object.getCodeableName() + " registered w/deps");
                 tryWaiting();
             }
         }

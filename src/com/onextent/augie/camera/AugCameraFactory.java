@@ -13,8 +13,6 @@ public interface AugCameraFactory extends Augiement {
     public static final CameraName AUGIE_FRONT_CAMERA = new CameraName("AUGIE/FEATURES/CAMERA/FRONT_CAMERA");
     public static final CameraName AUGIE_BACK_CAMERA = new CameraName("AUGIE/FEATURES/CAMERA/BACK_CAMERA");
 	
-    public String TAG = Augiement.TAG;
-    
     AugCamera getCamera(CameraName cn) throws AugCameraException;
     
     Set<CameraName> getCameraNames();

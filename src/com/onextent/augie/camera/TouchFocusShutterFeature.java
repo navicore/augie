@@ -82,14 +82,9 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             rect = new Rect(left, top, right, bottom);
         }
     }
-    protected void stakePicture() throws AugCameraException {
-        super.takePicture();
-    }
 
     protected void takePicture() throws AugCameraException {
         
-        try {
-
         String focusmode =  camera.getParameters().getFocusMode();
         if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
 
@@ -100,36 +95,9 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                 _setFocusAreas();
             }
             camera.applyParameters();
-
-            camera.focus(new AugFocusCallback() {
-
-                @Override
-                public void onFocus(boolean success) {
-                    Log.d(TAG, "auto focused: " + success);
-                    if (!success) {
-                        if (augview != null)
-                        Toast.makeText(augview.getContext(), "can not focus", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    try {
-                        stakePicture();
-                        
-                    } catch (AugCameraException e) {
-                        Log.d(TAG, e.toString(), e);
-                    } finally {
-                        clearTouchFocusArea();
-                    }
-                }
-            });
-
-        } else {
-            stakePicture();
         }
-        }  catch (AugCameraException e) {
-            clearTouchFocusArea();
-            throw e;
-        }
+        
+        super.takePicture();
     }
     
     void clearTouchFocusArea() {

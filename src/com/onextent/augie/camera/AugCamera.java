@@ -8,7 +8,6 @@ import com.onextent.util.codeable.CodeableName;
 
 public interface AugCamera extends Augiement {
 
-    static final String TAG = Augiement.TAG;
     public static final CodeableName AUGIENAME = new AugiementName("AUGIE/FEATURES/CAMERA");
     public static final String CAMERA_ID_KEY = "camera_id";
     public static final String CAMERA_NAME_KEY = "cameraName";

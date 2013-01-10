@@ -33,7 +33,6 @@ import android.util.Log;
          */
 public abstract class LevelerBase implements Augiement, SensorEventListener {
 
-    protected static final String TAG = Augiement.TAG;
     protected static final Map<Double, Double> tanCache;
     protected static final Map<String, AugLine> vlineCache;
     protected static final Map<String, AugLine> hlineCache;

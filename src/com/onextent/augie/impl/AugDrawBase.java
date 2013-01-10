@@ -20,7 +20,6 @@ import android.view.View.OnTouchListener;
 
 public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
-    protected static final String TAG = AugieScape.TAG;
     protected AugieScape augview;
     public static float CLOSE_PIXELS = 25;
 	

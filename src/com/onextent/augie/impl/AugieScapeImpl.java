@@ -8,6 +8,7 @@ import java.util.Set;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
+import com.onextent.util.codeable.Codeable;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -77,14 +78,14 @@ public class AugieScapeImpl extends View implements AugieScape {
     }
 
     public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        Log.d(Codeable.TAG, "resuming " + getClass().getName());
         for (Augiement f : features) {
             f.resume();
         }
     }
 
     public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        Log.d(Codeable.TAG, "stopping " + getClass().getName());
         for (Augiement f : features) {
             f.stop();
         }
@@ -128,7 +129,7 @@ public class AugieScapeImpl extends View implements AugieScape {
             }
             if (handled) invalidate();
         } catch (Exception e) {
-            Log.e(TAG, e.toString(), e);
+            Log.e(Codeable.TAG, e.toString(), e);
         }
         return true;
     }

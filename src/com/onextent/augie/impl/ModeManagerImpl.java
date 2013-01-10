@@ -14,7 +14,6 @@ import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStore;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
@@ -33,7 +32,6 @@ import com.onextent.util.store.CodeStore;
 
 public class ModeManagerImpl implements ModeManager {
 
-    private static final String TAG = Augiement.TAG;
     CodeStore store;
     private static final String CURRENT_MODE_KEY_KEY = "CURRENT/MODE_KEY";
     private static final String MODE_KEY_FLASH = "MODE/SYSTEM/FLASH";
@@ -88,12 +86,12 @@ public class ModeManagerImpl implements ModeManager {
             throw new java.lang.IllegalStateException("already stopped");
             //return;
         }
-        Log.d(TAG, "ModeManager.stop");
+        Log.d(Codeable.TAG, "ModeManager.stop");
         if (currentMode != null) {
             try {
                 currentMode.deactivate();
             } catch (AugieException e) {
-                Log.d(TAG, e.toString(), e);
+                Log.d(Codeable.TAG, e.toString(), e);
             } 
         }
         allModeCode = null;
@@ -109,7 +107,7 @@ public class ModeManagerImpl implements ModeManager {
             throw new AugieException("mode is null") {
                 private static final long serialVersionUID = 3508820766680012985L;};
         }
-        Log.d(TAG, "setCurrentMode " + mode.getCodeableName());
+        Log.d(Codeable.TAG, "setCurrentMode " + mode.getCodeableName());
         store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getCodeableName().toString());
         currentMode.activate();
     }
@@ -132,7 +130,7 @@ public class ModeManagerImpl implements ModeManager {
         if (code == null) throw new CodeableException("mode not found") {
             private static final long serialVersionUID = 7886435403395937189L;};
             
-        Log.d(TAG, "initializing mode from store");
+        Log.d(Codeable.TAG, "initializing mode from store");
         m.setCode(code);
         return m;
     }
@@ -141,12 +139,12 @@ public class ModeManagerImpl implements ModeManager {
 
         String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY);
         if (currentMode_key == null) {
-            Log.d(TAG, "no current mode key, initializing.");
+            Log.d(Codeable.TAG, "no current mode key, initializing.");
             primeDbWithModes();
             currentMode_key = MODE_KEY_DEFAULT;
             store.replaceContent(CURRENT_MODE_KEY_KEY, currentMode_key);
         } 
-        Log.d(TAG, "current mode key: " + currentMode_key);
+        Log.d(Codeable.TAG, "current mode key: " + currentMode_key);
         currentMode = getMode(new ModeName(currentMode_key));
     }
     
@@ -178,7 +176,7 @@ public class ModeManagerImpl implements ModeManager {
                     Code code = JSONCoder.newCode(codeStr);
                     list.add(code);
                 } catch (CodeableException e) {
-                    Log.e(TAG, e.toString(), e);
+                    Log.e(Codeable.TAG, e.toString(), e);
                     c.close();
                     throw new AugieStoreException(e);
                 }
@@ -263,7 +261,7 @@ public class ModeManagerImpl implements ModeManager {
             try {
                 setCurrentMode(getMode(new ModeName(MODE_KEY_DEFAULT)));
             } catch (AugieException e) {
-                Log.e(TAG, e.toString(), e);
+                Log.e(Codeable.TAG, e.toString(), e);
             }
         }
         store.remove(augieName.toString());
@@ -281,7 +279,7 @@ public class ModeManagerImpl implements ModeManager {
         if (store == null || mode == null) return; //too late
         Code code = mode.getCode();
         store.replaceContent(mode.getCodeableName(), code);       
-        Log.d(TAG, "saved mode " + mode.getCodeableName());
+        Log.d(Codeable.TAG, "saved mode " + mode.getCodeableName());
     }
 
     //ugh
@@ -300,9 +298,9 @@ public class ModeManagerImpl implements ModeManager {
                     icn.equals(ccn)) return i;
             }
         } catch (AugieStoreException e) {
-            Log.e(TAG, e.toString(), e);
+            Log.e(Codeable.TAG, e.toString(), e);
         } catch (CodeableException e) {
-            Log.e(TAG, e.toString(), e);
+            Log.e(Codeable.TAG, e.toString(), e);
         }
         return idx;
     }

@@ -5,6 +5,7 @@ package com.onextent.augie;
 
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
+import com.onextent.util.codeable.Codeable;
 
 import android.content.Context;
 import android.view.SurfaceHolder;
@@ -14,8 +15,6 @@ import android.util.Log;
 enum TOUCH_STATE {NOSTATE, SHOOTING, ZOOMING};
 
 public class RealityScape extends SurfaceView implements SurfaceHolder.Callback {
-
-    protected final String TAG = Augiement.TAG;
 
     private final SurfaceHolder holder;
     private final AugCamera augcamera;
@@ -42,7 +41,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
             augcamera.open();
             augcamera.setPreviewDisplay(holder);
         } catch (AugCameraException e) {
-            Log.e(TAG, "Error surfaceCreated: " + e.getMessage());
+            Log.e(Codeable.TAG, "Error surfaceCreated: " + e.getMessage());
         }
     }
 
@@ -52,7 +51,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
                 augcamera.stopPreview();
                 augcamera.close();
             } catch (AugCameraException e) {
-                Log.e(TAG, "Error surfaceDestroyed: " + e.getMessage());
+                Log.e(Codeable.TAG, "Error surfaceDestroyed: " + e.getMessage());
             }
         }
     }
@@ -61,7 +60,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
         try {
             augcamera.startPreview();
         } catch (AugCameraException e) {
-            Log.e(TAG, "Error surfaceChanged: " + e.getMessage());
+            Log.e(Codeable.TAG, "Error surfaceChanged: " + e.getMessage());
         }
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.

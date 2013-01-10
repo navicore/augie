@@ -11,8 +11,6 @@ import android.view.View.OnTouchListener;
  */
 public interface AugieScape extends OnTouchListener {
 
-    static final String TAG = Augiement.TAG;
-
     int      getWidth();
     
     int      getHeight();

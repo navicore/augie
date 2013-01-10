@@ -25,8 +25,6 @@ import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
 	
-    protected static final String TAG = Augiement.TAG;
-
 	int lastX;
 	int lastY;
     List<AugScrible> scribles;

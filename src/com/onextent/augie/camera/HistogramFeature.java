@@ -144,8 +144,8 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         if (augdraw == null) throw new AugiementException("draw feature is null");
         if (camera == null) throw new AugiementException("camera is null");
 
-        //camera.setPreviewCallback(this);
-        camera.setPreviewCallbackWithBuffer(this);
+        camera.setPreviewCallback(this);
+        //camera.setPreviewCallbackWithBuffer(this);
     }
     
     @Override
@@ -257,7 +257,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
             //add buffer back in
             hasData = false;
-            camera.addCallbackBuffer(yyuvdata);
+            //camera.addCallbackBuffer(yyuvdata);
             yyuvdata = null;
         }
         
@@ -291,9 +291,14 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             blueHistogramSum += mBlueHistogram[bin];
         }
 
-        updateHistogramRects(canvasHeight - 200, redHistogramSum, mRedHistogram, redRects);
-        updateHistogramRects(canvasHeight - 100, greenHistogramSum, mGreenHistogram, greenRects);
+        updateHistogramRects(canvasHeight - (2 * getHHeight()), redHistogramSum, mRedHistogram, redRects);
+        updateHistogramRects(canvasHeight - (getHHeight()), greenHistogramSum, mGreenHistogram, greenRects);
         updateHistogramRects(canvasHeight, blueHistogramSum, mBlueHistogram, blueRects);
+    }
+    
+    private int getHHeight() {
+        if (augview.getHeight() < 600) return 50;
+        return 100;
     }
 
     private void updateCanvas(RectF[] rects, Paint paint) {

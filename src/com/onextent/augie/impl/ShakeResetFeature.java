@@ -31,7 +31,6 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHAKE_RESET");
     public static final String UI_NAME = "Shake Reset";
     
-    protected static final String TAG = AugieScape.TAG;
     private SensorManager mSensorManager;
     private float mAccel; 			// acceleration apart from gravity
     private float mAccelCurrent; 	// current acceleration including gravity

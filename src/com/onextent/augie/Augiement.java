@@ -17,7 +17,7 @@ import com.onextent.util.codeable.CodeableName;
  *
  */
 public interface Augiement extends Codeable {
-	
+    
 	//the view calls this when bmp has been rebuilt from scratch
 	//and we need each feature to redraw
 	void updateCanvas();

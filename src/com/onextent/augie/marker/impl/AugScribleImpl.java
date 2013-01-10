@@ -13,7 +13,6 @@ import com.onextent.augie.marker.AugScrible;
 
 public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
 
-    protected final String TAG = Augiement.TAG;
     private static final int MAX_TAP_SCRIBLE_LEN = 10;
     private static final int MAX_TAP_SCRIBLE_END_DISTANCE = 50;
 

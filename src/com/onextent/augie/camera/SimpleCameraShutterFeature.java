@@ -25,6 +25,7 @@ import com.onextent.util.codeable.Code;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.Camera;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -85,7 +86,42 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 		//noop	
 	}
 
-	protected void takePicture() throws AugCameraException {
+    protected void takePicture() throws AugCameraException {
+        
+        try {
+
+        String focusmode =  camera.getParameters().getFocusMode();
+        if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
+
+            camera.focus(new AugFocusCallback() {
+
+                @Override
+                public void onFocus(boolean success) {
+                    Log.d(TAG, "auto focused: " + success);
+                    if (!success) {
+                        if (augview != null)
+                        Toast.makeText(augview.getContext(), "can not focus", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    try {
+                        _takePicture();
+                        
+                    } catch (AugCameraException e) {
+                        Log.d(TAG, e.toString(), e);
+                    } 
+                }
+            });
+
+        } else {
+            _takePicture();
+        }
+        }  catch (AugCameraException e) {
+            throw e;
+        }
+    }
+    
+	protected void _takePicture() throws AugCameraException {
 	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
 	    if (camera != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
