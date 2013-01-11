@@ -7,12 +7,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementDependencyRegistry;
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableName;
 
 import android.util.Log;
 

@@ -4,9 +4,9 @@ import java.util.List;
 
 import android.hardware.Camera;
 
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.Size;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.Size;
 
 public interface AugCameraParameters extends Codeable {
     

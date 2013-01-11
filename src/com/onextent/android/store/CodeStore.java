@@ -1,8 +1,8 @@
-package com.onextent.util.store;
+package com.onextent.android.store;
 
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;

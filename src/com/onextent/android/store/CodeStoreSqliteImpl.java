@@ -1,10 +1,10 @@
-package com.onextent.util.store;
+package com.onextent.android.store;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.impl.AugieDbHelper;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.JSONCoder;
 
 import android.content.ContentValues;
 import android.content.Context;

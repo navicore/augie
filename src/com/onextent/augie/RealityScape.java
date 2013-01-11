@@ -3,9 +3,9 @@
  */
 package com.onextent.augie;
 
+import com.onextent.android.codeable.Codeable;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
-import com.onextent.util.codeable.Codeable;
 
 import android.content.Context;
 import android.view.SurfaceHolder;

@@ -9,12 +9,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.MarkerFactory;
-import com.onextent.util.codeable.CodeableName;
 
 import android.content.Context;
 import android.content.SharedPreferences;

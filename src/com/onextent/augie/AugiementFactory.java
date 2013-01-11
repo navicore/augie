@@ -3,7 +3,7 @@ package com.onextent.augie;
 import java.util.Map;
 import java.util.Set;
 
-import com.onextent.util.codeable.CodeableName;
+import com.onextent.android.codeable.CodeableName;
 
 public interface AugiementFactory {
     

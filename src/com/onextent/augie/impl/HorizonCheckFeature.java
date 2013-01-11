@@ -5,17 +5,18 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.app.DialogFragment;
 
 public class HorizonCheckFeature extends LevelerBase {
     
@@ -93,5 +94,11 @@ public class HorizonCheckFeature extends LevelerBase {
                 return UI_NAME;
             }
         };
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

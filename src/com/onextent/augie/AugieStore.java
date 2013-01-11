@@ -1,6 +1,6 @@
 package com.onextent.augie;
 
-import com.onextent.util.store.CodeStore;
+import com.onextent.android.store.CodeStore;
 
 public class AugieStore {
     

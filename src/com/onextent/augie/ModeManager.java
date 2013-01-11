@@ -2,11 +2,11 @@ package com.onextent.augie;
 
 import java.util.List;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.store.CodeStore;
 import com.onextent.augie.camera.AugCameraFactory;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.store.CodeStore;
 
 import android.app.Activity;
 import android.content.Context;

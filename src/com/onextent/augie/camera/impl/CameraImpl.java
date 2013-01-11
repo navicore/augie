@@ -2,8 +2,13 @@ package com.onextent.augie.camera.impl;
 
 import java.util.Set;
 
+import android.support.v4.app.DialogFragment;
 import android.view.SurfaceHolder;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -15,10 +20,6 @@ import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugPreviewCallback;
 import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.JSONCoder;
 
 public class CameraImpl implements AugCamera {
     
@@ -190,5 +191,11 @@ public class CameraImpl implements AugCamera {
     public String getUIName() {
 
         return augcamera.getUIName();
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        
+        return augcamera.getUI();
     }
 }

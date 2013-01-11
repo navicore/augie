@@ -5,10 +5,10 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
+import com.onextent.android.codeable.Codeable;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.util.codeable.Codeable;
 
 import android.content.Context;
 import android.content.SharedPreferences;

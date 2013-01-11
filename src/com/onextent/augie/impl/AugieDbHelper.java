@@ -1,7 +1,7 @@
 package com.onextent.augie.impl;
 
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.store.CodeStoreSqliteImpl;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.store.CodeStoreSqliteImpl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

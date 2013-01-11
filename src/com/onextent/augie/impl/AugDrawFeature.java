@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -15,10 +17,9 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
 
 import android.graphics.Point;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -180,5 +181,11 @@ public class AugDrawFeature extends AugDrawBase {
     public String getUIName() {
 
         return "Augie Draw";
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

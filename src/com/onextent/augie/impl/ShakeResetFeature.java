@@ -16,14 +16,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import java.lang.Math;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
 
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 public class ShakeResetFeature implements Augiement, SensorEventListener {
@@ -191,5 +192,11 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
                 return UI_NAME;
             }
         };
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -1,7 +1,7 @@
 /**
  * copyright Ed Sweeney, 2012, all rights reserved
  */
-package com.onextent.augie.camera;
+package com.onextent.augie.camera.shutter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,22 +12,27 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
+import com.onextent.augie.camera.AugFocusCallback;
+import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -311,5 +316,11 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     public String getUIName() {
 
         return "Camera Shutter";
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -17,8 +20,6 @@ import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeableName;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
@@ -158,5 +159,11 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     public String getUIName() {
 
         return "Camera Factory";
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

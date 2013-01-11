@@ -1,19 +1,20 @@
-package com.onextent.augie.camera;
+package com.onextent.augie.camera.shutter;
 
 import java.util.Set;
 
+import android.support.v4.app.DialogFragment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
 
 public class TouchShutter implements Augiement, OnTouchListener {
     
@@ -21,7 +22,10 @@ public class TouchShutter implements Augiement, OnTouchListener {
     public static final String UI_NAME = "Touch Shutter";
     
     private final CameraShutterFeature shutter;
-    
+   
+    /**
+     * idiotic class is just here to give a no-argument constructor
+     */
     public TouchShutter() {
         shutter = CameraShutterFeature.getInstance();
     }
@@ -113,5 +117,11 @@ public class TouchShutter implements Augiement, OnTouchListener {
                 return UI_NAME;
             }
         };
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        
+        return shutter.getUI();
     }
 }

@@ -3,6 +3,12 @@ package com.onextent.augie.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeArray;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -14,12 +20,6 @@ import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeArray;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.JSONCoder;
 
 import android.util.Log;
 

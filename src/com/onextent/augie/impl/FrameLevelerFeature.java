@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.impl.AugDrawBase.VLine;
@@ -16,11 +18,10 @@ import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.app.DialogFragment;
 
 public class FrameLevelerFeature extends LevelerBase {
     
@@ -126,5 +127,11 @@ public class FrameLevelerFeature extends LevelerBase {
                 return UI_NAME;
             }
         };
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

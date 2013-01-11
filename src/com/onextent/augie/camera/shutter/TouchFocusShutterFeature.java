@@ -1,22 +1,25 @@
-package com.onextent.augie.camera;
+package com.onextent.augie.camera.shutter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeArray;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
+import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeArray;
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.JSONCoder;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;

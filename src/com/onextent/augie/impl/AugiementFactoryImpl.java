@@ -6,11 +6,11 @@ import java.util.Set;
 
 import android.util.Log;
 
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableName;
 
 public class AugiementFactoryImpl implements AugiementFactory {
 

@@ -12,10 +12,17 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
+import com.onextent.android.codeable.Size;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -29,12 +36,6 @@ import com.onextent.augie.camera.AugShutterCallback;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.camera.ImageFmt;
 import com.onextent.augie.camera.NamedInt;
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.JSONCoder;
-import com.onextent.util.codeable.Size;
 
 public class SimplePhoneCamera extends AbstractPhoneCamera {
     
@@ -465,5 +466,11 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     public String getUIName() {
 
         return "Phone Camera";
+    }
+
+    @Override
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -1,7 +1,7 @@
 /**
  * copyright Ed Sweeney, 2012, all rights reserved
  */
-package com.onextent.augie.camera;
+package com.onextent.augie.camera.shutter;
 
 import android.os.Build;
 import android.util.Log;

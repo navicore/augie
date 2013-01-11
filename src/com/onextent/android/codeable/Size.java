@@ -1,4 +1,4 @@
-package com.onextent.util.codeable;
+package com.onextent.android.codeable;
 
 import android.hardware.Camera;
 

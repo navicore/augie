@@ -1,6 +1,6 @@
 package com.onextent.augie;
 
-import com.onextent.util.codeable.CodeableName;
+import com.onextent.android.codeable.CodeableName;
 
 public class ModeName extends CodeableName {
 

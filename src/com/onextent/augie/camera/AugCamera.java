@@ -2,9 +2,9 @@ package com.onextent.augie.camera;
 
 import android.view.SurfaceHolder;
 
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementName;
-import com.onextent.util.codeable.CodeableName;
 
 public interface AugCamera extends Augiement {
 

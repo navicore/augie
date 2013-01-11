@@ -10,6 +10,12 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
+import com.onextent.android.store.CodeStore;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStore;
 import com.onextent.augie.AugieStoreException;
@@ -22,13 +28,7 @@ import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.PinchZoom;
-import com.onextent.augie.camera.TouchShutter;
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableName;
-import com.onextent.util.codeable.Code;
-import com.onextent.util.codeable.CodeableException;
-import com.onextent.util.codeable.JSONCoder;
-import com.onextent.util.store.CodeStore;
+import com.onextent.augie.camera.shutter.TouchShutter;
 
 public class ModeManagerImpl implements ModeManager {
 

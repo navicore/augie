@@ -5,8 +5,10 @@ package com.onextent.augie;
 
 import java.util.Set;
 
-import com.onextent.util.codeable.Codeable;
-import com.onextent.util.codeable.CodeableName;
+import android.support.v4.app.DialogFragment;
+
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableName;
 
 /**
  * An Augiement is an Augmented Reality feature, maybe some local
@@ -37,4 +39,6 @@ public interface Augiement extends Codeable {
 	Set<CodeableName> getDependencyNames();
 
     String getUIName();
+    
+    DialogFragment getUI();
 }
