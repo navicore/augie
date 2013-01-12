@@ -1,3 +1,6 @@
+/**
+ * copyright Ed Sweeney, 2012, all rights reserved
+ */
 package com.onextent.augie.impl;
 
 import com.onextent.android.codeable.Codeable;

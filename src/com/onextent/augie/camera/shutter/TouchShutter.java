@@ -1,3 +1,6 @@
+/**
+ * copyright Ed Sweeney, 2012, 2013 all rights reserved
+ */
 package com.onextent.augie.camera.shutter;
 
 import java.util.Set;
@@ -123,5 +126,22 @@ public class TouchShutter implements Augiement, OnTouchListener {
     public DialogFragment getUI() {
         
         return shutter.getUI();
+    }
+    
+
+    public int getMeterAreaColor() {
+        return shutter.getMeterAreaColor();
+    }
+
+    public void setMeterAreaColor(int meterAreaColor) {
+        shutter.setMeterAreaColor(meterAreaColor);
+    }
+
+    public int getFocusAreaColor() {
+        return shutter.getFocusAreaColor();
+    }
+
+    public void setFocusAreaColor(int focusAreaColor) {
+        shutter.setFocusAreaColor(focusAreaColor);
     }
 }

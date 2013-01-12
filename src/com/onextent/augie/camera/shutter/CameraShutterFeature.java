@@ -1,5 +1,5 @@
 /**
- * copyright Ed Sweeney, 2012, all rights reserved
+ * copyright Ed Sweeney, 2012, 2013 all rights reserved
  */
 package com.onextent.augie.camera.shutter;
 
@@ -27,4 +27,9 @@ public abstract class CameraShutterFeature implements Augiement, OnTouchListener
         }
         return sInstance;
     }
+    
+    abstract int getMeterAreaColor();
+    abstract void setMeterAreaColor(int meterAreaColor);
+    abstract int getFocusAreaColor();
+    abstract void setFocusAreaColor(int focusAreaColor);
 }

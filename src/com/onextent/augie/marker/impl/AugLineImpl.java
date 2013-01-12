@@ -1,3 +1,6 @@
+/**
+ * copyright Ed Sweeney, 2012, 2013, all rights reserved
+ */
 package com.onextent.augie.marker.impl;
 
 import com.onextent.android.codeable.Code;

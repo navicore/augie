@@ -1,8 +1,24 @@
+/**
+ * copyright Ed Sweeney, 2012, 2013 all rights reserved
+ */
 package com.onextent.augie.camera.shutter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import android.annotation.TargetApi;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.hardware.Camera;
+import android.os.Build;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeArray;
@@ -21,28 +37,20 @@ import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
-import android.annotation.TargetApi;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.hardware.Camera;
-import android.os.Build;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
-
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
+
 
     final List<ScribleHolder> focus_areas, meter_areas;
 
     private ScribleHolder movingRect;
     private Point startP;
     private ScribleHolder touchFocusArea;
+
+    private int meterAreaColor = Color.GRAY;
+    private int focusAreaColor = Color.GREEN;
 
     public TouchFocusShutterFeature() {
 
@@ -71,6 +79,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             code.put("bottom", rect.bottom);
             code.put("left", rect.left);
             code.put("right", rect.right);
+            code.put("focusAreaColor", focusAreaColor);
+            code.put("meterAreaColor", meterAreaColor);
             return code;
         }
 
@@ -83,37 +93,39 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             left = code.getInt("left");
             right = code.getInt("right");
             rect = new Rect(left, top, right, bottom);
+            if (code.has("focusAreaColor")) focusAreaColor = code.getInt("focusAreaColor");
+            if (code.has("meterAreaColor")) meterAreaColor = code.getInt("meterAreaColor");
         }
     }
 
     protected void takePicture() throws AugCameraException {
 
         try {
-            
-        String focusmode =  camera.getParameters().getFocusMode();
-        if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
 
-            _setMeterAreas();
-            if (focus_areas.isEmpty()) {
-                _setTouchFocusArea();
-            } else {
-                _setFocusAreas();
+            String focusmode =  camera.getParameters().getFocusMode();
+            if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
+
+                _setMeterAreas();
+                if (focus_areas.isEmpty()) {
+                    _setTouchFocusArea();
+                } else {
+                    _setFocusAreas();
+                }
+                camera.applyParameters();
             }
-            camera.applyParameters();
-        }
 
-        super.takePicture(new AugPictureCallback() {
+            super.takePicture(new AugPictureCallback() {
 
-            @Override
-            public void onPictureTaken(byte[] data, AugCamera c) {
-                clearTouchFocusArea();
-            }
-        });
+                @Override
+                public void onPictureTaken(byte[] data, AugCamera c) {
+                    clearTouchFocusArea();
+                }
+            });
         } catch (AugCameraException e) {
             clearTouchFocusArea();
             throw e;
         }
-        
+
     }
 
     void clearTouchFocusArea() {
@@ -321,11 +333,11 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         float orig_w = p.getStrokeWidth();
         int old_color = p.getColor();
         for (ScribleHolder h : meter_areas) {
-            p.setColor(Color.GRAY);
+            p.setColor(meterAreaColor);
             augview.getCanvas().drawRect(h.rect, p);
         }
         for (ScribleHolder h : focus_areas) {
-            p.setColor(Color.GREEN);
+            p.setColor(focusAreaColor);
             augview.getCanvas().drawRect(h.rect, p);
         }
         p.setStrokeWidth(orig_w);
@@ -411,5 +423,24 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     public String getUIName() {
 
         return "Touch Focus Shutter";
+    }
+    
+    public int getMeterAreaColor() {
+        return meterAreaColor;
+    }
+    public void setMeterAreaColor(int meterAreaColor) {
+        this.meterAreaColor = meterAreaColor;
+    }
+    public int getFocusAreaColor() {
+        return focusAreaColor;
+    }
+    public void setFocusAreaColor(int focusAreaColor) {
+        this.focusAreaColor = focusAreaColor;
+    }
+    
+    @Override
+    public DialogFragment getUI() {
+       
+        return new TouchFocusShutterDialog();
     }
 }

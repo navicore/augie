@@ -1,5 +1,5 @@
 /**
- * copyright Ed Sweeney, 2012, all rights reserved
+ * copyright Ed Sweeney, 2012, 2013 all rights reserved
  */
 package com.onextent.augie.camera.shutter;
 import java.io.File;
@@ -322,5 +322,29 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     public DialogFragment getUI() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    int getMeterAreaColor() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    void setMeterAreaColor(int meterAreaColor) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    int getFocusAreaColor() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    void setFocusAreaColor(int focusAreaColor) {
+        // TODO Auto-generated method stub
+        
     }
 }
