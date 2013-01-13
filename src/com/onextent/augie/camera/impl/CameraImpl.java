@@ -131,9 +131,6 @@ public class CameraImpl implements AugCamera {
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException { }
 
     @Override
-    public Set<CodeableName> getDependencyNames() { return null; }
-
-    @Override
     public String getName() {
         
         return name;
@@ -191,14 +188,44 @@ public class CameraImpl implements AugCamera {
     }
 
     @Override
-    public String getUIName() {
-
-        return augcamera.getUIName();
-    }
-
-    @Override
     public DialogFragment getUI() {
         
         return augcamera.getUI();
+    }
+
+    @Override
+    public Meta getMeta() {
+
+        //return augcamera.getMeta();
+        return new Meta() {
+
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+                return null;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                return AugCamera.AUGIENAME;
+            }
+
+            @Override
+            public String getUIName() {
+                
+                return "Phone Camera";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Phone Camera";
+            }
+
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+            
+        };
     }
 }

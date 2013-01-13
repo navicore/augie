@@ -15,6 +15,7 @@ import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
@@ -192,6 +193,7 @@ public class ModeImpl implements Codeable, Mode {
             v.addFeature(f);
         }
         AugCamera c = getCamera();
+        if (c == null) throw new AugiementException("null camera");
         v.addFeature(c);
         v.resume();
         

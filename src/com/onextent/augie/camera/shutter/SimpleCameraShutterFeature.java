@@ -53,18 +53,13 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	private AugPictureCallback rawCb;
 	private AugPictureCallback userCb;
 	
-    private final static Set<CodeableName> deps;
+    final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
         deps.add(AugCamera.AUGIENAME);
         deps.add(AugDrawFeature.AUGIE_NAME);
     }
 
-	@Override
-    public Set<CodeableName> getDependencyNames() {
-        return deps;
-    }
-	    
 	@Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 	    
@@ -314,12 +309,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
 
     @Override
-    public String getUIName() {
-
-        return "Camera Shutter";
-    }
-
-    @Override
     public DialogFragment getUI() {
         // TODO Auto-generated method stub
         return null;
@@ -347,5 +336,11 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     void setFocusAreaColor(int focusAreaColor) {
         // TODO Auto-generated method stub
         
+    }
+    
+
+    @Override
+    public Meta getMeta() {
+        return null;
     }
 }

@@ -61,7 +61,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
         assert(object != null);
 
         boolean dependsAllmet = true;
-        Set<CodeableName> dependencyNames = object.getDependencyNames();
+        Set<CodeableName> dependencyNames = object.getMeta().getDependencyNames();
         
         if (dependencyNames == null) {
             

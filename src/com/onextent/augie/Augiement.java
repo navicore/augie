@@ -36,9 +36,16 @@ public interface Augiement extends Codeable {
 	//called after default no arg constructor
 	void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException;
 	
-	Set<CodeableName> getDependencyNames();
-
-    String getUIName();
-    
     DialogFragment getUI();
+    
+    Meta getMeta();
+    
+    interface Meta {
+        
+        Class<? extends Augiement> getAugiementClass();
+        CodeableName getCodeableName();
+        String getUIName();
+        String getDescription();
+        Set<CodeableName> getDependencyNames();
+    }
 }

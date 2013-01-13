@@ -56,7 +56,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     protected double mAngle;
     protected long lastUpdateTime;
     
-    private final static Set<CodeableName> deps;
+    protected final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
         deps.add(HorizonFeature.AUGIE_NAME);
@@ -79,11 +79,6 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
         
         lastUpdateTime  = 0;
         mAngle          = 0;
-    }
-
-    @Override
-    public Set<CodeableName> getDependencyNames() {
-        return deps;
     }
 
     protected double getTan(double angle) {

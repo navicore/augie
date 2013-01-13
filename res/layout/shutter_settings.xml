@@ -28,5 +28,47 @@
 	/>
 	</TableRow>
 
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="Meter Area Color" 
+	/>
+
+	<Spinner
+	android:id="@+id/meter_area_camera_colors"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+	<CheckBox
+		android:id="@+id/auto_focus_area_enabled"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Let Camera Choose Focus Area" />
+	</TableRow>
+
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="Width and Height of Default Focus Area" 
+	/>
+	</TableRow>
+    
 </TableLayout>
 </ScrollView>

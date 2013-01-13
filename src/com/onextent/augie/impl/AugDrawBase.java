@@ -5,7 +5,6 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
-import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -47,11 +46,6 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 	    if (l.getP1().x == l.getP2().x) return true;
 	    return false;
 	}
-	
-	@Override
-    public Set<CodeableName> getDependencyNames() {
-        return null;
-    }    
 	
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
@@ -105,5 +99,4 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
         Log.d(TAG, "clearing " + getClass().getName());
 		//noop
     }
-	
 }

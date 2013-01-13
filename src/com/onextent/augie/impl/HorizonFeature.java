@@ -16,7 +16,6 @@ import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
@@ -33,6 +32,7 @@ import android.view.View;
 
 public class HorizonFeature extends AugDrawBase {
 
+    private static final String DESCRIPTION = "A drawable movable horizon line.";
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HORIZON_DRAW");
     private static final String UI_NAME = "Movable Horizon";
     
@@ -51,11 +51,6 @@ public class HorizonFeature extends AugDrawBase {
         lines = new ArrayList<AugLine>();
     }
     
-    @Override
-    public Set<CodeableName> getDependencyNames() {
-        return deps;
-    }
-
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
         super.onCreate(av, helpers);
@@ -235,14 +230,11 @@ public class HorizonFeature extends AugDrawBase {
         }
     }
 
-    @Override
-    public String getUIName() {
-
-        return UI_NAME;
+    public Meta getMeta() {
+        return META;
     }
     
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
+    public final static Meta META = new Meta() {
 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
@@ -261,8 +253,17 @@ public class HorizonFeature extends AugDrawBase {
 
                 return UI_NAME;
             }
+
+            @Override
+            public String getDescription() {
+
+                return DESCRIPTION;
+            }
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                return deps;
+            }
         };
-    }
 
     @Override
     public DialogFragment getUI() {

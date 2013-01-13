@@ -18,13 +18,13 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 
 public class PinchZoom implements Augiement, OnTouchListener {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/PINCH_ZOOM");
     public static final String UI_NAME = "Pinch Zoom";
+    public static final String DESCRIPTION = "Zoom control that recognizes the pinch gesture.";
     
     private AugieScape augview;
     private Point p1, p2;
@@ -79,11 +79,6 @@ public class PinchZoom implements Augiement, OnTouchListener {
         deps.add(AugCamera.AUGIENAME);
     }
 
-	@Override
-    public Set<CodeableName> getDependencyNames() {
-        return deps;
-    }
-	
 	private void zoom(double dist) {
 	    /*
 	     * todo: fix buggy, zoom is not smooth and jumps to max too easily
@@ -151,35 +146,39 @@ public class PinchZoom implements Augiement, OnTouchListener {
         }
         return false;
     }
-
-    @Override
-    public String getUIName() {
-
-        return UI_NAME;
-    }
     
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
+    public Meta getMeta() {
+        return META;
+    }
+
+    public static final Meta META =
+        new Augiement.Meta() {
 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
     
                 return PinchZoom.class;
             }
-
             @Override
             public CodeableName getCodeableName() {
                 
                 return AUGIE_NAME;
             }
-
             @Override
             public String getUIName() {
 
                 return UI_NAME;
             }
+            @Override
+            public String getDescription() {
+
+                return DESCRIPTION;
+            }
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                return deps;
+            }
         };
-    }
 
     @Override
     public DialogFragment getUI() {

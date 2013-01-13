@@ -12,7 +12,6 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
@@ -25,6 +24,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
+    
+    private static String DESCRIPTION = "Captures screen touches for processing by other augiements.";
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
+    public static final String UI_NAME = "Augie Draw";
 	
 	int prevX;
 	int prevY;
@@ -136,9 +139,9 @@ public class AugDrawFeature extends AugDrawBase {
     		}
     	}
 	}
-    
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
+   
+    public static final Augiement.Meta META =
+        new Augiement.Meta() {
 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
@@ -157,11 +160,19 @@ public class AugDrawFeature extends AugDrawBase {
 
                 return UI_NAME;
             }
-        };
-    }
 
-    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
-    public static final String UI_NAME = "Augie Draw";
+            @Override
+            public String getDescription() {
+
+                return DESCRIPTION;
+            }
+
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                return null;
+            }
+        };
+
     @Override
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
@@ -192,14 +203,14 @@ public class AugDrawFeature extends AugDrawBase {
 	}
 
     @Override
-    public String getUIName() {
-
-        return "Augie Draw";
-    }
-
-    @Override
     public DialogFragment getUI() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Meta getMeta() {
+
+        return META;
     }
 }

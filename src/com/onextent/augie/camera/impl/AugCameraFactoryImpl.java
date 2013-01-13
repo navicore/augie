@@ -112,11 +112,6 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public Set<CodeableName> getDependencyNames() {
-        return null;
-    }
-    
-    @Override
     public void registerCamera(int id, CameraName augname, String name) {
         AugCamera c = new CameraImpl(id, augname, name);
         cameras.put(augname, c);
@@ -156,13 +151,13 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public String getUIName() {
-
-        return "Camera Factory";
+    public DialogFragment getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
-    public DialogFragment getUI() {
+    public Meta getMeta() {
         // TODO Auto-generated method stub
         return null;
     }

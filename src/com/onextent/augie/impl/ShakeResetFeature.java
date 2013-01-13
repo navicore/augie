@@ -21,7 +21,6 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 
 import android.support.v4.app.DialogFragment;
@@ -31,6 +30,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHAKE_RESET");
     public static final String UI_NAME = "Shake Reset";
+    public static final String DESCRIPTION = "Shake the device to clear scribles.";
     
     private SensorManager mSensorManager;
     private float mAccel; 			// acceleration apart from gravity
@@ -42,11 +42,6 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     Calendar last, now;
     boolean doing_double = false;
 
-    @Override
-    public Set<CodeableName> getDependencyNames() {
-        return null;
-    }
-     
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
         augview = av;
@@ -165,14 +160,8 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
         
     }
 
-    @Override
-    public String getUIName() {
-
-        return UI_NAME;
-    }
-    
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
+    public static final Meta META =
+        new Meta() {
 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
@@ -191,12 +180,29 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
 
                 return UI_NAME;
             }
+
+            @Override
+            public String getDescription() {
+
+                return DESCRIPTION;
+            }
+
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         };
-    }
 
     @Override
     public DialogFragment getUI() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Meta getMeta() {
+
+        return META;
     }
 }

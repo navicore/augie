@@ -14,7 +14,6 @@ import com.onextent.augie.impl.AugDrawBase.HLine;
 import com.onextent.augie.impl.AugDrawBase.VLine;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
@@ -28,6 +27,7 @@ public class FrameLevelerFeature extends LevelerBase {
     private List<AugLine> frameLines;
     private boolean isInitialized = false;
 
+    public static final String DESCRIPTION = "Draws a square frame level around the picture preview.";
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/FRAME_LEVELER");
     public static final String UI_NAME = "Frame Level";
     
@@ -97,17 +97,11 @@ public class FrameLevelerFeature extends LevelerBase {
     @Override
     public void setCode(Code code) {
         // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public String getUIName() {
-
-        return UI_NAME;
     }
     
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
+    public static final Meta META = 
+
+        new Meta() {
 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
@@ -126,12 +120,29 @@ public class FrameLevelerFeature extends LevelerBase {
 
                 return UI_NAME;
             }
+
+            @Override
+            public String getDescription() {
+
+                return DESCRIPTION;
+            }
+
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                
+                return null;
+            }
         };
-    }
 
     @Override
     public DialogFragment getUI() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Meta getMeta() {
+    
+        return META;
     }
 }

@@ -332,11 +332,6 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             throws AugiementException {
     }
 
-    @Override
-    public Set<CodeableName> getDependencyNames() {
-        return null;
-    }
-
     protected Camera.Parameters getUpdatedCameraParameters() {
         Camera.Parameters cp = null;
         try {
@@ -463,14 +458,41 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     }
 
     @Override
-    public String getUIName() {
-
-        return "Phone Camera";
+    public DialogFragment getUI() {
+        return null;
     }
+    
+    public static final Meta META =
+            new Meta() {
+
+        @Override
+        public Class<? extends Augiement> getAugiementClass() {
+            return null;
+        }
+
+        @Override
+        public CodeableName getCodeableName() {
+            return AugCamera.AUGIENAME;
+        }
+
+        @Override
+        public String getUIName() {
+            return null;
+        }
+
+        @Override
+        public String getDescription() {
+            return "Phone Camera";
+        }
+
+        @Override
+        public Set<CodeableName> getDependencyNames() {
+            return null;
+        }
+    };
 
     @Override
-    public DialogFragment getUI() {
-        // TODO Auto-generated method stub
+    public Meta getMeta() {
         return null;
     }
 }

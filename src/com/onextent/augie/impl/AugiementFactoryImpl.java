@@ -17,15 +17,15 @@ import com.onextent.augie.AugiementFactory;
 
 public class AugiementFactoryImpl implements AugiementFactory {
 
-	private final Map<CodeableName, AugiementFactory.Meta> augieClasses;
+	private final Map<CodeableName, Augiement.Meta> augieClasses;
 	
     public AugiementFactoryImpl() {
 	    
-        augieClasses = new HashMap<CodeableName, AugiementFactory.Meta>();
+        augieClasses = new HashMap<CodeableName, Augiement.Meta>();
     }
 
     @Override
-    public void registerAugiement(AugiementFactory.Meta meta)
+    public void registerAugiement(Augiement.Meta meta)
             throws AugiementException {
         
         augieClasses.put(meta.getCodeableName(), meta);
@@ -42,7 +42,7 @@ public class AugiementFactoryImpl implements AugiementFactory {
         
         Log.d(Codeable.TAG, "newInstance " + augieName);
         
-        AugiementFactory.Meta m = augieClasses.get(augieName);
+        Augiement.Meta m = augieClasses.get(augieName);
         
         if (m == null) {
             throw new java.lang.NullPointerException("no class for " + augieName + " found");
@@ -60,7 +60,7 @@ public class AugiementFactoryImpl implements AugiementFactory {
     }
 
     @Override
-    public Map<CodeableName, Meta> getAllMeta() {
+    public Map<CodeableName, Augiement.Meta> getAllMeta() {
 
         return augieClasses;
     }

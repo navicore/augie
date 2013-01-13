@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.Augiement.Meta;
 
 public interface AugiementFactory {
     
@@ -18,10 +19,4 @@ public interface AugiementFactory {
     
     public Map<CodeableName, Meta> getAllMeta();
     
-    interface Meta {
-        
-        Class<? extends Augiement> getAugiementClass();
-        CodeableName getCodeableName();
-        String getUIName();
-    }
 }

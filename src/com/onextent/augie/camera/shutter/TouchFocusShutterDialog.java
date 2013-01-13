@@ -63,11 +63,34 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             AugCamera camera = mode.getCamera();
 
             setFocusAreaColorUI(v, camera);
+            setMeterAreaColorUI(v, camera);
+            
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
         }
 
         return v;
+    }
+
+    private void setMeterAreaColorUI(View v, AugCamera camera) {
+
+        Spinner spinner = (Spinner) v.findViewById(R.id.meter_area_camera_colors);
+        if (spinner == null) throw new java.lang.NullPointerException("spnner is null");
+        SpinnerUI<NamedInt> sui = new SpinnerUI<NamedInt>(spinner, COLOR_LIST, camera) {
+            @Override
+            public int calculatePos() {
+                int c = augiement.getMeterAreaColor();
+                for (int i = 0; i < COLOR_LIST.size(); i++) {
+                    if (COLOR_LIST.get(i).toInt() == c) return i;
+                }
+                return 0;
+            }
+            @Override
+            public void setMode(NamedInt m) {
+                augiement.setMeterAreaColor(m.toInt());
+            }
+        };
+        sui.init();
     }
 
     private void setFocusAreaColorUI(View v, AugCamera camera) {

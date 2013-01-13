@@ -28,7 +28,6 @@ import com.onextent.android.codeable.Size;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.impl.AugDrawBase;
 import com.onextent.augie.impl.AugDrawFeature;
@@ -47,7 +46,8 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
     public static final String UI_NAME = "Histogram";
-    
+    public static final String DESCRIPTION = "A live RGB Histogram drawn on the camera preview.";
+
     boolean hasData;
     byte[] yyuvdata;
 
@@ -126,13 +126,8 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     }
 
     @Override
-    public Set<CodeableName> getDependencyNames() {
-        return deps;
-    }
-
-    @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
-        
+
         super.onCreate(av, helpers);
 
         for (Augiement a : helpers) {
@@ -148,7 +143,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         camera.setPreviewCallback(this);
         //camera.setPreviewCallbackWithBuffer(this);
     }
-    
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
@@ -253,7 +248,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         if (!camera.isOpen()) return;
 
         if (yyuvdata != null && hasData) {
-            
+
             updateHistograms();
 
             //add buffer back in
@@ -261,14 +256,14 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             //camera.addCallbackBuffer(yyuvdata);
             yyuvdata = null;
         }
-        
+
         updateCanvas(redRects, mPaintRed);
         updateCanvas(greenRects, mPaintGreen);
         updateCanvas(blueRects, mPaintBlue);
     }
 
     private void updateHistograms() {
-        
+
         Canvas canvas = augview.getCanvas();
         int canvasHeight = canvas.getHeight();
         Size prevSize = camera.getParameters().getPreviewSize();
@@ -296,7 +291,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         updateHistogramRects(canvasHeight - (getHHeight()), greenHistogramSum, mGreenHistogram, greenRects);
         updateHistogramRects(canvasHeight, blueHistogramSum, mBlueHistogram, blueRects);
     }
-    
+
     private int getHHeight() {
         if (augview.getHeight() < 600) return 50;
         return 100;
@@ -365,34 +360,46 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         // when some other augiement was a re-paint.
         //augview.reset();
     }
+
     @Override
-    public String getUIName() {
-        
-        return UI_NAME;
+    public Meta getMeta() {
+        return META;
     }
-    
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
 
-            @Override
-            public Class<? extends Augiement> getAugiementClass() {
-    
-                return HistogramFeature.class;
-            }
+    public static final Meta META =
+            new Augiement.Meta() {
 
-            @Override
-            public CodeableName getCodeableName() {
-                
-                return AUGIE_NAME;
-            }
+        @Override
+        public Class<? extends Augiement> getAugiementClass() {
 
-            @Override
-            public String getUIName() {
+            return HistogramFeature.class;
+        }
 
-                return UI_NAME;
-            }
-        };
-    }
+        @Override
+        public CodeableName getCodeableName() {
+
+            return AUGIE_NAME;
+        }
+
+        @Override
+        public String getUIName() {
+
+            return UI_NAME;
+        }
+
+        @Override
+        public String getDescription() {
+
+            return DESCRIPTION;
+        }
+
+        @Override
+        public Set<CodeableName> getDependencyNames() {
+
+            return deps;
+        }
+    };
+
     @Override
     public DialogFragment getUI() {
         // TODO Auto-generated method stub

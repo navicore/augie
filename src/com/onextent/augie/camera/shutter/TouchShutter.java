@@ -16,13 +16,13 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.AugiementName;
 
 public class TouchShutter implements Augiement, OnTouchListener {
     
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_SHUTTER");
     public static final String UI_NAME = "Touch Shutter";
+    public static final String DESCRIPTION = "Trigger camera shutter by touching the screen.";
     
     private final CameraShutterFeature shutter;
    
@@ -83,24 +83,12 @@ public class TouchShutter implements Augiement, OnTouchListener {
     }
 
     @Override
-    public Set<CodeableName> getDependencyNames() {
-
-        return shutter.getDependencyNames();
-    }
-
-    @Override
     public boolean onTouch(View v, MotionEvent event) {
         return shutter.onTouch(v, event);
     }
 
-    @Override
-    public String getUIName() {
-
-        return UI_NAME;
-    }
-    
-    public static final AugiementFactory.Meta getMeta() {
-        return new AugiementFactory.Meta() {
+    public static final Meta META =
+        new Augiement.Meta() {
 
             @Override
             public Class<? extends Augiement> getAugiementClass() {
@@ -119,8 +107,18 @@ public class TouchShutter implements Augiement, OnTouchListener {
 
                 return UI_NAME;
             }
+
+            @Override
+            public String getDescription() {
+                
+                return DESCRIPTION;
+            }
+
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                return SimpleCameraShutterFeature.deps;
+            }
         };
-    }
 
     @Override
     public DialogFragment getUI() {
@@ -143,5 +141,11 @@ public class TouchShutter implements Augiement, OnTouchListener {
 
     public void setFocusAreaColor(int focusAreaColor) {
         shutter.setFocusAreaColor(focusAreaColor);
+    }
+
+    @Override
+    public Meta getMeta() {
+        
+        return META;
     }
 }
