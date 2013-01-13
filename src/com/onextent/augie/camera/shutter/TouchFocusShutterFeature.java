@@ -99,24 +99,30 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     protected void takePicture() throws AugCameraException {
 
+        Log.d(TAG, "ejs take pic");
         try {
 
             String focusmode =  camera.getParameters().getFocusMode();
             if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
+                Log.d(TAG, "ejs take pic focusing");
 
                 _setMeterAreas();
                 if (focus_areas.isEmpty()) {
+                Log.d(TAG, "ejs take pic focusing set toucharea");
                     _setTouchFocusArea();
                 } else {
+                Log.d(TAG, "ejs take pic focusing use toucharea");
                     _setFocusAreas();
                 }
                 camera.applyParameters();
+                Log.d(TAG, "ejs take pic focusing params applied");
             }
 
             super.takePicture(new AugPictureCallback() {
 
                 @Override
                 public void onPictureTaken(byte[] data, AugCamera c) {
+                Log.d(TAG, "ejs take pic focusing clear focus area");
                     clearTouchFocusArea();
                 }
             });
