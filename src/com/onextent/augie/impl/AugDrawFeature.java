@@ -74,10 +74,12 @@ public class AugDrawFeature extends AugDrawBase {
 	    int y = (int) event.getY();
 	    switch (action) {
 	    case MotionEvent.ACTION_UP:
+	        Log.d(TAG, "ejs up");
 	    	lastX = -1;
 	    	//todo: setting that discards current scrible and makes 'undolastscrible' func a noop
 	    	break;
 	    case MotionEvent.ACTION_DOWN:
+	        Log.d(TAG, "ejs down");
 	    	
 	    	currentScrible = MarkerFactory.createScrible(augview);
 	    	scribles.add(currentScrible);
@@ -91,6 +93,7 @@ public class AugDrawFeature extends AugDrawBase {
 	        lastY = (int) event.getY();
 	    	break;
 	    case MotionEvent.ACTION_MOVE:
+	        Log.d(TAG, "ejs move");
 	    	if (lastX != -1) {
 	    		scrible(lastX, lastY, x, y);
 	    	}
@@ -98,6 +101,7 @@ public class AugDrawFeature extends AugDrawBase {
 	        lastY = (int) event.getY();
 	    	break;
 	    default:
+	        Log.d(TAG, "ejs none?");
 	    	return false;
 	    }
 	    return true;

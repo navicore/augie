@@ -106,6 +106,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
     
     protected void _takePicture() throws AugCameraException {
+        Log.d(TAG, "ejs _take pic");
         
         try {
 
