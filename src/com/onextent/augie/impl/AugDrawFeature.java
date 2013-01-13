@@ -26,8 +26,8 @@ import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
 	
-	int lastX;
-	int lastY;
+	int prevX;
+	int prevY;
     List<AugScrible> scribles;
     AugScrible currentScrible;
 
@@ -37,7 +37,7 @@ public class AugDrawFeature extends AugDrawBase {
         super.onCreate(av, helpers);
 	    scribles = new ArrayList<AugScrible>();
 	    currentScrible = null;
-	    lastX = -1;
+	    prevX = -1;
     }
 	
 	public AugScrible getCurrentScrible() {
@@ -74,34 +74,44 @@ public class AugDrawFeature extends AugDrawBase {
 	    int y = (int) event.getY();
 	    switch (action) {
 	    case MotionEvent.ACTION_UP:
-	        Log.d(TAG, "ejs up");
-	    	lastX = -1;
+	        Log.d(TAG, "motion event up");
+	       
+	        //ejs BUG for zero len tap, trouble
+	        //either of these approaches causes 
+	        //  dragging off screen to take picture :(
+	        //handleZeroLenTap(prevX, prevY, x, y);
+	        scrible(prevX, prevY, x, y);
+	       
+	        /*
+	        how about a fake 1 pixel move?
+	               
+	        better idea, find out:
+	        why does touch shutter think a drag off screen
+	        is a tap?
+	         */
+	        
+	    	prevX = -1;
 	    	//todo: setting that discards current scrible and makes 'undolastscrible' func a noop
 	    	break;
 	    case MotionEvent.ACTION_DOWN:
-	        Log.d(TAG, "ejs down");
+	        Log.d(TAG, "motion event down");
 	    	
 	    	currentScrible = MarkerFactory.createScrible(augview);
 	    	scribles.add(currentScrible);
-	    	
-	    	if (lastX != -1) {
-	    		if ((int) event.getX() != lastX) {
-	    			scrible(lastX, lastY, x, y);
-	    		}
-	    	}
-	        lastX = (int) event.getX();
-	        lastY = (int) event.getY();
+	    
+	        prevX = (int) event.getX();
+	        prevY = (int) event.getY();
 	    	break;
 	    case MotionEvent.ACTION_MOVE:
-	        Log.d(TAG, "ejs move");
-	    	if (lastX != -1) {
-	    		scrible(lastX, lastY, x, y);
+	        Log.d(TAG, "motion event move");
+	    	if (prevX != -1) {
+	    		scrible(prevX, prevY, x, y);
 	    	}
-	        lastX = (int) event.getX();
-	        lastY = (int) event.getY();
+	        prevX = (int) event.getX();
+	        prevY = (int) event.getY();
 	    	break;
 	    default:
-	        Log.d(TAG, "ejs none?");
+	        Log.d(TAG, "motion event unknown");
 	    	return false;
 	    }
 	    return true;
@@ -116,7 +126,7 @@ public class AugDrawFeature extends AugDrawBase {
     @Override
 	public void updateCanvas() {
         //if (!prefs.getBoolean("ETCHA_ENABLED", false) && lastX == -1) {
-        if (lastX == -1) {
+        if (prevX == -1) {
             if (currentScrible != null) currentScrible.clear();
             scribles.clear();
         }

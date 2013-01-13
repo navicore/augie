@@ -5,7 +5,6 @@ package com.onextent.augie.marker;
 
 import java.util.List;
 
-
 public interface AugScrible extends AugMarker, List<AugLine> {
    
     /*
@@ -26,4 +25,6 @@ public interface AugScrible extends AugMarker, List<AugLine> {
     public int getMinY();
     
     public GESTURE_TYPE getGestureType();
+
+    void setGestureType(GESTURE_TYPE t);
 }

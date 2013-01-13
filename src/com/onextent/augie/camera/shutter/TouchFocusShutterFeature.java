@@ -266,6 +266,29 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         augdraw.undoCurrentScrible();
     }
 
+    private void handleGesture(AugScrible scrible) throws AugCameraException {
+        Log.d(TAG, "TouchFocusShutterFeature handleGesture: " + scrible);
+        if (scrible == null)  {
+            Log.w(TAG, "no current scrible / gesture");
+            return;
+        }
+        GESTURE_TYPE g_type = scrible.getGestureType();
+        switch (g_type) {
+
+        case TAP:
+            takePicture();
+            break;
+        case CLOCKWISE_AREA:
+            saveFocusArea(scrible);
+            break;
+        case COUNTER_CLOCKWISE_AREA:
+            saveMeterArea(scrible);
+            break;
+        default:
+            Log.w(TAG, "unrecognized gesture");
+        }
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
@@ -297,15 +320,8 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                     movingRect = null;
                 } else {
                     AugScrible scrible = augdraw.getCurrentScrible();
-                    if (scrible == null)  {
-                        Log.e(TAG, "no current scrible / gesture");
-                        break;
-                    }
 
-                    GESTURE_TYPE g_type = scrible.getGestureType();
-                    if (g_type == GESTURE_TYPE.TAP) takePicture();
-                    if (g_type == GESTURE_TYPE.CLOCKWISE_AREA) saveFocusArea(scrible);
-                    if (g_type == GESTURE_TYPE.COUNTER_CLOCKWISE_AREA) saveMeterArea(scrible);
+                    handleGesture(scrible);
                 }
                 break;
             case MotionEvent.ACTION_POINTER_UP:

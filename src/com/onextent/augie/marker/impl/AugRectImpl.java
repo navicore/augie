@@ -41,4 +41,9 @@ public class AugRectImpl implements AugRect {
         throw new java.lang.UnsupportedOperationException();
     }
 
+    @Override
+    public String toString() {
+    
+        return "rect: (" + p1 + ", " + p2 + ")";
+    }
 }

@@ -67,6 +67,14 @@ public class AugLineImpl implements AugLine {
         code.put("width", getWidth());
         return code;
     }
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        
+        return "line: (" + p1 + ", " + p2 + ")";
+    }
     @Override
     public void setCode(Code code) throws CodeableException {
         center = null;

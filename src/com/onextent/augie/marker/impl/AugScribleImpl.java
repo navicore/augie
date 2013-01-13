@@ -10,11 +10,12 @@ import java.util.List;
 import android.graphics.Point;
 
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.Augiement;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 
 public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
+    
+    //todo: make markers codeable and replace toString with getCode()
 
     private static final int MAX_TAP_SCRIBLE_LEN = 10;
     private static final int MAX_TAP_SCRIBLE_END_DISTANCE = 50;
@@ -38,26 +39,37 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
         minX = 0; maxX = 0; minY = 0; maxY = 0; sumOfEdges = 0;
     }
 
+    @Override
+    public void setGestureType(GESTURE_TYPE t) {
+        gtype = t;
+        gtype_is_set = true;
+    }
+
     //
     // begin api
     //
 
+    @Override
     public int getMaxX() {
         return maxX;
     }
 
+    @Override
     public int getMinX() {
         return minX;
     }
 
+    @Override
     public int getMaxY() {
         return maxY;
     }
 
+    @Override
     public int getMinY() {
         return minY;
     }
 
+    @Override
     public GESTURE_TYPE getGestureType() {
         if (!gtype_is_set) {
             gtype = getLineType();
@@ -153,11 +165,27 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
     private GESTURE_TYPE getTapGType() {
         if (size() <= 0) return GESTURE_TYPE.NONE;
 
-        if (size() < MAX_TAP_SCRIBLE_LEN && endsAreClose()) {
+        if (size() < MAX_TAP_SCRIBLE_LEN 
+                && endsAreClose()
+                && !isOnFrame()
+                ) {
 
             return GESTURE_TYPE.TAP;
         }
         return GESTURE_TYPE.NONE;
+    }
+
+    private boolean isOnFrame() {
+        if (size() != 1) return false;
+        Point p1 = get(0).getP1();
+        Point p2 = get(0).getP2();
+        if (p1.x < MAX_TAP_SCRIBLE_END_DISTANCE && p2.x < MAX_TAP_SCRIBLE_END_DISTANCE) return true;
+        if (p1.x > augview.getWidth() - MAX_TAP_SCRIBLE_END_DISTANCE 
+                && p2.x > augview.getWidth() - MAX_TAP_SCRIBLE_END_DISTANCE) return true;
+        if (p1.y < MAX_TAP_SCRIBLE_END_DISTANCE && p2.y < MAX_TAP_SCRIBLE_END_DISTANCE) return true;
+        if (p1.y > augview.getHeight() - MAX_TAP_SCRIBLE_END_DISTANCE 
+                && p2.y > augview.getHeight() - MAX_TAP_SCRIBLE_END_DISTANCE) return true;
+        return false;
     }
 
     @Override
@@ -249,4 +277,33 @@ public class AugScribleImpl extends ArrayList<AugLine> implements AugScrible {
         return AugScrible.GESTURE_TYPE.NONE;
     }
 
+    @Override
+    public String toString() {
+        String ret = "scrible: (";
+        switch (gtype) {
+        case TAP:
+            ret += "g: tap";
+            break;
+        case CLOCKWISE_AREA:
+            ret += "g: clockwise";
+            break;
+        case COUNTER_CLOCKWISE_AREA:
+            ret += "g: counter-clockwise";
+            break;
+        case HORIZONTAL_LINE:
+            ret += "g: horizontal";
+            break;
+        case VERTICAL_LINE:
+            ret += "g: vertical";
+            break;
+        case NONE:
+            ret += "g: none";
+            break;
+        }
+        for (AugLine l : this) {
+            ret += ", " + l;
+        }
+        ret += ")";
+        return ret;
+    }
 }
