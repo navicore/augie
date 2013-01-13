@@ -79,7 +79,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             public int calculatePos() {
                 int c = augiement.getFocusAreaColor();
                 for (int i = 0; i < COLOR_LIST.size(); i++) {
-                    if (COLOR_LIST.get(i).equals(c)) return i;
+                    if (COLOR_LIST.get(i).toInt() == c) return i;
                 }
                 return 0;
             }

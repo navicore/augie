@@ -42,7 +42,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
 
-
     final List<ScribleHolder> focus_areas, meter_areas;
 
     private ScribleHolder movingRect;
