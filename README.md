@@ -31,18 +31,21 @@ Augmented reality Tools, Libraries, and Applications
   * adjust position of rect to faces (snap to nearby face)
   * rect should follow faces
 1. Feature Dependancy Manager
-  * unregister features 
-      * when they are turned off
-      * and unreg dependent features
+  * ~~unregister features~~
   * ~~register features~~
-      * ~~when they are turned on~~
-      * ~~with a set of required features~~
 1. Flat (or angle!) Compass Overlay with moon and sun path info
+1. directory chooser dialog util
+  * for shutter augiements
+  * for debug
+    * settings export
+    * logger
 
 ### BUGS
 1. ~~camera does not update preview when resumed after 
    power button (but does if 'home' is hit first~~
-1. detect boarders more reliably
+1. ~~detect boarders more reliably~~
 1. horizon gets confused if device is oriented diff
-1. when action bar is pulled down preview resizes (only on 2.3)
+1. ~~when action bar is pulled down preview resizes (only on 2.3)~~
+1. jpeg meta does not know orientation
+1. shake reset is broken
 
