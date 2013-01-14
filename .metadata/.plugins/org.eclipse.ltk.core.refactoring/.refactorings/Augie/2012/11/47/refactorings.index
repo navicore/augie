@@ -1,0 +1,55 @@
+1353220516303	Rename method 'updateBmp'
+1353250856367	Rename method 'init'
+1353251033162	Change method 'onCreate'
+1353263520832	Rename field 'horizonFeture'
+1353266945053	Rename type 'AugiementRegistry'
+1353268910901	Rename method 'listDependencies'
+1353269628459	Rename local variable 'isactive'
+1353332387864	Rename type 'AugCamera'
+1353332489300	Extract interface 'AugCameraFactory'
+1353333376534	Copy compilation unit
+1353336565715	Move compilation unit
+1353336586959	Move compilation unit
+1353336599844	Move compilation unit
+1353336618600	Move compilation unit
+1353336629020	Move compilation unit
+1353336640055	Move compilation unit
+1353336654927	Move compilation unit
+1353336664510	Move compilation unit
+1353336675162	Move compilation unit
+1353336820385	Rename local variable 'augcamera'
+1353338033967	Move compilation unit
+1353338417500	Move compilation unit
+1353338447116	Move compilation unit
+1353342840885	Rename type 'AugPicturec'
+1353345891621	Delete element
+1353346181599	Rename type 'AugPhoneCamera'
+1353346582522	Copy compilation unit
+1353346655779	Rename type 'CameraShutterFeature'
+1353348277349	Copy compilation unit
+1353349815494	Copy compilation unit
+1353349952628	Rename type 'SimpleFrontCameraWrapper'
+1353349988726	Rename type 'SimpleBackCameraWrapper'
+1353350315143	Copy compilation unit
+1353350386058	Copy compilation unit
+1353350619276	Rename type 'IcsAugBackPhoneCamera'
+1353350648333	Rename type 'IcsAugPhoneCamera'
+1353350666224	Rename type 'IcsAugFrontPhoneCamera'
+1353350687205	Rename type 'SimpleAugBackPhoneCamera'
+1353350700204	Rename type 'SimpleAugPhoneCamera'
+1353350720495	Rename type 'SimpleAugFrontPhoneCamera'
+1353350783805	Rename type 'SimplePhoneCamera'
+1353350804433	Rename type 'AugPhoneCamera'
+1353350828110	Rename type 'IcsPhoneCamera'
+1353478305864	Copy compilation unit
+1353518996143	Change method 'setState'
+1353519016016	Change method 'getState'
+1353519626823	Change method 'edit'
+1353560921884	Rename type 'AugiementRegistry'
+1353560959872	Copy compilation unit
+1353561158537	Delete element
+1353602671855	Delete element
+1353602678641	Delete element
+1353602727842	Delete element
+1353602742727	Delete element
+1353604047637	Delete element

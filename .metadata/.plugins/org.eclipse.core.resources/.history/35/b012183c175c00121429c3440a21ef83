@@ -1,0 +1,32 @@
+/**
+ * copyright Ed Sweeney, 2012, all rights reserved
+ */
+package com.onextent.augie.camera.shutter;
+
+import android.os.Build;
+import android.util.Log;
+import android.view.View.OnTouchListener;
+
+import com.onextent.augie.Augiement;
+import com.onextent.augie.camera.SimpleCameraShutterFeature;
+import com.onextent.augie.camera.TouchFocusShutterFeature;
+
+/*
+ * factory to allow pre-icecreamsandwich touchfocus devices
+ */
+public abstract class CameraShutterFeature implements Augiement, OnTouchListener {
+
+    public static CameraShutterFeature getInstance( ) {
+        
+        CameraShutterFeature sInstance;
+
+        int sdkVersion = Build.VERSION.SDK_INT;
+        Log.d(TAG, "CameraShutterFeature sdkVersion=" + sdkVersion);
+        if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
+            sInstance = new SimpleCameraShutterFeature();
+        } else  {
+            sInstance = new TouchFocusShutterFeature();
+        }
+        return sInstance;
+    }
+}

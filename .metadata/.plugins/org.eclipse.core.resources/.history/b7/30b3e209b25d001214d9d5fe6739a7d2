@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal" >
+	
+	<CheckBox
+		android:id="@+id/module_enabled"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+    />
+	
+    <TextView
+		android:id="@+id/module_description"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+    	android:text="Description todo..." 
+	/>
+	
+    <TextView
+		android:id="@+id/module_dependencies"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+    	android:text="Depends on modules todo..." 
+	/>
+
+</LinearLayout>

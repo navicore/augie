@@ -1,0 +1,15 @@
+1355161610642	Rename field 'layout'
+1355161627435	Rename method 'getLayout'
+1355162032195	Rename method 'getAugview'
+1355162097652	Rename method 'getAugScape'
+1355174235394	Rename local variable 'json'
+1355252035952	Move compilation unit
+1355252049694	Delete element
+1355262080899	Move compilation unit
+1355262112504	Rename type 'AugieName'
+1355262221139	Rename method 'getAugieName'
+1355340597286	Rename method 'getBorderWidth'
+1355341051981	Rename field 'CODABLE_NAME_KEY'
+1355347061946	Rename method 'getModes'
+1355347234741	Rename field 'allModes'
+1355347729160	Rename type 'Codable'

@@ -1,0 +1,5 @@
+package com.onextent.android.ui;
+
+public interface CallbackActivity {
+
+}

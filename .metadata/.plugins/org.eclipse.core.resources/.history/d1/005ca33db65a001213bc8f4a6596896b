@@ -1,0 +1,34 @@
+package com.onextent.augmatic;
+
+import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementFactory;
+import com.onextent.augie.camera.HistogramFeature;
+import com.onextent.augie.camera.PinchZoom;
+import com.onextent.augie.camera.TouchShutter;
+import com.onextent.augie.impl.AugDrawFeature;
+import com.onextent.augie.impl.AugiementFactoryImpl;
+import com.onextent.augie.impl.FrameLevelerFeature;
+import com.onextent.augie.impl.HorizonCheckFeature;
+import com.onextent.augie.impl.HorizonFeature;
+import com.onextent.augie.impl.ShakeResetFeature;
+
+public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
+        AugiementFactory {
+
+    public AugmaticAugiementFactory() throws AugiementException {
+        super();
+        
+        //register built-in augiements
+
+        registerAugiement(AugDrawFeature.getMeta());
+        //todo: reimpl HorizonFeature as CheckedHorizon so that red lines
+        // are painted under white lines and only if 'correcting'
+        registerAugiement(HorizonFeature.class, HorizonFeature.AUGIE_NAME);
+        registerAugiement(HorizonCheckFeature.class, HorizonCheckFeature.AUGIE_NAME);
+        registerAugiement(FrameLevelerFeature.class, FrameLevelerFeature.AUGIE_NAME);
+        registerAugiement(TouchShutter.class, TouchShutter.AUGIE_NAME);
+        registerAugiement(ShakeResetFeature.class, ShakeResetFeature.AUGIE_NAME);
+        registerAugiement(PinchZoom.class, PinchZoom.AUGIE_NAME);
+        registerAugiement(HistogramFeature.class, HistogramFeature.AUGIE_NAME);
+    }
+}

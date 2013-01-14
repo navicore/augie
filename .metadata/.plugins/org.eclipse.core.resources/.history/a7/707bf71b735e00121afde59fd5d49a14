@@ -1,0 +1,11 @@
+package com.onextent.android.ui;
+
+import java.util.List;
+
+import com.onextent.augie.camera.NamedInt;
+
+public class UiUtil {
+
+    public final static List<NamedInt> COLOR_LIST;
+
+}

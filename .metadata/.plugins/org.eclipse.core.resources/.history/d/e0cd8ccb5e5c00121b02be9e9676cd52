@@ -1,0 +1,10 @@
+package com.onextent.augie;
+
+import com.onextent.android.ui.CallbackActivity;
+
+
+public interface AugieActivity extends CallbackActivity {
+
+    public abstract ModeManager getModeManager();
+
+}

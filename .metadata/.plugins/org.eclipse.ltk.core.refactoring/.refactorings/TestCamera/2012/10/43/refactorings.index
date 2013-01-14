@@ -1,0 +1,24 @@
+1351093322915	Delete element
+1351099056319	Move compilation unit
+1351100056850	Rename local variable 'cayoutmpreview'
+1351100180539	Rename local variable 'mPreview'
+1351100195617	Rename local variable 'cammPreview'
+1351107517610	Rename field 'mCameraActivity'
+1351290582850	Extract superclass 'AugDrawBase'
+1351361055204	Rename package 'com.onextent.testcamera'
+1351363865693	Rename field 'mCameraActivity'
+1351363886092	Rename field 'mHolder'
+1351364881721	Move compilation unit
+1351364897967	Move compilation unit
+1351364920787	Move compilation unit
+1351365009360	Move compilation unit
+1351365024819	Move compilation unit
+1351365042929	Move compilation unit
+1351365079639	Move compilation unit
+1351365098103	Move compilation unit
+1351365242779	Rename type 'CameraActivity'
+1351368564401	Copy package
+1351368587135	Copy package
+1351368599628	Copy package
+1351368626366	Copy file
+1351368662180	Copy file

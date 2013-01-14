@@ -1,0 +1,8 @@
+package com.onextent.augie;
+
+
+public interface AugieActivity {
+
+    public abstract ModeManager getModeManager();
+
+}

@@ -1,0 +1,184 @@
+package com.onextent.augmatic;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import android.app.Dialog;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.onextent.augie.AugieException;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementFactory;
+import com.onextent.augie.Mode;
+import com.onextent.augie.ModeManager;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableName;
+
+public class AugiementListHelper {
+
+    protected boolean isDualPane;
+    protected Map<CodeableName, Augiement> modeAugiements;
+    protected Map<CodeableName, AugiementFactory.Meta> allAugiements;
+    protected List<CodeableName> cnList;
+    protected String[] items;
+    private final SherlockFragmentActivity activity;
+
+    public AugiementListHelper(SherlockFragmentActivity activity) {
+        this.activity = activity;
+    }
+
+    protected void init() {
+        
+        // Check to see if we have a frame in which to embed the details
+        // fragment directly in the containing UI.
+        View detailsFrame = activity.findViewById(R.id.module_details);
+        isDualPane = detailsFrame != null;
+
+        ModeManager modeManager = ((BaseAugmaticActivity) activity).getModeManager();
+        Mode mode = modeManager.getCurrentMode();
+        modeAugiements = mode.getAugiements();
+        allAugiements = modeManager.getAugiementFactory().getAllMeta();
+
+        List<String> itemList = new ArrayList<String>();
+        cnList = new ArrayList<CodeableName>();
+        for (AugiementFactory.Meta m : allAugiements.values()) {
+            itemList.add(m.getUIName());
+            cnList.add(m.getCodeableName());
+        }
+
+        items = new String[itemList.size()];
+        itemList.toArray(items);
+    }
+    
+    /**
+     * Helper function to show the details of a selected item, either by
+     * displaying a fragment in-place in the current UI, or starting a
+     * whole new activity in which it is displayed.
+     */
+    protected void showDetails(int index) {
+    
+        //todo: ask augiement for the ui fragment, if not null, show in details area
+        /*
+        try {
+            mCurCheckPosition = index;
+    
+            // We can display everything in-place with fragments, so update
+            // the list to highlight the selected item and show the data.
+            getListView().setItemChecked(index, true);
+    
+            FragmentManager fm = ((SherlockFragmentActivity)getActivity()).getSupportFragmentManager();
+            SherlockDialogFragment f = null;
+            switch (index) {
+            case 0:
+                f = new ProcessingSettingsDialog();
+                break;
+            case 1:
+                f = new ImageSettingsDialog();
+                break;
+            case 2:
+                f = new ShootingSettingsDialog();
+                break;
+            default:
+            }
+            if (f != null) {
+                if (isDualPane) {
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.module_details, f);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    ft.commit();
+    
+                } else {
+                    f.show(fm, "Camera Settings");
+                    f.show((getActivity()).getSupportFragmentManager(), "Camera Settings");
+                }
+            }
+        } catch (Throwable err) {
+            Log.e(Codeable.TAG, err.toString(), err);
+        }
+         */
+    }
+
+    protected void initDialog(final int position) {
+
+        DialogFragment f = new SherlockDialogFragment() {
+
+            @Override
+            public View onCreateView(LayoutInflater inflater,
+                    ViewGroup container, Bundle savedInstanceState) {
+
+                Dialog d = getDialog();
+                if (d != null) d.setTitle("Enable Augiement");
+                View v = inflater.inflate(R.layout.module_status, container, false);
+                CheckBox cbox = (CheckBox) v.findViewById(R.id.module_enabled);
+
+                final CodeableName cn = cnList.get(position);
+
+                cbox.setChecked(modeAugiements.containsKey(cn));
+
+                cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        ModeManager modeManager = ((BaseAugmaticActivity) getActivity()).getModeManager();
+                        AugiementFactory af = modeManager.getAugiementFactory();
+                        Mode mode = modeManager.getCurrentMode();
+                        if (isChecked) {
+                            Augiement a = af.newInstance(cn);
+                            mode.addAugiement(a);
+                        } else {
+                            Augiement a = modeAugiements.get(cn);
+                            mode.removeAugiement(a);
+                        }
+                        try {
+                            modeManager.setCurrentMode(mode);
+                        } catch (AugieException e) {
+                            Log.e(Codeable.TAG, e.toString(), e);
+                        } //reset everything with new a
+                    }
+                });
+
+                return v;
+            }
+        };
+
+        FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
+        if (f != null) {
+            if (isDualPane) {
+                FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.module_status, f);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+                showDetails(position);
+
+            } else {
+                f.show(fm, "Module Status");
+                f.show((activity).getSupportFragmentManager(), "Module Status");
+                //todo: add details button to show details
+            }
+        }
+    }
+
+    public String[] getItems() {
+
+        return items;
+    }
+
+    public boolean isDualPane() {
+        
+        return isDualPane;
+    }
+}

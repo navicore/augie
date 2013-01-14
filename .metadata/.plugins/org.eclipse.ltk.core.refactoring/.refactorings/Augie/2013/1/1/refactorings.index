@@ -1,0 +1,9 @@
+1357147318845	Move type 'Params' to new file
+1357147429606	Rename type 'Params'
+1357147462349	Move type 'IcsParams' to new file
+1357147617204	Rename type 'AugCameraParamsImpl'
+1357147712376	Rename field 'AugCameraParamsImpl'
+1357148752953	Rename field 'icsPhoneCamera'
+1357251666867	Rename method 'isZoomEnabled'
+1357254129400	Move compilation unit
+1357349179934	Move compilation unit

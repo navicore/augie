@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical" >
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="Flash Mode" 
+	/>
+
+	<Spinner
+	android:id="@+id/camera_flash_modes"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="Focus Mode" 
+	/>
+
+	<Spinner
+	android:id="@+id/camera_focus_modes"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="Zoom" 
+	/>
+    <TextView
+	android:id="@+id/camera_zoom"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="0" 
+	/>
+	</TableRow>
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+	<SeekBar
+	android:id="@+id/camera_zoom_bar"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="Exposure Compensation" 
+	/>
+    <TextView
+	android:id="@+id/camera_exposure_comp"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="0" 
+	/>
+	</TableRow>
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+	<SeekBar
+	android:id="@+id/camera_exposure_comp_bar"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+	
+</TableLayout>
+</ScrollView>

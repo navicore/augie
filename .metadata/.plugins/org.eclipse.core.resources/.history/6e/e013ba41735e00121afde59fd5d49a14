@@ -1,0 +1,42 @@
+package com.onextent.android.ui;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.onextent.augie.camera.NamedInt;
+
+public class UiUtil {
+
+    public final static List<NamedInt> COLOR_LIST;
+
+    static {
+        UiUtil.COLOR_LIST = new ArrayList<NamedInt>();
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.GREEN, "Green"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.GRAY, "Gray"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.RED, "Red"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.BLACK, "Black"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.WHITE, "White"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.BLUE, "Blue"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.CYAN, "Cyan"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.MAGENTA, "Magenta"));
+        UiUtil.COLOR_LIST.add(new ColorItem(Color.YELLOW, "Yellow"));
+    }
+
+    public static class ColorItem implements NamedInt {
+
+        private final int color;
+        private final String name;
+        ColorItem(int c, String n) {
+            color = c;
+            name = n;
+        }
+        @Override
+        public String toString() {
+            return name;
+        }
+        @Override
+        public int toInt() {
+            return color;
+        }
+    }
+}

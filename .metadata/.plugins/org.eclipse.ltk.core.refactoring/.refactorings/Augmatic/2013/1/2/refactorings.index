@@ -1,0 +1,58 @@
+1357751552040	Delete element
+1357751600878	Delete element
+1357751624855	Rename resource 'camera_settings_single_screen.xml'
+1357756219763	Copy compilation unit
+1357756362304	Copy compilation unit
+1357756380350	Rename type 'CameraSelectionFrag'
+1357759258690	Copy compilation unit
+1357759303248	Rename type 'CameraSettingsListFrag'
+1357785257359	Copy file
+1357786708949	Copy compilation unit
+1357787322699	Delete element
+1357790471306	Extract superclass 'AugiementListBase'
+1357791646987	Copy compilation unit
+1357791672020	Rename type 'CameraSettingsListDialog'
+1357792452176	Copy compilation unit
+1357793209498	Delete element
+1357793740135	Delete element
+1357831742483	Copy file
+1357832148460	Delete element
+1357832236114	Copy file
+1357837069067	Copy folder
+1357837082297	Delete element
+1357837097336	Copy folder
+1357838251143	Rename resource 'values-normal'
+1357838286315	Rename resource 'values-400dp'
+1357839584108	Delete element
+1357839600169	Delete element
+1357839608947	Delete element
+1357839795214	Copy file
+1357839827753	Copy folder
+1357845896875	Rename resource 'settings_single_screen_normal.xml'
+1357845931365	Rename resource 'settings_single_screen.xml'
+1357846079821	Rename resource 'values-w850dp'
+1357847525549	Copy folder
+1357847539681	Rename resource 'Copy of values-w320dp'
+1357847658795	Copy file
+1357847850787	Delete element
+1357847861797	Delete element
+1357847870094	Delete element
+1357847904143	Delete element
+1357847911828	Delete element
+1357847985239	Rename resource 'settings_single_screen_w1024.xml'
+1357847994324	Copy file
+1357852369195	Rename resource 'layout-w1024dp'
+1357926815269	Copy package
+1357926879869	Rename package 'com.onextent.augmatic.ui'
+1357926896500	Move package
+1357928205507	Delete element
+1357929603049	Rename method 'initDialog'
+1357930182016	Copy file
+1357930372314	Copy file
+1357930445859	Rename resource 'shutter_settings.xml'
+1357930452047	Delete element
+1357930461265	Rename resource 'newcamera_processing_settings.xml'
+1357930511194	Delete element
+1357930524304	Rename resource 'shutter_settings.xml'
+1357938925195	Extract interface 'AugieActivity'
+1357938980129	Move compilation unit

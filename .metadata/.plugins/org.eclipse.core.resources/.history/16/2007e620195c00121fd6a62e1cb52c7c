@@ -1,0 +1,143 @@
+package com.onextent.augmatic.camera;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Spinner;
+
+import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.onextent.android.ui.SpinnerUI;
+import com.onextent.augmatic.BaseAugmaticActivity;
+import com.onextent.augmatic.R;
+import com.onextent.augie.Mode;
+import com.onextent.augie.ModeManager;
+import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraParameters;
+import com.onextent.util.codeable.Codeable;
+
+public class ProcessingSettingsDialog extends SherlockDialogFragment {
+
+    private final int getPosition(Object item, List<?> list) {
+
+        if (item == null) return 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (item.equals(list.get(i))) return i;
+        }
+        return 0;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Dialog d = getDialog();
+        if (d != null) d.setTitle("Edit Processing Settings");
+        View v = inflater.inflate(R.layout.camera_processing_settings, container, false);
+        
+        try {
+            
+        BaseAugmaticActivity activity = (BaseAugmaticActivity) getActivity();
+        ModeManager modeManager = activity.getModeManager();
+        Mode mode = modeManager.getCurrentMode();
+        AugCamera camera = mode.getCamera();
+
+        setColorModeUI(v, camera);
+        setWhiteBalUI(v, camera);
+        setSceneModeUI(v, camera);
+        setAntibandingUI(v, camera);
+        } catch (Exception e) {
+            Log.e(Codeable.TAG, e.toString(), e);
+        }
+
+        return v;
+    }
+
+    static private List<String> getChoiceList(List<String> list) {
+        if (list == null) return null;
+        List<String> r = new ArrayList<String>();
+        r.add("<unset>");
+        r.addAll(list);
+        return r;
+    }
+
+    //
+    // begin per-setting code
+    //
+    private void setColorModeUI(View v, AugCamera camera) {
+
+        final AugCameraParameters params = camera.getParameters();
+        Spinner spinner = (Spinner) v.findViewById(R.id.camera_color_modes);
+        final List<String> list = getChoiceList(params.getSupportedColorModes());
+        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list, camera) {
+            @Override
+            public int calculatePos() {
+                return getPosition(params.getColorMode(), list);
+            }
+            @Override
+            public void setMode(String m) {
+                params.setColorMode(m);
+            }
+        };
+        sui.init();
+    }
+
+    private void setWhiteBalUI(View v, AugCamera camera) {
+
+        final AugCameraParameters params = camera.getParameters();
+        Spinner spinner = (Spinner) v.findViewById(R.id.camera_whitebal_modes);
+        final List<String> list = getChoiceList(params.getSupportedWhiteBalances());
+        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list, camera) {
+            @Override
+            public int calculatePos() {
+                return getPosition(params.getWhiteBalance(), list);
+            }
+            @Override
+            public void setMode(String m) {
+                params.setWhiteBalance(m);
+            }
+        };
+        sui.init();
+    }
+
+    private void setSceneModeUI(View v, AugCamera camera) {
+
+        final AugCameraParameters params = camera.getParameters();
+        Spinner spinner = (Spinner) v.findViewById(R.id.camera_scene_modes);
+        final List<String> list = getChoiceList(params.getSupportedSceneModes());
+        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list, camera) {
+            @Override
+            public int calculatePos() {
+                return getPosition(params.getSceneMode(), list);
+            }
+            @Override
+            public void setMode(String m) {
+                params.setSceneMode(m);
+            }
+        };
+        sui.init();
+    }
+
+    private void setAntibandingUI(View v, AugCamera camera) {
+
+        final AugCameraParameters params = camera.getParameters();
+        Spinner spinner = (Spinner) v.findViewById(R.id.camera_antibanding_values);
+        final List<String> list = getChoiceList(params.getSupportedAntibanding());
+        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list, camera) {
+            @Override
+            public int calculatePos() {
+                return getPosition(params.getAntibanding(), list);
+            }
+            @Override
+            public void setMode(String m) {
+                params.setAntibanding(m);
+            }
+        };
+        sui.init();
+    }
+}
