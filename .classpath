@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/home/esweeney/android-sdk-linux/platforms/android-17/android.jar" sourcepath="/home/esweeney/android-sdk-linux/sources/android-17"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="output" path="bin/classes"/>
-</classpath>
