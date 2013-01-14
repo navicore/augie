@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Augmatic 1000</string>
+    <string name="JPG">JPG</string>
+    <string-array name="camsettings_flash_modes">
+    	<item>off</item>
+    	<item>on</item>
+    	<item>auto</item>
+    	<item>red eye</item>
+    	<item>torch</item>
+    </string-array>
+    	<string name="image_file_prefix_key">image_file_prefix_key</string>
+    	<string name="image_file_prefix_description">Image File Name Prefix</string>
+    	<string name="default_image_file_prefix">\"augie_img_</string>
+</resources>
