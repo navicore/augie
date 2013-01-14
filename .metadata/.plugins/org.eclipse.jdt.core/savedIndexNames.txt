@@ -1,9 +1,0 @@
-INDEX VERSION 1.126+/home/esweeney/workspace/.metadata/.plugins/org.eclipse.jdt.core
-3837981610.index
-3727581083.index
-4082908633.index
-3124080523.index
-3534210666.index
-613636315.index
-1010828381.index
-2739205508.index

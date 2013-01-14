@@ -1,9 +1,0 @@
-package com.onextent.augmatic;
-
-import com.onextent.augie.ModeManager;
-
-public interface AugieActivity {
-
-    public abstract ModeManager getModeManager();
-
-}

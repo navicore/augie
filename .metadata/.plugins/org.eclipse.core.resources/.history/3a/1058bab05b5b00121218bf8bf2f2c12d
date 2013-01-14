@@ -1,5 +1,0 @@
-<resources>
-    <item name="settings" 
-        type="layout">@layout/settings_single_screen_normal
-    </item>
-</resources>
