@@ -4,6 +4,9 @@ Reference Camera Implementation using Augie
 ----------------------------------------------------
 
 ### TODO
+1. Swipe Navigation 
+  * l/r between modes
+  * u/d between settings
 1. Splash Screen
 1. Pano Helper
   * a begin/end
