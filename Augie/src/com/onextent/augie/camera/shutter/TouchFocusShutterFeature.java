@@ -74,10 +74,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             code.put("bottom", rect.bottom);
             code.put("left", rect.left);
             code.put("right", rect.right);
-            code.put("focusAreaColor", getFocusAreaColor());
-            code.put("meterAreaColor", getMeterAreaColor());
-            code.put("alwaysSetFocusArea", isAlways_set_focus_area());
-            code.put("defaultFocusAreaSize", getTouchFocusSz());
             return code;
         }
 
@@ -90,10 +86,6 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
             left = code.getInt("left");
             right = code.getInt("right");
             rect = new Rect(left, top, right, bottom);
-            if (code.has("focusAreaColor")) setFocusAreaColor(code.getInt("focusAreaColor"));
-            if (code.has("meterAreaColor")) setMeterAreaColor(code.getInt("meterAreaColor"));
-            if (code.has("alwaysSetFocusArea")) setAlways_set_focus_area(code.getBoolean("alwaysSetFocusArea"));
-            if (code.has("defaultFocusAreaSize")) setTouchFocusSz(code.getInt("defaultFocusAreaSize"));
         }
     }
 
@@ -136,8 +128,14 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     }
 
     private Rect getTouchFocusRect(Point p) {
-        int xadj = augieScape.getWidth() / getTouchFocusSz();
-        int yadj = augieScape.getHeight() / getTouchFocusSz();
+        double w = augieScape.getWidth();
+        double h = augieScape.getHeight();
+        double sz = getTouchFocusSz();
+        double len = sz / 100 * w;
+        if (len > h) len = h / 2;
+        if (len < 5) len = 5;
+        int xadj = (int) (len / 2);
+        int yadj = (int) (len / 2);
         return new Rect(p.x - xadj, p.y - yadj, p.x + xadj, p.y + yadj);
     }
     private void _setTouchFocusArea() {
@@ -385,6 +383,12 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
+    
+    private static final String DEFAULT_FOCUS_SZ_KEY = "defaultFocusAreaSize";
+    private static final String ALWAYS_FOCUS_AREA_KEY = "alwaysSetFocusArea";
+    private static final String FOCUS_AREA_COLOR_KEY = "focusAreaColor";
+    private static final String METER_AREA_COLOR_KEY = "meterAreaColor";
+    
     @Override
     public Code getCode() throws CodeableException {
         Code code = super.getCode();
@@ -399,6 +403,10 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
         for (ScribleHolder sh : meter_areas) {
             maScribleCode.add(sh.getCode());
         }
+        code.put(FOCUS_AREA_COLOR_KEY, getFocusAreaColor());
+        code.put(METER_AREA_COLOR_KEY, getMeterAreaColor());
+        code.put(ALWAYS_FOCUS_AREA_KEY, isAlways_set_focus_area());
+        code.put(DEFAULT_FOCUS_SZ_KEY, getTouchFocusSz());
 
         return code;
     }
@@ -426,6 +434,16 @@ public class TouchFocusShutterFeature extends SimpleCameraShutterFeature {
                     meter_areas.add(sh);
                     _setMeterAreas();
                 }
+            }
+            
+            if (code.has(FOCUS_AREA_COLOR_KEY)) 
+            	setFocusAreaColor(code.getInt(FOCUS_AREA_COLOR_KEY));
+            if (code.has(METER_AREA_COLOR_KEY)) 
+            	setMeterAreaColor(code.getInt(METER_AREA_COLOR_KEY));
+            if (code.has(ALWAYS_FOCUS_AREA_KEY)) 
+            	setAlways_set_focus_area(code.getBoolean(ALWAYS_FOCUS_AREA_KEY));
+            if (code.has(DEFAULT_FOCUS_SZ_KEY))  {
+            	setTouchFocusSz(code.getInt(DEFAULT_FOCUS_SZ_KEY));
             }
         } catch (AugCameraException e) {
             throw new CodeableException(e);

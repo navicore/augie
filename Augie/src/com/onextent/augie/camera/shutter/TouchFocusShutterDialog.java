@@ -12,11 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnFocusChangeListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
@@ -28,7 +26,6 @@ import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.R;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.NamedInt;
 
 public class TouchFocusShutterDialog extends SherlockDialogFragment {
@@ -40,9 +37,9 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
 
         AugieActivity activity = (AugieActivity) getActivity();
         augiement = (TouchShutter) 
-                activity.getModeManager().getCurrentMode()
-                .getAugiements()
-                .get(TouchShutter.AUGIE_NAME);
+        			activity.getModeManager().getCurrentMode()
+        			.getAugiements()
+        			.get(TouchShutter.AUGIE_NAME);
 
         Dialog d = getDialog();
         if (d != null) d.setTitle("Touch Shutter Settings");
@@ -122,13 +119,13 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             }
         });
     }
-   
+  
     private void setDefaultFocusSz(View v, AugCamera camera) {
 
         Spinner spinner = (Spinner) v.findViewById(R.id.defaultFocusAreaSz);
         if (spinner == null) throw new java.lang.NullPointerException("spnner is null");
         final List<Integer> sizes = new ArrayList<Integer>();
-        for (int i = 0; i < 90; i++  ) {
+        for (int i = 0; i < 50; i++  ) {
             sizes.add(i + 1);
         }
         SpinnerUI<Integer> sui = new SpinnerUI<Integer>(spinner, sizes) {
@@ -142,29 +139,9 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             }
             @Override
             public void setMode(Integer m) {
-                augiement.setFocusAreaColor(m);
+                augiement.setTouchFocusSz(m);
             }
         };
         sui.init();
     }
-
-    /*
-    private void setDefaultFocusSz(View v, AugCamera camera) {
-
-        final EditText tbox = (EditText) v.findViewById(R.id.defaultFocusAreaSz);
-
-        int sz = augiement.getTouchFocusSz();
-        tbox.setText(Integer.toString(sz));
-       
-        OnFocusChangeListener l = new OnFocusChangeListener() {
-            
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                augiement.setTouchFocusSz(Integer.getInteger(tbox.getText().toString(), 10));
-            }
-        };
-        
-        tbox.setOnFocusChangeListener(l);
-    }
-     */
 }

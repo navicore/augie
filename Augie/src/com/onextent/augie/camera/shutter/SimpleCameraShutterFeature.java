@@ -347,7 +347,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     public int getTouchFocusSz() {
         return touchFocusSz;
     }
-    public void setTouchFocusSz(int touchFocusSz) {
-        this.touchFocusSz = touchFocusSz;
+    public void setTouchFocusSz(int sz) {
+        this.touchFocusSz = sz;
     }
 }

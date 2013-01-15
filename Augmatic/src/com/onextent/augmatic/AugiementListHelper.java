@@ -29,6 +29,7 @@ import com.onextent.augie.Augiement.Meta;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
+import com.onextent.augmatic.camera.EmptySettingsDialog;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableName;
 
@@ -165,15 +166,26 @@ public class AugiementListHelper {
         return "depends on " + ret;
     }
 
+    private void showEmptySettingsDialog() {
+    	FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.module_details, new EmptySettingsDialog());
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
+    }
     private void showDetails(final int position) {
         
         CodeableName cn = cnList.get(position);
 
         Augiement a = modeAugiements.get(cn);       
-        if (a == null) return; //todo: probably need a dummy frag to clear the prev
+        if (a == null) {
+        	return;
+        }
         
         DialogFragment f = a.getUI();
-        if (f == null) return; //todo: probably need a dummy frag to clear the prev
+        if (f == null) {
+        	showEmptySettingsDialog();
+        	return;
+        }
         
         FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
         if (f != null) {
