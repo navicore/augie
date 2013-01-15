@@ -15,6 +15,7 @@ import java.util.Set;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -58,8 +59,9 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     private int focusAreaColor = Color.GREEN;
     private boolean always_set_focus_area = true;
     private int touchFocusSz = 10;
+    private boolean showFileSavedToast;
 
-    final static Set<CodeableName> deps;
+	final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
         deps.add(AugCamera.AUGIENAME);
@@ -227,7 +229,9 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
-                Toast.makeText(context, "file saved as " + pictureFile.getName(), Toast.LENGTH_LONG).show();
+                if (showFileSavedToast)
+                	Toast.makeText(context, "file saved as " + 
+                        pictureFile.getName(), Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -302,16 +306,38 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         return AUGIE_NAME;
     }
 
+    private static final String DEFAULT_FOCUS_SZ_KEY 	= "defaultFocusAreaSize";
+    private static final String ALWAYS_FOCUS_AREA_KEY 	= "alwaysSetFocusArea";
+    private static final String FOCUS_AREA_COLOR_KEY 	= "focusAreaColor";
+    private static final String METER_AREA_COLOR_KEY 	= "meterAreaColor";
+    private static final String SHOW_FILE_TOAST 		= "showFileToast";
+    
     @Override
     public Code getCode() throws CodeableException {
-        // TODO Auto-generated method stub
-        return null;
+
+        Code code = JSONCoder.newCode();
+        code.put(FOCUS_AREA_COLOR_KEY, getFocusAreaColor());
+        code.put(METER_AREA_COLOR_KEY, getMeterAreaColor());
+        code.put(ALWAYS_FOCUS_AREA_KEY, isAlways_set_focus_area());
+        code.put(DEFAULT_FOCUS_SZ_KEY, getTouchFocusSz());
+        code.put(SHOW_FILE_TOAST, isShowFileSavedToast());
+        
+        return code;
     }
 
     @Override
     public void setCode(Code code) throws CodeableException {
-        // TODO Auto-generated method stub
-        
+
+    	if (code.has(FOCUS_AREA_COLOR_KEY)) 
+    		setFocusAreaColor(code.getInt(FOCUS_AREA_COLOR_KEY));
+    	if (code.has(METER_AREA_COLOR_KEY)) 
+    		setMeterAreaColor(code.getInt(METER_AREA_COLOR_KEY));
+    	if (code.has(ALWAYS_FOCUS_AREA_KEY)) 
+    		setAlways_set_focus_area(code.getBoolean(ALWAYS_FOCUS_AREA_KEY));
+    	if (code.has(DEFAULT_FOCUS_SZ_KEY))
+    		setTouchFocusSz(code.getInt(DEFAULT_FOCUS_SZ_KEY));
+    	if (code.has(SHOW_FILE_TOAST))
+    		setShowFileSavedToast(code.getBoolean(SHOW_FILE_TOAST));
     }
 
     @Override
@@ -350,4 +376,11 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     public void setTouchFocusSz(int sz) {
         this.touchFocusSz = sz;
     }
+    
+    public boolean isShowFileSavedToast() {
+		return showFileSavedToast;
+	}
+	public void setShowFileSavedToast(boolean showFileSavedToast) {
+		this.showFileSavedToast = showFileSavedToast;
+	}
 }

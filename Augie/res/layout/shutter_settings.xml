@@ -53,6 +53,18 @@
     >
 
 	<CheckBox
+		android:id="@+id/showFileSavedToast"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Show filename after taking picture" />
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+
+	<CheckBox
 		android:id="@+id/alwaysSetFocusArea"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

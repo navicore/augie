@@ -156,6 +156,13 @@ public class TouchShutter implements Augiement, OnTouchListener {
     public void setTouchFocusSz(int touchFocusSz) {
         shutter.setTouchFocusSz(touchFocusSz);
     }
+
+    public boolean isShowFileSavedToast() {
+		return shutter.isShowFileSavedToast();
+	}
+	public void setShowFileSavedToast(boolean showFileSavedToast) {
+		shutter.setShowFileSavedToast(showFileSavedToast);
+	}
     
     @Override
     public Meta getMeta() {

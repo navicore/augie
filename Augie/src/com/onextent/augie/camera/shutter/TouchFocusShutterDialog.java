@@ -42,7 +42,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
         			.get(TouchShutter.AUGIE_NAME);
 
         Dialog d = getDialog();
-        if (d != null) d.setTitle("Touch Shutter Settings");
+        if (d != null) d.setTitle(augiement.getMeta().getUIName() + " Settings");
         View v = inflater.inflate(R.layout.shutter_settings, container, false);
         try {
             ModeManager modeManager = activity.getModeManager();
@@ -53,6 +53,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             setMeterAreaColorUI(v, camera);
             setAlwaysSetFaUI(v, camera);
             setDefaultFocusSz(v, camera);
+            setFileSavedToast(v, camera);
 
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
@@ -103,6 +104,23 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
         sui.init();
     }
 
+    private void setFileSavedToast(View v, AugCamera camera) {
+
+        CheckBox cbox = (CheckBox) v.findViewById(R.id.showFileSavedToast);
+
+        boolean isEnabled = augiement.isShowFileSavedToast();
+        cbox.setChecked(isEnabled);
+
+        cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                augiement.setShowFileSavedToast(isChecked);
+            }
+        });
+    }
+  
     private void setAlwaysSetFaUI(View v, AugCamera camera) {
 
         CheckBox cbox = (CheckBox) v.findViewById(R.id.alwaysSetFocusArea);

@@ -41,6 +41,9 @@ public class HorizonFeature extends AugDrawBase {
     private final List<AugLine> lines;
     private AugDrawFeature augdraw;
     
+    private float vertLineWidth = 9;
+	private float horizLineWidth = 18;
+    
     private final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
@@ -68,9 +71,9 @@ public class HorizonFeature extends AugDrawBase {
         for (AugLine l : lines) {
             float diffx = l.getP1().x - e.getX();
             float diffy = l.getP1().y - e.getY();
-            if ( Math.abs(diffx) < CLOSE_PIXELS ) {
+            if ( Math.abs(diffx) < closePixelDist ) {
                 return l;
-            } else if ( Math.abs(diffy) < CLOSE_PIXELS) {
+            } else if ( Math.abs(diffy) < closePixelDist) {
                 return l;
             }
         }
@@ -125,13 +128,9 @@ public class HorizonFeature extends AugDrawBase {
         }
         
         AugLineImpl line;
-        //float vwidth = Float.parseFloat(prefs.getString("VERTICAL_LINE_WIDTH", "9"));
-        float vwidth = 9;
-        //float hwidth = Float.parseFloat(prefs.getString("HORIZONTAL_LINE_WIDTH", "18"));
-        float hwidth = 18;
         switch (lt) {
         case HORIZONTAL_LINE:
-            line = new HLine(0, augieScape.getWidth(), startP.y, hwidth);
+            line = new HLine(0, augieScape.getWidth(), startP.y, horizLineWidth);
             newMovingLine(line);
             if (moving)
                 augdraw.undoCurrentScrible();
@@ -143,7 +142,7 @@ public class HorizonFeature extends AugDrawBase {
             }
             break;
         case VERTICAL_LINE:
-            line = new VLine(0, augieScape.getHeight(), startP.x, vwidth);
+            line = new VLine(0, augieScape.getHeight(), startP.x, vertLineWidth);
             newMovingLine(line);
             if (moving)
                 augdraw.undoCurrentScrible();
@@ -209,6 +208,9 @@ public class HorizonFeature extends AugDrawBase {
                     linesCode.add(l.getCode());
                 }
             }
+            code.put("closePixelDist", getClosePixelDist());
+            code.put("horizLineWidth", getHorizLineWidth());
+            code.put("vertLineWidth", getVertLineWidth());
         } catch (CodeableException e) {
             Log.e(TAG, e.toString(), e);
         }
@@ -228,6 +230,12 @@ public class HorizonFeature extends AugDrawBase {
                 lines.add(l);
             }
         }
+        if (code.has("closePixelDist")) 
+        	setClosePixelDist(code.getInt("closePixelDist"));
+        if (code.has("horizLineWidth")) 
+        	setHorizLineWidth(code.getInt("horizLineWidth"));
+        if (code.has("vertLineWidth")) 
+        	setVertLineWidth(code.getInt("vertLineWidth"));
     }
 
     public Meta getMeta() {
@@ -267,7 +275,23 @@ public class HorizonFeature extends AugDrawBase {
 
     @Override
     public DialogFragment getUI() {
-        // TODO Auto-generated method stub
-        return null;
+       
+        return new HorizonFeatureDialog();
     }
+    
+    public float getVertLineWidth() {
+		return vertLineWidth;
+	}
+
+	public void setVertLineWidth(float virtLineWidth) {
+		this.vertLineWidth = virtLineWidth;
+	}
+
+	public float getHorizLineWidth() {
+		return horizLineWidth;
+	}
+
+	public void setHorizLineWidth(float horizLineWidth) {
+		this.horizLineWidth = horizLineWidth;
+	}
 }

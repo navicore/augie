@@ -37,4 +37,6 @@ public abstract class CameraShutterFeature implements Augiement, OnTouchListener
     abstract public void setAlways_set_focus_area(boolean always_set_focus_area);
     abstract public int getTouchFocusSz();
     abstract public void setTouchFocusSz(int touchFocusSz);
+    abstract public boolean isShowFileSavedToast();
+	abstract public void setShowFileSavedToast(boolean showFileSavedToast);
 }

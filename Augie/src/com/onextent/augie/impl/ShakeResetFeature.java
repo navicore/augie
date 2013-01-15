@@ -18,10 +18,12 @@ import java.lang.Math;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
+import com.onextent.augie.Mode;
 
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -41,6 +43,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     List<Augiement> twoShakeRegistry;
     Calendar last, now;
     boolean doing_double = false;
+	private boolean _init = false;
 
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
@@ -57,7 +60,17 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
         now = Calendar.getInstance(); 
     }
      
-    //todo: think about callback api for this sort of feature.  the shaker shouldn't care if
+    private void registerAllAugiements() {
+		
+        AugieActivity activity = (AugieActivity) augieScape.getContext();
+        Mode m = activity.getModeManager().getCurrentMode();
+
+    	for (Augiement a : m.getAugiements().values()) {
+    		registerOneShakeReset(a);
+    	}
+	}
+
+	//todo: think about callback api for this sort of feature.  the shaker shouldn't care if
     // it is for a reset or something else
     
     @Override
@@ -73,6 +86,9 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     public void registerOneShakeReset(Augiement f) {
+    	Log.d(TAG, "shake reset feature register " + 
+    			f.getMeta().getUIName() + 
+    			" for single shake");
         oneShakeRegistry.add(f);
     }
     public void registerTwoShakeReset(Augiement f) {
@@ -126,6 +142,13 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
 
     public void onSensorChanged(SensorEvent se) {
 
+
+        //todo: a generic UI Widget that lets Augiments list and multi select Augiements
+    	if (!_init) {
+    		registerAllAugiements();//temp until dialog lets us set them
+    		_init = true;
+    	}
+    	
         if (testAccel(se)) {
 
             Date new_date = new Date();

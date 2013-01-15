@@ -20,7 +20,7 @@ import android.view.View.OnTouchListener;
 public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
     protected AugieScape augieScape;
-    public static float CLOSE_PIXELS = 25;
+    public float closePixelDist = 25;
 	
 	static class VLine extends AugLineImpl {
 
@@ -54,15 +54,15 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
     protected boolean xcloseToEdge(MotionEvent e) {
         float x = e.getX();
-        if ( x < CLOSE_PIXELS ) return true;
-        if ( x > (augieScape.getWidth() - CLOSE_PIXELS )) return true;
+        if ( x < closePixelDist ) return true;
+        if ( x > (augieScape.getWidth() - closePixelDist )) return true;
         
         return false;
     }
     protected boolean ycloseToEdge(MotionEvent e) {
         float y = e.getY();
-        if ( y < CLOSE_PIXELS ) return true;
-        if ( y > (augieScape.getHeight() - CLOSE_PIXELS )) return true;
+        if ( y < closePixelDist ) return true;
+        if ( y > (augieScape.getHeight() - closePixelDist )) return true;
         
         return false;
     }
@@ -99,4 +99,12 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
         Log.d(TAG, "clearing " + getClass().getName());
 		//noop
     }
+	
+	public float getClosePixelDist() {
+		return closePixelDist;
+	}
+
+	public void setClosePixelDist(float sz) {
+		closePixelDist = sz;
+	}
 }
