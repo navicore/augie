@@ -39,4 +39,8 @@ public abstract class CameraShutterFeature implements Augiement, OnTouchListener
     abstract public void setTouchFocusSz(int touchFocusSz);
     abstract public boolean isShowFileSavedToast();
 	abstract public void setShowFileSavedToast(boolean showFileSavedToast);
+	abstract public String getPicturesDir();
+	abstract public void setPicturesDir(String picturesDir);
+	abstract public String getPicturesRoot();
+	abstract public void setPicturesRoot(String picturesRoot);
 }

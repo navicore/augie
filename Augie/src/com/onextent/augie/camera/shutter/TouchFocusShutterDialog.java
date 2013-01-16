@@ -8,6 +8,9 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
@@ -52,8 +56,10 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             setFocusAreaColorUI(v, camera);
             setMeterAreaColorUI(v, camera);
             setAlwaysSetFaUI(v, camera);
-            setDefaultFocusSz(v, camera);
-            setFileSavedToast(v, camera);
+            setDefaultFocusSzUI(v, camera);
+            setFileSavedToastUI(v, camera);
+            setPicFileRootDirUI(v, camera);
+            setPicFileDirUI(v, camera);
 
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
@@ -104,7 +110,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
         sui.init();
     }
 
-    private void setFileSavedToast(View v, AugCamera camera) {
+    private void setFileSavedToastUI(View v, AugCamera camera) {
 
         CheckBox cbox = (CheckBox) v.findViewById(R.id.showFileSavedToast);
 
@@ -138,7 +144,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
         });
     }
   
-    private void setDefaultFocusSz(View v, AugCamera camera) {
+    private void setDefaultFocusSzUI(View v, AugCamera camera) {
 
         Spinner spinner = (Spinner) v.findViewById(R.id.defaultFocusAreaSz);
         if (spinner == null) throw new java.lang.NullPointerException("spnner is null");
@@ -161,5 +167,48 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             }
         };
         sui.init();
+    }
+    
+    private void setPicFileRootDirUI(View v, final AugCamera camera) {
+
+        Spinner spinner = (Spinner) v.findViewById(R.id.picFileRootDir);
+        final List<String> list = new ArrayList<String>();
+        list.add(Environment.DIRECTORY_DCIM);
+        list.add(Environment.DIRECTORY_DOWNLOADS);
+        list.add(Environment.DIRECTORY_PICTURES);
+        list.add(Environment.DIRECTORY_MUSIC);
+        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list) {
+            @Override
+            public int calculatePos() {
+                return list.indexOf(augiement.getPicturesRoot());
+            }
+            @Override
+            public void setMode(String m) {
+                augiement.setPicturesRoot(m);
+            }
+        };
+        sui.init();
+    }
+    private void setPicFileDirUI(View v, final AugCamera camera) {
+
+        final EditText te = (EditText) v.findViewById(R.id.picFileDir);
+        te.setText(augiement.getPicturesDir());
+        te.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				Log.d(Codeable.TAG, "ejs b4: " + te.getText());
+			}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				Log.d(Codeable.TAG, "ejs on: " + te.getText());
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				Log.d(Codeable.TAG, "ejs after: " + te.getText());
+			}
+        });
     }
 }

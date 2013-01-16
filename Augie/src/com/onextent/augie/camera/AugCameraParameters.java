@@ -19,6 +19,10 @@ public interface AugCameraParameters extends Codeable {
 
     int getMaxNumMeteringAreas();
     
+    String getXISO();
+    void setXISO(String m);
+    List<String> getXSupportedISOs();
+
     String getFlashMode();
     void setFlashMode(String m);
     List<String> getSupportedFlashModes();

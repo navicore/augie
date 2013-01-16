@@ -32,7 +32,7 @@ class CamParams implements AugCameraParameters {
     
     private String      flashMode, colorMode, whiteBalMode, 
                         sceneMode, focusMode, antibanding;
-    private String      xpictureFmt;
+    private String      xpictureFmt, xISO;
     private NamedInt    pictureFmt, previewFmt;
     private Size        pictureSize, previewSize;
     private Code        initCode;
@@ -62,6 +62,7 @@ class CamParams implements AugCameraParameters {
         if (getAntibanding() != null) code.put("antibanding", getAntibanding());
         if (getPictureFmt() != null && getXPictureFmt() == null) code.put("pictureFmt", getPictureFmt().toInt());
         if (getPreviewFmt() != null) code.put("previewFmt", getPreviewFmt().toInt());
+        if (getXISO() != null) code.put("xISO", getXISO());
         if (getXPictureFmt() != null) code.put("xpictureFmt", getXPictureFmt());
         code.put("shutterSnd", shutterSnd);
         if (getPictureSize() != null) code.put("pictureSize", getPictureSize().getCode());
@@ -87,6 +88,7 @@ class CamParams implements AugCameraParameters {
             if (code.has("previewFmt")) setPreviewFmt(new ImageFmt(code.getInt("previewFmt")));
             if (code.has("shutterSnd")) setShutterSound(code.getBoolean("shutterSnd"));
             if (code.has("xpictureFmt")) setXPictureFmt(code.getString("xpictureFmt"));
+            if (code.has("xISO")) setXISO(code.getString("xISO"));
             if (code.has("pictureSize")) {
                 Size sz = new Size();
                 sz.setCode(code.get("pictureSize"));
@@ -404,4 +406,19 @@ class CamParams implements AugCameraParameters {
         minPrevFPS = min;
         maxPrevFPS = max;
     }
+	@Override
+	public String getXISO() {
+
+		return xISO;
+	}
+	@Override
+	public void setXISO(String m) {
+		xISO = m;
+	}
+	@Override
+	public List<String> getXSupportedISOs() {
+        String sl = augcamera.camera.getParameters().get("iso-values");
+        if (sl == null) return null;
+        return SimplePhoneCamera.split(sl, ',');
+	}
 }

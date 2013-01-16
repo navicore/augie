@@ -90,6 +90,27 @@
 	/>
 
 	</TableRow>
-    
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+	<Spinner
+	android:id="@+id/picFileRootDir"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	<!--  todo spinner with editable text -->
+    <EditText
+	android:id="@+id/picFileDir"
+	android:inputType="text"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="MyAugie" 
+	/>
+	</TableRow>
+	
 </TableLayout>
 </ScrollView>

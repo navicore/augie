@@ -164,6 +164,21 @@ public class TouchShutter implements Augiement, OnTouchListener {
 		shutter.setShowFileSavedToast(showFileSavedToast);
 	}
     
+	public String getPicturesDir() {
+		return shutter.getPicturesDir();
+	}
+
+	public void setPicturesDir(String picturesDir) {
+		shutter.setPicturesDir(picturesDir);
+	}
+
+	public String getPicturesRoot() {
+		return shutter.getPicturesRoot();
+	}
+
+	public void setPicturesRoot(String picturesRoot) {
+		shutter.setPicturesRoot(picturesRoot);
+	}
     @Override
     public Meta getMeta() {
         

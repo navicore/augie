@@ -59,6 +59,7 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
             setFocusModeUI(v, camera);
             setExposureCompUI(v, camera);
             setZoomUI(v, camera);
+            setISOUI(v, camera);
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
         }
@@ -177,4 +178,28 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
             ui.enable(false, "camera does not zoom");
         }
     }
+    
+    private void setISOUI(View v, final AugCamera camera) {
+
+        final AugCameraParameters params = camera.getParameters();
+        Spinner spinner = (Spinner) v.findViewById(R.id.camera_iso);
+        final List<String> list = getChoiceList(params.getXSupportedISOs());
+        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list) {
+            @Override
+            public int calculatePos() {
+                return getPosition(params.getXISO(), list);
+            }
+            @Override
+            public void setMode(String m) {
+                params.setXISO(m);
+                try {
+                    camera.applyParameters();
+                } catch (AugCameraException e) {
+                    Log.e(Codeable.TAG, e.toString());
+                }
+            }
+        };
+        sui.init();
+    }
+
 }

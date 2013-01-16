@@ -250,6 +250,10 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 params.setPictureFmt(null);
                 params.setXPictureFmt(m);
             }
+            m = cp.get("iso");
+            if (m != null) {
+                params.setXISO(m);
+            }
             Camera.Size sz = cp.getPictureSize();
             if (sz != null) params.setPictureSize(new Size(sz));
             
@@ -367,6 +371,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 m = p.getXPictureFmt();
                 if (m != null) cp.set("picture-format", m);
                 
+                m = p.getXISO();
+                if (m != null) cp.set("iso", m);
+                
                 Size sz = p.getPictureSize();
                 if (sz != null) cp.setPictureSize(sz.getWidth(), sz.getHeight());
                 
@@ -399,8 +406,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     protected final void __applyParameters(Camera.Parameters cp) throws AugCameraException {
         if (cp != null) {
             try {
-                //Log.d(TAG, "flattened params: " + cp.flatten());
+
                 camera.setParameters(getUpdatedCameraParameters());
+                
             } catch (Throwable err) {
                 Log.w(TAG, "can not set camera parameters: " + err);
                 try {

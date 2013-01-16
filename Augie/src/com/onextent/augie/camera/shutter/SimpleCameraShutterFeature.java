@@ -60,6 +60,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     private boolean always_set_focus_area = true;
     private int touchFocusSz = 10;
     private boolean showFileSavedToast;
+    private String picturesDir = "MyAugie";
+	private String picturesRoot = Environment.DIRECTORY_DCIM;
 
 	final static Set<CodeableName> deps;
     static {
@@ -109,7 +111,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
     
     protected void _takePicture() throws AugCameraException {
-        Log.d(TAG, "ejs _take pic");
         
         try {
 
@@ -252,14 +253,25 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         }
     }
     
+    
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type, String suffix){
+    private File getOutputMediaFile(int type, String suffix){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                  Environment.DIRECTORY_DCIM), "Augie");
-//                  Environment.DIRECTORY_PICTURES), "Camera");
+        //File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+        //          Environment.DIRECTORY_DCIM) + "/Augie2");
+        File mediaStorageDir;
+    	if (picturesDir == null) {
+    		
+    		mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                  picturesRoot), ".");
+    		
+    	} else {
+    		mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                  picturesRoot), picturesDir);
+    		
+    	}
        
         if ( !mediaStorageDir.exists() ){
             if (! mediaStorageDir.mkdirs()){
@@ -273,9 +285,6 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         if (type == MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
             "IMG_"+ timeStamp + suffix);
-        //} else if(type == MEDIA_TYPE_VIDEO) {
-        //    mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-        //    "VID_"+ timeStamp + suf);
         } else {
             return null;
         }
@@ -311,6 +320,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     private static final String FOCUS_AREA_COLOR_KEY 	= "focusAreaColor";
     private static final String METER_AREA_COLOR_KEY 	= "meterAreaColor";
     private static final String SHOW_FILE_TOAST 		= "showFileToast";
+    private static final String PICTURE_ROOT_DIR_KEY 	= "picRootDir";
+    private static final String PICTURE_DIR_KEY 		= "picDir";
     
     @Override
     public Code getCode() throws CodeableException {
@@ -321,6 +332,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         code.put(ALWAYS_FOCUS_AREA_KEY, isAlways_set_focus_area());
         code.put(DEFAULT_FOCUS_SZ_KEY, getTouchFocusSz());
         code.put(SHOW_FILE_TOAST, isShowFileSavedToast());
+        code.put(PICTURE_ROOT_DIR_KEY, getPicturesRoot());
+        code.put(PICTURE_DIR_KEY, getPicturesDir());
         
         return code;
     }
@@ -338,6 +351,10 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     		setTouchFocusSz(code.getInt(DEFAULT_FOCUS_SZ_KEY));
     	if (code.has(SHOW_FILE_TOAST))
     		setShowFileSavedToast(code.getBoolean(SHOW_FILE_TOAST));
+    	if (code.has(PICTURE_ROOT_DIR_KEY))
+    		setPicturesRoot(code.getString(PICTURE_ROOT_DIR_KEY));
+    	if (code.has(PICTURE_DIR_KEY))
+    		setPicturesDir(code.getString(PICTURE_DIR_KEY));
     }
 
     @Override
@@ -382,5 +399,20 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 	}
 	public void setShowFileSavedToast(boolean showFileSavedToast) {
 		this.showFileSavedToast = showFileSavedToast;
+	}
+    public String getPicturesDir() {
+		return picturesDir;
+	}
+
+	public void setPicturesDir(String d) {
+		this.picturesDir = d;
+	}
+
+	public String getPicturesRoot() {
+		return picturesRoot;
+	}
+
+	public void setPicturesRoot(String r) {
+		this.picturesRoot = r;
 	}
 }

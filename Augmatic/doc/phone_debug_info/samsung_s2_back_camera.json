@@ -1,1 +1,54 @@
-{"AUGIE\/DEBUG\/CAMERA\/FLATTEN":"preferred-preview-size-for-video=640x480;zoom=0;max-num-detected-faces-hw=0;zoom-supported=true;whitebalance=auto;scene-mode=auto;jpeg-quality=100;preview-format-values=yuv420sp,yuv420p,yuv422i-yuyv,yuv422sp,rgb565;jpeg-thumbnail-quality=100;preview-format=yuv420sp;video-size-values=720x480,176x144,320x240,352x288,640x480,1280x720,1920x1080;preview-size=640x480;focal-length=3.970000;flash-mode-values=off,auto,on,torch;preview-frame-rate-values=30,25,20,15,10,7;preview-frame-rate=30;focus-mode-values=auto,infinity,macro,fixed,facedetect,continuous-video;jpeg-thumbnail-width=320;video-size=720x480;scene-mode-values=auto,portrait,landscape,night,beach,snow,sunset,fireworks,sports,party,candlelight,dusk-dawn,fall-color,back-light,text;preview-fps-range-values=(7000,30000);jpeg-thumbnail-size-values=320x240,400x240,0x0;zoom-ratios=100,102,104,109,111,113,119,121,124,131,134,138,146,150,155,159,165,170,182,189,200,213,222,232,243,255,283,300,319,364,400;preview-size-values=640x480,720x480,800x480,800x450,352x288,320x240,176x144;picture-size-values=3264x2448,3264x1968,2048x1536,2048x1232,800x480,640x480;preview-fps-range=7000,30000;auto-whitebalance-lock=false;min-exposure-compensation=-4;max-num-focus-areas=1;vertical-view-angle=46.3;horizontal-view-angle=59.6;jpeg-thumbnail-height=240;smooth-zoom-supported=false;focus-mode=auto;video-frame-format=yuv420sp;max-num-detected-faces-sw=3;picture-format-values=jpeg;max-exposure-compensation=4;focus-areas=(0,0,0,0,0);exposure-compensation=0;exposure-compensation-step=0.5;flash-mode=off;auto-exposure-lock=false;effect-values=none,mono,negative,sepia,aqua;picture-size=3264x2448;max-zoom=30;effect=none;whitebalance-values=auto,incandescent,fluorescent,daylight,cloudy-daylight;picture-format=jpeg;focus-distances=0.15,1.20,Infinity","CURRENT\/MODE_KEY":"MODE\/SYSTEM\/DEFAULT","MODE\/SYSTEM\/DEFAULT":{"codable_name":"MODE\/SYSTEM\/DEFAULT","uiname":"Default","augiements":[{"codable_name":"AUGIE\/FEATURES\/DRAW"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_LEVEL"},{"codable_name":"AUGIE\/FEATURES\/TOUCH_SHUTTER","code":{"meterAreas":[],"focusAreas":[{"codable_name":"AUGIE\/UTIL\/RECT","bottom":233,"meterAreaColor":-7829368,"left":377,"right":552,"focusAreaColor":-16711936,"top":123}]}},{"codable_name":"AUGIE\/FEATURES\/PINCH_ZOOM"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_DRAW","code":{}}],"camera":{"codable_name":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","code":{"codable_name":"AUGIE\/FEATURES\/CAMERA","camera_id":0,"params":{"focusMode":"auto","jpegQuality":100,"jpegThumbnailQuality":100,"maxPrevFPS":30000,"previewFmt":17,"whiteBal":"auto","shutterSnd":true,"xpictureFmt":"jpeg","colorMode":"none","pictureSize":{"codable_name":"AUGIE\/CODEABLE\/SIZE","width":3264,"height":2448},"flashMode":"off","previewSize":{"codable_name":"AUGIE\/CODEABLE\/SIZE","width":640,"height":480},"minPrevFPS":7000},"cameraName":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","name":"Back Camera"}}},"MODE\/SYSTEM\/FLASH":{"codable_name":"MODE\/SYSTEM\/FLASH","uiname":"Flash","augiements":[{"codable_name":"AUGIE\/FEATURES\/SHAKE_RESET"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_DRAW","code":{}},{"codable_name":"AUGIE\/FEATURES\/PINCH_ZOOM"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_LEVEL"},{"codable_name":"AUGIE\/FEATURES\/TOUCH_SHUTTER","code":{"meterAreas":[],"focusAreas":[]}},{"codable_name":"AUGIE\/FEATURES\/DRAW"}],"camera":{"codable_name":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","code":{"cameraName":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","camera_id":0,"name":"Back Camera"}}}}
+{"AUGIE\/DEBUG\/CAMERA\/FLATTEN": "
+
+    auto-exposure-lock          =false;
+    auto-whitebalance-lock      =false;
+    effect-values               =none,mono,negative,sepia,aqua;
+    effect                      =none;
+    exposure-compensation-step  =0.5;
+    exposure-compensation       =0;
+    flash-mode-values           =off,auto,on,torch;
+    flash-mode                  =off;
+    focal-length                =3.970000;
+    focus-areas                 =(0,0,0,0,0);
+    focus-distances             =0.15,1.20,Infinity
+    focus-mode-values           =auto,infinity,macro,fixed,facedetect,continuous-video;
+    focus-mode                  =auto;
+    horizontal-view-angle       =59.6;
+    jpeg-quality                =100;
+    jpeg-thumbnail-height       =240;
+    jpeg-thumbnail-quality      =100;
+    jpeg-thumbnail-size-values  =320x240,400x240,0x0;
+    jpeg-thumbnail-width        =320;
+    max-exposure-compensation   =4;
+    max-num-detected-faces-hw   =0;
+    max-num-detected-faces-sw   =3;
+    max-num-focus-areas         =1;
+    max-zoom                    =30;
+    min-exposure-compensation   =-4;
+    picture-format-values       =jpeg;
+    picture-format              =jpeg;
+    picture-size-values         =3264x2448,3264x1968,2048x1536,2048x1232,800x480,640x480;
+    picture-size                =3264x2448;
+    preferred-preview-size-for-video=640x480;
+    preview-format-values       =yuv420sp,yuv420p,yuv422i-yuyv,yuv422sp,rgb565;
+    preview-format              =yuv420sp;
+    preview-fps-range-values    =(7000,30000);
+    preview-fps-range           =7000,30000;
+    preview-frame-rate-values   =30,25,20,15,10,7;
+    preview-frame-rate          =30;
+    preview-size-values         =640x480,720x480,800x480,800x450,352x288,320x240,176x144;
+    preview-size                =640x480;
+    scene-mode-values           =auto,portrait,landscape,night,beach,snow,sunset,fireworks,sports,party,candlelight,dusk-dawn,fall-color,back-light,text;
+    scene-mode                  =auto;
+    smooth-zoom-supported       =false;
+    vertical-view-angle         =46.3;
+    video-frame-format          =yuv420sp;
+    video-size-values           =720x480,176x144,320x240,352x288,640x480,1280x720,1920x1080;
+    video-size                  =720x480;
+    whitebalance-values         =auto,incandescent,fluorescent,daylight,cloudy-daylight;
+    whitebalance                =auto;
+    zoom-ratios                 =100,102,104,109,111,113,119,121,124,131,134,138,146,150,155,159,165,170,182,189,200,213,222,232,243,255,283,300,319,364,400;
+    zoom-supported              =true;
+    zoom                        =0;
+
+    ","CURRENT\/MODE_KEY":"MODE\/SYSTEM\/DEFAULT","MODE\/SYSTEM\/DEFAULT":{"codable_name":"MODE\/SYSTEM\/DEFAULT","uiname":"Default","augiements":[{"codable_name":"AUGIE\/FEATURES\/DRAW"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_LEVEL"},{"codable_name":"AUGIE\/FEATURES\/TOUCH_SHUTTER","code":{"meterAreas":[],"focusAreas":[{"codable_name":"AUGIE\/UTIL\/RECT","bottom":233,"meterAreaColor":-7829368,"left":377,"right":552,"focusAreaColor":-16711936,"top":123}]}},{"codable_name":"AUGIE\/FEATURES\/PINCH_ZOOM"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_DRAW","code":{}}],"camera":{"codable_name":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","code":{"codable_name":"AUGIE\/FEATURES\/CAMERA","camera_id":0,"params":{"focusMode":"auto","jpegQuality":100,"jpegThumbnailQuality":100,"maxPrevFPS":30000,"previewFmt":17,"whiteBal":"auto","shutterSnd":true,"xpictureFmt":"jpeg","colorMode":"none","pictureSize":{"codable_name":"AUGIE\/CODEABLE\/SIZE","width":3264,"height":2448},"flashMode":"off","previewSize":{"codable_name":"AUGIE\/CODEABLE\/SIZE","width":640,"height":480},"minPrevFPS":7000},"cameraName":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","name":"Back Camera"}}},"MODE\/SYSTEM\/FLASH":{"codable_name":"MODE\/SYSTEM\/FLASH","uiname":"Flash","augiements":[{"codable_name":"AUGIE\/FEATURES\/SHAKE_RESET"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_DRAW","code":{}},{"codable_name":"AUGIE\/FEATURES\/PINCH_ZOOM"},{"codable_name":"AUGIE\/FEATURES\/HORIZON_LEVEL"},{"codable_name":"AUGIE\/FEATURES\/TOUCH_SHUTTER","code":{"meterAreas":[],"focusAreas":[]}},{"codable_name":"AUGIE\/FEATURES\/DRAW"}],"camera":{"codable_name":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","code":{"cameraName":"AUGIE\/FEATURES\/CAMERA\/BACK_CAMERA","camera_id":0,"name":"Back Camera"}}}}
