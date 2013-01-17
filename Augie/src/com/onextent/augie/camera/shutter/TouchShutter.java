@@ -184,4 +184,11 @@ public class TouchShutter implements Augiement, OnTouchListener {
         
         return META;
     }
+    
+    public boolean isRegisterImageWithOS() {
+    	return shutter.isRegisterImageWithOS();
+    }
+	public void setRegisterImageWithOS(boolean r) {
+		shutter.setRegisterImageWithOS(r);
+    }
 }

@@ -60,6 +60,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             setFileSavedToastUI(v, camera);
             setPicFileRootDirUI(v, camera);
             setPicFileDirUI(v, camera);
+            setRegisterImage(v, camera);
 
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
@@ -123,6 +124,23 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 augiement.setShowFileSavedToast(isChecked);
+            }
+        });
+    }
+  
+    private void setRegisterImage(View v, AugCamera camera) {
+
+        CheckBox cbox = (CheckBox) v.findViewById(R.id.fireMediaStoreIntent);
+
+        boolean isEnabled = augiement.isRegisterImageWithOS();
+        cbox.setChecked(isEnabled);
+
+        cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                augiement.setRegisterImageWithOS(isChecked);
             }
         });
     }
@@ -198,16 +216,14 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				Log.d(Codeable.TAG, "ejs b4: " + te.getText());
 			}
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				Log.d(Codeable.TAG, "ejs on: " + te.getText());
+				augiement.setPicturesDir(s.toString());
 			}
 			@Override
 			public void afterTextChanged(Editable s) {
-				Log.d(Codeable.TAG, "ejs after: " + te.getText());
 			}
         });
     }

@@ -43,4 +43,6 @@ public abstract class CameraShutterFeature implements Augiement, OnTouchListener
 	abstract public void setPicturesDir(String picturesDir);
 	abstract public String getPicturesRoot();
 	abstract public void setPicturesRoot(String picturesRoot);
+    abstract public boolean isRegisterImageWithOS();
+	abstract public void setRegisterImageWithOS(boolean r);
 }

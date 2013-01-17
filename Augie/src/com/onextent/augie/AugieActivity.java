@@ -9,5 +9,6 @@ import com.onextent.android.ui.CallbackActivity;
 public interface AugieActivity extends CallbackActivity {
 
     public abstract ModeManager getModeManager();
-
+    
+    public int getOrientation();
 }

@@ -16,9 +16,12 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -58,12 +61,15 @@ public abstract class BaseAugmaticActivity
                       extends SherlockFragmentActivity 
                       implements AugieActivity {
 
+	private OrientationEventListener orientationEventListener;
     private AugCameraFactory    cameraFactory;
     private AugiementFactory    augiementFactory;
     protected ModeManager       modeManager;
     private AugieScape          augieScape;
     
-    public BaseAugmaticActivity() {
+    private int orientation = 0;
+    
+	public BaseAugmaticActivity() {
         super();
         callbacks = new HashMap<CodeableName, Callback>();
     }
@@ -99,11 +105,47 @@ public abstract class BaseAugmaticActivity
 
     protected abstract void configMenuButton();
     //end subclass methods
+   
+    private static int normalizeOrientation(int degrees) {
+        if (degrees > 315 || degrees <= 45) {
+            return Surface.ROTATION_0;
+        }
+
+        if (degrees > 45 && degrees <= 135) {
+            return Surface.ROTATION_90;
+        }
+
+        if (degrees > 135 && degrees <= 225) {
+            return Surface.ROTATION_180;
+        }
+
+        if (degrees > 225 && degrees <= 315) {
+            return Surface.ROTATION_270;
+        }
+        return Surface.ROTATION_0;
+    }
+        
+    private void initOrientationEventListener() {
+    	orientationEventListener = 
+    	new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL)
+    	{
+    	    @Override
+    	    public void onOrientationChanged(int o) {
+    	    	orientation = normalizeOrientation(o);
+    	}};
+        if (orientationEventListener.canDetectOrientation()){
+        	Toast.makeText(this, "Can DetectOrientation", Toast.LENGTH_LONG).show();
+            orientationEventListener.enable();
+        }
+        	else{Toast.makeText(this, "Can't DetectOrientation", Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        initOrientationEventListener();
         try {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
@@ -128,7 +170,7 @@ public abstract class BaseAugmaticActivity
 
         Log.d(Codeable.TAG, "BaseAugmaticActivity.init");
         RelativeLayout prevlayout = (RelativeLayout) findViewById(getPreviewId());
-        android.view.ViewGroup.LayoutParams p = prevlayout.getLayoutParams();
+        //android.view.ViewGroup.LayoutParams p = prevlayout.getLayoutParams();
         try {
             augieScape = new AugieScapeImpl(this);
             augiementFactory = new AugmaticAugiementFactory();
@@ -217,7 +259,9 @@ public abstract class BaseAugmaticActivity
 
     @Override
     protected void onDestroy() {
-        Log.d(Codeable.TAG, getClass().getName() + " onStop");
+        Log.d(Codeable.TAG, getClass().getName() + " onDestroy");
+    	super.onDestroy();
+    	orientationEventListener.disable();
         modeManager.stop();
         this.onStop();
     }
@@ -426,4 +470,10 @@ public abstract class BaseAugmaticActivity
         }
         return cb.handleCode(dest, code);
     }
+    
+    @Override
+	public int getOrientation() {
+	
+		return orientation;
+	}
 }

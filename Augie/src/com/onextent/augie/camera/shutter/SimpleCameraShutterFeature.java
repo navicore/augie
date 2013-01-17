@@ -17,6 +17,7 @@ import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieScape;
+import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
@@ -29,14 +30,18 @@ import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Camera;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Toast;
@@ -58,10 +63,13 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     private int meterAreaColor = Color.GRAY;
     private int focusAreaColor = Color.GREEN;
     private boolean always_set_focus_area = true;
-    private int touchFocusSz = 10;
+    private boolean registerImageWithOS = true;
+
+	private int touchFocusSz = 10;
     private boolean showFileSavedToast;
-    private String picturesDir = "MyAugie";
+    private String picturesDir = "Augie";
 	private String picturesRoot = Environment.DIRECTORY_DCIM;
+	private int prevPicOrientation = ExifInterface.ORIENTATION_NORMAL;
 
 	final static Set<CodeableName> deps;
     static {
@@ -110,6 +118,11 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         userCb = null;
     }
     
+    private void rememberRotation() {
+    	
+    	prevPicOrientation = ((AugieActivity)context).getOrientation();
+    }
+    
     protected void _takePicture() throws AugCameraException {
         
         try {
@@ -148,6 +161,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     }
     
 	protected void __takePicture() throws AugCameraException {
+		rememberRotation();
 	    if (!prefs.getBoolean("TOUCH_SHOOT_ENABLED", true)) return;
 	    if (camera != null)  {
 	        if (prefs.getBoolean("SAVE_RAW_ENABLED", false))
@@ -249,10 +263,43 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
                     Log.e(TAG, "Error starting preview after taking picture: " + e.getMessage(), e);
                 }
 
+            try {
+				updateExifOrientation(pictureFile);
+			} catch (IOException e) {
+				Log.e(TAG, e.toString(), e);
+			}
+            if (isRegisterImageWithOS()) galleryAddPic(pictureFile);
             handleUserCb(data, camera);
         }
+
+		private void updateExifOrientation(File pictureFile) throws IOException {
+			ExifInterface exif = new ExifInterface(pictureFile.getPath());
+			int newOrientation = ExifInterface.ORIENTATION_NORMAL;
+			switch (prevPicOrientation) {
+			case Surface.ROTATION_90:
+				newOrientation = ExifInterface.ORIENTATION_ROTATE_90;
+				break;
+			case Surface.ROTATION_180:
+				newOrientation = ExifInterface.ORIENTATION_ROTATE_180;
+				break;
+			case Surface.ROTATION_270:
+				newOrientation = ExifInterface.ORIENTATION_ROTATE_270;
+				break;
+			case Surface.ROTATION_0:
+			default:
+				newOrientation = ExifInterface.ORIENTATION_NORMAL;
+			}
+			exif.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(newOrientation));
+			exif.saveAttributes();
+		}
     }
     
+    private void galleryAddPic(File f) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
     
     /** Create a File for saving an image or video */
     private File getOutputMediaFile(int type, String suffix){
@@ -322,6 +369,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     private static final String SHOW_FILE_TOAST 		= "showFileToast";
     private static final String PICTURE_ROOT_DIR_KEY 	= "picRootDir";
     private static final String PICTURE_DIR_KEY 		= "picDir";
+    private static final String REG_PICS_WITH_OS 		= "registerPics";
     
     @Override
     public Code getCode() throws CodeableException {
@@ -334,6 +382,7 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
         code.put(SHOW_FILE_TOAST, isShowFileSavedToast());
         code.put(PICTURE_ROOT_DIR_KEY, getPicturesRoot());
         code.put(PICTURE_DIR_KEY, getPicturesDir());
+        code.put(REG_PICS_WITH_OS, isRegisterImageWithOS());
         
         return code;
     }
@@ -355,6 +404,8 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
     		setPicturesRoot(code.getString(PICTURE_ROOT_DIR_KEY));
     	if (code.has(PICTURE_DIR_KEY))
     		setPicturesDir(code.getString(PICTURE_DIR_KEY));
+    	if (code.has(REG_PICS_WITH_OS))
+    		setRegisterImageWithOS(code.getBoolean(REG_PICS_WITH_OS));
     }
 
     @Override
@@ -414,5 +465,13 @@ public class SimpleCameraShutterFeature extends CameraShutterFeature implements 
 
 	public void setPicturesRoot(String r) {
 		this.picturesRoot = r;
+	}
+	
+    public boolean isRegisterImageWithOS() {
+		return registerImageWithOS;
+	}
+
+	public void setRegisterImageWithOS(boolean r) {
+		this.registerImageWithOS = r;
 	}
 }
