@@ -3,8 +3,7 @@ Augmatic 1000
 Reference Camera Implementation using Augie
 ----------------------------------------------------
 
-NOTE, these are old todo notes, use Github's issues
-from now on.
+NOTE, these are old todo notes, use Github's issues from now on.
 ----------------------------------------------------
 
 ### TODO
