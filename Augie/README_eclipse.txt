@@ -1,6 +1,5 @@
-fuck you eclipse.  seriously.  fuck you.
+damn you eclipse.  seriously.  damn you.
 
-fyi, ddms debug port in eclipse is set to a nonesense number so it won't see anything and pop open a fucking useless window over my work.
+fyi, ddms debug port in eclipse is set to a nonesense number so it won't see anything and pop open a useless window over my work.
 
-the compile-as-you-type in eclipse is brilliant, the resource building is usable, but everything else is completely fucking insane.
-
+the compile-as-you-type in eclipse is brilliant, the resource building is usable, but everything else is completely insane.
