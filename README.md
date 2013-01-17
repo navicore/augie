@@ -9,3 +9,10 @@ Augmented reality Tools, Libraries, and Applications
    See sub-project [here](augie/tree/master/Augmatic).
 
 note, ActionBarSherlock is in the repo just as a convenience.  We've not made any changes to it.
+
+Terms
+=====
+1. Augie
+2. Agiement
+3. Augielay
+4. Mode
