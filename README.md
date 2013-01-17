@@ -12,7 +12,9 @@ note, ActionBarSherlock is in the repo just as a convenience.  We've not made an
 
 Terms
 ---
-1. Augie
-2. Agiement
-3. Augielay
-4. Mode
+1. Augie - The set of ideas and code libraries for working with cameras and camera live-views.
+2. Agiement - An Augie module.  Sets of modules make up an Augie application.
+3. Augielay - A visual Augiement that effects the live-view.
+4. Mode - An Augie application can have multiple personalities, each one embodied in a 
+   Mode.  All settings for a camera and augiements are scoped to a mode.
+5. Augmatic 1000 - the example camera application and reference implementation for all things Augie.
