@@ -1,7 +1,7 @@
 Augmatic 1000
 =====
 Reference Camera Implementation using Augie
-----------------------------------------------------
+=====
 NOTE, these are old todo notes, we're now using
 Github's issues system to manage bugs and features
 and milestones.
