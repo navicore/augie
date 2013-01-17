@@ -20,6 +20,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -106,7 +107,25 @@ public abstract class BaseAugmaticActivity
     protected abstract void configMenuButton();
     //end subclass methods
    
-    private static int normalizeOrientation(int degrees) {
+    private int normalizeOrientation(int degrees) {
+    
+    	//correct for device and rendering context
+    	Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int devOrienation = display.getRotation();
+        switch(devOrienation) {
+        case Surface.ROTATION_90:
+        	degrees += 90;
+        	break;
+        case Surface.ROTATION_180:
+        	degrees += 180;
+        	break;
+        case Surface.ROTATION_270:
+        	degrees += 270;
+        	break;
+        case Surface.ROTATION_0:
+        default:
+        }
+        
         if (degrees > 315 || degrees <= 45) {
             return Surface.ROTATION_0;
         }
@@ -134,7 +153,6 @@ public abstract class BaseAugmaticActivity
     	    	orientation = normalizeOrientation(o);
     	}};
         if (orientationEventListener.canDetectOrientation()){
-        	Toast.makeText(this, "Can DetectOrientation", Toast.LENGTH_LONG).show();
             orientationEventListener.enable();
         }
         	else{Toast.makeText(this, "Can't DetectOrientation", Toast.LENGTH_LONG).show();
