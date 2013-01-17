@@ -3,9 +3,9 @@
  */
 package com.onextent.augie.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import android.util.Log;
 
@@ -21,7 +21,8 @@ public class AugiementFactoryImpl implements AugiementFactory {
 	
     public AugiementFactoryImpl() {
 	    
-        augieClasses = new HashMap<CodeableName, Augiement.Meta>();
+        //augieClasses = new HashMap<CodeableName, Augiement.Meta>();
+        augieClasses = new TreeMap<CodeableName, Augiement.Meta>();
     }
 
     @Override

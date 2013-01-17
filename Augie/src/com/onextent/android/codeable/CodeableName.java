@@ -1,8 +1,8 @@
 package com.onextent.android.codeable;
 
-public abstract class CodeableName {
+public abstract class CodeableName implements Comparable<CodeableName> {
     
-    protected final String name;
+	protected final String name;
     
     protected CodeableName(String name) {
         if (name == null) throw new java.lang.NullPointerException("no name");
@@ -27,4 +27,9 @@ public abstract class CodeableName {
         
         return name;
     }
+    
+    @Override
+	public int compareTo(CodeableName another) {
+		return name.compareTo(another.name);
+	}
 }

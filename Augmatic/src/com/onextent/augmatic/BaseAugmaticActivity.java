@@ -152,10 +152,11 @@ public abstract class BaseAugmaticActivity
     	    public void onOrientationChanged(int o) {
     	    	orientation = normalizeOrientation(o);
     	}};
-        if (orientationEventListener.canDetectOrientation()){
+        if (orientationEventListener.canDetectOrientation()) {
             orientationEventListener.enable();
-        }
-        	else{Toast.makeText(this, "Can't DetectOrientation", Toast.LENGTH_LONG).show();
+        } else {
+        	Log.w(Codeable.TAG, "Can not detect orientation");
+        	Toast.makeText(this, "Can't Detect Orientation", Toast.LENGTH_LONG).show();
         }
     }
 

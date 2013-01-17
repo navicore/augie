@@ -24,13 +24,13 @@ public class TouchShutter implements Augiement, OnTouchListener {
     public static final String UI_NAME = "Touch Shutter";
     public static final String DESCRIPTION = "Trigger camera shutter by touching the screen.";
     
-    private final CameraShutterFeature shutter;
+    private final TouchShutterBase shutter;
    
     /**
      * idiotic class is just here to give a no-argument constructor
      */
     public TouchShutter() {
-        shutter = CameraShutterFeature.getInstance();
+        shutter = TouchShutterBase.getInstance();
     }
 
     @Override
@@ -156,39 +156,9 @@ public class TouchShutter implements Augiement, OnTouchListener {
     public void setTouchFocusSz(int touchFocusSz) {
         shutter.setTouchFocusSz(touchFocusSz);
     }
-
-    public boolean isShowFileSavedToast() {
-		return shutter.isShowFileSavedToast();
-	}
-	public void setShowFileSavedToast(boolean showFileSavedToast) {
-		shutter.setShowFileSavedToast(showFileSavedToast);
-	}
-    
-	public String getPicturesDir() {
-		return shutter.getPicturesDir();
-	}
-
-	public void setPicturesDir(String picturesDir) {
-		shutter.setPicturesDir(picturesDir);
-	}
-
-	public String getPicturesRoot() {
-		return shutter.getPicturesRoot();
-	}
-
-	public void setPicturesRoot(String picturesRoot) {
-		shutter.setPicturesRoot(picturesRoot);
-	}
     @Override
     public Meta getMeta() {
         
         return META;
-    }
-    
-    public boolean isRegisterImageWithOS() {
-    	return shutter.isRegisterImageWithOS();
-    }
-	public void setRegisterImageWithOS(boolean r) {
-		shutter.setRegisterImageWithOS(r);
     }
 }

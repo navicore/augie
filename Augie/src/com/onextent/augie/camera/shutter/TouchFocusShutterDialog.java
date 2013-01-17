@@ -8,9 +8,6 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
@@ -47,7 +43,7 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
 
         Dialog d = getDialog();
         if (d != null) d.setTitle(augiement.getMeta().getUIName() + " Settings");
-        View v = inflater.inflate(R.layout.shutter_settings, container, false);
+        View v = inflater.inflate(R.layout.touch_shutter_settings, container, false);
         try {
             ModeManager modeManager = activity.getModeManager();
             Mode mode = modeManager.getCurrentMode();
@@ -57,10 +53,6 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             setMeterAreaColorUI(v, camera);
             setAlwaysSetFaUI(v, camera);
             setDefaultFocusSzUI(v, camera);
-            setFileSavedToastUI(v, camera);
-            setPicFileRootDirUI(v, camera);
-            setPicFileDirUI(v, camera);
-            setRegisterImage(v, camera);
 
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
@@ -111,40 +103,6 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
         sui.init();
     }
 
-    private void setFileSavedToastUI(View v, AugCamera camera) {
-
-        CheckBox cbox = (CheckBox) v.findViewById(R.id.showFileSavedToast);
-
-        boolean isEnabled = augiement.isShowFileSavedToast();
-        cbox.setChecked(isEnabled);
-
-        cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                augiement.setShowFileSavedToast(isChecked);
-            }
-        });
-    }
-  
-    private void setRegisterImage(View v, AugCamera camera) {
-
-        CheckBox cbox = (CheckBox) v.findViewById(R.id.fireMediaStoreIntent);
-
-        boolean isEnabled = augiement.isRegisterImageWithOS();
-        cbox.setChecked(isEnabled);
-
-        cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                augiement.setRegisterImageWithOS(isChecked);
-            }
-        });
-    }
-  
     private void setAlwaysSetFaUI(View v, AugCamera camera) {
 
         CheckBox cbox = (CheckBox) v.findViewById(R.id.alwaysSetFocusArea);
@@ -185,46 +143,5 @@ public class TouchFocusShutterDialog extends SherlockDialogFragment {
             }
         };
         sui.init();
-    }
-    
-    private void setPicFileRootDirUI(View v, final AugCamera camera) {
-
-        Spinner spinner = (Spinner) v.findViewById(R.id.picFileRootDir);
-        final List<String> list = new ArrayList<String>();
-        list.add(Environment.DIRECTORY_DCIM);
-        list.add(Environment.DIRECTORY_DOWNLOADS);
-        list.add(Environment.DIRECTORY_PICTURES);
-        list.add(Environment.DIRECTORY_MUSIC);
-        SpinnerUI<String> sui = new SpinnerUI<String>(spinner, list) {
-            @Override
-            public int calculatePos() {
-                return list.indexOf(augiement.getPicturesRoot());
-            }
-            @Override
-            public void setMode(String m) {
-                augiement.setPicturesRoot(m);
-            }
-        };
-        sui.init();
-    }
-    private void setPicFileDirUI(View v, final AugCamera camera) {
-
-        final EditText te = (EditText) v.findViewById(R.id.picFileDir);
-        te.setText(augiement.getPicturesDir());
-        te.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				augiement.setPicturesDir(s.toString());
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-        });
     }
 }
