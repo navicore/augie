@@ -1,4 +1,4 @@
-fuck you eclipse.  seriously.  fuck you.
+damn you eclipse.  seriously.  damn you.
 
 fyi, ddms debug port in eclipse is set to a nonesense number so it won't see anything and pop open a fucking useless window over my work.
 
