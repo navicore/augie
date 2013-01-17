@@ -1,7 +1,11 @@
 Augie
 =====
 Augmented reality Tools, Libraries, and Applications
-----------------------------------------------------
+-----------------------------------------------------
+NOTE, these are old todo notes, we're now using
+Github's issues system to manage bugs and features
+and milestones.
+---------------------------------------------------
 
 ### TODO
 1. ~~Draw Horizons~~
