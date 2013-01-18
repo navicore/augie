@@ -55,6 +55,7 @@ public class ShutterDialog extends SherlockDialogFragment {
             setPicFileRootDirUI(v, camera);
             setPicFileDirUI(v, camera);
             setRegisterImage(v, camera);
+            setFileNameTemplateUI(v, camera);
 
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
@@ -132,6 +133,27 @@ public class ShutterDialog extends SherlockDialogFragment {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				augiement.setPicturesDir(s.toString());
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+        });
+    }
+    
+    private void setFileNameTemplateUI(View v, final AugCamera camera) {
+
+        final EditText te = (EditText) v.findViewById(R.id.fileNameTemplate);
+        te.setText(augiement.getFileNameTemplate());
+        te.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				augiement.setFileNameTemplate(s.toString());
 			}
 			@Override
 			public void afterTextChanged(Editable s) {

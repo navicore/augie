@@ -23,6 +23,7 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
+import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.AugFocusCallback;
 import com.onextent.augie.camera.AugPictureCallback;
 
@@ -48,7 +49,7 @@ public class Shutter implements Augiement {
 
 	private Context context;
 	private AugPictureCallback jpgCb;
-	//private AugPictureCallback rawCb;
+	private AugPictureCallback rawCb;
 	private AugPictureCallback userCb;
 
 	private boolean registerImageWithOS = true;
@@ -78,7 +79,7 @@ public class Shutter implements Augiement {
 
 		context = av.getContext();
 		jpgCb = new JpgCameraPictureCallback();
-		//rawCb = new RawCameraPictureCallback();
+		rawCb = new RawCameraPictureCallback();
 	}
 
 	@Override
@@ -144,8 +145,12 @@ public class Shutter implements Augiement {
 	protected void __takePicture() throws AugCameraException {
 		rememberRotation();
 		if (camera != null)  {
-			//camera.takePicture(null, rawCb, jpgCb);
-			camera.takePicture(null, null, jpgCb);
+			AugCameraParameters p = camera.getParameters();
+			if ("raw".equals(p.getXPictureFmt())) {
+				camera.takePicture(null, rawCb, null);
+			} else {
+				camera.takePicture(null, null, jpgCb);
+			}
 		} else {
 			handleUserCb(null, camera);
 			Log.e(TAG, "camera not found");
@@ -176,7 +181,7 @@ public class Shutter implements Augiement {
 		public void onPictureTaken(byte[] data, AugCamera camera) {
 
 			if (data == null){
-				Toast.makeText(context, "error: no image data", Toast.LENGTH_LONG).show();
+				//Toast.makeText(context, "error: no image data", Toast.LENGTH_LONG).show();
 				handleUserCb(data, camera);
 				return;
 			}
@@ -255,8 +260,6 @@ public class Shutter implements Augiement {
 		// To be safe, you should check that the SDCard is mounted
 		// using Environment.getExternalStorageState() before doing this.
 
-		//File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-		//          Environment.DIRECTORY_DCIM) + "/Augie2");
 		File mediaStorageDir;
 		if (picturesDir == null) {
 
@@ -276,16 +279,48 @@ public class Shutter implements Augiement {
 			}
 		}
 
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 		File mediaFile;
 		if (type == MEDIA_TYPE_IMAGE){
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-					"IMG_"+ timeStamp + suffix);
+					getFileName(suffix));
 		} else {
 			return null;
 		}
 
 		return mediaFile;
+	}
+	//private String fileNameTemplate = "Augie_Img_%y_%d_%t_%m_%s";
+	private String fileNameTemplate = "Augie_%y%M%d_%h%m%s_image";
+	public String getFileNameTemplate() {
+		return fileNameTemplate;
+	}
+
+	public void setFileNameTemplate(String fileNameTemplate) {
+		this.fileNameTemplate = fileNameTemplate;
+	}
+
+	private String getFileName(String suffix) {
+		Date date = new Date();
+		//String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+		String year = new SimpleDateFormat("yyyy", Locale.US).format(date);
+		String fn = fileNameTemplate.replace("%y", year);
+		
+		String dd = new SimpleDateFormat("dd", Locale.US).format(date);
+		fn = fn.replace("%d", dd);
+		
+		String MM = new SimpleDateFormat("MM", Locale.US).format(date);
+		fn = fn.replace("%M", MM);
+		
+		String HH = new SimpleDateFormat("HH", Locale.US).format(date);
+		fn = fn.replace("%h", HH);
+		
+		String mm = new SimpleDateFormat("mm", Locale.US).format(date);
+		fn = fn.replace("%m", mm);
+		
+		String ss = new SimpleDateFormat("ss", Locale.US).format(date);
+		fn = fn.replace("%s", ss);
+		
+		return fn + suffix;
 	}
 
 	@Override
@@ -315,6 +350,7 @@ public class Shutter implements Augiement {
 	private static final String PICTURE_ROOT_DIR_KEY 	= "picRootDir";
 	private static final String PICTURE_DIR_KEY 		= "picDir";
 	private static final String REG_PICS_WITH_OS 		= "registerPics";
+	private static final String FILENAME_TEMPLATE_KEY 	= "fnTemplate";
 
 	@Override
 	public Code getCode() throws CodeableException {
@@ -324,6 +360,7 @@ public class Shutter implements Augiement {
 		code.put(PICTURE_ROOT_DIR_KEY, getPicturesRoot());
 		code.put(PICTURE_DIR_KEY, getPicturesDir());
 		code.put(REG_PICS_WITH_OS, isRegisterImageWithOS());
+		code.put(FILENAME_TEMPLATE_KEY, getFileNameTemplate());
 
 		return code;
 	}
@@ -339,6 +376,8 @@ public class Shutter implements Augiement {
 			setPicturesDir(code.getString(PICTURE_DIR_KEY));
 		if (code.has(REG_PICS_WITH_OS))
 			setRegisterImageWithOS(code.getBoolean(REG_PICS_WITH_OS));
+		if (code.has(FILENAME_TEMPLATE_KEY))
+			setFileNameTemplate(code.getString(FILENAME_TEMPLATE_KEY));
 	}
 
 	@Override

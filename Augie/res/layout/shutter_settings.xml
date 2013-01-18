@@ -124,5 +124,27 @@
 	/>
 	</TableRow>
 	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="File name template" 
+	/>
+    
+    <EditText
+	android:id="@+id/fileNameTemplate"
+	android:inputType="text"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="MyAugie_%y%M%d_%h%m%s_image" 
+	/>
+
+	</TableRow>
+	
 </TableLayout>
 </ScrollView>

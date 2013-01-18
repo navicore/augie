@@ -246,8 +246,12 @@ public abstract class BaseAugmaticActivity
     @Override
     protected void onStop() {
         Log.d(Codeable.TAG, getClass().getName() + " onStop");
-        _paws();
+        try {
         super.onStop();
+        _paws();
+        } catch (Throwable err) {
+        	Log.e(Codeable.TAG, err.toString());
+        }
     }
 
     private void _paws() {
@@ -265,8 +269,8 @@ public abstract class BaseAugmaticActivity
     @Override
     protected void onPause() {
         Log.d(Codeable.TAG, getClass().getName() + " onPause");
-        _paws();
         super.onPause();
+        _paws();
     }
 
     @Override
