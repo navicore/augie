@@ -88,6 +88,9 @@ public class AugiementListHelper {
                 cbox.setChecked(isEnabled);
                 updateButtonText(cbox, cn, isEnabled);
                 updateStatusText(v, cn);
+                boolean isRequired = updateDepText(v, cn);
+                if (isEnabled && isRequired)
+                	cbox.setEnabled(false);
 
                 cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -135,16 +138,62 @@ public class AugiementListHelper {
         }
     }
 
+    private boolean updateDepText(View v, CodeableName cn) {
+
+        TextView deps = (TextView) v.findViewById(R.id.module_dependencies);
+        TextView reqs = (TextView) v.findViewById(R.id.module_required_by);
+        Augiement.Meta m = allAugiements.get(cn);
+        deps.setText(getDepsUINames(m));
+        List<Meta> rm = getRequiredByMeta(m);
+        reqs.setText(getRequiredByUINames(rm));
+        return rm != null;
+    }
+    
     private void updateStatusText(View v, CodeableName cn) {
 
         TextView desc = (TextView) v.findViewById(R.id.module_description);
-        TextView deps = (TextView) v.findViewById(R.id.module_dependencies);
         Augiement.Meta m = allAugiements.get(cn);
         desc.setText(m.getDescription());
-        deps.setText(getDepsDesc(m));
     }
     
-    private CharSequence getDepsDesc(Meta m) {
+    private List<Meta> getRequiredByMeta(Meta m) {
+    	
+    	if (m == null) return null;
+        
+    	CodeableName cn = m.getCodeableName();
+    	
+    	List<Meta> ret = new ArrayList<Meta>();
+        
+        for (Meta am : allAugiements.values()) {
+           
+        	Set<CodeableName> cnames = am.getDependencyNames();
+        	if (cnames == null) continue;
+            for (CodeableName dm : cnames)
+            	if (dm.equals(cn)) ret.add(am);
+        }
+        if (ret.size() == 0) return null;
+    
+        return ret;
+    }
+    
+    private CharSequence getRequiredByUINames(List<Meta> mlist) {
+        
+    	if (mlist == null) return null;
+    	
+        String ret = "";
+        
+        for (Meta am : mlist) {
+            
+            if (ret.length() > 0) ret += ", ";
+          
+            ret += am.getUIName();
+        }
+        if (ret.length() == 0) return null;
+    
+        return "required by " + ret;
+    }
+    
+    private CharSequence getDepsUINames(Meta m) {
         
         Set<CodeableName> cnames = m.getDependencyNames();
         if (cnames == null) return null;
@@ -153,14 +202,18 @@ public class AugiementListHelper {
         
         for (CodeableName cn : cnames) {
             
-            if (ret.length() > 0) ret += ", ";
-            
             Meta dm = allAugiements.get(cn);
 
-            if (dm == null) continue;
+            if (dm == null) {
+            	Log.w(Codeable.TAG, "getDepsDesc looking for unknown augiement: " + dm);
+            	continue;
+            }
+            
+            if (ret.length() > 0) ret += ", ";
             
             ret += dm.getUIName();
         }
+        
         if (ret.length() == 0) return null;
     
         return "depends on " + ret;
