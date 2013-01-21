@@ -44,7 +44,20 @@ import android.view.View;
 
 public class HistogramFeature extends AugDrawBase implements AugPreviewCallback {
 
-    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
+    @Override
+	public void stop() {
+		super.stop();
+        camera.setPreviewCallback(null);
+        //camera.setPreviewCallbackWithBuffer(this);
+	}
+	@Override
+	public void resume() {
+		super.resume();
+        camera.setPreviewCallback(this);
+        //camera.setPreviewCallbackWithBuffer(this);
+	}
+
+	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
     public static final String UI_NAME = "Histogram";
     public static final String DESCRIPTION = "A live RGB Histogram drawn on the camera preview.";
 
@@ -139,9 +152,6 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         }
         if (augdraw == null) throw new AugiementException("draw feature is null");
         if (camera == null) throw new AugiementException("camera is null");
-
-        camera.setPreviewCallback(this);
-        //camera.setPreviewCallbackWithBuffer(this);
     }
 
     @Override

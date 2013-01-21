@@ -223,6 +223,7 @@ public class ModeManagerImpl implements ModeManager {
         mode.addAugiement(new TouchShutter());
 
         mode.addAugiement(new PinchZoom());
+        mode.addAugiement(new GPS());
         
         //ShakeResetFeature shakeReseter = new ShakeResetFeature();
         //mode.addAugiement(shakeReseter);
@@ -254,6 +255,7 @@ public class ModeManagerImpl implements ModeManager {
 
         mode.addAugiement(new Shutter());
         mode.addAugiement(new TouchShutter());
+        mode.addAugiement(new GPS());
 
         ShakeResetFeature shakeReseter = new ShakeResetFeature();
         mode.addAugiement(shakeReseter);
