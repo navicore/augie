@@ -55,7 +55,7 @@ public class AugieScapeImpl extends View implements AugieScape {
     }
 
     public boolean removeFeature(Augiement f) throws AugiementException {
-        
+       
         if (f == null) {
             features.clear();
             return true;

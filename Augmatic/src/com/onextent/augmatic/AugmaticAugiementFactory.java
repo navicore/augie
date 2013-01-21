@@ -9,6 +9,7 @@ import com.onextent.augie.camera.shutter.TouchShutter;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.impl.AugiementFactoryImpl;
 import com.onextent.augie.impl.FrameLevelerFeature;
+import com.onextent.augie.impl.GPS;
 import com.onextent.augie.impl.HorizonCheckFeature;
 import com.onextent.augie.impl.HorizonFeature;
 import com.onextent.augie.impl.ShakeResetFeature;
@@ -32,5 +33,6 @@ public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
         registerAugiement(PinchZoom.META);
         registerAugiement(HistogramFeature.META);
         registerAugiement(Shutter.META);
+        registerAugiement(GPS.META);
     }
 }

@@ -8,28 +8,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
-
-import com.onextent.android.codeable.Code;
-import com.onextent.android.codeable.CodeableException;
-import com.onextent.android.codeable.CodeableName;
-import com.onextent.android.codeable.JSONCoder;
-import com.onextent.augie.AugieScape;
-import com.onextent.augie.AugieActivity;
-import com.onextent.augie.Augiement;
-import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementName;
-import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraException;
-import com.onextent.augie.camera.AugCameraParameters;
-import com.onextent.augie.camera.AugFocusCallback;
-import com.onextent.augie.camera.AugPictureCallback;
 
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.location.Location;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
@@ -38,16 +26,35 @@ import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableHandler;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.EventManager;
+import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugieActivity;
+import com.onextent.augie.AugieScape;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
+import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
+import com.onextent.augie.camera.AugCameraParameters;
+import com.onextent.augie.camera.AugFocusCallback;
+import com.onextent.augie.camera.AugPictureCallback;
+import com.onextent.augie.impl.GPS;
+
 public class Shutter implements Augiement {
 
 	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHUTTER");
-    public static final String UI_NAME = "Camera Shutter";
-    public static final String DESCRIPTION = "Operates the camera shutter, stores the picture files.";
+	public static final String UI_NAME = "Camera Shutter";
+	public static final String DESCRIPTION = "Operates the camera shutter, stores the picture files.";
 
 	protected AugieScape augieScape;
 	protected AugCamera camera;
 
 	private Context context;
+	private EventManager eventManager;
 	private AugPictureCallback jpgCb;
 	private AugPictureCallback rawCb;
 	private AugPictureCallback userCb;
@@ -57,7 +64,8 @@ public class Shutter implements Augiement {
 	private boolean showFileSavedToast;
 	private String picturesDir = "Augie";
 	private String picturesRoot = Environment.DIRECTORY_DCIM;
-	private int prevPicOrientation = ExifInterface.ORIENTATION_NORMAL;
+
+	private final Map<String, String> exifData = new HashMap<String, String>();
 
 	final static Set<CodeableName> deps;
 	static {
@@ -80,6 +88,19 @@ public class Shutter implements Augiement {
 		context = av.getContext();
 		jpgCb = new JpgCameraPictureCallback();
 		rawCb = new RawCameraPictureCallback();
+
+		eventManager = (EventManager) context;
+	}
+
+	public void setExif(String tag, String value) {
+		if (value == null) {
+			exifData.remove(tag);
+		} else {
+			exifData.put(tag, value);
+		}
+	}
+	public String getExif(String tag) {
+		return exifData.get(tag);
 	}
 
 	@Override
@@ -102,7 +123,24 @@ public class Shutter implements Augiement {
 
 	private void rememberRotation() {
 
-		prevPicOrientation = ((AugieActivity)context).getOrientation();
+		int prevPicOrientation = ((AugieActivity)context).getOrientation();
+		int newOrientation = ExifInterface.ORIENTATION_NORMAL;
+
+		switch (prevPicOrientation) {
+		case Surface.ROTATION_90:
+			newOrientation = ExifInterface.ORIENTATION_ROTATE_90;
+			break;
+		case Surface.ROTATION_180:
+			newOrientation = ExifInterface.ORIENTATION_ROTATE_180;
+			break;
+		case Surface.ROTATION_270:
+			newOrientation = ExifInterface.ORIENTATION_ROTATE_270;
+			break;
+		case Surface.ROTATION_0:
+		default:
+			newOrientation = ExifInterface.ORIENTATION_NORMAL;
+		}
+		exifData.put(ExifInterface.TAG_ORIENTATION, Integer.toString(newOrientation));
 	}
 
 	protected void _takePicture() throws AugCameraException {
@@ -171,6 +209,7 @@ public class Shutter implements Augiement {
 			super(".jpg");
 		}
 	}
+
 	class CameraPictureCallback implements AugPictureCallback {
 
 		final String suffix;
@@ -218,34 +257,27 @@ public class Shutter implements Augiement {
 				}
 
 			try {
-				updateExifOrientation(pictureFile);
+				updateExif(pictureFile);
 			} catch (IOException e) {
 				Log.e(TAG, e.toString(), e);
 			}
 			if (isRegisterImageWithOS()) galleryAddPic(pictureFile);
 			handleUserCb(data, camera);
 		}
+	}
 
-		private void updateExifOrientation(File pictureFile) throws IOException {
-			ExifInterface exif = new ExifInterface(pictureFile.getPath());
-			int newOrientation = ExifInterface.ORIENTATION_NORMAL;
-			switch (prevPicOrientation) {
-			case Surface.ROTATION_90:
-				newOrientation = ExifInterface.ORIENTATION_ROTATE_90;
-				break;
-			case Surface.ROTATION_180:
-				newOrientation = ExifInterface.ORIENTATION_ROTATE_180;
-				break;
-			case Surface.ROTATION_270:
-				newOrientation = ExifInterface.ORIENTATION_ROTATE_270;
-				break;
-			case Surface.ROTATION_0:
-			default:
-				newOrientation = ExifInterface.ORIENTATION_NORMAL;
-			}
-			exif.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(newOrientation));
-			exif.saveAttributes();
-		}
+	private void updateExif(File pictureFile) throws IOException {
+
+		//todo: need to set timestamp exif tag ie: 2003:08:11 16:45:32
+
+		if (exifData.isEmpty()) return;
+
+		ExifInterface exif = new ExifInterface(pictureFile.getPath());
+
+		for (String tag : exifData.keySet()) 
+			exif.setAttribute(tag, exifData.get(tag));
+
+		exif.saveAttributes();
 	}
 
 	private void galleryAddPic(File f) {
@@ -304,35 +336,37 @@ public class Shutter implements Augiement {
 		//String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 		String year = new SimpleDateFormat("yyyy", Locale.US).format(date);
 		String fn = fileNameTemplate.replace("%y", year);
-		
+
 		String dd = new SimpleDateFormat("dd", Locale.US).format(date);
 		fn = fn.replace("%d", dd);
-		
+
 		String MM = new SimpleDateFormat("MM", Locale.US).format(date);
 		fn = fn.replace("%M", MM);
-		
+
 		String HH = new SimpleDateFormat("HH", Locale.US).format(date);
 		fn = fn.replace("%h", HH);
-		
+
 		String mm = new SimpleDateFormat("mm", Locale.US).format(date);
 		fn = fn.replace("%m", mm);
-		
+
 		String ss = new SimpleDateFormat("ss", Locale.US).format(date);
 		fn = fn.replace("%s", ss);
-		
+
 		return fn + suffix;
 	}
 
 	@Override
 	public void stop() {
 		Log.d(TAG, "stopping " + getClass().getName());
-		//noop
+		if (eventManager == null) return;
+		eventManager.unlisten(GPS.GPS_UPDATE_AUGIE_NAME, gpsEventHandler);
 	}
 
 	@Override
 	public void resume() {
+		if (eventManager == null) return;
 		Log.d(TAG, "resuming " + getClass().getName());
-		//noop
+		eventManager.listen(GPS.GPS_UPDATE_AUGIE_NAME, gpsEventHandler);
 	}
 
 	@Override
@@ -340,6 +374,61 @@ public class Shutter implements Augiement {
 		Log.d(TAG, "clearing " + getClass().getName());
 		//noop
 	}
+
+	CodeableHandler gpsEventHandler = new CodeableHandler() {
+
+		@Override
+		public void onCode(Code code) {
+			double lat;
+			double lon;
+			try {
+				lat = code.getDouble(GPS.LATITUDE_KEY);
+				lon = code.getDouble(GPS.LONGITUDE_KEY);
+			} catch (CodeableException e) {
+				Log.e(TAG, e.toString(), e);
+				return;
+			}
+			//String latitudeStr = "90/1,12/1,30/1";
+			double alat = Math.abs(lat);
+			String dms = Location.convert(alat, Location.FORMAT_SECONDS);
+			String[] splits = dms.split(":");
+			String[] secnds = (splits[2]).split("\\.");
+			String seconds;
+			if(secnds.length==0)
+			{
+				seconds = splits[2];
+			}
+			else
+			{
+				seconds = secnds[0];
+			}
+
+			String latitudeStr = splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
+			exifData.put(ExifInterface.TAG_GPS_LATITUDE, latitudeStr);
+
+			exifData.put(ExifInterface.TAG_GPS_LATITUDE_REF, lat>0?"N":"S");
+
+			double alon = Math.abs(lon);
+
+
+			dms = Location.convert(alon, Location.FORMAT_SECONDS);
+			splits = dms.split(":");
+			secnds = (splits[2]).split("\\.");
+
+			if(secnds.length==0)
+			{
+				seconds = splits[2];
+			}
+			else
+			{
+				seconds = secnds[0];
+			}
+			String longitudeStr = splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
+
+			exifData.put(ExifInterface.TAG_GPS_LONGITUDE, longitudeStr);
+			exifData.put(ExifInterface.TAG_GPS_LONGITUDE_REF, lon>0?"E":"W");
+		}
+	};
 
 	@Override
 	public CodeableName getCodeableName() {
@@ -382,7 +471,7 @@ public class Shutter implements Augiement {
 
 	@Override
 	public DialogFragment getUI() {
-		
+
 		return new ShutterDialog();
 	}
 

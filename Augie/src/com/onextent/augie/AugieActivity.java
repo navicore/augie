@@ -3,12 +3,17 @@
  */
 package com.onextent.augie;
 
+import android.app.Activity;
+
+import com.onextent.android.codeable.EventManager;
 import com.onextent.android.ui.CallbackActivity;
 
 
-public interface AugieActivity extends CallbackActivity {
+public interface AugieActivity extends CallbackActivity, EventManager {
 
-    public abstract ModeManager getModeManager();
+    ModeManager getModeManager();
     
-    public int getOrientation();
+    int getOrientation();
+    
+    Activity getActivity();
 }

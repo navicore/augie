@@ -7,10 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -56,6 +59,7 @@ import com.onextent.augmatic.camera.CameraSelectionDialog;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableHandler;
 import com.onextent.android.codeable.CodeableName;
 
 public abstract class BaseAugmaticActivity 
@@ -68,11 +72,14 @@ public abstract class BaseAugmaticActivity
     protected ModeManager       modeManager;
     private AugieScape          augieScape;
     
+	private final Map<CodeableName, Set<CodeableHandler>> handlerSets;
+	
     private int orientation = 0;
     
 	public BaseAugmaticActivity() {
         super();
         callbacks = new HashMap<CodeableName, Callback>();
+        handlerSets = new HashMap<CodeableName, Set<CodeableHandler>>();
     }
 
     private static File getOutputFile(String pref, String suffix)
@@ -498,5 +505,52 @@ public abstract class BaseAugmaticActivity
 	public int getOrientation() {
 	
 		return orientation;
+	}
+    
+	@Override
+	public Activity getActivity() {
+		return this;
+	}
+
+	@Override
+	public void fire(Code code) {
+		
+		Set<CodeableHandler> handlers;
+		
+		try {
+			handlers = handlerSets.get(code.getCodeableName());
+			if (handlers != null) {
+				for (CodeableHandler h : handlers) {
+					
+					h.onCode(code);
+				}
+			}
+		} catch (CodeableException ex) {
+			Log.e(Codeable.TAG, ex.toString(), ex);
+		}
+	}
+
+	@Override
+	public void unlisten(CodeableName name, CodeableHandler handler) {
+	
+		Set<CodeableHandler> handlers = null;
+		if (handlerSets.containsKey(name)) {
+			handlers = handlerSets.get(name);
+		} 
+		if (handler != null)
+			handlers.remove(handler);
+	}
+	
+	@Override
+	public void listen(CodeableName name, CodeableHandler handler) {
+	
+		Set<CodeableHandler> handlers;
+		if (handlerSets.containsKey(name)) {
+			handlers = handlerSets.get(name);
+		} else {
+			handlers = new HashSet<CodeableHandler>();
+			handlerSets.put(name, handlers);
+		}
+		handlers.add(handler);
 	}
 }

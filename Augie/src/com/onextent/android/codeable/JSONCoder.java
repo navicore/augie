@@ -313,5 +313,13 @@ public class JSONCoder {
                 throws CodeableException {
             return new CodeableName(getString(key)) {};
         }
+		@Override
+		public CodeableName getCodeableName() throws CodeableException {
+			return getCodeableName(Codeable.CODEABLE_NAME_KEY);
+		}
+		@Override
+		public void put(CodeableName value) throws CodeableException {
+			put(Codeable.CODEABLE_NAME_KEY, value);
+		}
     }
 }
