@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -21,6 +23,7 @@ import android.location.Location;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.Surface;
@@ -217,13 +220,32 @@ public class Shutter implements Augiement {
 			this.suffix = suffix;
 		}
 
+
 		public void onPictureTaken(byte[] data, AugCamera camera) {
+		
+			if (handlingIntent()) {
+				onPictureTakenByIntent(data, camera);
+			} else {
+				onPictureTakenLocalFS(data, camera);
+			}
+		}
+		
+		private boolean handlingIntent() {
+			Activity a = (Activity) context;
+			Intent i = a.getIntent();
+			String action = i.getAction();
+			if (action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE)) return true;
+			return false;
+		}
+
+		public void onPictureTakenLocalFS(byte[] data, AugCamera camera) {
 
 			if (data == null){
 				//Toast.makeText(context, "error: no image data", Toast.LENGTH_LONG).show();
 				handleUserCb(data, camera);
 				return;
 			}
+			
 			File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, suffix);
 			if (pictureFile == null){
 				String msg = "Error storing file, check storage permissions";
@@ -263,6 +285,46 @@ public class Shutter implements Augiement {
 			}
 			if (isRegisterImageWithOS()) galleryAddPic(pictureFile);
 			handleUserCb(data, camera);
+		}
+		
+		public void onPictureTakenByIntent(byte[] data, AugCamera camera) {
+			
+			Activity activity = (Activity) context;
+			
+			Uri uriTarget = (Uri) activity.getIntent().getExtras().getParcelable( MediaStore.EXTRA_OUTPUT );
+		
+			Log.d(TAG, "writing to uri target: " + uriTarget);
+			if (uriTarget == null) {
+				
+				Toast.makeText(context, "error: uriTarget is null", Toast.LENGTH_LONG).show();
+				// todo: if no uri you must return a small bitmap per api for MediaStore.ACTION_IMAGE_CAPTURE");
+				Log.w(TAG, "'no uri'-intent not supported, client activity must send a uri.");
+				handleUserCb(data, camera);
+				return;
+			}
+			
+			try {
+				OutputStream fos = context.getContentResolver().openOutputStream(uriTarget);
+				fos.write(data);
+				fos.flush();
+				fos.close();
+				((Activity)context).setResult(Activity.RESULT_OK);
+			} catch (IOException e) {
+				Log.e(TAG, "Error accessing file: " + e.getMessage());
+				((Activity)context).setResult(Activity.RESULT_CANCELED);
+			}
+
+			try {
+				String p = uriTarget.getPath();
+				if (p != null) {
+					File f = new File(p);
+					if (f != null) updateExif(f);
+				}
+			} catch (IOException e) {
+				Log.w(TAG, e.toString());
+			}
+			handleUserCb(data, camera);
+            ((Activity)context).finish();
 		}
 	}
 

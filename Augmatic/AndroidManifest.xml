@@ -24,6 +24,8 @@
           android:label="@string/app_name"
           android:screenOrientation="landscape">
           <intent-filter>
+            <category android:name="android.intent.category.DEFAULT" />
+        	<action android:name="android.media.action.IMAGE_CAPTURE" />
         	<action android:name="android.intent.action.MAIN" />
         	<category android:name="android.intent.category.LAUNCHER" />
     		</intent-filter>

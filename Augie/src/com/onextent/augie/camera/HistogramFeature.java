@@ -24,6 +24,7 @@ import java.util.Set;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.codeable.Size;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -47,14 +48,14 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     @Override
 	public void stop() {
 		super.stop();
-        camera.setPreviewCallback(null);
-        //camera.setPreviewCallbackWithBuffer(this);
+        //camera.setPreviewCallback(null);
+        camera.setPreviewCallbackWithBuffer(this);
 	}
 	@Override
 	public void resume() {
 		super.resume();
-        camera.setPreviewCallback(this);
-        //camera.setPreviewCallbackWithBuffer(this);
+        //camera.setPreviewCallback(this);
+        camera.setPreviewCallbackWithBuffer(this);
 	}
 
 	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
@@ -76,15 +77,19 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     Paint mPaintRed;
     Paint mPaintGreen;
     Paint mPaintBlue;
+    Paint mPaintWhite;
 
     private AugDrawFeature augdraw;
     private AugCamera camera;
 
+    final RectF greyRects[];
     final RectF redRects[];
     final RectF greenRects[];
     final RectF blueRects[];
+	private boolean greyscale;
+    private int hheight = 0;
 
-    private final static Set<CodeableName> deps;
+	private final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
         deps.add(AugCamera.AUGIENAME);
@@ -101,6 +106,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     }
     public HistogramFeature() {
         hasData = false;
+        greyRects = newRects();
         redRects = newRects();
         greenRects = newRects();
         blueRects = newRects();
@@ -136,6 +142,11 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         mPaintBlue.setStyle(Paint.Style.FILL);
         mPaintBlue.setColor(Color.BLUE);
         mPaintBlue.setTextSize(25);
+        
+        mPaintWhite = new Paint();
+        mPaintWhite.setStyle(Paint.Style.FILL);
+        mPaintWhite.setColor(Color.WHITE);
+        mPaintWhite.setTextSize(25);
     }
 
     @Override
@@ -179,7 +190,8 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     }
 
     static private void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
-        final int frameSize = width * height;
+        
+    	final int frameSize = width * height;
 
         for (int j = 0, yp = 0; j < height; j++) {
             int uvp = frameSize + (j >> 1) * width, u = 0, v = 0;
@@ -205,9 +217,9 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         }
     }
 
-    /*
-    static private void decodeYUV420SPGrayscale(int[] rgb, byte[] yuv420sp, int width, int height)
-    {
+    static private void decodeYUV420SPGrayscale(int[] rgb, byte[] yuv420sp, 
+    		int width, int height) {
+    	
         final int frameSize = width * height;
 
         for (int pix = 0; pix < frameSize; pix++)
@@ -218,7 +230,6 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             rgb[pix] = 0xff000000 | (pixVal << 16) | (pixVal << 8) | pixVal;
         } // pix
     }
-     */
 
     static private void calculateIntensityHistogram(int[] rgb, int[] histogram, int width, int height, int component)
     {
@@ -263,13 +274,17 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
             //add buffer back in
             hasData = false;
-            //camera.addCallbackBuffer(yyuvdata);
+            camera.addCallbackBuffer(yyuvdata);
             yyuvdata = null;
         }
 
-        updateCanvas(redRects, mPaintRed);
-        updateCanvas(greenRects, mPaintGreen);
-        updateCanvas(blueRects, mPaintBlue);
+        if (greyscale) {
+        	updateCanvas(greyRects, mPaintWhite);
+        } else {
+        	updateCanvas(redRects, mPaintRed);
+        	updateCanvas(greenRects, mPaintGreen);
+        	updateCanvas(blueRects, mPaintBlue);
+        }
     }
 
     private void updateHistograms() {
@@ -282,8 +297,10 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         int[] rgbdata = new int[w * h]; 
 
         // Convert from YUV to RGB
-        decodeYUV420SP(rgbdata, yyuvdata, w, h);
-        //decodeYUV420SPGrayscale(rgbdata, yyuvdata, w, h);
+        if (greyscale)
+        	decodeYUV420SPGrayscale(rgbdata, yyuvdata, w, h);
+        else
+        	decodeYUV420SP(rgbdata, yyuvdata, w, h);
 
         calculateIntensityHistogram(rgbdata, mRedHistogram, w, h, 0);
         calculateIntensityHistogram(rgbdata, mGreenHistogram, w, h, 1);
@@ -297,16 +314,24 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             blueHistogramSum += mBlueHistogram[bin];
         }
 
-        updateHistogramRects(canvasHeight - (2 * getHHeight()), redHistogramSum, mRedHistogram, redRects);
-        updateHistogramRects(canvasHeight - (getHHeight()), greenHistogramSum, mGreenHistogram, greenRects);
-        updateHistogramRects(canvasHeight, blueHistogramSum, mBlueHistogram, blueRects);
+        if (greyscale) {
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	//todo: ejs warning this greyscale stuff is a bad bad hack.  broken.
+        	updateHistogramRects(canvasHeight, redHistogramSum, mRedHistogram, greyRects);
+        } else {
+        	updateHistogramRects(canvasHeight - (2 * getHHeight()), redHistogramSum, mRedHistogram, redRects);
+        	updateHistogramRects(canvasHeight - (getHHeight()), greenHistogramSum, mGreenHistogram, greenRects);
+        	updateHistogramRects(canvasHeight, blueHistogramSum, mBlueHistogram, blueRects);
+        }
     }
-
-    private int getHHeight() {
-        if (augieScape.getHeight() < 600) return 50;
-        return 100;
-    }
-
+    
     private void updateCanvas(RectF[] rects, Paint paint) {
         Canvas canvas = augieScape.getCanvas();
         for (RectF r : rects) {
@@ -352,13 +377,25 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     }
 
     @Override
-    public Code getCode() {
+    public Code getCode() throws CodeableException {
 
-        return null;
+        Code code = JSONCoder.newCode();
+        code.put(AUGIE_NAME);
+        code.put("greyscale", greyscale);
+        code.put("hheight", hheight);
+        
+        return code;
     }
 
     @Override
     public void setCode(Code code) throws CodeableException {
+    	if (code == null) return;
+    	if (code.has("hheight")) {
+    		hheight = code.getInt("hheight");
+    	}
+    	if (code.has("greyscale")) {
+    		greyscale = code.getBoolean("greyscale");
+    	}
     }
 
     @Override
@@ -412,7 +449,23 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
     @Override
     public DialogFragment getUI() {
-        // TODO Auto-generated method stub
-        return null;
+        return new HistogramDialog();
+    }
+    
+    public boolean isGreyscale() {
+		return greyscale;
+	}
+	public void setGreyscale(boolean greyscale) {
+		this.greyscale = greyscale;
+	}
+	
+    public void setHHeight(int h) {
+    	hheight = h;
+    }
+    
+    public int getHHeight() {
+    	if (hheight != 0) return hheight;
+        if (augieScape != null && augieScape.getHeight() > 600) return 100;
+        return 50;
     }
 }

@@ -93,13 +93,12 @@ public class AugieScapeImpl extends View implements AugieScape {
 
     public boolean initBmp(int w, int h) {
         if (w <= 0 || h <= 0) return false;
-        Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas();
-        c.setBitmap(img);
+        c.setBitmap(bitmap);
         if (bitmap != null) {
-            c.drawBitmap(img, 0, 0, null);
+            c.drawBitmap(bitmap, 0, 0, null);
         }
-        bitmap = img;
         canvas = c;
         return true;
     }
