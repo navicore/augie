@@ -108,8 +108,13 @@ public class ModeImpl implements Codeable, Mode {
                 for (int i = 0; i < features.length(); i++) {
                     Code acode = features.get(i);
                     CodeableName fName = new AugiementName(acode.getString(KEY_AUGIENAME));
-                    Augiement f = modeManager.getAugiementFactory().newInstance(fName);
-                    if (f == null) throw new java.lang.NullPointerException("no feature from augiment factory");
+                    Augiement f = null;
+                    try {
+                    	f = modeManager.getAugiementFactory().newInstance(fName);
+                    } catch(Exception e) {
+                    	Log.w(TAG, "can not find " + fName + " augiement");
+                    	continue;
+                    }
                     if (acode.has(KEY_CODE)) {
                         Code fCode = acode.get(KEY_CODE);
                         if (fCode != null) f.setCode(fCode);
