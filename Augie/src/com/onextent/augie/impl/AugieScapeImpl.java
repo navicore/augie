@@ -82,6 +82,7 @@ public class AugieScapeImpl extends View implements AugieScape {
         for (Augiement f : features) {
             f.resume();
         }
+        initBmp(getWidth(), getHeight());
     }
 
     public void stop() {
@@ -89,17 +90,24 @@ public class AugieScapeImpl extends View implements AugieScape {
         for (Augiement f : features) {
             f.stop();
         }
+        if (bitmap != null)  {
+        	bitmap.recycle();
+        	bitmap = null;
+        }
     }
 
     public boolean initBmp(int w, int h) {
+    	
         if (w <= 0 || h <= 0) return false;
-        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas();
-        c.setBitmap(bitmap);
-        if (bitmap != null) {
-            c.drawBitmap(bitmap, 0, 0, null);
+        
+        if (bitmap == null) {
+        	canvas = new Canvas();
+        	bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        	canvas.setBitmap(bitmap);
+        } else {
+        	bitmap.eraseColor(Color.TRANSPARENT);
         }
-        canvas = c;
+        
         return true;
     }
 

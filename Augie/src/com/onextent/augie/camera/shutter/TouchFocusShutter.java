@@ -256,7 +256,7 @@ public class TouchFocusShutter extends SimpleCameraShutterFeature {
     }
 
     private void handleGesture(AugScrible scrible) throws AugCameraException {
-        Log.d(TAG, "TouchFocusShutterFeature handleGesture: " + scrible);
+
         if (scrible == null)  {
             Log.w(TAG, "no current scrible / gesture");
             return;

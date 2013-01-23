@@ -77,27 +77,11 @@ public class AugDrawFeature extends AugDrawBase {
 	    int y = (int) event.getY();
 	    switch (action) {
 	    case MotionEvent.ACTION_UP:
-	        Log.d(TAG, "motion event up");
-	       
-	        //ejs BUG for zero len tap, trouble
-	        //either of these approaches causes 
-	        //  dragging off screen to take picture :(
-	        //handleZeroLenTap(prevX, prevY, x, y);
 	        scrible(prevX, prevY, x, y);
-	       
-	        /*
-	        how about a fake 1 pixel move?
-	               
-	        better idea, find out:
-	        why does touch shutter think a drag off screen
-	        is a tap?
-	         */
-	        
 	    	prevX = -1;
-	    	//todo: setting that discards current scrible and makes 'undolastscrible' func a noop
+
 	    	break;
 	    case MotionEvent.ACTION_DOWN:
-	        Log.d(TAG, "motion event down");
 	    	
 	    	currentScrible = MarkerFactory.createScrible(augieScape);
 	    	scribles.add(currentScrible);
@@ -106,7 +90,6 @@ public class AugDrawFeature extends AugDrawBase {
 	        prevY = (int) event.getY();
 	    	break;
 	    case MotionEvent.ACTION_MOVE:
-	        Log.d(TAG, "motion event move");
 	    	if (prevX != -1) {
 	    		scrible(prevX, prevY, x, y);
 	    	}
@@ -114,7 +97,6 @@ public class AugDrawFeature extends AugDrawBase {
 	        prevY = (int) event.getY();
 	    	break;
 	    default:
-	        Log.d(TAG, "motion event unknown");
 	    	return false;
 	    }
 	    return true;

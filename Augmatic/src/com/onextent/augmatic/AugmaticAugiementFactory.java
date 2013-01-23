@@ -8,6 +8,7 @@ import com.onextent.augie.camera.shutter.Shutter;
 import com.onextent.augie.camera.shutter.TouchShutter;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.impl.AugiementFactoryImpl;
+import com.onextent.augie.impl.Compass;
 import com.onextent.augie.impl.GPS;
 import com.onextent.augie.impl.HorizonCheckFeature;
 import com.onextent.augie.impl.HorizonFeature;
@@ -32,5 +33,6 @@ public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
         registerAugiement(HistogramFeature.META);
         registerAugiement(Shutter.META);
         registerAugiement(GPS.META);
+        registerAugiement(Compass.META);
     }
 }
