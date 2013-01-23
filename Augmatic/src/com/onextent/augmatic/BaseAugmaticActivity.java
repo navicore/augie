@@ -242,6 +242,10 @@ public abstract class BaseAugmaticActivity
             modeManager.getCurrentMode().activate();
 
             prevlayout.setOnTouchListener(augieScape);
+            Button b = getMenuButton();
+            if (b != null) {
+            	b.setOnLongClickListener(augieScape);
+            }
 
         } catch (AugiementException e) {
             Log.e(Codeable.TAG, "can not create augmatic", e);

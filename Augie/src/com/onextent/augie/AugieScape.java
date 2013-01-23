@@ -6,13 +6,14 @@ package com.onextent.augie;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 
 /**
  * The View layered on top of the RealityScape that holds
  * the Augiements
  */
-public interface AugieScape extends OnTouchListener {
+public interface AugieScape extends OnTouchListener, OnLongClickListener {
 
     int      getWidth();
     

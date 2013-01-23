@@ -35,11 +35,9 @@ public class ModeSelectionFrag extends SherlockListFragment {
             ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
             modeCode = modeManager.getAllModeCode();
             String currentModeUIName = modeManager.getCurrentMode().getName();
-            Log.d(Codeable.TAG, "ejs cur ui name " + currentModeUIName);
             int currentCameraIdPos = -1;
             for (Code c : modeCode) {
                 String n = c.getString(Codeable.UI_NAME_KEY);
-                Log.d(Codeable.TAG, "ejs adding name " + n);
                 names.add(n);
             }
             currentCameraIdPos = names.indexOf(currentModeUIName); 
@@ -47,6 +45,8 @@ public class ModeSelectionFrag extends SherlockListFragment {
             String[] items = new String[names.size()];
             names.toArray(items);
 
+//                            R.layout.item, 
+//                            com.actionbarsherlock.R.layout.abs__list_menu_item_layout, 
             setListAdapter(
                     new ArrayAdapter<String>(
                             getActivity(), 

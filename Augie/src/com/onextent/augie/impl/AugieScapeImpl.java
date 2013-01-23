@@ -129,6 +129,7 @@ public class AugieScapeImpl extends View implements AugieScape {
         boolean handled = false;
         try {
             for (Augiement f : features) {
+            	//todo: make an ordered list of these at startup
                 if (f instanceof OnTouchListener) {
                     boolean b = ((OnTouchListener)f).onTouch(v, event);
                     if (b) handled = true;
@@ -138,6 +139,27 @@ public class AugieScapeImpl extends View implements AugieScape {
         } catch (Exception e) {
             Log.e(Codeable.TAG, e.toString(), e);
         }
+        //return handled;
         return true;
     }
+
+	@Override
+	public boolean onLongClick(View v) {
+		
+		boolean handled = false;
+        try {
+            for (Augiement f : features) {
+            	//todo: make an ordered list of these at startup
+                if (f instanceof OnLongClickListener) {
+                    boolean b = ((OnLongClickListener)f).onLongClick(v);
+                    if (b) handled = true;
+                }
+            }
+            if (handled) invalidate(); //probably unnecessary
+        } catch (Exception e) {
+            Log.e(Codeable.TAG, e.toString(), e);
+        }
+        //return handled;
+        return true;
+	}
 }
