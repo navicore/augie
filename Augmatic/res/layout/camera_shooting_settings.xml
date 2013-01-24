@@ -17,7 +17,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Flash Mode" 
+	android:text="@string/aug_fld_title_flash_mode" 
 	/>
 
 	<Spinner
@@ -36,7 +36,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Focus Mode" 
+	android:text="@string/aug_fld_title_focus_mode" 
 	/>
 
 	<Spinner
@@ -55,14 +55,13 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Zoom" 
+	android:text="@string/aug_fld_title_zoom" 
 	/>
     <TextView
 	android:id="@+id/camera_zoom"
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="0" 
 	/>
 	</TableRow>
 	<TableRow
@@ -85,14 +84,13 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Exposure Compensation" 
+	android:text="@string/aug_fld_title_exp_comp" 
 	/>
     <TextView
 	android:id="@+id/camera_exposure_comp"
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="0" 
 	/>
 	</TableRow>
 	<TableRow
@@ -115,7 +113,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="ISO" 
+	android:text="@string/aug_fld_title_iso" 
 	/>
 
 	<Spinner

@@ -18,7 +18,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Color Mode" 
+	android:text="@string/aug_fld_title_color_mode" 
 	/>
 
 	<Spinner
@@ -37,7 +37,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="White Balance" 
+	android:text="@string/aug_fld_title_white_bal" 
 	/>
 
 	<Spinner
@@ -56,7 +56,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Scene Mode" 
+	android:text="@string/aug_fld_title_scene_mode" 
 	/>
 
 	<Spinner
@@ -76,7 +76,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Antibanding Values" 
+	android:text="@string/aug_fld_title_anti_banding_values" 
 	/>
 
 	<Spinner

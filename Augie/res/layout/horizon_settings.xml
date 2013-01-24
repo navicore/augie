@@ -7,7 +7,7 @@
 <TableLayout 
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:orientation="vertical" >
+	android:orientation="vertical" > 
 	
 	<TableRow
 	android:layout_width="fill_parent"
@@ -17,7 +17,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Pixel sensitivity for dragging" 
+	android:text="@string/aug_fld_title_horizon_pixel_drag_sensitivity" 
 	/>
     
 	<Spinner
@@ -36,7 +36,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Horizontal Line Width" 
+	android:text="@string/aug_fld_title_horizon_hline_width" 
 	/>
     
 	<Spinner
@@ -55,7 +55,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Vertical Line Width" 
+	android:text="@string/aug_fld_title_horizon_vline_width" 
 	/>
     
 	<Spinner

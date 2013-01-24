@@ -17,7 +17,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Longitude" 
+	android:text="@string/aug_fld_title_gps_longitude"
 	/>
 
     <TextView
@@ -25,7 +25,6 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="0" 
 	/>
 	</TableRow>
 	
@@ -37,7 +36,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Latitude" 
+	android:text="@string/aug_fld_title_gps_latitude"
 	/>
 
     <TextView
@@ -45,7 +44,6 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="0" 
 	/>
 	</TableRow>
 
@@ -58,7 +56,8 @@
 		android:id="@+id/gpsEnabled"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="GPS is enabled" />
+	    android:text="@string/aug_fld_title_gps_enabled"
+		/>
 	</TableRow>
 	
 </TableLayout>

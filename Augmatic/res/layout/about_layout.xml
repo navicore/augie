@@ -13,7 +13,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:layout_weight="1"
-	android:text="App Name:" 
+	android:text="@string/aug_fld_title_app_name" 
 	/>
     <TextView
        android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
     android:layout_weight="1"
-	android:text="Build Time:" 
+	android:text="@string/aug_fld_title_build_time" 
 	/>
    <TextView
         android:id="@+id/buildltime"
@@ -50,7 +50,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Git Name:" 
+	android:text="@string/aug_fld_title_build_name" 
 	/>
     <TextView
         android:layout_width="wrap_content"

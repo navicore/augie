@@ -18,7 +18,8 @@
 		android:id="@+id/robo_blackout"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Blackout screen while shooting" />
+		android:text="@string/aug_fld_title_blackout"
+		/> 
 	</TableRow>
 	
 	<TableRow
@@ -29,7 +30,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="First delay seconds" 
+    android:text="@string/aug_fld_title_shooting_first_delay"
 	/>
 	</TableRow>
     
@@ -53,7 +54,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Shooting interval in seconds" 
+    android:text="@string/aug_fld_title_shooting_interval"
 	/>
 	</TableRow>
     
@@ -77,7 +78,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Shooting duration in minutes" 
+    android:text="@string/aug_fld_title_shooting_dur"
 	/>
 	</TableRow>
     

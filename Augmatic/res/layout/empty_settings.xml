@@ -9,7 +9,7 @@
 		android:id="@+id/module_dependencies"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-    	android:text="No Settings" 
+    	android:text="@string/aug_fld_title_no_settings" 
 	/>
 
 </LinearLayout>

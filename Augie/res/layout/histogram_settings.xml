@@ -17,7 +17,7 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Histogram Height" 
+	android:text="@string/aug_fld_title_histogram_height" 
 	/>
 
 	<Spinner
@@ -37,7 +37,8 @@
 		android:id="@+id/rgbHistogram"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Show RGB Histogram" />
+	    android:text="@string/aug_fld_title_histogram_show_rgb"
+		/>
 	</TableRow>
 	
 </TableLayout>

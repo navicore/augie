@@ -15,20 +15,17 @@
 		android:id="@+id/module_description"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-    	android:text="Description todo..." 
 	/>
 	
     <TextView
 		android:id="@+id/module_dependencies"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-    	android:text="Depends on modules ..." 
 	/>
 
     <TextView
 		android:id="@+id/module_required_by"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-    	android:text="Required by ..." 
 	/>
 </LinearLayout>
