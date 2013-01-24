@@ -340,6 +340,10 @@ public abstract class BaseAugmaticActivity
             ald = new DeleteModeDialog();
             ald.show(getSupportFragmentManager(), "Delete Mode Fragment");
             return true;
+        case R.id.about:
+            ald = new AboutDialog();
+            ald.show(getSupportFragmentManager(), "About Fragment");
+            return true;
         case R.id.dump:
             try {
                 dump();
