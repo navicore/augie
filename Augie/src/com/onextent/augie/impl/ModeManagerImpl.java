@@ -9,7 +9,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -19,10 +18,11 @@ import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.store.CodeStore;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieException;
+import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieStore;
 import com.onextent.augie.AugieStoreException;
-import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
@@ -88,17 +88,18 @@ public class ModeManagerImpl implements ModeManager {
     public void stop() {
         if (store == null) {
             throw new java.lang.IllegalStateException("already stopped");
-            //return;
         }
-        Log.d(Codeable.TAG, "ModeManager.stop");
+        AugLog.d( "ModeManager.stop");
         if (currentMode != null) {
             try {
                 currentMode.deactivate();
+                currentMode = null;
             } catch (AugieException e) {
-                Log.d(Codeable.TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
             } 
         }
         allModeCode = null;
+        store = null;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class ModeManagerImpl implements ModeManager {
             throw new AugieException("mode is null") {
                 private static final long serialVersionUID = 3508820766680012985L;};
         }
-        Log.d(Codeable.TAG, "setCurrentMode " + mode.getCodeableName());
+        AugLog.d( "setCurrentMode " + mode.getCodeableName());
         store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getCodeableName().toString());
         currentMode.activate();
     }
@@ -134,7 +135,7 @@ public class ModeManagerImpl implements ModeManager {
         if (code == null) throw new CodeableException("mode not found") {
             private static final long serialVersionUID = 7886435403395937189L;};
             
-        Log.d(Codeable.TAG, "initializing mode from store");
+        AugLog.d( "initializing mode from store");
         m.setCode(code);
         return m;
     }
@@ -143,12 +144,12 @@ public class ModeManagerImpl implements ModeManager {
 
         String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY);
         if (currentMode_key == null) {
-            Log.d(Codeable.TAG, "no current mode key, initializing.");
+            AugLog.d( "no current mode key, initializing.");
             primeDbWithModes();
             currentMode_key = MODE_KEY_DEFAULT;
             store.replaceContent(CURRENT_MODE_KEY_KEY, currentMode_key);
         } 
-        Log.d(Codeable.TAG, "current mode key: " + currentMode_key);
+        AugLog.d( "current mode key: " + currentMode_key);
         currentMode = getMode(new ModeName(currentMode_key));
     }
     
@@ -180,7 +181,7 @@ public class ModeManagerImpl implements ModeManager {
                     Code code = JSONCoder.newCode(codeStr);
                     list.add(code);
                 } catch (CodeableException e) {
-                    Log.e(Codeable.TAG, e.toString(), e);
+                    AugLog.e( e.toString(), e);
                     c.close();
                     throw new AugieStoreException(e);
                 }
@@ -269,7 +270,7 @@ public class ModeManagerImpl implements ModeManager {
             try {
                 setCurrentMode(getMode(new ModeName(MODE_KEY_DEFAULT)));
             } catch (AugieException e) {
-                Log.e(Codeable.TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
             }
         }
         store.remove(augieName.toString());
@@ -287,7 +288,7 @@ public class ModeManagerImpl implements ModeManager {
         if (store == null || mode == null) return; //too late
         Code code = mode.getCode();
         store.replaceContent(mode.getCodeableName(), code);       
-        Log.d(Codeable.TAG, "saved mode " + mode.getCodeableName());
+        AugLog.d( "saved mode " + mode.getCodeableName());
     }
 
     //ugh
@@ -306,9 +307,9 @@ public class ModeManagerImpl implements ModeManager {
                     icn.equals(ccn)) return i;
             }
         } catch (AugieStoreException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         } catch (CodeableException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         return idx;
     }

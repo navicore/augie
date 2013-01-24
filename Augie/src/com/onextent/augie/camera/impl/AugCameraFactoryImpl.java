@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.Set;
 
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -43,12 +43,12 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         
         if (cameras.containsKey(name)) {
             
-            Log.d(TAG, "getting already instantiated camera: " + name);
+            AugLog.d( "getting already instantiated camera: " + name);
             camera = cameras.get(name);
             
         } else {
             
-            Log.d(TAG, "constructing new camera instance: " + name);
+            AugLog.d( "constructing new camera instance: " + name);
             camera = createCamera(name);
             if (camera != null) cameras.put(name, camera);
         }
@@ -68,9 +68,9 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
             try {
                 camera = c.newInstance();
             } catch (InstantiationException e) {
-                Log.e(TAG, "can not create camera", e);
+                AugLog.e( "can not create camera", e);
             } catch (IllegalAccessException e) {
-                Log.e(TAG, "can not access camera", e);
+                AugLog.e( "can not access camera", e);
             }
         }
             
@@ -96,7 +96,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
 	        try {
                 c.close();
             } catch (AugCameraException e) {
-                Log.e(TAG, "can not close camera", e);
+                AugLog.e( "can not close camera", e);
             }
 	    }
 	    cameras.clear();

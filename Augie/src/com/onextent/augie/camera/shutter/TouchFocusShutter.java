@@ -25,6 +25,7 @@ import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -320,20 +321,20 @@ public class TouchFocusShutter extends SimpleCameraShutterFeature {
             }
         } catch (Exception e) {
             Toast.makeText(augieScape.getContext(), e.toString(), Toast.LENGTH_SHORT).show(); //todo: tmp
-            Log.e(TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         return true;
     }
 
     @Override
     public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
         //noop
     }
 
     @Override
     public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
         //noop
     }
 

@@ -4,7 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.Mode;
@@ -12,14 +19,6 @@ import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.CameraName;
 import com.onextent.augmatic.R;
-import com.onextent.android.codeable.Codeable;
-
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 public class CameraSelectionFrag extends SherlockListFragment {
     
@@ -84,7 +83,7 @@ public class CameraSelectionFrag extends SherlockListFragment {
             m.setCamera(c);
             m.activate();
         } catch (AugieException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
     }
 }

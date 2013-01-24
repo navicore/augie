@@ -37,11 +37,17 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableHandler;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
@@ -56,11 +62,6 @@ import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
 import com.onextent.augie.impl.AugieScapeImpl;
 import com.onextent.augie.impl.ModeManagerImpl;
 import com.onextent.augmatic.camera.CameraSelectionDialog;
-import com.onextent.android.codeable.Code;
-import com.onextent.android.codeable.Codeable;
-import com.onextent.android.codeable.CodeableException;
-import com.onextent.android.codeable.CodeableHandler;
-import com.onextent.android.codeable.CodeableName;
 
 public abstract class BaseAugmaticActivity 
                       extends SherlockFragmentActivity 
@@ -92,7 +93,7 @@ public abstract class BaseAugmaticActivity
 
         if ( !mediaStorageDir.exists() ){
             if (! mediaStorageDir.mkdirs()){
-                Log.e(Codeable.TAG, "failed to create directory");
+                AugLog.e( "failed to create directory");
                 throw new AugieException("can not create dir") {
                     private static final long serialVersionUID = 1L; };
             }
@@ -151,7 +152,13 @@ public abstract class BaseAugmaticActivity
         return Surface.ROTATION_0;
     }
         
-    private void initOrientationEventListener() {
+    private void stopOrientationEventListener() {
+        if (orientationEventListener != null) {
+            orientationEventListener.disable(); 
+            orientationEventListener = null;
+        }
+    }
+    private void startOrientationEventListener() {
     	orientationEventListener = 
     	new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL)
     	{
@@ -171,7 +178,6 @@ public abstract class BaseAugmaticActivity
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        initOrientationEventListener();
         try {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
@@ -182,21 +188,20 @@ public abstract class BaseAugmaticActivity
 
         setContentView(getLayoutId());
 
-        init();
+        //init();
 
-            configMenuButton();
-            getSupportActionBar().setBackgroundDrawable(null);
+        configMenuButton();
+        getSupportActionBar().setBackgroundDrawable(null);
 
         } catch (Throwable err) {
-            Log.e(Codeable.TAG, "can not create augmatic", err);
+            AugLog.e( "can not create augmatic", err);
         }
     }
 
     private void init() {
 
-        Log.d(Codeable.TAG, "BaseAugmaticActivity.init");
+        AugLog.d( "BaseAugmaticActivity.init");
         RelativeLayout prevlayout = (RelativeLayout) findViewById(getPreviewId());
-        //android.view.ViewGroup.LayoutParams p = prevlayout.getLayoutParams();
         try {
             augieScape = new AugieScapeImpl(this);
             augiementFactory = new AugmaticAugiementFactory();
@@ -229,10 +234,10 @@ public abstract class BaseAugmaticActivity
         try {
             modeManager.onCreate(this);
         } catch (AugieStoreException e1) {
-            Log.e(Codeable.TAG, e1.toString(), e1);
+            AugLog.e( e1.toString(), e1);
             return;
         } catch (CodeableException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
             return;
         }
 
@@ -248,74 +253,52 @@ public abstract class BaseAugmaticActivity
             }
 
         } catch (AugiementException e) {
-            Log.e(Codeable.TAG, "can not create augmatic", e);
+            AugLog.e( "can not create augmatic", e);
         } catch (Throwable err) {
-            Log.e(Codeable.TAG, "can not create augmatic", err);
+            AugLog.e( "can not create augmatic", err);
         }
     }
 
     @Override
-    protected void onStop() {
-        Log.d(Codeable.TAG, getClass().getName() + " onStop");
-        try {
-        super.onStop();
-        _paws();
-        } catch (Throwable err) {
-        	Log.e(Codeable.TAG, err.toString());
-        }
-    }
-
-    private void _paws() {
-        try {
-            Mode m = modeManager.getCurrentMode();
-            if (m != null) m.deactivate();
-        } catch (AugieException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
-        }
+    protected void onPause() {
+        AugLog.d( getClass().getName() + " onPause");
+        super.onPause();
+        stopOrientationEventListener();
         augieScape.stop();
         cameraFactory.stop();
         modeManager.stop();
     }
 
     @Override
-    protected void onPause() {
-        Log.d(Codeable.TAG, getClass().getName() + " onPause");
-        super.onPause();
-        _paws();
-    }
-
-    @Override
     protected void onResume() {
-        Log.d(Codeable.TAG, getClass().getName() + " onResume");
+        AugLog.d( getClass().getName() + " onResume");
         super.onResume();
         init();
+        startOrientationEventListener();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(Codeable.TAG, getClass().getName() + " onDestroy");
+        AugLog.d( getClass().getName() + " onDestroy");
     	super.onDestroy();
-    	orientationEventListener.disable();
-        modeManager.stop();
-        this.onStop();
     }
 
     private boolean isDualPane() {
 
-        //Log.d(TAG, "ejs w: " + augview.getWidth() );
+        //AugLog.d( "ejs w: " + augview.getWidth() );
         return augieScape.getWidth() > 300;
         //return augview.getWidth() > 1000;
 
         /*
         View detailsFrame = null;
         ViewGroup v = (ViewGroup) findViewById(R.layout.settings);
-        Log.d(Codeable.TAG, "ejs isDualPane v is null: " + (v == null));
+        AugLog.d( "ejs isDualPane v is null: " + (v == null));
         if (v != null) {
             detailsFrame = v.findViewById(R.id.module_details_holder);
-            Log.d(Codeable.TAG, "ejs isDualPane d is null: " + (detailsFrame == null));
+            AugLog.d( "ejs isDualPane d is null: " + (detailsFrame == null));
         }
         boolean ret = detailsFrame != null;
-        Log.d(Codeable.TAG, "isDualPane: " + ret);
+        AugLog.d( "isDualPane: " + ret);
         return ret;
          */
     }
@@ -361,11 +344,11 @@ public abstract class BaseAugmaticActivity
             try {
                 dump();
             } catch (CodeableException e) {
-                Log.e(Codeable.TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
             }
             return true;
         default:
-            Log.d(Codeable.TAG, "menu default for id " + item.getItemId());
+            AugLog.d( "menu default for id " + item.getItemId());
             return super.onOptionsItemSelected(item);
         }
     }
@@ -374,11 +357,11 @@ public abstract class BaseAugmaticActivity
         Code dcode = modeManager.getStore().dump();
         String pstr = modeManager.getCurrentMode().getCamera().flatten();
         dcode.put("AUGIE/DEBUG/CAMERA/FLATTEN", pstr);
-        Log.d(Codeable.TAG, "dcode: " + dcode);
+        AugLog.d( "dcode: " + dcode);
         try {
             writeStringToFile(getOutputFile("dump_", ".json"), dcode.toString());
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
     }
 
@@ -405,11 +388,11 @@ public abstract class BaseAugmaticActivity
                         getModeManager().setCurrentMode(m);
                     }
                 } catch (AugieStoreException e) {
-                    Log.e(Codeable.TAG, e.toString(), e);
+                    AugLog.e( e.toString(), e);
                 } catch (AugieException e) {
-                    Log.e(Codeable.TAG, e.toString(), e);
+                    AugLog.e( e.toString(), e);
                 } catch (CodeableException e) {
-                    Log.e(Codeable.TAG, e.toString(), e);
+                    AugLog.e( e.toString(), e);
                 }
                 return true;
             }
@@ -449,12 +432,12 @@ public abstract class BaseAugmaticActivity
                 if (cm != null) {
                     return cm.getString(Codeable.UI_NAME_KEY);
                 } else {
-                    Log.e(Codeable.TAG, "can not find mode for idx " + location);
+                    AugLog.e( "can not find mode for idx " + location);
                 }
             } catch (AugieStoreException e) {
-                Log.e(Codeable.TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
             } catch (CodeableException e) {
-                Log.e(Codeable.TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
             }
             return null;
         }
@@ -466,7 +449,7 @@ public abstract class BaseAugmaticActivity
                 if (modes == null) return 0;
                 return modes.size();
             } catch (AugieStoreException e) {
-                Log.e(Codeable.TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
             }
             return 0;
         }
@@ -530,7 +513,7 @@ public abstract class BaseAugmaticActivity
 				}
 			}
 		} catch (CodeableException ex) {
-			Log.e(Codeable.TAG, ex.toString(), ex);
+			AugLog.e( ex.toString(), ex);
 		}
 	}
 

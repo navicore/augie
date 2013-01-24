@@ -4,9 +4,9 @@
 package com.onextent.augie.camera.shutter;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.View.OnTouchListener;
 
+import com.onextent.augie.AugLog;
 import com.onextent.augie.Augiement;
 
 /*
@@ -19,7 +19,7 @@ public abstract class TouchShutterBase implements Augiement, OnTouchListener {
         TouchShutterBase sInstance;
 
         int sdkVersion = Build.VERSION.SDK_INT;
-        Log.d(TAG, "CameraShutterFeature sdkVersion=" + sdkVersion);
+        AugLog.d( "CameraShutterFeature sdkVersion=" + sdkVersion);
         if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
             sInstance = new SimpleCameraShutterFeature();
         } else  {

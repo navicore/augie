@@ -8,13 +8,13 @@ import java.util.List;
 
 import android.hardware.Camera;
 import android.hardware.Camera.Area;
-import android.util.Log;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.codeable.Size;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.ImageFmt;
 import com.onextent.augie.camera.NamedInt;
@@ -159,9 +159,9 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedColorModes() {
-        if (augcamera == null) Log.e(TAG, "ejs null augcamera");
-        if (augcamera.camera == null) Log.e(TAG, "ejs null camera");
-        if (augcamera.camera.getParameters() == null) Log.e(TAG, "ejs null params");
+        if (augcamera == null) AugLog.e( "ejs null augcamera");
+        if (augcamera.camera == null) AugLog.e( "ejs null camera");
+        if (augcamera.camera.getParameters() == null) AugLog.e( "ejs null params");
         return augcamera.camera.getParameters().getSupportedColorEffects();
     }
     

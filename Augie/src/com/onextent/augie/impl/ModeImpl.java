@@ -6,12 +6,15 @@ package com.onextent.augie.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
+
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeArray;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -24,8 +27,6 @@ import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.CameraName;
-
-import android.util.Log;
 
 public class ModeImpl implements Codeable, Mode {
     
@@ -84,7 +85,7 @@ public class ModeImpl implements Codeable, Mode {
                 }
             }
         } catch (CodeableException e) {
-            Log.e(TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         return code;
     }
@@ -158,7 +159,7 @@ public class ModeImpl implements Codeable, Mode {
             Code code = modeManager.getModeCode(augieName);
             if (code != null) {
                 Code ccode = code.get(KEY_CAMERA).get(KEY_CODE);;
-                Log.d(TAG, "setting camera code: " + ccode);
+                AugLog.d( "setting camera code: " + ccode);
                 this.camera.setCode(ccode); //todo: buggy
             }
             */
@@ -187,14 +188,14 @@ public class ModeImpl implements Codeable, Mode {
     @Override
     public void activate() throws AugieException {
         
-        Log.d(TAG, "activating mode " + getCodeableName());
+        AugLog.d( "activating mode " + getCodeableName());
         
         ModeManager mm = modeManager;
         AugieScape v = mm.getAugieScape();
         v.stop();
         v.removeFeature(null);
         for (Augiement f : augiements.values()) {
-            Log.d(TAG, "    activate node add feature " + f.getCodeableName());
+            AugLog.d( "    activate node add feature " + f.getCodeableName());
             v.addFeature(f);
         }
         AugCamera c = getCamera();
@@ -208,7 +209,7 @@ public class ModeImpl implements Codeable, Mode {
 
     @Override
     public void deactivate() throws AugieException {
-        Log.d(TAG, "deactivate node " + getCodeableName());
+        AugLog.d( "deactivate node " + getCodeableName());
         try {
             camera.close();
             modeManager.saveMode(this);

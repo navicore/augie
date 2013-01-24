@@ -3,15 +3,16 @@
  */
 package com.onextent.augie.impl;
 
-import com.onextent.android.codeable.Codeable;
-import com.onextent.android.store.CodeStoreSqliteImpl;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.store.CodeStoreSqliteImpl;
+import com.onextent.augie.AugLog;
 
 //todo: consider ics dberrorhandler
 
@@ -29,13 +30,13 @@ public class AugieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(Codeable.TAG, "create db");
+        AugLog.d( "create db");
        
         try {
             
             db.execSQL(CREATE_TABLE);
         } catch (SQLiteException e) {
-            Log.e(Codeable.TAG, "can not create db", e);
+            AugLog.e( "can not create db", e);
         }
         
     }

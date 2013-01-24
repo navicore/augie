@@ -6,14 +6,13 @@ import java.util.Map;
 import java.util.Set;
 
 import android.app.Dialog;
-import android.view.LayoutInflater;
-import android.view.View;
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -22,6 +21,9 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.Augiement;
@@ -30,8 +32,6 @@ import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augmatic.camera.EmptySettingsDialog;
-import com.onextent.android.codeable.Codeable;
-import com.onextent.android.codeable.CodeableName;
 
 public class AugiementListHelper {
 
@@ -111,7 +111,7 @@ public class AugiementListHelper {
                         try {
                             modeManager.setCurrentMode(mode);
                         } catch (AugieException e) {
-                            Log.e(Codeable.TAG, e.toString(), e);
+                            AugLog.e( e.toString(), e);
                         } //reset everything with new a
                     }
                 });

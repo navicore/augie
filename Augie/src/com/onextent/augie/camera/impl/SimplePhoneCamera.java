@@ -23,6 +23,7 @@ import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.codeable.Size;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -86,7 +87,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     
         if (camera != null) return;
         try {
-            Log.d(TAG, "open camera with id: " + getId());
+            AugLog.d( "open camera with id: " + getId());
             camera = Camera.open(getId());
 
             if (previewCbWB != null) {
@@ -127,6 +128,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     public void close() throws AugCameraException {
         if (camera == null) return;
         camera.setPreviewCallback(null);
+        camera.stopPreview();
         camera.release();
         camera = null;
     }
@@ -153,7 +155,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 
     @Override
     public void stopPreview() throws AugCameraException {
-        open();
+        if (camera == null) return;
         try {
             camera.setPreviewCallback(null);
             camera.stopPreview();
@@ -236,12 +238,12 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     private boolean isLocked = false;
     private synchronized boolean lock() {
         if (isLocked) return false;
-        Log.d(TAG, "locking camera");
+        AugLog.d( "locking camera");
         isLocked = true;
         return true;
     }
     private synchronized void unlock() {
-        Log.d(TAG, "unlocking camera");
+        AugLog.d( "unlocking camera");
         isLocked = false;
     }
 
@@ -320,7 +322,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             
         } catch (Throwable err) {
             params = null;
-            Log.e(TAG, err.toString(), err);
+            AugLog.e( err.toString(), err);
         }
     }
 
@@ -438,7 +440,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             }
             
         } catch (Throwable err) {
-            Log.e(TAG, err.toString(), err);
+            AugLog.e( err.toString(), err);
         }
         
         return cp;

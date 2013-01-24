@@ -1,18 +1,17 @@
 package com.onextent.augmatic.camera;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.onextent.augmatic.R;
-import com.onextent.android.codeable.Codeable;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockListFragment;
+import com.onextent.augie.AugLog;
+import com.onextent.augmatic.R;
 
 public class CameraSettingsListFrag extends SherlockListFragment {
 
@@ -94,7 +93,7 @@ public class CameraSettingsListFrag extends SherlockListFragment {
                 }
             }
         } catch (Throwable err) {
-            Log.e(Codeable.TAG, err.toString(), err);
+            AugLog.e( err.toString(), err);
         }
     }
 }

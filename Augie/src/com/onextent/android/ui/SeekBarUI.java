@@ -3,13 +3,11 @@
  */
 package com.onextent.android.ui;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-import com.onextent.android.codeable.Codeable;
+import com.onextent.augie.AugLog;
 
 public abstract class SeekBarUI {
     private final String progressSuffix;
@@ -56,7 +54,7 @@ public abstract class SeekBarUI {
                     if (track)
                         onStopTrackingTouch(seekBar);
                 } catch (Throwable err) {
-                    Log.e(Codeable.TAG, err.toString(), err);
+                    AugLog.e( err.toString(), err);
                 }
             }
             @Override

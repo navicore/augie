@@ -21,27 +21,27 @@ package com.onextent.augie.camera;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.onextent.android.codeable.Code;
-import com.onextent.android.codeable.CodeableException;
-import com.onextent.android.codeable.CodeableName;
-import com.onextent.android.codeable.JSONCoder;
-import com.onextent.android.codeable.Size;
-import com.onextent.augie.AugieScape;
-import com.onextent.augie.Augiement;
-import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementName;
-import com.onextent.augie.impl.AugDrawBase;
-import com.onextent.augie.impl.AugDrawFeature;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.hardware.Camera;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
+import com.onextent.android.codeable.Size;
+import com.onextent.augie.AugLog;
+import com.onextent.augie.AugieScape;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
+import com.onextent.augie.AugiementName;
+import com.onextent.augie.impl.AugDrawBase;
+import com.onextent.augie.impl.AugDrawFeature;
 
 public class HistogramFeature extends AugDrawBase implements AugPreviewCallback {
 
@@ -184,7 +184,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
             default:
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         return false;
     }

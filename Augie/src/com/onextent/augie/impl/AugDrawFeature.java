@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import android.graphics.Point;
+import android.support.v4.app.DialogFragment;
+import android.view.MotionEvent;
+import android.view.View;
+
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -16,12 +22,6 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.MarkerFactory;
-
-import android.graphics.Point;
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 public class AugDrawFeature extends AugDrawBase {
     
@@ -104,7 +104,7 @@ public class AugDrawFeature extends AugDrawBase {
     
     @Override
 	public void clear() {
-        Log.d(TAG, "clearing " + getClass().getName());
+        AugLog.d( "clearing " + getClass().getName());
     	scribles.clear();
 	}
 
@@ -174,13 +174,13 @@ public class AugDrawFeature extends AugDrawBase {
 
     @Override
 	public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
 		//noop
 	}
 	
 	@Override
 	public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
 		//noop
 	}
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,14 @@ import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SpinnerUI;
-import com.onextent.augmatic.R;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
-import com.onextent.android.codeable.Codeable;
+import com.onextent.augmatic.R;
 
 public class ProcessingSettingsDialog extends SherlockDialogFragment {
 
@@ -53,7 +52,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
         setSceneModeUI(v, camera);
         setAntibandingUI(v, camera);
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
 
         return v;
@@ -86,7 +85,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -109,7 +108,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -132,7 +131,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -155,7 +154,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };

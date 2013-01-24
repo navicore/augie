@@ -5,7 +5,6 @@ package com.onextent.augie.impl;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,9 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.Code;
-import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableHandler;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.R;
 
@@ -68,7 +67,7 @@ public class GPSDialog extends SherlockDialogFragment {
 			longitude.setText(Double.toString(augiement.getLongitude()));
 
 		} catch (Exception e) {
-			Log.e(Codeable.TAG, e.toString(), e);
+			AugLog.e( e.toString(), e);
 		}
 
 		return myview;
@@ -78,14 +77,14 @@ public class GPSDialog extends SherlockDialogFragment {
 
 		@Override
 		public void onCode(Code code) {
-			Log.d(Codeable.TAG, "ejs got dialog gps: " + code);
+			AugLog.d( "ejs got dialog gps: " + code);
 			TextView lat = (TextView) myview.findViewById(R.id.latitude);
 			TextView longitude = (TextView) myview.findViewById(R.id.longitude);
 			try {
 				lat.setText(code.getString(GPS.LATITUDE_KEY));
 				longitude.setText(code.getString(GPS.LONGITUDE_KEY));
 			} catch (CodeableException e) {
-				Log.e(Codeable.TAG, e.toString(), e);
+				AugLog.e( e.toString(), e);
 			}
 		}
 	};

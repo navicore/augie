@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +21,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.onextent.android.codeable.Codeable;
 import com.onextent.android.ui.SpinnerUI;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
@@ -58,7 +57,7 @@ public class ShutterDialog extends SherlockDialogFragment {
             setFileNameTemplateUI(v, camera);
 
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
 
         return v;

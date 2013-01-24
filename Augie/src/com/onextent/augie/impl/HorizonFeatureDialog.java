@@ -8,15 +8,14 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.onextent.android.codeable.Codeable;
 import com.onextent.android.ui.SpinnerUI;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
@@ -49,7 +48,7 @@ public class HorizonFeatureDialog extends SherlockDialogFragment {
             setVertLineWidthUI(v, camera);
 
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
 
         return v;

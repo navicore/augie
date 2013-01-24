@@ -5,10 +5,17 @@ package com.onextent.augie.camera.shutter;
 import java.util.HashSet;
 import java.util.Set;
 
+import android.graphics.Color;
+import android.support.v4.app.DialogFragment;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -19,13 +26,6 @@ import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
-
-import android.graphics.Color;
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 
 public class SimpleCameraShutterFeature extends TouchShutterBase implements OnTouchListener {
 	
@@ -106,26 +106,26 @@ public class SimpleCameraShutterFeature extends TouchShutterBase implements OnTo
 			return false;
 		}
 		} catch (Exception e) {
-			Log.e(TAG, e.toString(), e);
+			AugLog.e( e.toString(), e);
 		}
 	    return true;
     }
 
 	@Override
 	public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
 		//noop
 	}
 	
 	@Override
 	public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
 		//noop
 	}
 
 	@Override
 	public void clear() {
-        Log.d(TAG, "clearing " + getClass().getName());
+        AugLog.d( "clearing " + getClass().getName());
 		//noop
     }
 	

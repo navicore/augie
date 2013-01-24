@@ -12,13 +12,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugieScape;
-import com.onextent.augie.Augiement;
-import com.onextent.augie.AugiementException;
-import com.onextent.augie.marker.AugLine;
-import com.onextent.augie.marker.MarkerFactory;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -27,7 +20,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
+import com.onextent.augie.AugieScape;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
+import com.onextent.augie.marker.AugLine;
+import com.onextent.augie.marker.MarkerFactory;
 
         /** X1 = 0 
             Y1 = Yc + Xc * tan(a) 
@@ -65,7 +65,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 
-    	Log.d(TAG, "LevelerBase.onCreate");
+    	AugLog.d( "LevelerBase.onCreate");
         for (Augiement a : helpers) {
             if (a instanceof HorizonFeature) {
                 horizonFeature = (HorizonFeature) a;
@@ -77,10 +77,13 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
         prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
         mSensorManager  = (SensorManager) av.getContext().getSystemService(Context.SENSOR_SERVICE);
         if (mSensorManager == null) {
-        	Log.d(TAG, "can not access sensor manager");
-        } else {
+        	AugLog.d( "can not access sensor manager");
+        } 
+        /*
+        else {
         	registerSensorListeners();
         }
+         */
         
         lastUpdateTime  = 0;
         mAngle          = 0;
@@ -155,7 +158,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     @Override
     public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
         unregisterSensorListeners();
         if (vlineCache.size() > 1000)  vlineCache.clear();
         if (hlineCache.size() > 1000)  hlineCache.clear();
@@ -164,7 +167,7 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     @Override
     public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
         registerSensorListeners();
     }
 

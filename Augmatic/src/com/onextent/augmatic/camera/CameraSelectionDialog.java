@@ -8,16 +8,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.CameraName;
-import com.onextent.android.codeable.Codeable;
 
 public class CameraSelectionDialog extends SherlockDialogFragment {
     
@@ -31,7 +30,7 @@ public class CameraSelectionDialog extends SherlockDialogFragment {
             m.setCamera(c);
             m.activate();
         } catch (AugieException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
     }
     

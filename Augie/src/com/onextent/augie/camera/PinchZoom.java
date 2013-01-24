@@ -5,9 +5,9 @@ package com.onextent.augie.camera;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import android.graphics.Point;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -15,6 +15,7 @@ import android.view.View.OnTouchListener;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -107,7 +108,7 @@ public class PinchZoom implements Augiement, OnTouchListener {
 	        camera.getParameters().setZoom((int) newzoom);
 	        camera.applyParameters();
 	    } catch (Throwable e) {
-	        Log.e(TAG, e.toString(), e);
+	        AugLog.e( e.toString(), e);
 	    }
 	}
 	    
@@ -142,7 +143,7 @@ public class PinchZoom implements Augiement, OnTouchListener {
             default:
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         return false;
     }

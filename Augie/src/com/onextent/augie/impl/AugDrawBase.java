@@ -5,17 +5,17 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
+import android.graphics.Point;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.impl.AugLineImpl;
-
-import android.graphics.Point;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 
 public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
@@ -84,19 +84,19 @@ public abstract class AugDrawBase implements Augiement, OnTouchListener {
 
 	@Override
 	public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
 		//noop
 	}
 	
 	@Override
 	public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
 		//noop
 	}
 
 	@Override
 	public void clear() {
-        Log.d(TAG, "clearing " + getClass().getName());
+        AugLog.d( "clearing " + getClass().getName());
 		//noop
     }
 	

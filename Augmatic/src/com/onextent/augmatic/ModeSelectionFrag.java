@@ -3,23 +3,23 @@ package com.onextent.augmatic;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.Codeable;
+import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
-import com.onextent.android.codeable.Code;
-import com.onextent.android.codeable.Codeable;
-import com.onextent.android.codeable.CodeableException;
-import com.onextent.android.codeable.CodeableName;
-
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 public class ModeSelectionFrag extends SherlockListFragment {
 
@@ -57,9 +57,9 @@ public class ModeSelectionFrag extends SherlockListFragment {
 
             updateUI();
         } catch (CodeableException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         } catch (AugieStoreException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
     }
 
@@ -82,9 +82,9 @@ public class ModeSelectionFrag extends SherlockListFragment {
             setMode(modeName);
             updateUI();
         } catch (CodeableException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         } catch (AugieException e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
     }
 

@@ -35,6 +35,7 @@ import com.onextent.android.codeable.CodeableHandler;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.EventManager;
 import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -157,7 +158,7 @@ public class Shutter implements Augiement {
 
 					@Override
 					public void onFocus(boolean success) {
-						Log.d(TAG, "auto focused: " + success);
+						AugLog.d( "auto focused: " + success);
 						if (!success) {
 							if (augieScape != null)
 								Toast.makeText(augieScape.getContext(), "can not focus", Toast.LENGTH_SHORT).show();
@@ -170,7 +171,7 @@ public class Shutter implements Augiement {
 
 						} catch (AugCameraException e) {
 							handleUserCb(null, camera);
-							Log.d(TAG, e.toString(), e);
+							AugLog.e( e.toString(), e);
 						} 
 					}
 				});
@@ -198,7 +199,7 @@ public class Shutter implements Augiement {
 				}
 			} else {
 				handleUserCb(null, camera);
-				Log.e(TAG, "camera not found");
+				AugLog.e( "camera not found");
 				Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
 			}
 		} catch (Throwable err) {
@@ -239,7 +240,7 @@ public class Shutter implements Augiement {
 					onPictureTakenLocalFS(data, camera);
 				}
 			} catch (Throwable err) {
-				Log.e(TAG, "onPictureTaken error: " + err.toString(), err);
+				AugLog.e( "onPictureTaken error: " + err.toString(), err);
 			
 			} finally {
 
@@ -247,9 +248,9 @@ public class Shutter implements Augiement {
 					try {
 						//todo: it is wrong to do this for both callbacks
 						camera.startPreview();
-						Log.d(TAG, "restarted preview after taking pic");
+						AugLog.d( "restarted preview after taking pic");
 					} catch (Throwable e) {
-						Log.e(TAG, "Error starting preview after taking picture: " + e.getMessage(), e);
+						AugLog.e( "Error starting preview after taking picture: " + e.getMessage(), e);
 					}
 			}
 		}
@@ -274,7 +275,7 @@ public class Shutter implements Augiement {
 			if (pictureFile == null){
 				String msg = "Error storing file, check storage permissions";
 				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-				Log.d(TAG, msg);
+				AugLog.d( msg);
 				handleUserCb(data, camera);
 				return;
 			}
@@ -287,15 +288,15 @@ public class Shutter implements Augiement {
 					Toast.makeText(context, "file saved as " + 
 							pictureFile.getName(), Toast.LENGTH_LONG).show();
 			} catch (FileNotFoundException e) {
-				Log.e(TAG, "File not found: " + e.getMessage());
+				AugLog.e( "File not found: " + e.getMessage());
 			} catch (IOException e) {
-				Log.e(TAG, "Error accessing file: " + e.getMessage());
+				AugLog.e( "Error accessing file: " + e.getMessage());
 			}
 
 			try {
 				updateExif(pictureFile);
 			} catch (IOException e) {
-				Log.e(TAG, e.toString(), e);
+				AugLog.e( e.toString(), e);
 			}
 			if (isRegisterImageWithOS()) galleryAddPic(pictureFile);
 			handleUserCb(data, camera);
@@ -307,7 +308,7 @@ public class Shutter implements Augiement {
 
 			Uri uriTarget = (Uri) activity.getIntent().getExtras().getParcelable( MediaStore.EXTRA_OUTPUT );
 
-			Log.d(TAG, "writing to uri target: " + uriTarget);
+			AugLog.d( "writing to uri target: " + uriTarget);
 			if (uriTarget == null) {
 
 				Toast.makeText(context, "error: uriTarget is null", Toast.LENGTH_LONG).show();
@@ -324,7 +325,7 @@ public class Shutter implements Augiement {
 				fos.close();
 				((Activity)context).setResult(Activity.RESULT_OK);
 			} catch (IOException e) {
-				Log.e(TAG, "Error accessing file: " + e.getMessage());
+				AugLog.e( "Error accessing file: " + e.getMessage());
 				((Activity)context).setResult(Activity.RESULT_CANCELED);
 			}
 
@@ -382,7 +383,7 @@ public class Shutter implements Augiement {
 
 		if ( !mediaStorageDir.exists() ){
 			if (! mediaStorageDir.mkdirs()){
-				Log.e(TAG, "failed to create directory");
+				AugLog.e( "failed to create directory");
 				return null;
 			}
 		}
@@ -433,7 +434,7 @@ public class Shutter implements Augiement {
 
 	@Override
 	public void stop() {
-		Log.d(TAG, "stopping " + getClass().getName());
+		AugLog.d( "stopping " + getClass().getName());
 		if (eventManager == null) return;
 		eventManager.unlisten(GPS.GPS_UPDATE_AUGIE_NAME, gpsEventHandler);
 	}
@@ -441,13 +442,13 @@ public class Shutter implements Augiement {
 	@Override
 	public void resume() {
 		if (eventManager == null) return;
-		Log.d(TAG, "resuming " + getClass().getName());
+		AugLog.d( "resuming " + getClass().getName());
 		eventManager.listen(GPS.GPS_UPDATE_AUGIE_NAME, gpsEventHandler);
 	}
 
 	@Override
 	public void clear() {
-		Log.d(TAG, "clearing " + getClass().getName());
+		AugLog.d( "clearing " + getClass().getName());
 		//noop
 	}
 
@@ -461,7 +462,7 @@ public class Shutter implements Augiement {
 				lat = code.getDouble(GPS.LATITUDE_KEY);
 				lon = code.getDouble(GPS.LONGITUDE_KEY);
 			} catch (CodeableException e) {
-				Log.e(TAG, e.toString(), e);
+				AugLog.e( e.toString(), e);
 				return;
 			}
 			//String latitudeStr = "90/1,12/1,30/1";

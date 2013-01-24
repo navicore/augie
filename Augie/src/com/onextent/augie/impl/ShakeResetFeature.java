@@ -14,19 +14,17 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import java.lang.Math;
+import android.support.v4.app.DialogFragment;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.Mode;
-
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
 public class ShakeResetFeature implements Augiement, SensorEventListener {
 
@@ -86,7 +84,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     public void registerOneShakeReset(Augiement f) {
-    	Log.d(TAG, "shake reset feature register " + 
+    	AugLog.d( "shake reset feature register " + 
     			f.getMeta().getUIName() + 
     			" for single shake");
         oneShakeRegistry.add(f);
@@ -104,12 +102,12 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     }
 
     public void stop() {
-        Log.d(TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
         unregisterSensorListeners();
     }
 
     public void resume() {
-        Log.d(TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
         registerSensorListeners();
     }
 

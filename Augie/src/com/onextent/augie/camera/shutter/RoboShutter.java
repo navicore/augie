@@ -16,6 +16,7 @@ import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -180,11 +181,11 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 
         @Override
         public void onPictureTaken(byte[] data, AugCamera c) {
-            Log.d(TAG, "robo shutter took pic");
+            AugLog.d( "robo shutter took pic");
             long now = System.currentTimeMillis();
             if (isRunning() && (getStarttime() + (getDuration() * 1000 * 60) < now)) {
                 stopRobo();
-                Log.d(TAG, "robo shutter stopped / duration expired");
+                AugLog.d( "robo shutter stopped / duration expired");
             } else {
                 setTaskFuture(runner.schedule(task, interval, TimeUnit.SECONDS));
             }
@@ -200,7 +201,7 @@ public class RoboShutter implements Augiement, OnLongClickListener {
             } catch (AugCameraException e) {
                 Log.w(TAG, "could not take pic: " + e.toString());
             } catch (Throwable e) {
-                Log.e(TAG, e.toString(), e);
+                AugLog.e( e.toString(), e);
                 stopRobo();
             }
         }
@@ -208,7 +209,7 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 
     private void stopRobo() {
         if (isRunning()) {
-            Log.d(TAG, "stopping robo shutter");
+            AugLog.d( "stopping robo shutter");
             setRunning(false);
 
             ScheduledFuture<?> t = getTaskFuture();
@@ -228,7 +229,7 @@ public class RoboShutter implements Augiement, OnLongClickListener {
             setRunning(true);
             setStattime(System.currentTimeMillis());
             setTaskFuture(runner.schedule(task, initInterval, TimeUnit.SECONDS));
-            Log.d(TAG, "robo shutter started. init: " + initInterval + " interval:" + interval + " duration: " + duration);
+            AugLog.d( "robo shutter started. init: " + initInterval + " interval:" + interval + " duration: " + duration);
         }
         return true;
     }

@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.Dialog;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.onextent.android.codeable.Size;
 import com.onextent.android.ui.SeekBarUI;
 import com.onextent.android.ui.SpinnerUI;
-import com.onextent.augmatic.R;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
@@ -26,8 +26,7 @@ import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.NamedInt;
-import com.onextent.android.codeable.Codeable;
-import com.onextent.android.codeable.Size;
+import com.onextent.augmatic.R;
 
 public class ImageSettingsDialog extends SherlockDialogFragment {
 
@@ -91,7 +90,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
         setJpegThumbnailQualityUI(v, camera);
         setPreviewFPSRangeUI(v, camera);
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
 
         return v;
@@ -125,7 +124,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -148,7 +147,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -171,7 +170,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -194,7 +193,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -217,7 +216,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -236,7 +235,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -255,7 +254,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };
@@ -297,7 +296,7 @@ public class ImageSettingsDialog extends SherlockDialogFragment {
                 try {
                     camera.applyParameters();
                 } catch (AugCameraException e) {
-                    Log.e(Codeable.TAG, e.toString());
+                    AugLog.e( e.toString());
                 }
             }
         };

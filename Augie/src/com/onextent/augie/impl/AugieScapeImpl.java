@@ -5,21 +5,18 @@ package com.onextent.augie.impl;
 
 import java.util.Set;
 
-import com.onextent.android.codeable.Codeable;
-import com.onextent.augie.AugieScape;
-import com.onextent.augie.Augiement;
-import com.onextent.augie.AugiementException;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.onextent.augie.AugLog;
+import com.onextent.augie.AugieScape;
+import com.onextent.augie.Augiement;
+import com.onextent.augie.AugiementException;
 
 public class AugieScapeImpl extends View implements AugieScape {
 
@@ -31,13 +28,11 @@ public class AugieScapeImpl extends View implements AugieScape {
 
     public AugieScapeImpl(Context context) {
         super(context);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE); 
 
-        float stroke_w = Float.parseFloat(prefs.getString("DRAW_LINE_WIDTH", "18"));
-        paint.setStrokeWidth( stroke_w );
+        paint.setStrokeWidth( 18 ); //todo: setting
 
         paint.setColor(Color.WHITE);
         paint.setAlpha(Color.WHITE);
@@ -78,7 +73,7 @@ public class AugieScapeImpl extends View implements AugieScape {
     }
 
     public void resume() {
-        Log.d(Codeable.TAG, "resuming " + getClass().getName());
+        AugLog.d( "resuming " + getClass().getName());
         for (Augiement f : features) {
             f.resume();
         }
@@ -86,7 +81,7 @@ public class AugieScapeImpl extends View implements AugieScape {
     }
 
     public void stop() {
-        Log.d(Codeable.TAG, "stopping " + getClass().getName());
+        AugLog.d( "stopping " + getClass().getName());
         for (Augiement f : features) {
             f.stop();
         }
@@ -137,7 +132,7 @@ public class AugieScapeImpl extends View implements AugieScape {
             }
             if (handled) invalidate();
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         //return handled;
         return true;
@@ -157,7 +152,7 @@ public class AugieScapeImpl extends View implements AugieScape {
             }
             if (handled) invalidate(); //probably unnecessary
         } catch (Exception e) {
-            Log.e(Codeable.TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         //return handled;
         return true;

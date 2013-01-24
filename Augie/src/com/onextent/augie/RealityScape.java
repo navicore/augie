@@ -41,7 +41,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
             augcamera.open();
             augcamera.setPreviewDisplay(holder);
         } catch (AugCameraException e) {
-            Log.e(Codeable.TAG, "Error surfaceCreated: " + e.getMessage());
+            AugLog.e( "Error surfaceCreated: " + e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
                 augcamera.stopPreview();
                 augcamera.close();
             } catch (AugCameraException e) {
-                Log.e(Codeable.TAG, "Error surfaceDestroyed: " + e.getMessage());
+                AugLog.e( "Error surfaceDestroyed: " + e.getMessage());
             }
         }
     }
@@ -60,7 +60,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
         try {
             augcamera.startPreview();
         } catch (AugCameraException e) {
-            Log.e(Codeable.TAG, "Error surfaceChanged: " + e.getMessage());
+            AugLog.e( "Error surfaceChanged: " + e.getMessage());
         }
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.

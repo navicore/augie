@@ -8,11 +8,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.support.v4.app.DialogFragment;
+import android.view.MotionEvent;
+import android.view.View;
+
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeArray;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -21,14 +28,6 @@ import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.augie.marker.impl.AugLineImpl;
-
-
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 public class HorizonFeature extends AugDrawBase {
 
@@ -105,7 +104,7 @@ public class HorizonFeature extends AugDrawBase {
             default:
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         return false;
     }
@@ -177,7 +176,7 @@ public class HorizonFeature extends AugDrawBase {
     public void updateCanvas() {
         Paint p = augieScape.getPaint();
         float orig_w = p.getStrokeWidth();
-        //Log.d(TAG, "ejs update HF: " + lines.size() + " hc: " + hashCode());
+        //AugLog.d( "ejs update HF: " + lines.size() + " hc: " + hashCode());
         for (AugLine l : lines) {
             float temp_w = l.getWidth();
             p.setStrokeWidth( temp_w );
@@ -212,7 +211,7 @@ public class HorizonFeature extends AugDrawBase {
             code.put("horizLineWidth", getHorizLineWidth());
             code.put("vertLineWidth", getVertLineWidth());
         } catch (CodeableException e) {
-            Log.e(TAG, e.toString(), e);
+            AugLog.e( e.toString(), e);
         }
         
         return code;
