@@ -47,7 +47,7 @@ public interface AugCamera extends Augiement {
     
     String flatten();
 
-    void focus(AugFocusCallback cb);
+    void focus(AugFocusCallback cb) throws AugCameraException;
     
     void setPreviewCallback(AugPreviewCallback cb);
     void setPreviewCallbackWithBuffer(AugPreviewCallback cb);

@@ -163,7 +163,7 @@ public class CameraImpl implements AugCamera {
     }
 
     @Override
-    public void focus(AugFocusCallback cb) {
+    public void focus(AugFocusCallback cb) throws AugCameraException {
         augcamera.focus(cb);
     }
 

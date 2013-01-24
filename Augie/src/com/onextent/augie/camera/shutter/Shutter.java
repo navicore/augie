@@ -180,22 +180,29 @@ public class Shutter implements Augiement {
 			}
 		}  catch (AugCameraException e) {
 			throw e;
+		}  catch (Throwable e) {
+			throw new AugCameraException(e);
 		}
 	}
 
 	protected void __takePicture() throws AugCameraException {
-		rememberRotation();
-		if (camera != null)  {
-			AugCameraParameters p = camera.getParameters();
-			if ("raw".equals(p.getXPictureFmt())) {
-				camera.takePicture(null, rawCb, null);
+		try {
+
+			rememberRotation();
+			if (camera != null)  {
+				AugCameraParameters p = camera.getParameters();
+				if ("raw".equals(p.getXPictureFmt())) {
+					camera.takePicture(null, rawCb, null);
+				} else {
+					camera.takePicture(null, null, jpgCb);
+				}
 			} else {
-				camera.takePicture(null, null, jpgCb);
+				handleUserCb(null, camera);
+				Log.e(TAG, "camera not found");
+				Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
 			}
-		} else {
-			handleUserCb(null, camera);
-			Log.e(TAG, "camera not found");
-			Toast.makeText(context, "error!  camera not found", Toast.LENGTH_LONG).show();
+		} catch (Throwable err) {
+			throw new AugCameraException(err);
 		}
 	}
 
@@ -222,14 +229,31 @@ public class Shutter implements Augiement {
 
 
 		public void onPictureTaken(byte[] data, AugCamera camera) {
-		
-			if (handlingIntent()) {
-				onPictureTakenByIntent(data, camera);
-			} else {
-				onPictureTakenLocalFS(data, camera);
+
+			try {
+
+
+				if (handlingIntent()) {
+					onPictureTakenByIntent(data, camera);
+				} else {
+					onPictureTakenLocalFS(data, camera);
+				}
+			} catch (Throwable err) {
+				Log.e(TAG, "onPictureTaken error: " + err.toString(), err);
+			
+			} finally {
+
+				if (camera != null)
+					try {
+						//todo: it is wrong to do this for both callbacks
+						camera.startPreview();
+						Log.d(TAG, "restarted preview after taking pic");
+					} catch (Throwable e) {
+						Log.e(TAG, "Error starting preview after taking picture: " + e.getMessage(), e);
+					}
 			}
 		}
-		
+
 		private boolean handlingIntent() {
 			Activity a = (Activity) context;
 			Intent i = a.getIntent();
@@ -245,7 +269,7 @@ public class Shutter implements Augiement {
 				handleUserCb(data, camera);
 				return;
 			}
-			
+
 			File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, suffix);
 			if (pictureFile == null){
 				String msg = "Error storing file, check storage permissions";
@@ -268,16 +292,6 @@ public class Shutter implements Augiement {
 				Log.e(TAG, "Error accessing file: " + e.getMessage());
 			}
 
-			if (camera != null)
-				try {
-					//ejs todo: it is wrong to do this for both callbacks
-					Log.d(TAG, "restarting preview after taking pic");
-					camera.startPreview();
-					Log.d(TAG, "restarted preview after taking pic");
-				} catch (AugCameraException e) {
-					Log.e(TAG, "Error starting preview after taking picture: " + e.getMessage(), e);
-				}
-
 			try {
 				updateExif(pictureFile);
 			} catch (IOException e) {
@@ -286,23 +300,23 @@ public class Shutter implements Augiement {
 			if (isRegisterImageWithOS()) galleryAddPic(pictureFile);
 			handleUserCb(data, camera);
 		}
-		
+
 		public void onPictureTakenByIntent(byte[] data, AugCamera camera) {
-			
+
 			Activity activity = (Activity) context;
-			
+
 			Uri uriTarget = (Uri) activity.getIntent().getExtras().getParcelable( MediaStore.EXTRA_OUTPUT );
-		
+
 			Log.d(TAG, "writing to uri target: " + uriTarget);
 			if (uriTarget == null) {
-				
+
 				Toast.makeText(context, "error: uriTarget is null", Toast.LENGTH_LONG).show();
 				// todo: if no uri you must return a small bitmap per api for MediaStore.ACTION_IMAGE_CAPTURE");
 				Log.w(TAG, "'no uri'-intent not supported, client activity must send a uri.");
 				handleUserCb(data, camera);
 				return;
 			}
-			
+
 			try {
 				OutputStream fos = context.getContentResolver().openOutputStream(uriTarget);
 				fos.write(data);
@@ -324,7 +338,7 @@ public class Shutter implements Augiement {
 				Log.w(TAG, e.toString());
 			}
 			handleUserCb(data, camera);
-            ((Activity)context).finish();
+			((Activity)context).finish();
 		}
 	}
 

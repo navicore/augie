@@ -163,7 +163,9 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     }
     
     @Override
-    public void focus(final AugFocusCallback cb) {
+    public void focus(final AugFocusCallback cb) throws AugCameraException {
+    	
+    	if (camera == null) throw new AugCameraException("camera is null");
        
         AutoFocusCallback fcb = new AutoFocusCallback() {
 
@@ -173,8 +175,12 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
                 cb.onFocus(success);
             }
         };
-        
-        camera.autoFocus(fcb);
+      
+        try {
+        	camera.autoFocus(fcb);
+        } catch (Throwable err) {
+        	throw new AugCameraException(err);
+        }
     }
     
     @Override

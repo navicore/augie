@@ -72,7 +72,7 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 
 	@Override
 	public void updateCanvas() { 
-		
+
 		if (running && augieScape != null && blackout) {
 			augieScape.getCanvas().drawColor(Color.BLACK);
 		}
@@ -152,27 +152,27 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 		}
 	};
 
-	public boolean isBlackout() {
+	public synchronized boolean isBlackout() {
 		return blackout;
 	}
 
-	public void setBlackout(boolean blackout) {
+	public synchronized void setBlackout(boolean blackout) {
 		this.blackout = blackout;
 	}
 
-	public int getInterval() {
+	public synchronized int getInterval() {
 		return interval;
 	}
 
-	public void setInterval(int interval) {
+	public synchronized void setInterval(int interval) {
 		this.interval = interval;
 	}
 
-	public int getDuration() {
+	public synchronized int getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public synchronized void setDuration(int duration) {
 		this.duration = duration;
 	}
 
@@ -190,36 +190,44 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 		public void run() {
 			try {
 				shutter.takePicture(myCb);
+				//shutter.takePicture();
+				long now = System.currentTimeMillis();
+				if (isRunning() && (getStarttime() + (duration * 1000 * 60) < now)) {
+					stopRobo();
+					Log.d(TAG, "robo shutter stopped / duration expired");
+				}
 			} catch (AugCameraException e) {
 				Log.e(TAG, e.toString(), e);
-			}
-			long now = System.currentTimeMillis();
-			if (running && (getStarttime() + (duration * 1000 * 60) < now)) {
-				running = false;
-				taskFuture.cancel(false);
-				taskFuture = null;
-				Log.d(TAG, "robo shutter stopped / duration expired");
+				//stopRobo(); //for testing.  normally don't want to quit if you can't focus
+			} catch (Throwable e) {
+				Log.e(TAG, e.toString(), e);
+				stopRobo(); //for testing.  normally don't want to quit if you can't focus
 			}
 		}
 	};
-	
-	@Override
-	public boolean onLongClick(View v) {
+
+	private void stopRobo() {
 		if (isRunning()) {
+			Log.d(TAG, "stopping robo shutter");
 			setRunning(false);
-			
+
 			ScheduledFuture<?> t = getTaskFuture();
 			if (t != null) {
 				t.cancel(false);
-				Log.d(TAG, "robo shutter manually stopped");
 				setTaskFuture(null);
 			}
+		}
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		if (isRunning()) {
+			stopRobo();
 
 		} else {
 			setRunning(true);
 			setStattime(System.currentTimeMillis());
-			ScheduledFuture<?> t = runner.scheduleWithFixedDelay(task, initInterval, interval, TimeUnit.SECONDS);
-			setTaskFuture(t);
+			setTaskFuture(runner.scheduleWithFixedDelay(task, initInterval, interval, TimeUnit.SECONDS));
 			Log.d(TAG, "robo shutter started. init: " + initInterval + " interval:" + interval + " duration: " + duration);
 		}
 		return true;
@@ -238,7 +246,7 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 	private synchronized void setRunning(boolean r) {
 		running = r;
 	}
-	
+
 	private synchronized long getStarttime() {
 		return startTime;
 	}
@@ -246,11 +254,11 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 		startTime = s;
 	}
 
-	public int getInitInterval() {
+	public synchronized int getInitInterval() {
 		return initInterval;
 	}
 
-	public void setInitInterval(int initInterval) {
+	public synchronized void setInitInterval(int initInterval) {
 		this.initInterval = initInterval;
 	}
 }
