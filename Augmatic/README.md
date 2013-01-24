@@ -1,4 +1,4 @@
-Augmatic 1000
+Augmatic 1000 
 =====
 Reference Camera Implementation using Augie
 ----------------------------------------------------
