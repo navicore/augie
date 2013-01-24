@@ -26,239 +26,239 @@ import com.onextent.augie.camera.AugPictureCallback;
 
 public class RoboShutter implements Augiement, OnLongClickListener {
 
-	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHUTTER/ROBO");
-	public static final String UI_NAME = "Robo Shutter";
-	public static final String DESCRIPTION = "Operates shutter at timed intervals.";
+    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHUTTER/ROBO");
+    public static final String UI_NAME = "Robo Shutter";
+    public static final String DESCRIPTION = "Operates shutter at timed intervals.";
 
-	private AugieScape augieScape;
-	private Shutter shutter;
-	private int initInterval = 0; //for now in seconds
-	private int interval = 10; //for now in seconds
-	private int duration = 1; //for now in minutes
-	private long startTime = 0;
+    private AugieScape augieScape;
+    private Shutter shutter;
+    private int initInterval = 0; //for now in seconds
+    private int interval = 10; //for now in seconds
+    private int duration = 1; //for now in minutes
+    private long startTime = 0;
 
-	private boolean blackout;
-	private boolean running;
+    private boolean blackout;
+    private boolean running;
 
-	final static Set<CodeableName> deps;
-	static {
-		deps = new HashSet<CodeableName>();
-		deps.add(Shutter.AUGIE_NAME);
-	}
-	private ScheduledThreadPoolExecutor runner;
+    final static Set<CodeableName> deps;
+    static {
+        deps = new HashSet<CodeableName>();
+        deps.add(Shutter.AUGIE_NAME);
+    }
+    private ScheduledThreadPoolExecutor runner;
 
-	@Override
-	public CodeableName getCodeableName() {
-		return AUGIE_NAME;
-	}
+    @Override
+    public CodeableName getCodeableName() {
+        return AUGIE_NAME;
+    }
 
-	@Override
-	public Code getCode() throws CodeableException {
-		Code code = JSONCoder.newCode();
-		code.put(AUGIE_NAME);
-		code.put("blackout", blackout);
-		code.put("interval", interval);
-		code.put("duration", duration);
-		return code;
-	}
+    @Override
+    public Code getCode() throws CodeableException {
+        Code code = JSONCoder.newCode();
+        code.put(AUGIE_NAME);
+        code.put("blackout", blackout);
+        code.put("interval", interval);
+        code.put("duration", duration);
+        return code;
+    }
 
-	@Override
-	public void setCode(Code code) throws CodeableException {
-		if (code == null) return;
-		if (code.has("blackout")) blackout = code.getBoolean("blackout");
-		if (code.has("interval")) interval = code.getInt("interval");
-		if (code.has("duration")) duration = code.getInt("duration");
-	}
+    @Override
+    public void setCode(Code code) throws CodeableException {
+        if (code == null) return;
+        if (code.has("blackout")) blackout = code.getBoolean("blackout");
+        if (code.has("interval")) interval = code.getInt("interval");
+        if (code.has("duration")) duration = code.getInt("duration");
+    }
 
-	@Override
-	public void updateCanvas() { 
+    @Override
+    public void updateCanvas() { 
 
-		if (running && augieScape != null && blackout) {
-			augieScape.getCanvas().drawColor(Color.BLACK);
-		}
-	}
+        if (running && augieScape != null && blackout) {
+            augieScape.getCanvas().drawColor(Color.BLACK);
+        }
+    }
 
-	@Override
-	public void clear() { }
+    @Override
+    public void clear() { }
 
-	@Override
-	public void stop() {
+    @Override
+    public void stop() {
 
-		runner.shutdown();
-		runner = null;
-	}
+        runner.shutdown();
+        runner = null;
+    }
 
-	@Override
-	public void resume() {
+    @Override
+    public void resume() {
 
-		runner = new ScheduledThreadPoolExecutor(2);
-	}
+        runner = new ScheduledThreadPoolExecutor(2);
+    }
 
-	@Override
-	public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
+    @Override
+    public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 
-		augieScape = av;
-		for (Augiement a: helpers) {
+        augieScape = av;
+        for (Augiement a: helpers) {
 
-			if (a instanceof Shutter) {
-				shutter = (Shutter) a;
-			}
-		}
-		if (shutter == null) throw new AugiementException("no shutter found");
-	}
+            if (a instanceof Shutter) {
+                shutter = (Shutter) a;
+            }
+        }
+        if (shutter == null) throw new AugiementException("no shutter found");
+    }
 
-	@Override
-	public DialogFragment getUI() {
+    @Override
+    public DialogFragment getUI() {
 
-		return new RoboShutterDialog();
-	}
+        return new RoboShutterDialog();
+    }
 
-	@Override
-	public Meta getMeta() {
+    @Override
+    public Meta getMeta() {
 
-		return META;
-	}
+        return META;
+    }
 
-	public static final Meta META =
-			new Augiement.Meta() {
+    public static final Meta META =
+            new Augiement.Meta() {
 
-		@Override
-		public Class<? extends Augiement> getAugiementClass() {
+        @Override
+        public Class<? extends Augiement> getAugiementClass() {
 
-			return RoboShutter.class;
-		}
+            return RoboShutter.class;
+        }
 
-		@Override
-		public CodeableName getCodeableName() {
+        @Override
+        public CodeableName getCodeableName() {
 
-			return AUGIE_NAME;
-		}
+            return AUGIE_NAME;
+        }
 
-		@Override
-		public String getUIName() {
+        @Override
+        public String getUIName() {
 
-			return UI_NAME;
-		}
+            return UI_NAME;
+        }
 
-		@Override
-		public String getDescription() {
+        @Override
+        public String getDescription() {
 
-			return DESCRIPTION;
-		}
+            return DESCRIPTION;
+        }
 
-		@Override
-		public Set<CodeableName> getDependencyNames() {
-			return deps;
-		}
-	};
+        @Override
+        public Set<CodeableName> getDependencyNames() {
+            return deps;
+        }
+    };
 
-	public synchronized boolean isBlackout() {
-		return blackout;
-	}
+    public synchronized boolean isBlackout() {
+        return blackout;
+    }
 
-	public synchronized void setBlackout(boolean blackout) {
-		this.blackout = blackout;
-	}
+    public synchronized void setBlackout(boolean blackout) {
+        this.blackout = blackout;
+    }
 
-	public synchronized int getInterval() {
-		return interval;
-	}
+    public synchronized int getInterval() {
+        return interval;
+    }
 
-	public synchronized void setInterval(int interval) {
-		this.interval = interval;
-	}
+    public synchronized void setInterval(int interval) {
+        this.interval = interval;
+    }
 
-	public synchronized int getDuration() {
-		return duration;
-	}
+    public synchronized int getDuration() {
+        return duration;
+    }
 
-	public synchronized void setDuration(int duration) {
-		this.duration = duration;
-	}
+    public synchronized void setDuration(int duration) {
+        this.duration = duration;
+    }
 
-	private final AugPictureCallback myCb = new AugPictureCallback() {
+    private final AugPictureCallback myCb = new AugPictureCallback() {
 
-		@Override
-		public void onPictureTaken(byte[] data, AugCamera c) {
-			Log.d(TAG, "robo shutter took pic");
-		}
-	};
+        @Override
+        public void onPictureTaken(byte[] data, AugCamera c) {
+            Log.d(TAG, "robo shutter took pic");
+            long now = System.currentTimeMillis();
+            if (isRunning() && (getStarttime() + (getDuration() * 1000 * 60) < now)) {
+                stopRobo();
+                Log.d(TAG, "robo shutter stopped / duration expired");
+            } else {
+                setTaskFuture(runner.schedule(task, interval, TimeUnit.SECONDS));
+            }
+        }
+    };
 
-	private final Runnable task = new Runnable() {
+    private final Runnable task = new Runnable() {
 
-		@Override
-		public void run() {
-			try {
-				shutter.takePicture(myCb);
-				//shutter.takePicture();
-				long now = System.currentTimeMillis();
-				if (isRunning() && (getStarttime() + (duration * 1000 * 60) < now)) {
-					stopRobo();
-					Log.d(TAG, "robo shutter stopped / duration expired");
-				}
-			} catch (AugCameraException e) {
-				Log.e(TAG, e.toString(), e);
-				//stopRobo(); //for testing.  normally don't want to quit if you can't focus
-			} catch (Throwable e) {
-				Log.e(TAG, e.toString(), e);
-				stopRobo(); //for testing.  normally don't want to quit if you can't focus
-			}
-		}
-	};
+        @Override
+        public void run() {
+            try {
+                shutter.takePicture(myCb);
+            } catch (AugCameraException e) {
+                Log.w(TAG, "could not take pic: " + e.toString());
+            } catch (Throwable e) {
+                Log.e(TAG, e.toString(), e);
+                stopRobo();
+            }
+        }
+    };
 
-	private void stopRobo() {
-		if (isRunning()) {
-			Log.d(TAG, "stopping robo shutter");
-			setRunning(false);
+    private void stopRobo() {
+        if (isRunning()) {
+            Log.d(TAG, "stopping robo shutter");
+            setRunning(false);
 
-			ScheduledFuture<?> t = getTaskFuture();
-			if (t != null) {
-				t.cancel(false);
-				setTaskFuture(null);
-			}
-		}
-	}
+            ScheduledFuture<?> t = getTaskFuture();
+            if (t != null) {
+                t.cancel(false);
+                setTaskFuture(null);
+            }
+        }
+    }
 
-	@Override
-	public boolean onLongClick(View v) {
-		if (isRunning()) {
-			stopRobo();
+    @Override
+    public boolean onLongClick(View v) {
+        if (isRunning()) {
+            stopRobo();
 
-		} else {
-			setRunning(true);
-			setStattime(System.currentTimeMillis());
-			setTaskFuture(runner.scheduleWithFixedDelay(task, initInterval, interval, TimeUnit.SECONDS));
-			Log.d(TAG, "robo shutter started. init: " + initInterval + " interval:" + interval + " duration: " + duration);
-		}
-		return true;
-	}
+        } else {
+            setRunning(true);
+            setStattime(System.currentTimeMillis());
+            setTaskFuture(runner.schedule(task, initInterval, TimeUnit.SECONDS));
+            Log.d(TAG, "robo shutter started. init: " + initInterval + " interval:" + interval + " duration: " + duration);
+        }
+        return true;
+    }
 
-	private ScheduledFuture<?> taskFuture;
-	private synchronized void setTaskFuture(ScheduledFuture<?> t) {
-		taskFuture = t;
-	}
-	private synchronized ScheduledFuture<?> getTaskFuture() {
-		return taskFuture;
-	}
-	private synchronized boolean isRunning() {
-		return running;
-	}
-	private synchronized void setRunning(boolean r) {
-		running = r;
-	}
+    private ScheduledFuture<?> taskFuture;
+    private synchronized void setTaskFuture(ScheduledFuture<?> t) {
+        taskFuture = t;
+    }
+    private synchronized ScheduledFuture<?> getTaskFuture() {
+        return taskFuture;
+    }
+    private synchronized boolean isRunning() {
+        return running;
+    }
+    private synchronized void setRunning(boolean r) {
+        running = r;
+    }
 
-	private synchronized long getStarttime() {
-		return startTime;
-	}
-	private synchronized void setStattime(long s) {
-		startTime = s;
-	}
+    private synchronized long getStarttime() {
+        return startTime;
+    }
+    private synchronized void setStattime(long s) {
+        startTime = s;
+    }
 
-	public synchronized int getInitInterval() {
-		return initInterval;
-	}
+    public synchronized int getInitInterval() {
+        return initInterval;
+    }
 
-	public synchronized void setInitInterval(int initInterval) {
-		this.initInterval = initInterval;
-	}
+    public synchronized void setInitInterval(int initInterval) {
+        this.initInterval = initInterval;
+    }
 }

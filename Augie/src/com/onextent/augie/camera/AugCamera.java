@@ -28,7 +28,7 @@ public interface AugCamera extends Augiement {
     
     void takePicture(AugShutterCallback shutter, 
                             AugPictureCallback raw, 
-                            AugPictureCallback jpeg);
+                            AugPictureCallback jpeg) throws AugCameraException;
     
     AugCameraParameters getParameters();
     

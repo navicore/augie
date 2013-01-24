@@ -76,7 +76,7 @@ public class CameraImpl implements AugCamera {
     @Override
     public void takePicture(AugShutterCallback shutter, 
                             AugPictureCallback raw, 
-                            AugPictureCallback jpeg) {
+                            AugPictureCallback jpeg) throws AugCameraException {
         
         augcamera.takePicture(shutter, raw, jpeg);
     }

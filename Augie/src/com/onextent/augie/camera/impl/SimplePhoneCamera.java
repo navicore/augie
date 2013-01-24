@@ -186,28 +186,63 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     @Override
     public void takePicture(final AugShutterCallback shutter, 
                             final AugPictureCallback raw,
-                            final AugPictureCallback jpeg) {
-        Camera.ShutterCallback scb = new Camera.ShutterCallback() {
+                            final AugPictureCallback jpeg) throws AugCameraException {
+        Camera.ShutterCallback scb = null;
+        Camera.PictureCallback rcb = null;
+        Camera.PictureCallback jcb = null;
+        
+        if (shutter != null)
+        scb = new Camera.ShutterCallback() {
             @Override
             public void onShutter() {
+                
                 if (shutter != null) shutter.onShutter();
             }
         };
-        Camera.PictureCallback rcb = new Camera.PictureCallback() {
+        if (raw != null)
+        rcb = new Camera.PictureCallback() {
             
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
+                try {
                 if (raw != null) raw.onPictureTaken(data, SimplePhoneCamera.this);
+                } finally {
+                    unlock();
+                }
             }
         };
-        Camera.PictureCallback jcb = new Camera.PictureCallback() {
+        if (jpeg != null)
+        jcb = new Camera.PictureCallback() {
             
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
-                if (jpeg != null) jpeg.onPictureTaken(data, SimplePhoneCamera.this);
+                try {
+                    if (jpeg != null) jpeg.onPictureTaken(data, SimplePhoneCamera.this);
+                } finally {
+                    unlock();
+                }
             }
         };
-        camera.takePicture(scb, rcb, jcb);
+        if (rcb == null && jcb == null) throw new AugCameraException("no callbacks");
+        boolean locked = lock();
+        if (!locked) throw new AugCameraException("camera busy");
+        try {
+            camera.takePicture(scb, rcb, jcb);
+        } catch (Throwable err) {
+            unlock();
+        }
+    }
+    
+    private boolean isLocked = false;
+    private synchronized boolean lock() {
+        if (isLocked) return false;
+        Log.d(TAG, "locking camera");
+        isLocked = true;
+        return true;
+    }
+    private synchronized void unlock() {
+        Log.d(TAG, "unlocking camera");
+        isLocked = false;
     }
 
     @Override

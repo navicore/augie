@@ -31,7 +31,12 @@
 	android:layout_height="wrap_content"
 	android:text="First delay seconds" 
 	/>
+	</TableRow>
     
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
 	<Spinner
 	android:id="@+id/robo_init_interval"
 	android:layout_width="fill_parent"
@@ -50,7 +55,12 @@
 	android:layout_height="wrap_content"
 	android:text="Shooting interval in seconds" 
 	/>
+	</TableRow>
     
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
 	<Spinner
 	android:id="@+id/robo_interval"
 	android:layout_width="fill_parent"
@@ -69,7 +79,12 @@
 	android:layout_height="wrap_content"
 	android:text="Shooting duration in minutes" 
 	/>
+	</TableRow>
     
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
 	<Spinner
 	android:id="@+id/robo_duration"
 	android:layout_width="fill_parent"
