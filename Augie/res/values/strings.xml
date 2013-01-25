@@ -5,7 +5,6 @@
     <string name="aug_fld_title_focus_area_color">Focus Area Color</string>
     <string name="aug_fld_title_meter_area_color">Focus Area Color</string>
     <string name="aug_fld_title_default_focus_area_edge_sz">Default Focus Area Edge Size</string>
-    <string name="aug_fld_title_always_ovr_fa">Always Override Camera Focus Area</string>
     <string name="aug_fld_title_reg_pics">Register Pictures with Media Store (Gallery)</string>
     <string name="aug_fld_title_show_filename">Show Filename after Taking Picture</string>
     <string name="aug_fld_title_override_fa">Touch Screen to Focus</string>
@@ -13,9 +12,9 @@
     <string name="aug_fld_title_fn_tmplate">Filename Template</string>
     <string name="aug_fld_fn_tmplate">Augie_%y%M%d_%h%m%s_image</string>
     <string name="aug_fld_title_blackout">Blackout screen while shooting</string>
-    <string name="aug_fld_title_shooting_first_delay">First Delay (in seconds)</string>
-    <string name="aug_fld_title_shooting_interval">Shooting Interval (in seconds)</string>
-    <string name="aug_fld_title_shooting_dur">Shooting Duration (in minutes)</string>
+    <string name="aug_fld_title_shooting_first_delay">Delay (in seconds)</string>
+    <string name="aug_fld_title_shooting_interval">Interval (in seconds)</string>
+    <string name="aug_fld_title_shooting_dur">Duration (in minutes)</string>
     <string name="aug_fld_title_horizon_pixel_drag_sensitivity">Pixel Sensitivity for Drag</string>
     <string name="aug_fld_title_horizon_hline_width">Horizontal Line Width</string>
     <string name="aug_fld_title_horizon_vline_width">Vertical Line Width</string>
@@ -24,5 +23,7 @@
     <string name="aug_fld_title_gps_longitude">Longitude</string>
     <string name="aug_fld_title_gps_latitude">Latitude</string>
     <string name="aug_fld_title_gps_enabled">GPS is Enabled</string>
+    <string name="aug_fld_title_root_dir">Picture File Root:</string>
+    <string name="aug_fld_title_dir">Directory:</string>
     
 </resources>

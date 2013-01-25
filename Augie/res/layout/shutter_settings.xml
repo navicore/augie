@@ -13,45 +13,6 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
     >
-    <TextView
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
-	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_focus_area_color" 
-	/>
-  
-	<Spinner
-	android:id="@+id/focus_area_camera_colors"
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
-	android:layout_height="wrap_content"
-	/>
-	</TableRow>
-
-	<TableRow
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    >
-    <TextView
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
-	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_meter_area_color" 
-	/>
-
-	<Spinner
-	android:id="@+id/meter_area_camera_colors"
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
-	android:layout_height="wrap_content"
-	/>
-	</TableRow>
-	
-	<TableRow
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    >
-
 	<CheckBox
 		android:id="@+id/fireMediaStoreIntent"
 		android:layout_width="wrap_content"
@@ -64,7 +25,6 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
     >
-
 	<CheckBox
 		android:id="@+id/showFileSavedToast"
 		android:layout_width="wrap_content"
@@ -77,33 +37,12 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
     >
-
-	<CheckBox
-		android:id="@+id/alwaysSetFocusArea"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-	    android:text="@string/aug_fld_title_override_fa" 
-		/>
-	</TableRow>
-
-	<TableRow
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    >
     <TextView
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_default_focus_area_edge_sz" 
+	android:text="@string/aug_fld_title_root_dir"
 	/>
-    
-	<Spinner
-	android:id="@+id/defaultFocusAreaSz"
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
-	android:layout_height="wrap_content"
-	/>
-
 	</TableRow>
 	
 	<TableRow
@@ -116,7 +55,24 @@
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	/>
-	<!--  todo spinner with editable text -->
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_dir"
+	/>
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
     <EditText
 	android:id="@+id/picFileDir"
 	android:inputType="text"
@@ -137,7 +93,12 @@
 	android:layout_height="wrap_content"
 	android:text="@string/aug_fld_title_fn_tmplate"
 	/>
+	</TableRow>
     
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
     <EditText
 	android:id="@+id/fileNameTemplate"
 	android:inputType="text"
@@ -146,7 +107,6 @@
 	android:layout_height="wrap_content"
 	android:text="@string/aug_fld_fn_tmplate"
 	/>
-
 	</TableRow>
 	
 </TableLayout>

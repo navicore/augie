@@ -28,21 +28,15 @@
     >
     <TextView
 	android:layout_width="fill_parent"
-	android:layout_weight="1"
+	android:layout_weight="2"
 	android:layout_height="wrap_content"
     android:text="@string/aug_fld_title_shooting_first_delay"
 	/>
-	</TableRow>
-    
-	<TableRow
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    >
 	<Spinner
 	android:id="@+id/robo_init_interval"
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
+	android:layout_weight="1"
 	/>
 	</TableRow>
 	
@@ -52,21 +46,15 @@
     >
     <TextView
 	android:layout_width="fill_parent"
-	android:layout_weight="1"
+	android:layout_weight="2"
 	android:layout_height="wrap_content"
     android:text="@string/aug_fld_title_shooting_interval"
 	/>
-	</TableRow>
-    
-	<TableRow
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    >
 	<Spinner
 	android:id="@+id/robo_interval"
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
+	android:layout_weight="1"
 	/>
 	</TableRow>
 	
@@ -76,21 +64,15 @@
     >
     <TextView
 	android:layout_width="fill_parent"
-	android:layout_weight="1"
+	android:layout_weight="2"
 	android:layout_height="wrap_content"
     android:text="@string/aug_fld_title_shooting_dur"
 	/>
-	</TableRow>
-    
-	<TableRow
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    >
 	<Spinner
 	android:id="@+id/robo_duration"
-	android:layout_width="fill_parent"
-	android:layout_weight="1"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
+	android:layout_weight="1"
 	/>
 	</TableRow>
 	

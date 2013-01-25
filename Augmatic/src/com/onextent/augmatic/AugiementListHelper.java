@@ -47,7 +47,7 @@ public class AugiementListHelper {
     }
 
     public void init() {
-        
+
         // Check to see if we have a frame in which to embed the details
         // fragment directly in the containing UI.
         View detailsFrame = activity.findViewById(R.id.module_details);
@@ -90,7 +90,7 @@ public class AugiementListHelper {
                 updateStatusText(v, cn);
                 boolean isRequired = updateDepText(v, cn);
                 if (isEnabled && isRequired)
-                	cbox.setEnabled(false);
+                    cbox.setEnabled(false);
 
                 cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -122,21 +122,19 @@ public class AugiementListHelper {
             }
 
         };
-        
-        FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
-        if (f != null) {
-            if (isDualPane) {
-                FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.module_status, f);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.commit();
-                showDetails(position);
 
-            } else {
-                f.show(fm, "Module Status");
-                f.show((activity).getSupportFragmentManager(), "Module Status");
-                //todo: add details button to show details
-            }
+        if (isDualPane) {
+            FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.module_status, f);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+            showDetails(position);
+
+        } else {
+            FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
+            f.show(fm, "Module Status");
+            f.show((activity).getSupportFragmentManager(), "Module Status");
+            //todo: add details button to show details
         }
     }
 
@@ -150,98 +148,99 @@ public class AugiementListHelper {
         reqs.setText(getRequiredByUINames(rm));
         return rm != null;
     }
-    
+
     private void updateStatusText(View v, CodeableName cn) {
 
         TextView desc = (TextView) v.findViewById(R.id.module_description);
         Augiement.Meta m = allAugiements.get(cn);
         desc.setText(m.getDescription());
     }
-    
+
     private List<Meta> getRequiredByMeta(Meta m) {
-    	
-    	if (m == null) return null;
-        
-    	CodeableName cn = m.getCodeableName();
-    	
-    	List<Meta> ret = new ArrayList<Meta>();
-        
+
+        if (m == null) return null;
+
+        CodeableName cn = m.getCodeableName();
+
+        List<Meta> ret = new ArrayList<Meta>();
+
         for (Meta am : allAugiements.values()) {
-           
-        	Set<CodeableName> cnames = am.getDependencyNames();
-        	if (cnames == null) continue;
+
+            Set<CodeableName> cnames = am.getDependencyNames();
+            if (cnames == null) continue;
             for (CodeableName dm : cnames)
-            	if (dm.equals(cn)) ret.add(am);
+                if (dm.equals(cn)) ret.add(am);
         }
         if (ret.size() == 0) return null;
-    
+
         return ret;
     }
-    
+
     private CharSequence getRequiredByUINames(List<Meta> mlist) {
-        
-    	if (mlist == null) return null;
-    	
+
+        if (mlist == null) return null;
+
         String ret = "";
-        
+
         for (Meta am : mlist) {
-            
+
             if (ret.length() > 0) ret += ", ";
-          
+
             ret += am.getUIName();
         }
         if (ret.length() == 0) return null;
-    
+
         return "required by " + ret;
     }
-    
+
     private CharSequence getDepsUINames(Meta m) {
-        
+
         Set<CodeableName> cnames = m.getDependencyNames();
         if (cnames == null) return null;
-        
+
         String ret = "";
-        
+
         for (CodeableName cn : cnames) {
-            
+
             Meta dm = allAugiements.get(cn);
 
             if (dm == null) {
-            	Log.w(Codeable.TAG, "getDepsDesc looking for unknown augiement: " + dm);
-            	continue;
+                Log.w(Codeable.TAG, "getDepsDesc looking for unknown augiement: " + dm);
+                continue;
             }
-            
+
             if (ret.length() > 0) ret += ", ";
-            
+
             ret += dm.getUIName();
         }
-        
+
         if (ret.length() == 0) return null;
-    
+
         return "depends on " + ret;
     }
 
     private void showEmptySettingsDialog() {
-    	FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.module_details, new EmptySettingsDialog());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
     private void showDetails(final int position) {
-        
+
         CodeableName cn = cnList.get(position);
 
         Augiement a = modeAugiements.get(cn);       
         if (a == null) {
-        	return;
+            showEmptySettingsDialog();
+            return;
         }
-        
+
         DialogFragment f = a.getUI();
         if (f == null) {
-        	showEmptySettingsDialog();
-        	return;
+            showEmptySettingsDialog();
+            return;
         }
-        
+
         FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
         if (f != null) {
             if (isDualPane) {
@@ -258,7 +257,7 @@ public class AugiementListHelper {
     }
 
     private void updateButtonText(CompoundButton b, CodeableName cn, boolean isEnabled) {
-            
+
         String n = allAugiements.get(cn).getUIName();
         if (isEnabled) {
             b.setText(n + " is enabled");
@@ -273,7 +272,7 @@ public class AugiementListHelper {
     }
 
     public boolean isDualPane() {
-        
+
         return isDualPane;
     }
 }

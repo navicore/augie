@@ -56,7 +56,7 @@
 		android:id="@+id/alwaysSetFocusArea"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-	    android:text="@string/aug_fld_title_always_ovr_fa" 
+	    android:text="@string/aug_fld_title_override_fa" 
 		/>
 	</TableRow>
 
