@@ -103,10 +103,12 @@ public class AugiementListHelper {
                         if (isChecked) {
                             Augiement a = af.newInstance(cn);
                             mode.addAugiement(a);
+                            modeAugiements = mode.getAugiements(); //refresh list
                             updateButtonText(buttonView, cn, isChecked);
                         } else {
                             Augiement a = modeAugiements.get(cn);
                             mode.removeAugiement(a);
+                            modeAugiements = mode.getAugiements(); //refresh list
                         }
                         try {
                             modeManager.setCurrentMode(mode);

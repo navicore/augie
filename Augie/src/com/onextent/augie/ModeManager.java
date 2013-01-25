@@ -24,6 +24,7 @@ public interface ModeManager {
     void onCreate(Context context) throws AugieStoreException, CodeableException;
 
     void stop();
+    void resume() throws AugieStoreException, CodeableException;
 
     void setCurrentMode(Mode mode) throws AugieException;
 

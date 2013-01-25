@@ -76,14 +76,22 @@ public class ModeManagerImpl implements ModeManager {
     }   
 
     @Override
-    public void onCreate(Context context) throws AugieStoreException, CodeableException {
+    public void onCreate(Context c) throws AugieStoreException, CodeableException {
 
-        if (store != null) 
-            throw new java.lang.IllegalStateException("already init");
-        store = AugieStore.getCodeStore();
-        init();
+        //if (store != null) 
+        //throw new java.lang.IllegalStateException("already init");
+            
+        if (store == null) 
+            store = AugieStore.getCodeStore();
+        //init();
     }
 
+    @Override
+    public void resume() throws AugieStoreException, CodeableException {
+        //onCreate(context);
+        init();
+    }
+    
     @Override
     public void stop() {
         if (store == null) {
@@ -99,7 +107,7 @@ public class ModeManagerImpl implements ModeManager {
             } 
         }
         allModeCode = null;
-        store = null;
+        //store = null;
     }
 
     @Override
@@ -119,6 +127,14 @@ public class ModeManagerImpl implements ModeManager {
 
     @Override
     public Mode getCurrentMode() {
+        if (currentMode == null)
+            try {
+                init();
+            } catch (AugieStoreException e) {
+                AugLog.e(e);
+            } catch (CodeableException e) {
+                AugLog.e(e);
+            }
         return currentMode;
     }
     
@@ -331,4 +347,5 @@ public class ModeManagerImpl implements ModeManager {
     public CodeStore getStore() {
         return store;
     }
+
 }

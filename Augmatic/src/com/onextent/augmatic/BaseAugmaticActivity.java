@@ -274,6 +274,17 @@ public abstract class BaseAugmaticActivity
         AugLog.d( getClass().getName() + " onResume");
         super.onResume();
         init();
+        /*
+        try {
+            modeManager.resume();
+        } catch (AugieStoreException e) {
+            AugLog.e(e);
+        } catch (CodeableException e) {
+            AugLog.e(e);
+        }
+        cameraFactory.resume();
+        augieScape.resume();
+         */
         startOrientationEventListener();
     }
 
@@ -408,12 +419,11 @@ public abstract class BaseAugmaticActivity
         return true;
     }
 
-    /* (non-Javadoc)
-     * @see com.onextent.augmatic.AugieActivity#getModeManager()
-     */
     @Override
     public ModeManager getModeManager() {
 
+        //if (modeManager == null) throw new java.lang.NullPointerException("mode manager is null");
+        if (modeManager == null) init();
         return modeManager;
     }
 
