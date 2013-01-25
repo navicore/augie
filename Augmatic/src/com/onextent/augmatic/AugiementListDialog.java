@@ -13,7 +13,7 @@ public class AugiementListDialog extends SherlockDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
        
-        helper = new AugiementListHelper(getSherlockActivity());
+        helper = new AugiementListHelper((AugiementSettingsActivity) getSherlockActivity());
 
         helper.init();
 

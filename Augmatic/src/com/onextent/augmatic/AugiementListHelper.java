@@ -5,30 +5,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.app.Dialog;
-import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
-import com.onextent.augie.AugieException;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.Augiement.Meta;
-import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augmatic.camera.EmptySettingsDialog;
@@ -39,10 +29,11 @@ public class AugiementListHelper {
     protected Map<CodeableName, Augiement> modeAugiements;
     protected Map<CodeableName, Augiement.Meta> allAugiements;
     protected List<CodeableName> cnList;
-    protected String[] items;
-    private final SherlockFragmentActivity activity;
 
-    public AugiementListHelper(SherlockFragmentActivity activity) {
+    protected String[] items;
+    private final AugiementSettingsActivity activity;
+
+    public AugiementListHelper(AugiementSettingsActivity activity) {
         this.activity = activity;
     }
 
@@ -71,6 +62,10 @@ public class AugiementListHelper {
 
     public void initDialogs(final int position) {
 
+        activity.setCurrentAugiementIdx(position);
+        DialogFragment f = new AugiementStatusFrag();
+        
+        /*
         DialogFragment f = new SherlockDialogFragment() {
 
             @Override
@@ -122,6 +117,7 @@ public class AugiementListHelper {
             }
 
         };
+         */
 
         if (isDualPane) {
             FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
@@ -138,7 +134,7 @@ public class AugiementListHelper {
         }
     }
 
-    private boolean updateDepText(View v, CodeableName cn) {
+    public boolean updateDepText(View v, CodeableName cn) {
 
         TextView deps = (TextView) v.findViewById(R.id.module_dependencies);
         TextView reqs = (TextView) v.findViewById(R.id.module_required_by);
@@ -149,7 +145,7 @@ public class AugiementListHelper {
         return rm != null;
     }
 
-    private void updateStatusText(View v, CodeableName cn) {
+    public void updateStatusText(View v, CodeableName cn) {
 
         TextView desc = (TextView) v.findViewById(R.id.module_description);
         Augiement.Meta m = allAugiements.get(cn);
@@ -256,7 +252,7 @@ public class AugiementListHelper {
         }
     }
 
-    private void updateButtonText(CompoundButton b, CodeableName cn, boolean isEnabled) {
+    public void updateButtonText(CompoundButton b, CodeableName cn, boolean isEnabled) {
 
         String n = allAugiements.get(cn).getUIName();
         if (isEnabled) {
@@ -274,5 +270,17 @@ public class AugiementListHelper {
     public boolean isDualPane() {
 
         return isDualPane;
+    }
+
+    public Map<CodeableName, Augiement> getModeAugiements() {
+        return modeAugiements;
+    }
+    
+    public List<CodeableName> getCnList() {
+        return cnList;
+    }
+
+    public void refreshModeAugiements(Mode mode) {
+        modeAugiements = mode.getAugiements(); //refresh list
     }
 }

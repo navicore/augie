@@ -17,7 +17,7 @@ public class AugiementListFrag extends SherlockListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        helper = new AugiementListHelper(getSherlockActivity());
+        helper = new AugiementListHelper((AugiementSettingsActivity) getSherlockActivity());
 
         helper.init();
 

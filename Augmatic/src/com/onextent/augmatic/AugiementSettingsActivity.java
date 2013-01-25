@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.Button;
 
 public class AugiementSettingsActivity extends BaseAugmaticActivity {
+    
+    private int currentAugiementIdx = 0;
 
     public AugiementSettingsActivity() {
     }
@@ -44,5 +46,13 @@ public class AugiementSettingsActivity extends BaseAugmaticActivity {
         txn.replace(R.id.main_list, modeList);
         
         txn.commit();
+    }
+
+    public int getCurrentAugiementIdx() {
+        return currentAugiementIdx;
+    }
+
+    public void setCurrentAugiementIdx(int currentAugiementIdx) {
+        this.currentAugiementIdx = currentAugiementIdx;
     }
 }
