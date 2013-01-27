@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Augmatic 1000</string>
+    <string name="JPG">JPG</string>
+    <string-array name="camsettings_flash_modes">
+    	<item>off</item>
+    	<item>on</item>
+    	<item>auto</item>
+    	<item>red eye</item>
+    	<item>torch</item>
+    </string-array>
+    <string name="image_file_prefix_key">image_file_prefix_key</string>
+    <string name="image_file_prefix_description">Image File Name Prefix</string>
+    <string name="default_image_file_prefix">augie_img_</string>
+    
+    <string name="aug_fld_title_app_name">App Name</string>
+    <string name="aug_fld_title_build_time">Build Time</string>
+    <string name="aug_fld_title_build_name">Build Name</string>
+    <string name="aug_fld_title_color_mode">Color Mode</string>
+    <string name="aug_fld_title_white_bal">White Balance</string>
+    <string name="aug_fld_title_scene_mode">Scene Mode</string>
+    <string name="aug_fld_title_anti_banding_values">Antibanding Values</string>
+    <string name="aug_fld_title_flash_mode">Flash Mode</string>
+    <string name="aug_fld_title_focus_mode">Focus Mode</string>
+    <string name="aug_fld_title_zoom">Zoom</string>
+    <string name="aug_fld_title_exp_comp">Exposure Comp</string>
+    <string name="aug_fld_title_iso">ISO</string>
+    <string name="aug_fld_title_no_settings">No Settings</string>
+    <string name="aug_fld_title_pic_fmt">Picture Format</string>
+    <string name="aug_fld_title_prev_fmt">Preview Format</string>
+    <string name="aug_fld_title_x_pic_fmt">(X)Picture Format</string>
+    <string name="aug_fld_title_shutter_sound">Shutter Sound</string>
+    <string name="aug_fld_title_pic_sz">Picture Size</string>
+    <string name="aug_fld_title_prev_sz">Preview Size</string>
+    <string name="aug_fld_title_jpg_q">JPEG Quality</string>
+    <string name="aug_fld_title_jpg_thn_q">Thumbnail Quality</string>
+    <string name="aug_fld_title_prev_fps_range">Preview FPS Range</string>
+    
+</resources>
