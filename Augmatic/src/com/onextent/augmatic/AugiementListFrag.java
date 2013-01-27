@@ -1,11 +1,12 @@
 package com.onextent.augmatic;
 
-import com.actionbarsherlock.app.SherlockListFragment;
-
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.actionbarsherlock.app.SherlockListFragment;
 
 public class AugiementListFrag extends SherlockListFragment {
 
@@ -24,9 +25,20 @@ public class AugiementListFrag extends SherlockListFragment {
         setListAdapter(
                 new ArrayAdapter<String>(
                         getActivity(), 
-                        R.layout.item, 
+                        android.R.layout.simple_list_item_1, 
                         helper.getItems()
-                        )
+                        ) {
+                            @Override
+                            public View getView(int position, View convertView,
+                                    ViewGroup parent) {
+
+                                View v = super.getView(position, convertView, parent);
+                                
+                                v.setBackgroundResource(R.drawable.row_selector);
+                                
+                                return v;
+                            }
+                        }
                       );
 
         if (savedInstanceState != null) {

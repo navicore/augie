@@ -21,7 +21,6 @@ import com.onextent.augie.Augiement;
 import com.onextent.augie.Augiement.Meta;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
-import com.onextent.augmatic.camera.EmptySettingsDialog;
 
 public class AugiementListHelper {
 

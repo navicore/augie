@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
             
     <item android:id="@+id/menu_camera" android:title="Camera" 
-    	android:showAsAction="ifRoom"
+        android:showAsAction="ifRoom"
     	>
     </item>
    
@@ -14,10 +14,14 @@
     	android:showAsAction="ifRoom"
     	>
         <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-            <item android:id="@+id/mode_add" android:title="Create New Mode" />
-            <item android:id="@+id/mode_del" android:title="Delete Mode" />
-            <item android:id="@+id/about" android:title="About" />
-            <item android:id="@+id/dump" android:title="Export Settings" />
+            <item android:id="@+id/mode_add" 
+                android:title="Create New Mode" />
+            <item android:id="@+id/mode_del" 
+                android:title="Delete Mode" />
+            <item android:id="@+id/about" 
+                android:title="About" />
+            <item android:id="@+id/dump" 
+                android:title="Export Settings" />
         </menu>
     </item>
     <item android:id="@+id/menu_hide" android:title="Close Menu"

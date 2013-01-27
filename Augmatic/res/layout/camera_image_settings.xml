@@ -2,7 +2,7 @@
 <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView1"
-        android:layout_width="wrap_content"
+	    android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 <TableLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +18,8 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Picture Format" 
+	android:text="@string/aug_fld_title_pic_fmt" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner
@@ -37,7 +38,8 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Preview Format" 
+	android:text="@string/aug_fld_title_prev_fmt" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner
@@ -56,7 +58,8 @@
     	android:id="@+id/camera_shutter_snd"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
-    	android:text="Shutter Sound" />
+	    android:text="@string/aug_fld_title_shutter_sound" 
+    	/>
 
 	</TableRow>
 	
@@ -68,7 +71,8 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="(X) Picture Format" 
+    android:text="@string/aug_fld_title_x_pic_fmt" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner
@@ -87,7 +91,8 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Picture Size" 
+    android:text="@string/aug_fld_title_pic_sz" 
+    style="@style/AugMediumText"
 	/>
 	<Spinner
 	android:id="@+id/camera_picture_sizes"
@@ -105,7 +110,8 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Preview Size" 
+    android:text="@string/aug_fld_title_prev_sz" 
+    style="@style/AugMediumText"
 	/>
 	<Spinner
 	android:id="@+id/camera_preview_sizes"
@@ -123,14 +129,15 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="JPEG Quality" 
+    android:text="@string/aug_fld_title_jpg_q" 
+    style="@style/AugMediumText"
 	/>
     <TextView
 	android:id="@+id/camera_jpeg_quality"
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="0" 
+    style="@style/AugSmallText"
 	/>
 	</TableRow>
 	<TableRow
@@ -153,14 +160,15 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="JPEG Thumbnail Quality" 
+    android:text="@string/aug_fld_title_jpg_thn_q" 
+    style="@style/AugMediumText"
 	/>
     <TextView
 	android:id="@+id/camera_jpeg_thumbnail_quality"
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="0" 
+    style="@style/AugSmallText"
 	/>
 	</TableRow>
 	<TableRow
@@ -184,7 +192,8 @@
 	android:layout_width="fill_parent"
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
-	android:text="Preview FPS Range" 
+    android:text="@string/aug_fld_title_prev_fps_range" 
+    style="@style/AugMediumText"
 	/>
 	<Spinner
 	android:id="@+id/camera_preview_fps_range"

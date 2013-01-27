@@ -58,6 +58,10 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
         now = Calendar.getInstance(); 
     }
      
+    private void unregisterAllAugiements() {
+        oneShakeRegistry.clear();
+        twoShakeRegistry.clear();
+    }
     private void registerAllAugiements() {
 		
         AugieActivity activity = (AugieActivity) augieScape.getContext();
@@ -104,11 +108,15 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
     public void stop() {
         AugLog.d( "stopping " + getClass().getName());
         unregisterSensorListeners();
+        unregisterAllAugiements();
+        _init = false;
     }
 
     public void resume() {
         AugLog.d( "resuming " + getClass().getName());
+        registerAllAugiements();
         registerSensorListeners();
+        _init = true;
     }
 
     private boolean testAccel(SensorEvent se) {
@@ -143,8 +151,7 @@ public class ShakeResetFeature implements Augiement, SensorEventListener {
 
         //todo: a generic UI Widget that lets Augiments list and multi select Augiements
     	if (!_init) {
-    		registerAllAugiements();//temp until dialog lets us set them
-    		_init = true;
+    		return;
     	}
     	
         if (testAccel(se)) {

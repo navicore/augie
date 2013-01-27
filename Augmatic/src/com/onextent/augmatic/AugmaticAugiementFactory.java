@@ -35,6 +35,6 @@ public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
         registerAugiement(Shutter.META);
         registerAugiement(GPS.META);
         registerAugiement(Compass.META);
-        registerAugiement(RoboShutter.META);
+        //registerAugiement(RoboShutter.META);  //buggy, loses camera on htc 2.3
     }
 }

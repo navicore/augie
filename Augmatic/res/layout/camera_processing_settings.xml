@@ -2,7 +2,7 @@
 <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView1"
-        android:layout_width="wrap_content"
+	    android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
 <TableLayout 
@@ -19,6 +19,7 @@
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	android:text="@string/aug_fld_title_color_mode" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner
@@ -38,6 +39,7 @@
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	android:text="@string/aug_fld_title_white_bal" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner
@@ -57,6 +59,7 @@
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	android:text="@string/aug_fld_title_scene_mode" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner
@@ -77,6 +80,7 @@
 	android:layout_weight="1"
 	android:layout_height="wrap_content"
 	android:text="@string/aug_fld_title_anti_banding_values" 
+    style="@style/AugMediumText"
 	/>
 
 	<Spinner

@@ -1,30 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <CheckBoxPreference 
-    	android:title="Drawing (Etcha)"
-    	android:key="ETCHA_ENABLED"
-    	android:summaryOn="enabled" 
-    	android:summaryOff="disabled"
-    	android:defaultValue="false"/>
-    <EditTextPreference 
-    	android:text = "text"
-    	android:key="IMG_FILE_PREFIX" 
-    	android:title="Image File Prefix" 
-    	android:defaultValue="augie_img_"/>
-    <EditTextPreference 
-    	android:numeric = "integer"
-    	android:key="HORIZON_LINE_WIDTH" 
-    	android:title="Horizon Line Width" 
-    	android:defaultValue="9"/>
-    <EditTextPreference 
-    	android:numeric = "integer"
-    	android:key="VERTICAL_LINE_WIDTH" 
-    	android:title="Vertical Line Width" 
-    	android:defaultValue="12"/>
-    <EditTextPreference 
-    	android:numeric = "integer"
-    	android:key="ETCHA_LINE_WIDTH" 
-    	android:title="Drawing Line Width" 
-    	android:defaultValue="18"/>
 
 </PreferenceScreen>

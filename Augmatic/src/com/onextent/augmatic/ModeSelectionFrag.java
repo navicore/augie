@@ -50,7 +50,7 @@ public class ModeSelectionFrag extends SherlockListFragment {
             setListAdapter(
                     new ArrayAdapter<String>(
                             getActivity(), 
-                            R.layout.item, 
+                            android.R.layout.simple_list_item_1, 
                             items));
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             getListView().setItemChecked(currentCameraIdPos, true);

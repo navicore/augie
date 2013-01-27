@@ -61,7 +61,6 @@ import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
 import com.onextent.augie.impl.AugieScapeImpl;
 import com.onextent.augie.impl.ModeManagerImpl;
-import com.onextent.augmatic.camera.CameraSelectionDialog;
 
 public abstract class BaseAugmaticActivity 
                       extends SherlockFragmentActivity 
@@ -295,12 +294,13 @@ public abstract class BaseAugmaticActivity
     }
 
     private boolean isDualPane() {
+        return true;
 
+        /*
         //AugLog.d( "ejs w: " + augview.getWidth() );
         return augieScape.getWidth() > 300;
         //return augview.getWidth() > 1000;
 
-        /*
         View detailsFrame = null;
         ViewGroup v = (ViewGroup) findViewById(R.layout.settings);
         AugLog.d( "ejs isDualPane v is null: " + (v == null));
@@ -324,8 +324,7 @@ public abstract class BaseAugmaticActivity
             if (isDualPane()) {
                 startActivity(new Intent(this, CameraSettingsActivity.class));
             } else {
-                ald = new CameraSelectionDialog();
-                ald.show(getSupportFragmentManager(), "Camera Fragment");
+                throw (new java.lang.UnsupportedOperationException("not dual pane"));
             }
             return true;
         case R.id.menu_settings:
@@ -334,8 +333,7 @@ public abstract class BaseAugmaticActivity
             if (isDualPane()) {
                 startActivity(new Intent(this, AugiementSettingsActivity.class));
             } else {
-                ald = new AugiementListDialog();
-                ald.show(getSupportFragmentManager(), "Augielay Fragment");
+                throw (new java.lang.UnsupportedOperationException("not dual pane"));
             }
             return true;
         case R.id.menu_hide:
@@ -415,6 +413,11 @@ public abstract class BaseAugmaticActivity
 
         actionBar.setListNavigationCallbacks(adapter, navl);
         actionBar.setSelectedNavigationItem(modeManager.getCurrentModeIdx());
+        
+        if (getMenuButton() == null) {
+            MenuItem mi = menu.findItem(R.id.menu_hide);
+            mi.setVisible(false);
+        }
 
         return true;
     }

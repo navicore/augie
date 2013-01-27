@@ -23,8 +23,7 @@ public class CameraSettingsListFrag extends SherlockListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.item, items));
-        // android.R.layout.simple_list_item_activated_1, items));
+        setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.row, items));
 
         // Check to see if we have a frame in which to embed the details
         // fragment directly in the containing UI.
@@ -38,7 +37,7 @@ public class CameraSettingsListFrag extends SherlockListFragment {
 
         if (isDualPane) {
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            showDetails(mCurCheckPosition);
+            //showDetails(mCurCheckPosition);
         }
     }
 

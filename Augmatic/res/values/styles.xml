@@ -1,15 +1,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-        parent="@style/Theme.Sherlock"
-    	parent="android:Theme.Light"
-        parent="@style/Theme.Sherlock"
-        parent="@style/Theme.Sherlock.Light"
-    -->
-    
-    <style name="AppTheme" 
-        parent="@style/Theme.Sherlock"
-    	>
+    <style name="AugieScapeTheme" parent="Theme.Sherlock">
     </style>
-    
+
+    <style name="AugSettingsTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+    </style>
+
 </resources>
