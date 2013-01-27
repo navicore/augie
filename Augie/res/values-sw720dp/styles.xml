@@ -1,0 +1,29 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AugMediumTextOff" 
+        parent="@android:style/TextAppearance.Medium"
+    	>
+    	<item name="android:textSize">20sp</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textColor">#CC0000FF</item>
+    </style>
+    
+    <style name="AugSmallText" 
+        parent="@android:style/TextAppearance.Small"
+    	>
+    	<item name="android:textSize">12sp</item>
+    </style>
+    
+    <style name="AugMediumText" 
+        parent="@android:style/TextAppearance.Medium"
+    	>
+    	<item name="android:textSize">20sp</item>
+    </style>
+    
+    <style name="AugLargeText" 
+        parent="@android:style/TextAppearance.Large"
+    	>
+    	<item name="android:textSize">30sp</item>
+    </style>
+    
+</resources>
