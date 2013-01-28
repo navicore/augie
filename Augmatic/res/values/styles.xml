@@ -6,4 +6,34 @@
     <style name="AugSettingsTheme" parent="Theme.Sherlock.Light.DarkActionBar">
     </style>
 
+    <style name="AugButtonTxtBase" 
+        parent="@style/AugLargeText"
+    	>
+    </style>
+    
+    <style name="AugListTitleBase" 
+        parent="@android:style/TextAppearance.Large"
+    	>
+    </style>
+    
+    <style name="AugPlusButtonTxt" 
+        parent="@style/AugButtonTxtBase"
+        android:textStyle="bold"
+        android:textColor="#13DEC0"
+    	>
+    </style>
+    
+    <style name="AugMinusButtonTxt" 
+        parent="@style/AugButtonTxtBase"
+        android:textStyle="bold"
+        android:textColor="#13DEC0"
+    	>
+    </style>
+    
+    <style name="AugListTitle" 
+        parent="@style/AugListTitleBase"
+    	>
+    	<item name="android:textSize">12sp</item>
+    </style>
+    
 </resources>

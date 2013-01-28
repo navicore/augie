@@ -19,10 +19,6 @@
     	>
     </style>
     
-    <style name="AugListTitleBase" 
-        parent="@android:style/TextAppearance.Large"
-    	>
-    </style>
 
     <!--                                                    -->
     <!--                    impls                           -->
@@ -46,10 +42,5 @@
     	<item name="android:textSize">18sp</item>
     </style>
     
-    <style name="AugListTitle" 
-        parent="@style/AugListTitleBase"
-    	>
-    	<item name="android:textSize">12sp</item>
-    </style>
     
 </resources>

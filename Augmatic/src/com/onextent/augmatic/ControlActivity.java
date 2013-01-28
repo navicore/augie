@@ -65,7 +65,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     @Override
     protected int getLayoutId() {
 
-        return R.layout.mode_and_camera_settings;
+        return R.layout.control;
     }
 
     @Override
@@ -127,9 +127,13 @@ public class ControlActivity extends BaseAugmaticActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
-            showEmptySettingsDetails();
-            showCameraDetails(position);
-            initAugiementList(); //todo: wasteful, just wanna deselect
+            if (isDualPane) {
+                showEmptySettingsDetails();
+                showCameraDetails(position);
+                initAugiementList(); //todo: wasteful, just wanna deselect
+            } else {
+                showCameraDetails(position);
+            }
         }
     };
     
@@ -253,6 +257,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     }
     
     private void showEmptySettingsDetails() {
+        if (!isDualPane) return;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.module_status, new EmptySettingsDialog());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
