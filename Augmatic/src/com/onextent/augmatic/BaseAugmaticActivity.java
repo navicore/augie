@@ -319,7 +319,7 @@ public abstract class BaseAugmaticActivity
         
         SherlockDialogFragment ald;
         switch (item.getItemId()) {
-        case R.id.menu_camera:
+        case R.id.menu_control:
             //check if tablet
             if (isDualPane()) {
                 startActivity(new Intent(this, CameraSettingsActivity.class));
@@ -328,13 +328,6 @@ public abstract class BaseAugmaticActivity
             }
             return true;
         case R.id.menu_settings:
-            return true;
-        case R.id.menu_overlays:
-            if (isDualPane()) {
-                startActivity(new Intent(this, AugiementSettingsActivity.class));
-            } else {
-                throw (new java.lang.UnsupportedOperationException("not dual pane"));
-            }
             return true;
         case R.id.menu_hide:
             getSupportActionBar().hide();
@@ -557,4 +550,13 @@ public abstract class BaseAugmaticActivity
 		}
 		handlers.add(handler);
 	}
+	
+    private int currentAugiementIdx = 0;
+    public int getCurrentAugiementIdx() {
+        return currentAugiementIdx;
+    }
+
+    public void setCurrentAugiementIdx(int currentAugiementIdx) {
+        this.currentAugiementIdx = currentAugiementIdx;
+    }
 }

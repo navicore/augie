@@ -30,9 +30,9 @@ public class AugiementListHelper {
     protected List<CodeableName> cnList;
 
     protected String[] items;
-    private final AugiementSettingsActivity activity;
+    private final BaseAugmaticActivity activity;
 
-    public AugiementListHelper(AugiementSettingsActivity activity) {
+    public AugiementListHelper(BaseAugmaticActivity activity) {
         this.activity = activity;
     }
 

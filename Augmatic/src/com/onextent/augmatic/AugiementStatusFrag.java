@@ -28,7 +28,7 @@ public class AugiementStatusFrag extends SherlockDialogFragment {
             ViewGroup container,
             Bundle savedInstanceState) {
        
-        AugiementSettingsActivity activity = (AugiementSettingsActivity) getSherlockActivity();
+        BaseAugmaticActivity activity = (BaseAugmaticActivity) getSherlockActivity();
         helper = new AugiementListHelper(activity);
         helper.init();
 
