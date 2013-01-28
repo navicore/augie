@@ -13,6 +13,12 @@
               android:layout_height="fill_parent"
               >
               
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_mode_list" 
+	style="@style/AugMediumText"
+	/>
     <ListView 
         android:id="@+id/mode_list" 
         android:layout_width="fill_parent" 
@@ -20,6 +26,12 @@
         android:choiceMode="singleChoice"
         android:listSelector="@drawable/row_selector"
     />
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_cam_list" 
+	style="@style/AugMediumText"
+	/> 
     <ListView 
         android:id="@+id/camera_list" 
         android:layout_width="fill_parent" 
@@ -27,6 +39,12 @@
         android:choiceMode="singleChoice"
         android:listSelector="@drawable/row_selector"
     />
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_cam_settings_list" 
+	style="@style/AugMediumText"
+	/>
     <ListView 
         android:id="@+id/camera_catagory_list" 
         android:layout_width="fill_parent" 
@@ -43,6 +61,12 @@
               android:layout_height="wrap_content"
               >
     
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_augiement_list" 
+	style="@style/AugMediumText"
+	/>
     <ListView 
         android:id="@+id/augiement_list" 
         android:layout_width="fill_parent" 

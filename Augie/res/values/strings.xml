@@ -25,5 +25,9 @@
     <string name="aug_fld_title_gps_enabled">GPS is Enabled</string>
     <string name="aug_fld_title_root_dir">Picture File Root:</string>
     <string name="aug_fld_title_dir">Directory:</string>
+    <string name="aug_fld_title_mode_list">Modes</string>
+    <string name="aug_fld_title_cam_list">Cameras</string>
+    <string name="aug_fld_title_cam_settings_list">Camera Settings</string>
+    <string name="aug_fld_title_augiement_list">Augiements</string>
     
 </resources>
