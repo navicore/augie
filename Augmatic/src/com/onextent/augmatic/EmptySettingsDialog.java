@@ -1,6 +1,6 @@
 package com.onextent.augmatic;
 
-import android.app.Dialog;
+//import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,7 @@ public class EmptySettingsDialog extends SherlockDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Dialog d = getDialog();
+        //Dialog d = getDialog();
         //if (d != null) d.setTitle("No Settings Available");
         View v = inflater.inflate(R.layout.empty_settings, container, false);
         return v;

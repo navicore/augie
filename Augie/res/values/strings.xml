@@ -29,5 +29,6 @@
     <string name="aug_fld_title_cam_list">Cameras</string>
     <string name="aug_fld_title_cam_settings_list">Camera Settings</string>
     <string name="aug_fld_title_augiement_list">Augiements</string>
+    <string name="aug_fld_title_max_focus_tries">Max Focus Tries</string>
     
 </resources>

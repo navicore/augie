@@ -107,6 +107,7 @@ public class CameraSettingsActivity extends BaseAugmaticActivity {
             setMode(modeName);
             initCameraList();
             initAugiementList();
+            showEmptySettingsDetails();
         } catch (CodeableException e) {
             AugLog.e( e.toString(), e);
         } catch (AugieException e) {

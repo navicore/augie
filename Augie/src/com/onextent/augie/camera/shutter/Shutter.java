@@ -64,6 +64,7 @@ public class Shutter implements Augiement {
 	private AugPictureCallback userCb;
 
 	private boolean registerImageWithOS = true;
+	private int maxFocusAttempts = 1;
 
 	private boolean showFileSavedToast;
 	private String picturesDir = "Augie";
@@ -155,14 +156,26 @@ public class Shutter implements Augiement {
 			if (focusmode.equals( Camera.Parameters.FOCUS_MODE_AUTO)) {
 
 				camera.focus(new AugFocusCallback() {
+				    
+				    int tries = 0;
 
 					@Override
 					public void onFocus(boolean success) {
 						AugLog.d( "auto focused: " + success);
+						tries++;
 						if (!success) {
-							if (augieScape != null)
-								Toast.makeText(augieScape.getContext(), "can not focus", Toast.LENGTH_SHORT).show();
-							handleUserCb(null, camera);
+						    if (tries < getMaxFocusAttempts()) {
+						        //an alternative impl might temporarily remove focus area
+						        try {
+                                    camera.focus(this);
+                                } catch (AugCameraException e) {
+                                    AugLog.e(e);
+                                }
+						    } else {
+						        if (augieScape != null)
+								    Toast.makeText(augieScape.getContext(), "can not focus", Toast.LENGTH_SHORT).show();
+							    handleUserCb(null, camera);
+						    }
 							return;
 						}
 
@@ -517,6 +530,7 @@ public class Shutter implements Augiement {
 	private static final String PICTURE_DIR_KEY 		= "picDir";
 	private static final String REG_PICS_WITH_OS 		= "registerPics";
 	private static final String FILENAME_TEMPLATE_KEY 	= "fnTemplate";
+	private static final String MAX_FOCUS_TRIES_KEY 	= "maxFocusTries";
 
 	@Override
 	public Code getCode() throws CodeableException {
@@ -527,6 +541,7 @@ public class Shutter implements Augiement {
 		code.put(PICTURE_DIR_KEY, getPicturesDir());
 		code.put(REG_PICS_WITH_OS, isRegisterImageWithOS());
 		code.put(FILENAME_TEMPLATE_KEY, getFileNameTemplate());
+		code.put(MAX_FOCUS_TRIES_KEY, getMaxFocusAttempts());
 
 		return code;
 	}
@@ -544,6 +559,8 @@ public class Shutter implements Augiement {
 			setRegisterImageWithOS(code.getBoolean(REG_PICS_WITH_OS));
 		if (code.has(FILENAME_TEMPLATE_KEY))
 			setFileNameTemplate(code.getString(FILENAME_TEMPLATE_KEY));
+		if (code.has(MAX_FOCUS_TRIES_KEY))
+			setMaxFocusAttempts(code.getInt(MAX_FOCUS_TRIES_KEY));
 	}
 
 	@Override
@@ -587,7 +604,15 @@ public class Shutter implements Augiement {
 		this.registerImageWithOS = r;
 	}
 
-	public static final Meta META =
+	public int getMaxFocusAttempts() {
+        return maxFocusAttempts;
+    }
+
+    public void setMaxFocusAttempts(int maxFocusAttempts) {
+        this.maxFocusAttempts = maxFocusAttempts;
+    }
+
+    public static final Meta META =
 			new Augiement.Meta() {
 
 		@Override

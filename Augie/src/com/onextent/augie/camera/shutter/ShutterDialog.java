@@ -24,10 +24,7 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SpinnerUI;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
-import com.onextent.augie.Mode;
-import com.onextent.augie.ModeManager;
 import com.onextent.augie.R;
-import com.onextent.augie.camera.AugCamera;
 
 public class ShutterDialog extends SherlockDialogFragment {
 
@@ -46,15 +43,13 @@ public class ShutterDialog extends SherlockDialogFragment {
         if (d != null) d.setTitle(augiement.getMeta().getUIName() + " Settings");
         View v = inflater.inflate(R.layout.shutter_settings, container, false);
         try {
-            ModeManager modeManager = activity.getModeManager();
-            Mode mode = modeManager.getCurrentMode();
-            AugCamera camera = mode.getCamera();
 
-            setFileSavedToastUI(v, camera);
-            setPicFileRootDirUI(v, camera);
-            setPicFileDirUI(v, camera);
-            setRegisterImage(v, camera);
-            setFileNameTemplateUI(v, camera);
+            setFileSavedToastUI(v);
+            setPicFileRootDirUI(v);
+            setPicFileDirUI(v);
+            setRegisterImage(v);
+            setFileNameTemplateUI(v);
+            setMaxFocusTriesUI(v);
 
         } catch (Exception e) {
             AugLog.e( e.toString(), e);
@@ -63,7 +58,7 @@ public class ShutterDialog extends SherlockDialogFragment {
         return v;
     }
 
-    private void setFileSavedToastUI(View v, AugCamera camera) {
+    private void setFileSavedToastUI(View v) {
 
         CheckBox cbox = (CheckBox) v.findViewById(R.id.showFileSavedToast);
 
@@ -80,7 +75,7 @@ public class ShutterDialog extends SherlockDialogFragment {
         });
     }
   
-    private void setRegisterImage(View v, AugCamera camera) {
+    private void setRegisterImage(View v) {
 
         CheckBox cbox = (CheckBox) v.findViewById(R.id.fireMediaStoreIntent);
 
@@ -97,7 +92,7 @@ public class ShutterDialog extends SherlockDialogFragment {
         });
     }
   
-    private void setPicFileRootDirUI(View v, final AugCamera camera) {
+    private void setPicFileRootDirUI(View v) {
 
         Spinner spinner = (Spinner) v.findViewById(R.id.picFileRootDir);
         final List<String> list = new ArrayList<String>();
@@ -118,7 +113,7 @@ public class ShutterDialog extends SherlockDialogFragment {
         sui.init();
     }
     
-    private void setPicFileDirUI(View v, final AugCamera camera) {
+    private void setPicFileDirUI(View v) {
 
         final EditText te = (EditText) v.findViewById(R.id.picFileDir);
         te.setText(augiement.getPicturesDir());
@@ -139,7 +134,7 @@ public class ShutterDialog extends SherlockDialogFragment {
         });
     }
     
-    private void setFileNameTemplateUI(View v, final AugCamera camera) {
+    private void setFileNameTemplateUI(View v) {
 
         final EditText te = (EditText) v.findViewById(R.id.fileNameTemplate);
         te.setText(augiement.getFileNameTemplate());
@@ -158,5 +153,30 @@ public class ShutterDialog extends SherlockDialogFragment {
 			public void afterTextChanged(Editable s) {
 			}
         });
+    }
+    
+    private void setMaxFocusTriesUI(View v) {
+
+        Spinner spinner = (Spinner) v.findViewById(R.id.maxFocusTries);
+        if (spinner == null) throw new java.lang.NullPointerException("spnner is null");
+        final List<Integer> sizes = new ArrayList<Integer>();
+        for (int i = 1; i <= 3; i++  ) {
+            sizes.add(i);
+        }
+        SpinnerUI<Integer> sui = new SpinnerUI<Integer>(spinner, sizes) {
+            @Override
+            public int calculatePos() {
+                int c = augiement.getMaxFocusAttempts();
+                for (int i = 0; i < sizes.size(); i++) {
+                    if (sizes.get(i).equals(c)) return i;
+                }
+                return 0;
+            }
+            @Override
+            public void setMode(Integer m) {
+                augiement.setMaxFocusAttempts(m);
+            }
+        };
+        sui.init();
     }
 }

@@ -4,7 +4,7 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.camera.HistogramFeature;
 import com.onextent.augie.camera.PinchZoom;
-import com.onextent.augie.camera.shutter.RoboShutter;
+//import com.onextent.augie.camera.shutter.RoboShutter;
 import com.onextent.augie.camera.shutter.Shutter;
 import com.onextent.augie.camera.shutter.TouchShutter;
 import com.onextent.augie.impl.AugDrawFeature;
