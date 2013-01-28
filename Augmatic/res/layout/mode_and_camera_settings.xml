@@ -1,114 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	          android:orientation="horizontal"
-              android:layout_width="fill_parent" 
-              android:layout_height="fill_parent"
-	          android:baselineAligned="false"
-              >
-       
-<!-- left -->
-<LinearLayout android:orientation="vertical"
-              android:layout_weight="1"
-              android:layout_width="0dp" 
-              android:layout_height="fill_parent"
-              >
-              
-    <TextView
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_mode_list" 
-	style="@style/AugMediumText"
-	/>
-    <ListView 
-        android:id="@+id/mode_list" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:listSelector="@drawable/row_selector"
-    />
-    <TextView
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_cam_list" 
-	style="@style/AugMediumText"
-	/> 
-    <ListView 
-        android:id="@+id/camera_list" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:listSelector="@drawable/row_selector"
-    />
-    <TextView
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_cam_settings_list" 
-	style="@style/AugMediumText"
-	/>
-    <ListView 
-        android:id="@+id/camera_catagory_list" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:listSelector="@drawable/row_selector"
-    />
-</LinearLayout>
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
 
-<!-- middle -->
-<LinearLayout android:orientation="vertical"
-              android:layout_weight="1"
-              android:layout_width="0dp" 
-              android:layout_height="wrap_content"
-              >
-    
-    <TextView
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:text="@string/aug_fld_title_augiement_list" 
-	style="@style/AugMediumText"
-	/>
-    <ListView 
-        android:id="@+id/augiement_list" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:listSelector="@drawable/row_selector"
-    />
-</LinearLayout>
+    <!-- left -->
 
-<!-- right -->
-<LinearLayout android:orientation="vertical"
-              android:layout_weight="2"
-              android:layout_width="0dp" 
-              android:layout_height="fill_parent"
-              >
-              
-<LinearLayout android:orientation="vertical"
-              android:layout_weight="1"
-              android:layout_width="fill_parent" 
-              android:layout_height="0dp"
-              >
-    <FrameLayout 
-        android:id="@+id/module_status" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-    />
-    <FrameLayout 
-        android:id="@+id/module_details" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-    />
-</LinearLayout>
-	<RelativeLayout 
-        android:id="@+id/camera_settings_preview" 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:layout_width="fill_parent" 
-        android:layout_height="0dp"
-    />
-</LinearLayout>
+        android:orientation="vertical" >
 
-</LinearLayout>
-<!--   RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/AugListTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/aug_fld_title_mode_list" />
+
+            <ListView
+                android:id="@+id/mode_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/row_selector" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/AugListTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/aug_fld_title_cam_list" />
+
+            <ListView
+                android:id="@+id/camera_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/row_selector" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/AugListTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/aug_fld_title_cam_settings_list" />
+
+            <ListView
+                android:id="@+id/camera_catagory_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/row_selector" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- middle -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            style="@style/AugListTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/aug_fld_title_augiement_list" />
+
+        <ListView
+            android:id="@+id/augiement_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice"
+            android:listSelector="@drawable/row_selector" />
+    </LinearLayout>
+
+    <!-- right -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/module_status"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@+id/module_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/camera_settings_preview"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</LinearLayout><!--
+RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:layout_marginLeft="8dp"
@@ -189,4 +210,5 @@
     />
     </LinearLayout>
 
-</RelativeLayout -->
+</RelativeLayout
+-->

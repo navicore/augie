@@ -376,6 +376,7 @@ public abstract class BaseAugmaticActivity
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.options, menu);
 
+        /*
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
@@ -406,6 +407,7 @@ public abstract class BaseAugmaticActivity
 
         actionBar.setListNavigationCallbacks(adapter, navl);
         actionBar.setSelectedNavigationItem(modeManager.getCurrentModeIdx());
+         */
         
         if (getMenuButton() == null) {
             MenuItem mi = menu.findItem(R.id.menu_hide);

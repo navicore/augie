@@ -26,4 +26,10 @@
     	<item name="android:textSize">30sp</item>
     </style>
     
+    <style name="AugListTitle" 
+        parent="@android:style/TextAppearance.Large"
+    	>
+    	<item name="android:textSize">18sp</item>
+    </style>
+    
 </resources>
