@@ -318,7 +318,7 @@ public abstract class BaseAugmaticActivity
         case R.id.menu_control:
             //check if tablet
             if (isDualPane()) {
-                startActivity(new Intent(this, CameraSettingsActivity.class));
+                startActivity(new Intent(this, ControlActivity.class));
             } else {
                 throw (new java.lang.UnsupportedOperationException("not dual pane"));
             }

@@ -244,6 +244,7 @@ public class Shutter implements Augiement {
 
 		public void onPictureTaken(byte[] data, AugCamera camera) {
 
+		    AugLog.d( "Shutter augiement onPictureTaken cb");
 			try {
 
 
@@ -257,7 +258,9 @@ public class Shutter implements Augiement {
 			
 			} finally {
 
-				if (camera != null)
+			    AugLog.d( "restarting preview after taking pic");
+				if (camera != null) {
+				    
 					try {
 						//todo: it is wrong to do this for both callbacks
 						camera.startPreview();
@@ -265,6 +268,9 @@ public class Shutter implements Augiement {
 					} catch (Throwable e) {
 						AugLog.e( "Error starting preview after taking picture: " + e.getMessage(), e);
 					}
+				} else {
+				    AugLog.e( "no camera to restart preview after taking pic");
+				}
 			}
 		}
 

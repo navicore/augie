@@ -173,8 +173,13 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
-                
-                cb.onFocus(success);
+               
+                try {
+                    
+                    cb.onFocus(success);
+                } catch (Throwable err) {
+                    AugLog.e(err);
+                }
             }
         };
       
@@ -198,6 +203,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             @Override
             public void onShutter() {
                 
+                AugLog.d( "shutter callback");
                 if (shutter != null) shutter.onShutter();
             }
         };
@@ -207,7 +213,8 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
                 try {
-                if (raw != null) raw.onPictureTaken(data, SimplePhoneCamera.this);
+                    AugLog.d( "raw callback");
+                    if (raw != null) raw.onPictureTaken(data, SimplePhoneCamera.this);
                 } finally {
                     unlock();
                 }
@@ -219,6 +226,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
                 try {
+                    AugLog.d( "jpg callback");
                     if (jpeg != null) jpeg.onPictureTaken(data, SimplePhoneCamera.this);
                 } finally {
                     unlock();
@@ -229,6 +237,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
         boolean locked = lock();
         if (!locked) throw new AugCameraException("camera busy");
         try {
+            AugLog.d( "camera taking picture");
             camera.takePicture(scb, rcb, jcb);
         } catch (Throwable err) {
             unlock();

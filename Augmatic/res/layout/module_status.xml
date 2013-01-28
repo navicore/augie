@@ -1,41 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:orientation="vertical" >
-	
-	<CheckBox
-		android:id="@+id/module_enabled"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <CheckBox
+        android:id="@+id/module_enabled"
         style="@style/AugMediumText"
-    />
-	
-    <TextView
-		android:id="@+id/module_description"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-        style="@style/AugSmallText"
-	/>
-	
-    <TextView
-		android:id="@+id/module_dependencies"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-        style="@style/AugSmallText"
-	/>
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
-		android:id="@+id/module_required_by"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
+        android:id="@+id/module_description"
         style="@style/AugSmallText"
-	/>
-    
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	/>
+        android:id="@+id/module_dependencies"
+        style="@style/AugSmallText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/module_required_by"
+        style="@style/AugSmallText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:id="@+id/editAugiementDetailsBtnHolder"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" 
+            android:layout_weight="2"
+            />
+
+        <Button
+            android:id="@+id/editAugiementDetailsBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/aug_btn_title_edit_augiment_details"
+            />
+        
+    </LinearLayout>
 
 </LinearLayout>

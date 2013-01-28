@@ -30,9 +30,9 @@ public class AugiementListHelper {
     protected List<CodeableName> cnList;
 
     protected String[] items;
-    private final BaseAugmaticActivity activity;
+    private final ControlActivity activity;
 
-    public AugiementListHelper(BaseAugmaticActivity activity) {
+    public AugiementListHelper(ControlActivity activity) {
         this.activity = activity;
     }
 
@@ -64,60 +64,6 @@ public class AugiementListHelper {
         activity.setCurrentAugiementIdx(position);
         DialogFragment f = new AugiementStatusFrag();
         
-        /*
-        DialogFragment f = new SherlockDialogFragment() {
-
-            @Override
-            public View onCreateView(LayoutInflater inflater,
-                    ViewGroup container, Bundle savedInstanceState) {
-
-                Dialog d = getDialog();
-                if (d != null) d.setTitle("Enable Augiement");
-                View v = inflater.inflate(R.layout.module_status, container, false);
-                CheckBox cbox = (CheckBox) v.findViewById(R.id.module_enabled);
-
-                final CodeableName cn = cnList.get(position);
-
-                boolean isEnabled = modeAugiements.containsKey(cn);
-                cbox.setChecked(isEnabled);
-                updateButtonText(cbox, cn, isEnabled);
-                updateStatusText(v, cn);
-                boolean isRequired = updateDepText(v, cn);
-                if (isEnabled && isRequired)
-                    cbox.setEnabled(false);
-
-                cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                        ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
-                        AugiementFactory af = modeManager.getAugiementFactory();
-                        Mode mode = modeManager.getCurrentMode();
-                        if (isChecked) {
-                            Augiement a = af.newInstance(cn);
-                            mode.addAugiement(a);
-                            modeAugiements = mode.getAugiements(); //refresh list
-                            updateButtonText(buttonView, cn, isChecked);
-                        } else {
-                            Augiement a = modeAugiements.get(cn);
-                            mode.removeAugiement(a);
-                            modeAugiements = mode.getAugiements(); //refresh list
-                        }
-                        try {
-                            modeManager.setCurrentMode(mode);
-                        } catch (AugieException e) {
-                            AugLog.e( e.toString(), e);
-                        } //reset everything with new a
-                    }
-                });
-
-                return v;
-            }
-
-        };
-         */
-
         if (isDualPane) {
             FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.module_status, f);
@@ -126,10 +72,7 @@ public class AugiementListHelper {
             showDetails(position);
 
         } else {
-            FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
-            f.show(fm, "Module Status");
-            f.show((activity).getSupportFragmentManager(), "Module Status");
-            //todo: add details button to show details
+            f.show(activity.getSupportFragmentManager(), "Module Status");
         }
     }
 
@@ -220,7 +163,7 @@ public class AugiementListHelper {
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
-    private void showDetails(final int position) {
+    public void showDetails(final int position) {
 
         CodeableName cn = cnList.get(position);
 
@@ -245,8 +188,8 @@ public class AugiementListHelper {
                 ft.commit();
 
             } else {
-                f.show(fm, "Module Settings");
-                f.show((activity).getSupportFragmentManager(), "Module Settings");
+                f.show(fm, "Augiement Settings");
+                f.show((activity).getSupportFragmentManager(), "Augiement Settings");
             }
         }
     }

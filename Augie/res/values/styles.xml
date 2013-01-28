@@ -1,35 +1,55 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AugMediumTextOff" 
-        parent="@android:style/TextAppearance.Medium"
+    <!--                                                    -->
+    <!--                    bases                           -->
+    <!--                                                    -->
+    
+    <style name="AugSmallTextBase" 
+        parent="@android:style/TextAppearance.Small"
     	>
-    	<item name="android:textSize">20sp</item>
-    	<item name="android:textStyle">bold</item>
-    	<item name="android:textColor">#CC0000FF</item>
     </style>
     
+    <style name="AugMediumTextBase" 
+        parent="@android:style/TextAppearance.Medium"
+    	>
+    </style>
+    
+    <style name="AugLargeTextBase" 
+        parent="@android:style/TextAppearance.Large"
+    	>
+    </style>
+    
+    <style name="AugListTitleBase" 
+        parent="@android:style/TextAppearance.Large"
+    	>
+    </style>
+
+    <!--                                                    -->
+    <!--                    impls                           -->
+    <!--                                                    -->
+    
     <style name="AugSmallText" 
-        parent="@android:style/TextAppearance.Small"
+        parent="@style/AugSmallTextBase"
     	>
     	<item name="android:textSize">12sp</item>
     </style>
     
     <style name="AugMediumText" 
-        parent="@android:style/TextAppearance.Medium"
+        parent="@style/AugMediumTextBase"
     	>
     	<item name="android:textSize">17sp</item>
     </style>
     
     <style name="AugLargeText" 
-        parent="@android:style/TextAppearance.Large"
+        parent="@style/AugLargeTextBase"
     	>
     	<item name="android:textSize">18sp</item>
     </style>
     
     <style name="AugListTitle" 
-        parent="@android:style/TextAppearance.Large"
+        parent="@style/AugListTitleBase"
     	>
-    	<item name="android:textSize">18sp</item>
+    	<item name="android:textSize">12sp</item>
     </style>
     
 </resources>

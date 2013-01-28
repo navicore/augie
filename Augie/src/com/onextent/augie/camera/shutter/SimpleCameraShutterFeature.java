@@ -27,7 +27,7 @@ import com.onextent.augie.impl.AugDrawFeature;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
-public class SimpleCameraShutterFeature extends TouchShutterBase implements OnTouchListener {
+public class SimpleCameraShutterFeature extends AbstractTouchShutter implements OnTouchListener {
 	
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SIMPLE_SHUTTER");
     

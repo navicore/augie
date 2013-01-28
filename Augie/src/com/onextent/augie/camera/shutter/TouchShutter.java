@@ -24,13 +24,13 @@ public class TouchShutter implements Augiement, OnTouchListener {
     public static final String UI_NAME = "Touch Shutter";
     public static final String DESCRIPTION = "Trigger camera shutter by touching the screen.";
     
-    private final TouchShutterBase shutter;
+    private final AbstractTouchShutter shutter;
    
     /**
      * idiotic class is just here to give a no-argument constructor
      */
     public TouchShutter() {
-        shutter = TouchShutterBase.getInstance();
+        shutter = AbstractTouchShutter.getInstance();
     }
 
     @Override

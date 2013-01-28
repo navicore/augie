@@ -34,5 +34,6 @@
     <string name="aug_fld_title_jpg_q">JPEG Quality</string>
     <string name="aug_fld_title_jpg_thn_q">Thumbnail Quality</string>
     <string name="aug_fld_title_prev_fps_range">Preview FPS Range</string>
+    <string name="aug_btn_title_edit_augiment_details">Edit</string>
     
 </resources>

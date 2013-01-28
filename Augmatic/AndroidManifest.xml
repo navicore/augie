@@ -35,7 +35,7 @@
 		
 		<activity android:name=".AugmaticPreferences"/>
 		
-        <activity android:name=".CameraSettingsActivity"
+        <activity android:name="com.onextent.augmatic.ControlActivity"
           android:label="@string/app_name"
           android:theme="@style/AugSettingsTheme"
           android:screenOrientation="landscape">

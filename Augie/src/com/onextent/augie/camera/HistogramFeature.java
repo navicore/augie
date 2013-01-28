@@ -44,18 +44,24 @@ import com.onextent.augie.impl.AugDrawBase;
 import com.onextent.augie.impl.AugDrawFeature;
 
 public class HistogramFeature extends AugDrawBase implements AugPreviewCallback {
+   
+    private boolean manageBuffers = false;
 
     @Override
 	public void stop() {
 		super.stop();
-        //camera.setPreviewCallback(null);
-        camera.setPreviewCallbackWithBuffer(this);
+		if (manageBuffers)
+		    camera.setPreviewCallbackWithBuffer(this);
+		else
+		    camera.setPreviewCallback(null);
 	}
 	@Override
 	public void resume() {
 		super.resume();
-        //camera.setPreviewCallback(this);
-        camera.setPreviewCallbackWithBuffer(this);
+		if (manageBuffers)
+		    camera.setPreviewCallbackWithBuffer(this);
+		else
+            camera.setPreviewCallback(this);
 	}
 
 	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
@@ -274,7 +280,8 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
 
             //add buffer back in
             hasData = false;
-            camera.addCallbackBuffer(yyuvdata);
+            if (manageBuffers)
+                camera.addCallbackBuffer(yyuvdata);
             yyuvdata = null;
         }
 
@@ -383,6 +390,7 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
         code.put(AUGIE_NAME);
         code.put("greyscale", greyscale);
         code.put("hheight", hheight);
+        code.put("manageBuffers", manageBuffers);
         
         return code;
     }
@@ -395,6 +403,9 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     	}
     	if (code.has("greyscale")) {
     		greyscale = code.getBoolean("greyscale");
+    	}
+    	if (code.has("manageBuffers")) {
+    		manageBuffers = code.getBoolean("manageBuffers");
     	}
     }
 
@@ -467,5 +478,12 @@ public class HistogramFeature extends AugDrawBase implements AugPreviewCallback 
     	if (hheight != 0) return hheight;
         if (augieScape != null && augieScape.getHeight() > 600) return 100;
         return 50;
+    }
+    
+    public boolean isManageBuffers() {
+        return manageBuffers;
+    }
+    public void setManageBuffers(boolean manageBuffers) {
+        this.manageBuffers = manageBuffers;
     }
 }
