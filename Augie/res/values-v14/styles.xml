@@ -1,0 +1,13 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--                                                    -->
+    <!--                    bases                           -->
+    <!--                                                    -->
+    
+    <style name="AugListTitleBase" 
+        parent="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle"
+    	>
+    	<item name="android:textSize">12sp</item>
+    </style>
+    
+</resources>
