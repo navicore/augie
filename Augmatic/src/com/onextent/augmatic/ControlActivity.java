@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -39,7 +40,7 @@ public class ControlActivity extends BaseAugmaticActivity {
 
     private final String[] camSettingCatagories = {"Processing", "Image File", "Shooting"};
     private final List<CameraName> cameraNames = new ArrayList<CameraName>();
-    private List<Code> modeCode = new ArrayList<Code>();
+    private List<Code> modeCode;
     private ListView cameraList;
     private ListView cameraCatagoryList;
     private ListView augiementList;
@@ -75,6 +76,23 @@ public class ControlActivity extends BaseAugmaticActivity {
     
     @Override
     protected void configMenuButton() { }
+    
+    final private OnClickListener newModeListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            SherlockDialogFragment ald = new NewModeDialog();
+            ald.show(getSupportFragmentManager(), "New Mode Fragment");
+        }
+    };
+    final private OnClickListener delModeListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            SherlockDialogFragment ald = new DeleteModeDialog();
+            ald.show(getSupportFragmentManager(), "Delete Mode Fragment");
+        }
+    };
     
     final private OnItemClickListener cameraListener = new OnItemClickListener() {
 
@@ -208,6 +226,11 @@ public class ControlActivity extends BaseAugmaticActivity {
         cameraList.setAdapter(adapter);
         cameraList.setItemChecked(currentModePos, true);
         cameraList.setOnItemClickListener(modeListener);
+        
+        Button newb = (Button) findViewById(R.id.add_mode_btn);
+        newb.setOnClickListener(newModeListener);
+        Button delb = (Button) findViewById(R.id.del_mode_btn);
+        delb.setOnClickListener(delModeListener);
     }
     
     public void initCameraList() {

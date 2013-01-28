@@ -14,7 +14,6 @@ import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugLog;
-import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.ModeManager;
@@ -28,7 +27,7 @@ public class DeleteModeDialog extends SherlockDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete Modes");
 
-        final AugieActivity activity = (AugieActivity) getActivity();
+        final ControlActivity activity = (ControlActivity) getActivity();
         final ModeManager modeManager = activity.getModeManager();
         List<Code> modes;
         try {
@@ -73,10 +72,12 @@ public class DeleteModeDialog extends SherlockDialogFragment {
 
             builder.setPositiveButton("Delete Modes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    
                     for (CodeableName augieName : augieNamesToDelete) {
                         
                         AugLog.d( "trying to delete mode " + augieName);
-                        if (modeManager.getCurrentMode().getCodeableName().equals(augieName)) {
+                        CodeableName currName = modeManager.getCurrentMode().getCodeableName();
+                        if (currName.toString().equals(augieName.toString())) {
                             AugLog.d( "deactivating mode " + augieName);
                             try {
                                 activity.getModeManager().setCurrentMode(modeManager.getMode(new ModeName(ModeManager.MODE_KEY_DEFAULT)));
@@ -89,7 +90,10 @@ public class DeleteModeDialog extends SherlockDialogFragment {
                         AugLog.d( "delete mode " + augieName);
                         try {
                             modeManager.deleteMode(augieName);
+                            activity.initModeList();
                         } catch (CodeableException e) {
+                            AugLog.e( e.toString(), e);
+                        } catch (AugieStoreException e) {
                             AugLog.e( e.toString(), e);
                         }
                     }

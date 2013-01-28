@@ -36,7 +36,8 @@ public class NewModeDialog extends SherlockDialogFragment {
                 String text = e.getText().toString();
                 AugLog.d( "new mode name " + text);
 
-                ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
+                ControlActivity activity = (ControlActivity) getActivity();
+                ModeManager modeManager = activity.getModeManager();
 
                 try {
                     Mode mode = modeManager.newMode();
@@ -48,12 +49,12 @@ public class NewModeDialog extends SherlockDialogFragment {
                     modeManager.setCurrentMode(mode);
 
                     ((AugieActivity) getActivity()).getModeManager().setCurrentMode(mode);
+                    activity.initModeList();
                 } catch (AugieException e1) {
                     AugLog.e( e1.toString(), e1);
                 } catch (CodeableException e1) {
                     AugLog.e( e1.toString(), e1);
                 }
-                ((BaseAugmaticActivity) getActivity()).getSupportActionBar().setSelectedNavigationItem(modeManager.getCurrentModeIdx());
             }
         })
         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
