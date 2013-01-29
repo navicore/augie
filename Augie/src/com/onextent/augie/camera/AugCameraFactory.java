@@ -24,5 +24,5 @@ public interface AugCameraFactory extends Augiement {
     
     void registerCamera(int id, CodeableName augname, String name); //phone cameras
 
-    Collection<AugCamera> getCameras();
+    Collection<CameraMeta> getCameras();
 }

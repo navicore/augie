@@ -31,6 +31,7 @@ import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.CameraMeta;
 import com.onextent.augmatic.camera.ImageSettingsDialog;
 import com.onextent.augmatic.camera.ProcessingSettingsDialog;
 import com.onextent.augmatic.camera.ShootingSettingsDialog;
@@ -124,7 +125,7 @@ public class ControlActivity extends BaseAugmaticActivity {
 
         CodeableName modeName;
         try {
-            modeName = code.getCodeableName(Codeable.CODEABLE_NAME_KEY);
+            modeName = code.getCodeableName();
             setMode(modeName);
             initCameraList();
             initAugiementList();
@@ -235,13 +236,12 @@ public class ControlActivity extends BaseAugmaticActivity {
         
         List<String> names = new ArrayList<String>();
         final ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
-        Collection<AugCamera> cameras = modeManager.getCameraFactory().getCameras();
+        Collection<CameraMeta> cameras = modeManager.getCameraFactory().getCameras();
         CodeableName currentCodeableName = modeManager.getCurrentMode().getCamera().getCameraName();
-        for (AugCamera c : cameras) {
-            CodeableName cn = c.getCameraName();
-            AugLog.d("ejs adding camera name: " + cn);
+        for (CameraMeta c : cameras) {
+            CodeableName cn = c.getCn();
             cameraNames.add(cn);
-            names.add(c.getName());
+            names.add(c.getUiname());
         }
         int currentCameraIdPos = cameraNames.indexOf(currentCodeableName); 
 

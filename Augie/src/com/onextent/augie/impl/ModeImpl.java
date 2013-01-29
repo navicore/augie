@@ -59,9 +59,8 @@ public class ModeImpl implements Codeable, Mode {
     }
 
     @Override
-    public Code getCode() {
+    public Code getCode() throws CodeableException {
         Code code = JSONCoder.newCode();
-        try {
             code.put(KEY_NAME, name);
             code.put(KEY_AUGIENAME, augieName.toString());
 
@@ -81,9 +80,6 @@ public class ModeImpl implements Codeable, Mode {
                         fjson.put(KEY_CODE, fcode);
                 }
             }
-        } catch (CodeableException e) {
-            AugLog.e( e.toString(), e);
-        }
         return code;
     }
 
@@ -216,8 +212,8 @@ public class ModeImpl implements Codeable, Mode {
     public void deactivate() throws AugieException {
         AugLog.d( "deactivate node " + getCodeableName());
         try {
-            camera.close();
             modeManager.saveMode(this);
+            camera.close();
         } catch (CodeableException e) {
             throw new AugieException(e) {
                 private static final long serialVersionUID = 660929239042327743L;};

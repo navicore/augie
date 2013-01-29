@@ -3,14 +3,12 @@
  */
 package com.onextent.augie;
 
-import com.onextent.android.codeable.Codeable;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 
 import android.content.Context;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.util.Log;
 
 enum TOUCH_STATE {NOSTATE, SHOOTING, ZOOMING};
 

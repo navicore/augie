@@ -19,15 +19,18 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.augie.camera.CameraMeta;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
-	private final Map<CodeableName, AugCamera> cameras;
+	//private final Map<CodeableName, AugCamera> cameras;
+	private final Map<CodeableName, CameraMeta> camerasMeta;
 	private final Map<CodeableName, Class<? extends AugCamera>> cameraClasses;
 	
 	public AugCameraFactoryImpl() {
 	    
-	    cameras = new HashMap<CodeableName, AugCamera>();
+	    //cameras = new HashMap<CodeableName, AugCamera>();
+	    camerasMeta = new HashMap<CodeableName, CameraMeta>();
 	    cameraClasses = new HashMap<CodeableName, Class<? extends AugCamera>>();
 	}
 	
@@ -40,16 +43,17 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         
         AugCamera camera = null;
         
-        if (cameras.containsKey(name)) {
+        if (camerasMeta.containsKey(name)) {
             
-            AugLog.d( "getting already instantiated camera: " + name);
-            camera = cameras.get(name);
+            AugLog.d( "getting cam by id: " + name);
+            CameraMeta h = camerasMeta.get(name);
+            camera = new CameraImpl(h.getId(), h.getCn(), h.getUiname());
             
         } else {
             
             AugLog.d( "constructing new camera instance: " + name);
             camera = createCamera(name);
-            if (camera != null) cameras.put(name, camera);
+            //if (camera != null) cameras.put(name, camera);
         }
         
         if (camera == null) throw new AugCameraException("no camera");
@@ -91,6 +95,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     @Override
 	public void stop() {
 
+        /*
 	    for (AugCamera c : cameras.values()) {
 	        try {
                 c.close();
@@ -99,6 +104,8 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
             }
 	    }
 	    cameras.clear();
+         */
+	    camerasMeta.clear();
 	}
 
     @Override
@@ -111,9 +118,10 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public void registerCamera(int id, CodeableName augname, String name) {
-        AugCamera c = new CameraImpl(id, augname, name);
-        cameras.put(augname, c);
+    public void registerCamera(int id, CodeableName cn, String name) {
+        //AugCamera c = new CameraImpl(id, augname, name);
+        //cameras.put(augname, c);
+        camerasMeta.put(cn, new CameraMeta(id, cn, name));
     }
    
     /**
@@ -144,9 +152,10 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
     
     @Override
-    public Collection<AugCamera> getCameras() {
+    public Collection<CameraMeta> getCameras() {
         
-        return cameras.values();
+        //return cameras.values();
+        return camerasMeta.values();
     }
 
     @Override

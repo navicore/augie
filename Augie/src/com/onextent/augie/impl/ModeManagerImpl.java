@@ -115,11 +115,11 @@ public class ModeManagerImpl implements ModeManager {
         if (currentMode != null) {
            currentMode.deactivate(); 
         }
-        currentMode = mode;
         if (mode == null) {
             throw new AugieException("mode is null") {
                 private static final long serialVersionUID = 3508820766680012985L;};
         }
+        currentMode = mode;
         AugLog.d( "setCurrentMode " + mode.getCodeableName());
         store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getCodeableName().toString());
         currentMode.activate();
@@ -145,7 +145,8 @@ public class ModeManagerImpl implements ModeManager {
 
     @Override
     public Mode getMode(CodeableName augieName) throws CodeableException {
-        
+       
+        AugLog.d("ejs getMode " + augieName);
         Mode m = new ModeImpl(this);
         Code code = store.getContentCode(augieName);
         if (code == null) throw new CodeableException("mode not found") {
