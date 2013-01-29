@@ -26,7 +26,6 @@ import com.onextent.augie.ModeName;
 import com.onextent.augie.SuperScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
-import com.onextent.augie.camera.CameraName;
 
 public class ModeImpl implements Codeable, Mode {
     
@@ -65,11 +64,9 @@ public class ModeImpl implements Codeable, Mode {
         try {
             code.put(KEY_NAME, name);
             code.put(KEY_AUGIENAME, augieName.toString());
-            
-            Code cameraJson = JSONCoder.newCode();
-            code.put(KEY_CAMERA, cameraJson);
-            cameraJson.put(KEY_AUGIENAME, camera.getCameraName().toString());
-            cameraJson.put(KEY_CODE, camera.getCode());
+
+            Code cameraCode = camera.getCode();
+            code.put(KEY_CAMERA, cameraCode);
             
             if (!augiements.isEmpty()) {
                 CodeArray<Code> features = JSONCoder.newArrayOfCode();
@@ -93,16 +90,24 @@ public class ModeImpl implements Codeable, Mode {
     @Override
     public void setCode(Code code) throws CodeableException {
         try {
+            if (camera != null) throw new CodeableException("camera already set");
             name = code.getString(KEY_NAME);
             augieName = new ModeName(code.getString(KEY_AUGIENAME));
+            
             if (!code.has(KEY_CAMERA)) throw new CodeableException("no camera");
-            Code cameraJson = code.get(KEY_CAMERA);
-            CameraName cameraName = new CameraName(cameraJson.getString(KEY_AUGIENAME));
-            Code cameraCode = cameraJson.get(KEY_CODE);
-            camera = modeManager.getCameraFactory().getCamera(cameraName);
-            if (camera != null && cameraCode != null) {
-                camera.setCode(cameraCode);
+            Code cameraCode = code.get(KEY_CAMERA);
+            if (cameraCode == null) {
+                throw new CodeableException("no camera code");
             }
+            
+            CodeableName cameraName = cameraCode.getCodeableName();
+            
+            camera = modeManager.getCameraFactory().getCamera(cameraName);
+            if (camera == null) 
+                throw new CodeableException("no camera: " + cameraName);
+            
+            camera.setCode(cameraCode);
+            
             if (code.has(KEY_AUGIEMENTS)) {
                 @SuppressWarnings("unchecked")
                 CodeArray<Code> features = (CodeArray<Code>) code.getCodeArray(KEY_AUGIEMENTS);

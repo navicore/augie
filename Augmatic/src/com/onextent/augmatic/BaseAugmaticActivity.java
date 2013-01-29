@@ -53,7 +53,6 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCameraFactory;
-import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
 import com.onextent.augie.impl.AugieScapeImpl;
 import com.onextent.augie.impl.ModeManagerImpl;
@@ -214,7 +213,7 @@ public abstract class BaseAugmaticActivity
                     cameraFactory.registerCamera(i, AugCameraFactory.AUGIE_FRONT_CAMERA, "Front Camera");
                     break;
                 default:
-                    cameraFactory.registerCamera(i, new CameraName("AUGIE/FEATURES/CAMERA/CAMERA_" + i), "Camera " + i);
+                    cameraFactory.registerCamera(i, new CodeableName("AUGIE/FEATURES/CAMERA/CAMERA_" + i), "Camera " + i);
                 }
             }
 

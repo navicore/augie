@@ -19,21 +19,20 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
-import com.onextent.augie.camera.CameraName;
 
 public class AugCameraFactoryImpl implements AugCameraFactory {
 
-	private final Map<CameraName, AugCamera> cameras;
-	private final Map<CameraName, Class<? extends AugCamera>> cameraClasses;
+	private final Map<CodeableName, AugCamera> cameras;
+	private final Map<CodeableName, Class<? extends AugCamera>> cameraClasses;
 	
 	public AugCameraFactoryImpl() {
 	    
-	    cameras = new HashMap<CameraName, AugCamera>();
-	    cameraClasses = new HashMap<CameraName, Class<? extends AugCamera>>();
+	    cameras = new HashMap<CodeableName, AugCamera>();
+	    cameraClasses = new HashMap<CodeableName, Class<? extends AugCamera>>();
 	}
 	
     @Override
-	public AugCamera getCamera(CameraName name) throws AugCameraException {
+	public AugCamera getCamera(CodeableName name) throws AugCameraException {
         
         if (name == null)  {
             throw new AugCameraException("no camera name");
@@ -58,7 +57,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
         return camera;
 	}
 	
-    private AugCamera createCamera(CameraName name) {
+    private AugCamera createCamera(CodeableName name) {
         
         AugCamera camera = null;
         
@@ -112,7 +111,7 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
     }
 
     @Override
-    public void registerCamera(int id, CameraName augname, String name) {
+    public void registerCamera(int id, CodeableName augname, String name) {
         AugCamera c = new CameraImpl(id, augname, name);
         cameras.put(augname, c);
     }
@@ -122,12 +121,12 @@ public class AugCameraFactoryImpl implements AugCameraFactory {
      * show up in the getCameras set yet
      */
     @Override
-    public void registerCamera(Class<? extends AugCamera> camclass, CameraName name) {
+    public void registerCamera(Class<? extends AugCamera> camclass, CodeableName name) {
         cameraClasses.put(name, camclass);
     }
 
     @Override
-    public Set<CameraName> getCameraNames() {
+    public Set<CodeableName> getCodeableNames() {
 
         return cameraClasses.keySet();
     }

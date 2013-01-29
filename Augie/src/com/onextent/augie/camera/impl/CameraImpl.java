@@ -22,17 +22,16 @@ import com.onextent.augie.camera.AugFocusCallback;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugPreviewCallback;
 import com.onextent.augie.camera.AugShutterCallback;
-import com.onextent.augie.camera.CameraName;
 
 public class CameraImpl implements AugCamera {
     
     private AugCamera augcamera;
-    private CameraName cameraName;
     private String name;
+    private CodeableName cname; //cameraname is different from codeable name
   
-    public CameraImpl(int id, CameraName augname, String name) {
-    
-        this.cameraName = augname;
+    public CameraImpl(int id, CodeableName cameraname, String name) {
+   
+        this.cname = cameraname;
         this.name = name;
         //if no valid id, the camera will be created by setCode(code)
         if (id >= 0) augcamera = AbstractPhoneCamera.getInstance(id);
@@ -41,11 +40,6 @@ public class CameraImpl implements AugCamera {
     public CameraImpl() {
         
         this(-1, null, null);
-    }
-
-    @Override
-    public CameraName getCameraName() {
-        return cameraName;
     }
 
     @Override
@@ -88,29 +82,40 @@ public class CameraImpl implements AugCamera {
 
     @Override
     public Code getCode() throws CodeableException {
-        Code code = augcamera.getCode();
-        if (code == null) {
-            code = JSONCoder.newCode();
-        }
-        code.put(CAMERA_NAME_KEY, cameraName);
+        Code icode = augcamera.getCode();
+        Code code = JSONCoder.newCode();
+        if (icode != null)
+            code.put("impl", icode);
+        code.put(cname);
         code.put(CAMERA_UINAME_KEY, name);
         code.put(CAMERA_ID_KEY, getId());
         return code;
     }
 
+    private void release() throws CodeableException {
+        
+        if (augcamera != null) {
+            try {
+                augcamera.close();
+                augcamera = null;
+            } catch (AugCameraException e) {
+                throw new CodeableException(e);
+            }
+        }
+    }
     @Override
     public void setCode(Code code) throws CodeableException {
+        release();
+        cname = code.getCodeableName();
+        name = code.getString(CAMERA_UINAME_KEY);
         int id = code.getInt(CAMERA_ID_KEY);
-        if (augcamera != null) {
-            augcamera.setCode(code);
-        } else {
-            augcamera = AbstractPhoneCamera.getInstance(id);
-            if (augcamera == null) {
-                throw new CodeableException("camera not found");
-            }
-            cameraName = new CameraName(code.getString(CAMERA_NAME_KEY));
-            name = code.getString(CAMERA_UINAME_KEY);
+        augcamera = AbstractPhoneCamera.getInstance(id);
+        if (augcamera == null) {
+            throw new CodeableException("camera not found");
         }
+        Code icode = code.get("impl");
+        if (icode != null) 
+            augcamera.setCode(icode);
     }
 
     //NOOP stubs just here so that dependency manager can 
@@ -147,6 +152,18 @@ public class CameraImpl implements AugCamera {
         augcamera.applyParameters();
     }
 
+    /**
+     * this name is unique to type of camera, ie FRONT / BACK / CANON_MKIII_TETHER
+     */
+    @Override
+    public CodeableName getCameraName() {
+        return cname;
+    }
+
+    /**
+     * this name is unique to type of camera type of augiement, all cameras return the same
+     * so that apps looking or cameras can find 'em
+     */
     @Override
     public CodeableName getCodeableName() {
         return augcamera.getCodeableName();

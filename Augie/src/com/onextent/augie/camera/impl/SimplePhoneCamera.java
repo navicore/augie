@@ -34,7 +34,6 @@ import com.onextent.augie.camera.AugFocusCallback;
 import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugPreviewCallback;
 import com.onextent.augie.camera.AugShutterCallback;
-import com.onextent.augie.camera.CameraName;
 import com.onextent.augie.camera.ImageFmt;
 import com.onextent.augie.camera.NamedInt;
 
@@ -44,7 +43,6 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 	protected Camera camera;
 	
 	protected final int cameraId;
-	protected final CameraName cameraName;
 	protected AugPreviewCallback previewCb;
 	protected AugPreviewCallback previewCbWB;
 	
@@ -53,7 +51,6 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 	
 	SimplePhoneCamera(int id) {
 	    cameraId = id;
-        cameraName = new CameraName("/AUGIE/CAMERA_ID_" + getId());
 	}
 
 	private final static int NBUFFERS = 3;
@@ -111,12 +108,7 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
 	}
 	
     @Override
-    public CameraName getCameraName() {
-        return cameraName;
-    }
-    
-    @Override
-    public CodeableName getCodeableName() {
+    public final CodeableName getCodeableName() {
         return AugCamera.AUGIENAME;
     }
     
@@ -554,5 +546,10 @@ public class SimplePhoneCamera extends AbstractPhoneCamera {
     @Override
     public Meta getMeta() {
         return null;
+    }
+
+    @Override
+    public CodeableName getCameraName() {
+        return null; //for the wrapper to wrap
     }
 }

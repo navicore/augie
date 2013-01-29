@@ -41,7 +41,7 @@ public interface AugCamera extends Augiement {
     int getId();
     
     String getName(); //ui name
-    CameraName getCameraName(); //camera factory name
+    CodeableName getCodeableName(); //camera factory name
 
     void initParams();
     
@@ -54,4 +54,6 @@ public interface AugCamera extends Augiement {
     void addCallbackBuffer(byte[] b);
 
     boolean isOpen();
+
+    CodeableName getCameraName();
 }

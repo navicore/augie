@@ -31,7 +31,6 @@ import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.CameraName;
 import com.onextent.augmatic.camera.ImageSettingsDialog;
 import com.onextent.augmatic.camera.ProcessingSettingsDialog;
 import com.onextent.augmatic.camera.ShootingSettingsDialog;
@@ -39,7 +38,7 @@ import com.onextent.augmatic.camera.ShootingSettingsDialog;
 public class ControlActivity extends BaseAugmaticActivity {
 
     private final String[] camSettingCatagories = {"Processing", "Image File", "Shooting"};
-    private final List<CameraName> cameraNames = new ArrayList<CameraName>();
+    private final List<CodeableName> cameraNames = new ArrayList<CodeableName>();
     private List<Code> modeCode;
     private ListView cameraList;
     private ListView cameraCatagoryList;
@@ -99,10 +98,9 @@ public class ControlActivity extends BaseAugmaticActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
-            CameraName cn = cameraNames.get(position);
+            CodeableName cn = cameraNames.get(position);
             setCamera(cn);
             initCameraCatagoryList();
-            showEmptySettingsDetails();
         }
     };
     
@@ -111,8 +109,8 @@ public class ControlActivity extends BaseAugmaticActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
-            helper.initDialogs(position);
             initCameraCatagoryList(); //todo: wasteful, just wanna deselect
+            helper.initDialogs(position);
         }
     };
     
@@ -130,7 +128,6 @@ public class ControlActivity extends BaseAugmaticActivity {
             setMode(modeName);
             initCameraList();
             initAugiementList();
-            showEmptySettingsDetails();
         } catch (CodeableException e) {
             AugLog.e( e.toString(), e);
         } catch (AugieException e) {
@@ -147,8 +144,8 @@ public class ControlActivity extends BaseAugmaticActivity {
                 long id) {
             if (isDualPane) {
                 showEmptySettingsDetails();
-                showCameraDetails(position);
                 initAugiementList(); //todo: wasteful, just wanna deselect
+                showCameraDetails(position);
             } else {
                 showCameraDetails(position);
             }
@@ -165,7 +162,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         modeManager.setCurrentMode(m);
     }
     
-    private void setCamera(CameraName cn) {
+    private void setCamera(CodeableName cn) {
         
         ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
         Mode m = modeManager.getCurrentMode();
@@ -231,6 +228,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         newb.setOnClickListener(newModeListener);
         Button delb = (Button) findViewById(R.id.del_mode_btn);
         delb.setOnClickListener(delModeListener);
+        showEmptySettingsDetails();
     }
     
     public void initCameraList() {
@@ -238,13 +236,14 @@ public class ControlActivity extends BaseAugmaticActivity {
         List<String> names = new ArrayList<String>();
         final ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
         Collection<AugCamera> cameras = modeManager.getCameraFactory().getCameras();
-        CameraName currentCameraName = modeManager.getCurrentMode().getCamera().getCameraName();
+        CodeableName currentCodeableName = modeManager.getCurrentMode().getCamera().getCameraName();
         for (AugCamera c : cameras) {
-            CameraName cn = c.getCameraName();
+            CodeableName cn = c.getCameraName();
+            AugLog.d("ejs adding camera name: " + cn);
             cameraNames.add(cn);
             names.add(c.getName());
         }
-        int currentCameraIdPos = cameraNames.indexOf(currentCameraName); 
+        int currentCameraIdPos = cameraNames.indexOf(currentCodeableName); 
 
         String[] items = new String[names.size()];
         names.toArray(items);
@@ -256,6 +255,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         cameraList.setItemChecked(currentCameraIdPos, true);
         cameraList.setOnItemClickListener(cameraListener);
         initCameraCatagoryList();
+        showEmptySettingsDetails();
     }
     
     public void initCameraCatagoryList() {
@@ -265,6 +265,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         cameraCatagoryList = (ListView) findViewById(R.id.camera_catagory_list);
         cameraCatagoryList.setAdapter(adapter);
         cameraCatagoryList.setOnItemClickListener(cameraCatagoryListener);
+        showEmptySettingsDetails();
     }
     
     public void initAugiementList() {
@@ -277,6 +278,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         augiementList = (ListView) findViewById(R.id.augiement_list);
         augiementList.setAdapter(adapter);
         augiementList.setOnItemClickListener(augiementListener);
+        showEmptySettingsDetails();
     }
     
     private void showEmptySettingsDetails() {
