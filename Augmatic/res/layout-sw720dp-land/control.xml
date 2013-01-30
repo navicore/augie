@@ -11,7 +11,9 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:layout_margin="8dp"
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -101,25 +103,30 @@
 
     <!-- middle -->
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:layout_margin="8dp"
+        >
 
         <TextView
+            android:id="@+id/augiement_list_header"
             style="@style/AugListTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/aug_fld_title_augiement_list" />
+            android:text="@string/aug_fld_title_augiement_list" 
+            />
 
         <ListView
             android:id="@+id/augiement_list"
+            android:layout_below="@id/augiement_list_header"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:choiceMode="singleChoice"
             android:listSelector="@drawable/row_selector" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- right -->
 
@@ -127,13 +134,16 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="2"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            >
 
             <FrameLayout
                 android:id="@+id/module_status"
@@ -150,7 +160,8 @@
             android:id="@+id/camera_settings_preview"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
 </LinearLayout>
