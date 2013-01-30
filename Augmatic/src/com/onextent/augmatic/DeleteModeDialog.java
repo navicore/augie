@@ -13,7 +13,6 @@ import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.ModeManager;
@@ -57,7 +56,7 @@ public class DeleteModeDialog extends SherlockDialogFragment {
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                     
                     CodeableName  augieName = augieNameList.get(which);
-                    AugLog.d( "sched to delete mode " + augieName + " which " + which);
+                    AugAppLog.d( "sched to delete mode " + augieName + " which " + which);
                     if (isChecked) {
                         if (!augieNamesToDelete.contains(augieName)) {
                             augieNamesToDelete.add(augieName);
@@ -75,26 +74,26 @@ public class DeleteModeDialog extends SherlockDialogFragment {
                     
                     for (CodeableName augieName : augieNamesToDelete) {
                         
-                        AugLog.d( "trying to delete mode " + augieName);
+                        AugAppLog.d( "trying to delete mode " + augieName);
                         CodeableName currName = modeManager.getCurrentMode().getCodeableName();
                         if (currName.toString().equals(augieName.toString())) {
-                            AugLog.d( "deactivating mode " + augieName);
+                            AugAppLog.d( "deactivating mode " + augieName);
                             try {
                                 activity.getModeManager().setCurrentMode(modeManager.getMode(new ModeName(ModeManager.MODE_KEY_DEFAULT)));
                             } catch (CodeableException e) {
-                                AugLog.e( e.toString(), e);
+                                AugAppLog.e( e.toString(), e);
                             } catch (AugieException e) {
-                                AugLog.e( e.toString(), e);
+                                AugAppLog.e( e.toString(), e);
                             }
                         }
-                        AugLog.d( "delete mode " + augieName);
+                        AugAppLog.d( "delete mode " + augieName);
                         try {
                             modeManager.deleteMode(augieName);
                             activity.initModeList();
                         } catch (CodeableException e) {
-                            AugLog.e( e.toString(), e);
+                            AugAppLog.e( e.toString(), e);
                         } catch (AugieStoreException e) {
-                            AugLog.e( e.toString(), e);
+                            AugAppLog.e( e.toString(), e);
                         }
                     }
                 }
@@ -109,9 +108,9 @@ public class DeleteModeDialog extends SherlockDialogFragment {
             return builder.create();
             
         } catch (AugieStoreException e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         } catch (CodeableException e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         }
         return null;
     }

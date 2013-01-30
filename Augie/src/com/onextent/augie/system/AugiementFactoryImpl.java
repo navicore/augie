@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
@@ -39,7 +39,7 @@ public class AugiementFactoryImpl implements AugiementFactory {
     @Override
     public Augiement newInstance(CodeableName augieName) {
         
-        AugLog.d( "newInstance " + augieName);
+        AugSysLog.d( "newInstance " + augieName);
         
         Augiement.Meta m = augieClasses.get(augieName);
         
@@ -51,9 +51,9 @@ public class AugiementFactoryImpl implements AugiementFactory {
             try {
                 return m.getAugiementClass().newInstance();
             } catch (InstantiationException e) {
-                AugLog.e( e.toString(), e);
+                AugSysLog.e( e.toString(), e);
             } catch (IllegalAccessException e) {
-                AugLog.e( e.toString(), e);
+                AugSysLog.e( e.toString(), e);
             }
         throw new java.lang.NullPointerException("no instance for " + augieName);
     }

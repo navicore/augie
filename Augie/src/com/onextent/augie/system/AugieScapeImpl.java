@@ -13,7 +13,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -73,7 +73,7 @@ public class AugieScapeImpl extends View implements AugieScape {
     }
 
     public void resume() {
-        AugLog.d( "resuming " + getClass().getName());
+        AugSysLog.d( "resuming " + getClass().getName());
         for (Augiement f : features) {
             f.resume();
         }
@@ -81,7 +81,7 @@ public class AugieScapeImpl extends View implements AugieScape {
     }
 
     public void stop() {
-        AugLog.d( "stopping " + getClass().getName());
+        AugSysLog.d( "stopping " + getClass().getName());
         for (Augiement f : features) {
             f.stop();
         }
@@ -132,7 +132,7 @@ public class AugieScapeImpl extends View implements AugieScape {
             }
             if (handled) invalidate();
         } catch (Exception e) {
-            AugLog.e( e.toString(), e);
+            AugSysLog.e( e.toString(), e);
         }
         //return handled;
         return true;
@@ -152,7 +152,7 @@ public class AugieScapeImpl extends View implements AugieScape {
             }
             if (handled) invalidate(); //probably unnecessary
         } catch (Exception e) {
-            AugLog.e( e.toString(), e);
+            AugSysLog.e( e.toString(), e);
         }
         //return handled;
         return true;

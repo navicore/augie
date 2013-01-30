@@ -24,7 +24,6 @@ import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
@@ -135,9 +134,9 @@ public class ControlActivity extends BaseAugmaticActivity {
             //initCameraList();
             //initAugiementList();
         } catch (CodeableException e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         } catch (AugieException e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         }
 
         }
@@ -173,7 +172,7 @@ public class ControlActivity extends BaseAugmaticActivity {
             m.setCamera(c);
             m.activate();
         } catch (AugieException e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         }
     }
     
@@ -193,10 +192,10 @@ public class ControlActivity extends BaseAugmaticActivity {
         try {
             initModeList();
         } catch (AugieStoreException e) {
-            AugLog.e(e);
+            AugAppLog.e(e);
             finish();
         } catch (CodeableException e) {
-            AugLog.e(e);
+            AugAppLog.e(e);
             finish();
         }
         initCameraList();
@@ -326,7 +325,7 @@ public class ControlActivity extends BaseAugmaticActivity {
                 }
             }
         } catch (Throwable err) {
-            AugLog.e( err.toString(), err);
+            AugAppLog.e( err.toString(), err);
         }
     }
     

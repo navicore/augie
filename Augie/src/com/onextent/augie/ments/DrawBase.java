@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -84,19 +83,16 @@ public abstract class DrawBase implements Augiement, OnTouchListener {
 
 	@Override
 	public void stop() {
-        AugLog.d( "stopping " + getClass().getName());
 		//noop
 	}
 	
 	@Override
 	public void resume() {
-        AugLog.d( "resuming " + getClass().getName());
 		//noop
 	}
 
 	@Override
 	public void clear() {
-        AugLog.d( "clearing " + getClass().getName());
 		//noop
     }
 	

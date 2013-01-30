@@ -158,7 +158,6 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     @Override
     public void stop() {
-        AugLog.d( "stopping " + getClass().getName());
         unregisterSensorListeners();
         if (vlineCache.size() > 1000)  vlineCache.clear();
         if (hlineCache.size() > 1000)  hlineCache.clear();
@@ -167,7 +166,6 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
 
     @Override
     public void resume() {
-        AugLog.d( "resuming " + getClass().getName());
         registerSensorListeners();
     }
 

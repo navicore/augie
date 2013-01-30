@@ -14,7 +14,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.Augiement;
@@ -103,7 +102,7 @@ public class AugiementStatusFrag extends SherlockDialogFragment {
                 try {
                     modeManager.setCurrentMode(mode);
                 } catch (AugieException e) {
-                    AugLog.e( e.toString(), e);
+                    AugAppLog.e( e.toString(), e);
                 } //reset everything with new a
             }
         });

@@ -14,7 +14,7 @@ import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
-import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -180,14 +180,14 @@ public class ModeImpl implements Codeable, Mode {
     @Override
     public void activate() throws AugieException {
         
-        AugLog.d( "activating mode " + getCodeableName());
+        AugSysLog.d( "activating mode " + getCodeableName());
         
         ModeManager mm = modeManager;
         AugieScape v = mm.getAugieScape();
         v.stop();
         v.removeFeature(null);
         for (Augiement f : augiements.values()) {
-            AugLog.d( "    activate node add feature " + f.getCodeableName());
+            AugSysLog.d( "    activate node add feature " + f.getCodeableName());
             v.addFeature(f);
         }
         AugCamera c = getCamera();
@@ -202,7 +202,7 @@ public class ModeImpl implements Codeable, Mode {
 
     @Override
     public void deactivate() throws AugieException {
-        AugLog.d( "deactivate node " + getCodeableName());
+        AugSysLog.d( "deactivate node " + getCodeableName());
         try {
             modeManager.saveMode(this);
             camera.close();

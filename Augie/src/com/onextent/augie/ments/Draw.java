@@ -104,7 +104,6 @@ public class Draw extends DrawBase {
     
     @Override
 	public void clear() {
-        AugLog.d( "clearing " + getClass().getName());
     	scribles.clear();
 	}
 
@@ -178,13 +177,11 @@ public class Draw extends DrawBase {
 
     @Override
 	public void stop() {
-        AugLog.d( "stopping " + getClass().getName());
 		//noop
 	}
 	
 	@Override
 	public void resume() {
-        AugLog.d( "resuming " + getClass().getName());
 		//noop
 	}
 

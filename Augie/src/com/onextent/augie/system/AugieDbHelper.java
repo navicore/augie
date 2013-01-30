@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.store.CodeStoreSqliteImpl;
-import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 
 //todo: consider ics dberrorhandler
 
@@ -30,13 +30,13 @@ public class AugieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        AugLog.d( "create db");
+        AugSysLog.d( "create db");
        
         try {
             
             db.execSQL(CREATE_TABLE);
         } catch (SQLiteException e) {
-            AugLog.e( "can not create db", e);
+            AugSysLog.e( "can not create db", e);
         }
         
     }

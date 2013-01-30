@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 
 import com.onextent.android.ui.SpinnerUI;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraParameters;
+import com.onextent.augmatic.AugAppLog;
 import com.onextent.augmatic.R;
 
 public class ProcessingSettingsDialog extends CamSettingsDialogBase {
@@ -39,7 +39,7 @@ public class ProcessingSettingsDialog extends CamSettingsDialogBase {
             setSceneModeUI(v, camera);
             setAntibandingUI(v, camera);
         } catch (Exception e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         }
 
         return v;

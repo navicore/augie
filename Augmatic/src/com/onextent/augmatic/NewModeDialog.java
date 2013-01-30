@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.CodeableException;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.Mode;
@@ -34,7 +33,7 @@ public class NewModeDialog extends SherlockDialogFragment {
 
                 EditText e = (EditText) getDialog().findViewById(com.onextent.augmatic.R.id.new_mode_name);
                 String text = e.getText().toString();
-                AugLog.d( "new mode name " + text);
+                AugAppLog.d( "new mode name " + text);
 
                 ControlActivity activity = (ControlActivity) getActivity();
                 ModeManager modeManager = activity.getModeManager();
@@ -51,9 +50,9 @@ public class NewModeDialog extends SherlockDialogFragment {
                     ((AugieActivity) getActivity()).getModeManager().setCurrentMode(mode);
                     activity.initModeList();
                 } catch (AugieException e1) {
-                    AugLog.e( e1.toString(), e1);
+                    AugAppLog.e( e1.toString(), e1);
                 } catch (CodeableException e1) {
-                    AugLog.e( e1.toString(), e1);
+                    AugAppLog.e( e1.toString(), e1);
                 }
             }
         })

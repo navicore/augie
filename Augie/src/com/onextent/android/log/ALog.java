@@ -8,7 +8,7 @@ public class ALog {
     
     public static class ATag extends CodeableName {
 
-        protected ATag(String name) {
+        public ATag(String name) {
             super(name);
         }
     }

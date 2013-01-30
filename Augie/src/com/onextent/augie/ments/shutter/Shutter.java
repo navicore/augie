@@ -453,7 +453,6 @@ public class Shutter implements Augiement {
 
 	@Override
 	public void stop() {
-		AugLog.d( "stopping " + getClass().getName());
 		if (eventManager == null) return;
 		eventManager.unlisten(GPS.GPS_UPDATE_AUGIE_NAME, gpsEventHandler);
 	}
@@ -461,13 +460,11 @@ public class Shutter implements Augiement {
 	@Override
 	public void resume() {
 		if (eventManager == null) return;
-		AugLog.d( "resuming " + getClass().getName());
 		eventManager.listen(GPS.GPS_UPDATE_AUGIE_NAME, gpsEventHandler);
 	}
 
 	@Override
 	public void clear() {
-		AugLog.d( "clearing " + getClass().getName());
 		//noop
 	}
 

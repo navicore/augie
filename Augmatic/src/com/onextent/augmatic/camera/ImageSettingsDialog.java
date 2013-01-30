@@ -17,13 +17,13 @@ import android.widget.Spinner;
 import com.onextent.android.codeable.Size;
 import com.onextent.android.ui.SeekBarUI;
 import com.onextent.android.ui.SpinnerUI;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.NamedInt;
+import com.onextent.augmatic.AugAppLog;
 import com.onextent.augmatic.R;
 
 public class ImageSettingsDialog extends CamSettingsDialogBase {
@@ -71,7 +71,7 @@ public class ImageSettingsDialog extends CamSettingsDialogBase {
             setJpegThumbnailQualityUI(v, camera);
             setPreviewFPSRangeUI(v, camera);
         } catch (Exception e) {
-            AugLog.e( e.toString(), e);
+            AugAppLog.e( e.toString(), e);
         }
 
         return v;

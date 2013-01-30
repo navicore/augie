@@ -328,13 +328,11 @@ public class TouchFocusShutter extends SimpleCameraShutter {
 
     @Override
     public void stop() {
-        AugLog.d( "stopping " + getClass().getName());
         //noop
     }
 
     @Override
     public void resume() {
-        AugLog.d( "resuming " + getClass().getName());
         //noop
     }
 

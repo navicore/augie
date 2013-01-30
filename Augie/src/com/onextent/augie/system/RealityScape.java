@@ -3,7 +3,7 @@
  */
 package com.onextent.augie.system;
 
-import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
@@ -44,7 +44,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
             augcamera.setPreviewDisplay(holder);
             augieScape.resume();
         } catch (AugCameraException e) {
-            AugLog.e( "Error surfaceCreated: " + e.getMessage());
+            AugSysLog.e( "Error surfaceCreated: " + e.getMessage());
         }
     }
 
@@ -54,7 +54,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
                 augcamera.stopPreview();
                 augcamera.close();
             } catch (AugCameraException e) {
-                AugLog.e( "Error surfaceDestroyed: " + e.getMessage());
+                AugSysLog.e( "Error surfaceDestroyed: " + e.getMessage());
             }
         }
     }
@@ -63,7 +63,7 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
         try {
             augcamera.startPreview();
         } catch (AugCameraException e) {
-            AugLog.e( "Error surfaceChanged: " + e.getMessage());
+            AugSysLog.e( "Error surfaceChanged: " + e.getMessage());
         }
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.

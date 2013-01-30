@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementDependencyRegistry;
@@ -37,7 +37,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
         try {
             a.onCreate(augieScape, this);
         } catch (AugiementException e) {
-            AugLog.e( "augiement onCreate error", e);
+            AugSysLog.e( "augiement onCreate error", e);
             //todo: make error visible in ui
         }
     }
@@ -65,14 +65,14 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
             
             active.put(object.getCodeableName(), object);
             create(object);
-            AugLog.d( "augiement " + object.getCodeableName() + " registered w/no deps");
+            AugSysLog.d( "augiement " + object.getCodeableName() + " registered w/no deps");
             tryWaiting();
             
         } else {
 
             for (CodeableName dname : dependencyNames) {
                 if (!active.containsKey(dname)) {
-                    AugLog.d( "augiement " + object.getCodeableName() + " waiting for " + dname);
+                    AugSysLog.d( "augiement " + object.getCodeableName() + " waiting for " + dname);
                     waiting.put(object.getCodeableName(), object);
                     dependsAllmet = false;
                     break;
@@ -82,7 +82,7 @@ public class AugiementRegistryImpl extends AbstractSet<Augiement> implements Aug
             if (dependsAllmet) {
                 active.put(object.getCodeableName(), object);
                 create(object);
-                AugLog.d( "augiement " + object.getCodeableName() + " registered w/deps");
+                AugSysLog.d( "augiement " + object.getCodeableName() + " registered w/deps");
                 tryWaiting();
             }
         }

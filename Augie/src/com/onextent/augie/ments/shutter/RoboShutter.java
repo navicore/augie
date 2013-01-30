@@ -213,7 +213,6 @@ public class RoboShutter implements Augiement, OnLongClickListener {
 
     private void stopRobo() {
         if (isRunning()) {
-            AugLog.d( "stopping robo shutter");
             setRunning(false);
 
             ScheduledFuture<?> t = getTaskFuture();

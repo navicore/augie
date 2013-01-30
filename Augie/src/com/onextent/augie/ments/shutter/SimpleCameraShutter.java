@@ -113,19 +113,16 @@ public class SimpleCameraShutter extends AbstractTouchShutter implements OnTouch
 
 	@Override
 	public void stop() {
-        AugLog.d( "stopping " + getClass().getName());
 		//noop
 	}
 	
 	@Override
 	public void resume() {
-        AugLog.d( "resuming " + getClass().getName());
 		//noop
 	}
 
 	@Override
 	public void clear() {
-        AugLog.d( "clearing " + getClass().getName());
 		//noop
     }
 	
