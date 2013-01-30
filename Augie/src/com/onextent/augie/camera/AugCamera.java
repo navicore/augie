@@ -62,4 +62,6 @@ public interface AugCamera extends Augiement {
     void stopFaceDetection();
 
     void setFaceDetectionListener(AugFaceListener faceListener);
+
+    void setDisplayOrientation(int i);
 }

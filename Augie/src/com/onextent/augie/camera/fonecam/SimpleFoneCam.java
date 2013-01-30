@@ -572,4 +572,9 @@ public class SimpleFoneCam extends AbstractFoneCam {
     public void setFaceDetectionListener(AugFaceListener faceListener) {
         //noop for pre-ics
     }
+
+    @Override
+    public void setDisplayOrientation(int i) {
+        if (camera != null) camera.setDisplayOrientation(i);
+    }
 }

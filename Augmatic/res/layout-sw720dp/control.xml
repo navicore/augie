@@ -33,21 +33,21 @@
 
                 <Button
                     android:id="@+id/add_mode_btn"
-                    android:textColor="#62D853"
-                    android:textStyle="bold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/aug_btn_title_plus_txt" />
+                    android:text="@string/aug_btn_title_plus_txt"
+                    android:textColor="#62D853"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/del_mode_btn"
-                    android:textColor="#FF1E00"
-                    android:textStyle="bold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/aug_btn_title_minus_txt" />
+                    android:text="@string/aug_btn_title_minus_txt"
+                    android:textColor="#FF1E00"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <ListView
@@ -97,28 +97,30 @@
                 android:choiceMode="singleChoice"
                 android:listSelector="@drawable/row_selector" />
         </LinearLayout>
-    </LinearLayout>
 
-    <!-- middle -->
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-
-        <TextView
-            style="@style/AugListTitle"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/aug_fld_title_augiement_list" />
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical" 
+            >
 
-        <ListView
-            android:id="@+id/augiement_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:choiceMode="singleChoice"
-            android:listSelector="@drawable/row_selector" />
+            <TextView
+                style="@style/AugListTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/aug_fld_title_augiement_list" 
+                />
+
+            <ListView
+                android:id="@+id/augiement_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/row_selector" 
+                />
+        </LinearLayout>
+        
     </LinearLayout>
 
     <!-- right -->
@@ -126,14 +128,16 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight="2"
-        android:orientation="vertical" >
+        android:layout_weight="1"
+        android:orientation="vertical" 
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical" >
+            android:orientation="vertical" 
+            >
 
             <FrameLayout
                 android:id="@+id/module_status"
@@ -150,7 +154,8 @@
             android:id="@+id/camera_settings_preview"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1" 
+            />
     </LinearLayout>
 
 </LinearLayout>

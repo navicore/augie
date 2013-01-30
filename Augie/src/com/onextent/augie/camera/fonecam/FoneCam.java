@@ -265,4 +265,9 @@ public class FoneCam implements AugCamera {
     public void setFaceDetectionListener(AugFaceListener faceListener) {
         augcamera.setFaceDetectionListener(faceListener);
     }
+
+    @Override
+    public void setDisplayOrientation(int i) {
+        augcamera.setDisplayOrientation(i);
+    }
 }

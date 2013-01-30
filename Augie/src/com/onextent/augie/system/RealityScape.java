@@ -9,6 +9,7 @@ import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -41,6 +42,11 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
     public void surfaceCreated(SurfaceHolder holder) {
         try {
             augcamera.open();
+
+            if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
+            {
+                augcamera.setDisplayOrientation(90);
+            }
             augcamera.setPreviewDisplay(holder);
             augieScape.resume();
         } catch (AugCameraException e) {

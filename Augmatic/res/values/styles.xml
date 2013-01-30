@@ -3,7 +3,7 @@
     <style name="AugieScapeTheme" parent="Theme.Sherlock">
     </style>
 
-    <style name="AugSettingsTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="AugControlTheme" parent="Theme.Sherlock.Light.DarkActionBar">
     </style>
 
     <style name="AugButtonTxtBase" 

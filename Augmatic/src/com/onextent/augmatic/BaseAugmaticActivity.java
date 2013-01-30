@@ -525,18 +525,22 @@ public abstract class BaseAugmaticActivity
 
 	@Override
 	public void unlisten(CodeableName name, CodeableHandler handler) {
+	    
+	    if (handler == null) return;
 	
 		Set<CodeableHandler> handlers = null;
 		if (handlerSets.containsKey(name)) {
 			handlers = handlerSets.get(name);
 		} 
-		if (handler != null)
+		if (handler != null && handlers != null)
 			handlers.remove(handler);
 	}
 	
 	@Override
 	public void listen(CodeableName name, CodeableHandler handler) {
 	
+	    if (handler == null) return;
+	    
 		Set<CodeableHandler> handlers;
 		if (handlerSets.containsKey(name)) {
 			handlers = handlerSets.get(name);
