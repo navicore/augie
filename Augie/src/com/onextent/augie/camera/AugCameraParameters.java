@@ -99,4 +99,6 @@ public interface AugCameraParameters extends Codeable {
     int[] getPreviewFPSRange();
 
     void setPreviewFPSRange(int min, int max);
+
+    int getMaxNumDetectedFaces();
 }

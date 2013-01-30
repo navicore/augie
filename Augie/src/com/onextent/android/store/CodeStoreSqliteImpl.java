@@ -4,7 +4,7 @@ import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
-import com.onextent.augie.impl.AugieDbHelper;
+import com.onextent.augie.system.AugieDbHelper;
 
 import android.content.ContentValues;
 import android.content.Context;

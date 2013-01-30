@@ -1,6 +1,5 @@
 package com.onextent.augmatic.camera;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
@@ -10,28 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SpinnerUI;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augmatic.R;
 
-public class ProcessingSettingsDialog extends SherlockDialogFragment {
-
-    private final int getPosition(Object item, List<?> list) {
-
-        if (item == null) return 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            if (item.equals(list.get(i))) return i;
-        }
-        return 0;
-    }
+public class ProcessingSettingsDialog extends CamSettingsDialogBase {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,31 +26,23 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
         Dialog d = getDialog();
         if (d != null) d.setTitle("Edit Processing Settings");
         View v = inflater.inflate(R.layout.camera_processing_settings, container, false);
-        
-        try {
-            
-        AugieActivity activity = (AugieActivity) getActivity();
-        ModeManager modeManager = activity.getModeManager();
-        Mode mode = modeManager.getCurrentMode();
-        AugCamera camera = mode.getCamera();
 
-        setColorModeUI(v, camera);
-        setWhiteBalUI(v, camera);
-        setSceneModeUI(v, camera);
-        setAntibandingUI(v, camera);
+        try {
+
+            AugieActivity activity = (AugieActivity) getActivity();
+            ModeManager modeManager = activity.getModeManager();
+            Mode mode = modeManager.getCurrentMode();
+            AugCamera camera = mode.getCamera();
+
+            setColorModeUI(v, camera);
+            setWhiteBalUI(v, camera);
+            setSceneModeUI(v, camera);
+            setAntibandingUI(v, camera);
         } catch (Exception e) {
             AugLog.e( e.toString(), e);
         }
 
         return v;
-    }
-
-    static private List<String> getChoiceList(List<String> list) {
-        if (list == null) return null;
-        List<String> r = new ArrayList<String>();
-        r.add("<unset>");
-        r.addAll(list);
-        return r;
     }
 
     //
@@ -82,11 +61,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setColorMode(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();
@@ -105,11 +80,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setWhiteBalance(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();
@@ -128,11 +99,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setSceneMode(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();
@@ -151,11 +118,7 @@ public class ProcessingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setAntibanding(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();

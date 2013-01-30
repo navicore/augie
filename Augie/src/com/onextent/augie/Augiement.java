@@ -47,5 +47,6 @@ public interface Augiement extends Codeable {
         String getUIName();
         String getDescription();
         Set<CodeableName> getDependencyNames();
+        int getMinSdkVer();
     }
 }

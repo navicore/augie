@@ -56,4 +56,10 @@ public interface AugCamera extends Augiement {
     boolean isOpen();
 
     CodeableName getCameraName();
+
+    void startFaceDetection();
+
+    void stopFaceDetection();
+
+    void setFaceDetectionListener(AugFaceListener faceListener);
 }

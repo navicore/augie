@@ -53,9 +53,9 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCameraFactory;
-import com.onextent.augie.camera.impl.AugCameraFactoryImpl;
-import com.onextent.augie.impl.AugieScapeImpl;
-import com.onextent.augie.impl.ModeManagerImpl;
+import com.onextent.augie.camera.fonecam.FoneCamFactory;
+import com.onextent.augie.system.AugieScapeImpl;
+import com.onextent.augie.system.ModeManagerImpl;
 
 public abstract class BaseAugmaticActivity 
                       extends SherlockFragmentActivity 
@@ -200,7 +200,7 @@ public abstract class BaseAugmaticActivity
             augieScape = new AugieScapeImpl(this);
             augiementFactory = new AugmaticAugiementFactory();
 
-            cameraFactory = new AugCameraFactoryImpl();
+            cameraFactory = new FoneCamFactory();
             for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
 
                 Camera.CameraInfo info = new Camera.CameraInfo();

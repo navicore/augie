@@ -1,6 +1,5 @@
 package com.onextent.augmatic.camera;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SeekBarUI;
 import com.onextent.android.ui.SpinnerUI;
 import com.onextent.augie.AugLog;
@@ -18,29 +16,10 @@ import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
-import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augmatic.R;
 
-public class ShootingSettingsDialog extends SherlockDialogFragment {
-
-    static private List<String> getChoiceList(List<String> list) {
-        if (list == null) return null;
-        List<String> r = new ArrayList<String>();
-        r.add("<unset>");
-        r.addAll(list);
-        return r;
-    }
-
-    static private final int getPosition(Object item, List<?> list) {
-
-        if (item == null) return 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            if (item.equals(list.get(i))) return i;
-        }
-        return 0;
-    }
+public class ShootingSettingsDialog extends CamSettingsDialogBase {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,11 +58,7 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setFocusMode(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();
@@ -103,11 +78,7 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setFlashMode(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();
@@ -136,11 +107,7 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
                 if (ec < min) ec = min;
                 if (ec > max) ec = max;
                 params.setExposureCompensation(ec);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         ui.track(true);
@@ -164,11 +131,7 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setValue(int p) {
                 params.setZoom(p);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         ui.track(true);
@@ -191,11 +154,7 @@ public class ShootingSettingsDialog extends SherlockDialogFragment {
             @Override
             public void setMode(String m) {
                 params.setXISO(m);
-                try {
-                    camera.applyParameters();
-                } catch (AugCameraException e) {
-                    AugLog.e( e.toString());
-                }
+                applyChanges(camera);
             }
         };
         sui.init();
