@@ -386,6 +386,9 @@ public class SimpleFoneCam extends AbstractFoneCam {
         try {
             cp = camera.getParameters();
             AugCameraParameters p = getParameters();
+            if (p == null || cp == null) {
+                throw new java.lang.NullPointerException("can not update params");
+            }
             if (p != null && cp != null) {
                 //todo: update with each 2.3 setting
                 String m;

@@ -81,6 +81,8 @@ public class ControlActivity extends BaseAugmaticActivity {
         @Override
         public void onClick(View v) {
             showEmptySettingsDetails();
+            unsetCameraCatagorySelection();
+            unsetAugiementSelection();
             SherlockDialogFragment ald = new NewModeDialog();
             ald.show(getSupportFragmentManager(), "New Mode Fragment");
         }
@@ -90,10 +92,23 @@ public class ControlActivity extends BaseAugmaticActivity {
         @Override
         public void onClick(View v) {
             showEmptySettingsDetails();
+            unsetCameraCatagorySelection();
+            unsetAugiementSelection();
             SherlockDialogFragment ald = new DeleteModeDialog();
             ald.show(getSupportFragmentManager(), "Delete Mode Fragment");
         }
     };
+    
+    private void unsetAugiementSelection() {
+        if (augiementList == null) return;
+        int position = augiementList.getCheckedItemPosition();
+        augiementList.setItemChecked(position, false);
+    }
+    private void unsetCameraCatagorySelection() {
+        if (cameraCatagoryList == null) return;
+        int position = cameraCatagoryList.getCheckedItemPosition();
+        cameraCatagoryList.setItemChecked(position, false);
+    }
     
     final private OnItemClickListener cameraListener = new OnItemClickListener() {
 
@@ -101,9 +116,10 @@ public class ControlActivity extends BaseAugmaticActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
             showEmptySettingsDetails();
+            unsetCameraCatagorySelection();
+            unsetAugiementSelection();
             CodeableName cn = cameraNames.get(position);
             setCamera(cn);
-            //initCameraCatagoryList();
         }
     };
     
@@ -112,8 +128,8 @@ public class ControlActivity extends BaseAugmaticActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
-            //initCameraCatagoryList(); //todo: wasteful, just wanna deselect
             showEmptySettingsDetails();
+            unsetCameraCatagorySelection();
             helper.initDialogs(position);
         }
     };
@@ -129,10 +145,10 @@ public class ControlActivity extends BaseAugmaticActivity {
         CodeableName modeName;
         try {
             showEmptySettingsDetails();
+            unsetCameraCatagorySelection();
+            unsetAugiementSelection();
             modeName = code.getCodeableName();
             setMode(modeName);
-            //initCameraList();
-            //initAugiementList();
         } catch (CodeableException e) {
             AugAppLog.e( e.toString(), e);
         } catch (AugieException e) {
@@ -148,6 +164,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
             showEmptySettingsDetails();
+            unsetAugiementSelection();
             showCameraDetails(position);
         }
     };

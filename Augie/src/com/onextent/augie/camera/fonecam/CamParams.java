@@ -54,6 +54,7 @@ class CamParams implements AugCameraParameters {
     public Code getCode() throws CodeableException {
         Code code = JSONCoder.newCode();
 
+        code.put("zoom", getZoom());
         if (getFlashMode() != null) code.put("flashMode", getFlashMode());
         if (getColorMode() != null) code.put("colorMode", getColorMode());
         if (getWhiteBalance() != null) code.put("whiteBal", getWhiteBalance());
@@ -78,6 +79,7 @@ class CamParams implements AugCameraParameters {
     public void setCode(Code code) throws CodeableException {
         if (code != null) {
             
+            if (code.has("zoom")) setZoom(code.getInt("zoom"));
             if (code.has("flashMode")) setFlashMode(code.getString("flashMode"));
             if (code.has("colorMode")) setColorMode(code.getString("colorMode"));
             if (code.has("whiteBal")) setWhiteBalance(code.getString("whiteBal"));
