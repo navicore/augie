@@ -10,6 +10,7 @@ import com.onextent.android.store.CodeStoreSqliteImpl;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -24,18 +25,20 @@ import android.widget.RelativeLayout;
  */
 public class AugmaticActivity extends BaseAugmaticActivity {
 
-    private Button menu_btn;
+    private View controlLayout;
     
     public AugmaticActivity() {
         
     }
    
     @Override
-    protected Button getMenuButton() {
-        if (menu_btn == null) {
-            menu_btn = new Button(this);
+    protected View getControlLayout() {
+        if (controlLayout == null) {
+            
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            controlLayout = inflater.inflate(R.layout.main_nav, null);
         }
-        return menu_btn;
+        return controlLayout;
     }
 
     @Override
@@ -50,20 +53,9 @@ public class AugmaticActivity extends BaseAugmaticActivity {
     
     @Override
     protected void configMenuButton() {
-    
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-    
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         
-        final Button btn = getMenuButton();
-    
-        btn.setLayoutParams(params);
-    
-        btn.setMinimumHeight(30);
-    
-        btn.setMinimumWidth(30);
-    
-        btn.setBackgroundResource(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
+        View cntl = getControlLayout();
+        final Button btn = (Button) cntl.findViewById(R.id.menuButton);
     
         btn.setOnClickListener(new View.OnClickListener() {
     
@@ -92,6 +84,7 @@ public class AugmaticActivity extends BaseAugmaticActivity {
         initStore(this);
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setBackgroundDrawable(null);
         getSupportActionBar().hide();
     }
     

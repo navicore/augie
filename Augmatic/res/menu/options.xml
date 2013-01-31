@@ -10,10 +10,6 @@
     	android:showAsAction="ifRoom"
     	>
         <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-            <item android:id="@+id/mode_add" 
-                android:title="Create New Mode" />
-            <item android:id="@+id/mode_del" 
-                android:title="Delete Mode" />
             <item android:id="@+id/about" 
                 android:title="About" />
             <item android:id="@+id/dump" 

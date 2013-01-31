@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.hardware.Camera;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -61,10 +62,10 @@ public class ModeManagerImpl implements ModeManager {
     //todo: evil, get rid
 
     private final ViewGroup camPrevLayout;
-    private final Button button;
+    private final View button;
 
     public ModeManagerImpl(Activity a, AugieScape av, AugCameraFactory cf, 
-            AugiementFactory af, ViewGroup l, Button b) {
+            AugiementFactory af, ViewGroup l, View b) {
 
         activity = a;
         augieScape = av;
@@ -79,7 +80,7 @@ public class ModeManagerImpl implements ModeManager {
         return camPrevLayout;
     }
     @Override
-    public Button getButton() {
+    public View getButton() {
         return button;
     }   
 

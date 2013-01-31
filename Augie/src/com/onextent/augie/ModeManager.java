@@ -13,6 +13,7 @@ import com.onextent.augie.camera.AugCameraFactory;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -61,5 +62,5 @@ public interface ModeManager {
     //this is extremely evil, get rid of these calls
     //this is extremely evil, get rid of these calls
     ViewGroup getCamPrevLayout();
-    Button getButton();
+    View getButton();
 }

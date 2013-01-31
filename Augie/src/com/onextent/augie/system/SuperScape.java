@@ -10,16 +10,15 @@ import com.onextent.augie.camera.AugCamera;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 public class SuperScape {
 
     private final ViewGroup layout;
     private final AugieScape augieScape;
-    private final Button button;
+    private final View button;
     private final Activity activity;
 
-    public SuperScape(Activity activity, AugieScape augieScape, Button button, ViewGroup layout) {
+    public SuperScape(Activity activity, AugieScape augieScape, View button, ViewGroup layout) {
         this.activity = activity;
         this.augieScape = augieScape;
         this.button = button;

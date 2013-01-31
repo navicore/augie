@@ -99,7 +99,7 @@ public abstract class BaseAugmaticActivity
     }
 
     //begin subclass methods
-    protected abstract Button getMenuButton();
+    protected abstract View getControlLayout();
 
     protected abstract int getLayoutId();
 
@@ -184,7 +184,6 @@ public abstract class BaseAugmaticActivity
         //init();
 
         configMenuButton();
-        getSupportActionBar().setBackgroundDrawable(null);
 
         } catch (Throwable err) {
             AugAppLog.e( "can not create augmatic", err);
@@ -219,7 +218,7 @@ public abstract class BaseAugmaticActivity
             modeManager = new ModeManagerImpl(this, 
                     augieScape, 
                     cameraFactory, 
-                    augiementFactory, prevlayout, getMenuButton());
+                    augiementFactory, prevlayout, getControlLayout());
         } catch (Exception e) {
             throw new java.lang.IllegalStateException(e);
         }
@@ -240,7 +239,7 @@ public abstract class BaseAugmaticActivity
             modeManager.getCurrentMode().activate();
 
             prevlayout.setOnTouchListener(augieScape);
-            Button b = getMenuButton();
+            View b = getControlLayout();
             if (b != null) {
             	b.setOnLongClickListener(augieScape);
             }
@@ -325,16 +324,11 @@ public abstract class BaseAugmaticActivity
             return true;
         case R.id.menu_hide:
             getSupportActionBar().hide();
-            Button b = getMenuButton();
-            if (b != null) b.setVisibility(View.VISIBLE);
-            return true;
-        case R.id.mode_add:
-            ald = new NewModeDialog();
-            ald.show(getSupportFragmentManager(), "New Mode Fragment");
-            return true;
-        case R.id.mode_del:
-            ald = new DeleteModeDialog();
-            ald.show(getSupportFragmentManager(), "Delete Mode Fragment");
+            View v = getControlLayout();
+            if (v != null) {
+                Button b = (Button) v.findViewById(R.id.menuButton);
+                if (b != null) b.setVisibility(View.VISIBLE);
+            }
             return true;
         case R.id.about:
             ald = new AboutDialog();
@@ -403,7 +397,7 @@ public abstract class BaseAugmaticActivity
         actionBar.setSelectedNavigationItem(modeManager.getCurrentModeIdx());
          */
         
-        if (getMenuButton() == null) {
+        if (getControlLayout() == null) {
             MenuItem mi = menu.findItem(R.id.menu_hide);
             mi.setVisible(false);
         }

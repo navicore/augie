@@ -58,7 +58,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     }
 
     @Override
-    protected Button getMenuButton() {
+    protected Button getControlLayout() {
         return null;
     }
 

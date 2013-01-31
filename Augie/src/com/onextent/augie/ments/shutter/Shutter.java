@@ -66,7 +66,7 @@ public class Shutter implements Augiement {
 	private boolean registerImageWithOS = true;
 	private int maxFocusAttempts = 1;
 
-	private boolean showFileSavedToast;
+	private boolean showFileSavedToast = true;
 	private String picturesDir = "Augie";
 	private String picturesRoot = Environment.DIRECTORY_DCIM;
 
