@@ -63,4 +63,9 @@ public interface ModeManager {
     //this is extremely evil, get rid of these calls
     ViewGroup getCamPrevLayout();
     View getButton();
+
+    List<String> getModeNameStrings() throws AugieStoreException,
+            CodeableException;
+
+    int getCurrentModePos(List<String> names);
 }

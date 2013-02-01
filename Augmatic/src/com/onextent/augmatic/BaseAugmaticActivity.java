@@ -50,6 +50,7 @@ import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
+import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.fonecam.FoneCamFactory;
@@ -57,20 +58,20 @@ import com.onextent.augie.system.AugieScapeImpl;
 import com.onextent.augie.system.ModeManagerImpl;
 
 public abstract class BaseAugmaticActivity 
-                      extends SherlockFragmentActivity 
-                      implements AugieActivity {
+extends SherlockFragmentActivity 
+implements AugieActivity {
 
-	private OrientationEventListener orientationEventListener;
-    private AugCameraFactory    cameraFactory;
+    private OrientationEventListener orientationEventListener;
+    protected AugCameraFactory    cameraFactory;
     private AugiementFactory    augiementFactory;
     protected ModeManager       modeManager;
     private AugieScape          augieScape;
-    
-	private final Map<CodeableName, Set<CodeableHandler>> handlerSets;
-	
+
+    private final Map<CodeableName, Set<CodeableHandler>> handlerSets;
+
     private int orientation = 0;
-    
-	public BaseAugmaticActivity() {
+
+    public BaseAugmaticActivity() {
         super();
         callbacks = new HashMap<CodeableName, Callback>();
         handlerSets = new HashMap<CodeableName, Set<CodeableHandler>>();
@@ -107,26 +108,26 @@ public abstract class BaseAugmaticActivity
 
     protected abstract void configMenuButton();
     //end subclass methods
-   
+
     private int normalizeOrientation(int degrees) {
-    
-    	//correct for device and rendering context
-    	Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+        //correct for device and rendering context
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int devOrienation = display.getRotation();
         switch(devOrienation) {
         case Surface.ROTATION_90:
-        	degrees += 90;
-        	break;
+            degrees += 90;
+            break;
         case Surface.ROTATION_180:
-        	degrees += 180;
-        	break;
+            degrees += 180;
+            break;
         case Surface.ROTATION_270:
-        	degrees += 270;
-        	break;
+            degrees += 270;
+            break;
         case Surface.ROTATION_0:
         default:
         }
-        
+
         if (degrees > 315 || degrees <= 45) {
             return Surface.ROTATION_0;
         }
@@ -144,7 +145,7 @@ public abstract class BaseAugmaticActivity
         }
         return Surface.ROTATION_0;
     }
-        
+
     private void stopOrientationEventListener() {
         if (orientationEventListener != null) {
             orientationEventListener.disable(); 
@@ -152,19 +153,19 @@ public abstract class BaseAugmaticActivity
         }
     }
     private void startOrientationEventListener() {
-    	orientationEventListener = 
-    	new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL)
-    	{
-    	    @Override
-    	    public void onOrientationChanged(int o) {
-    	    	orientation = normalizeOrientation(o);
-    	}};
-        if (orientationEventListener.canDetectOrientation()) {
-            orientationEventListener.enable();
-        } else {
-        	Log.w(Codeable.TAG, "Can not detect orientation");
-        	Toast.makeText(this, "Can't Detect Orientation", Toast.LENGTH_LONG).show();
-        }
+        orientationEventListener = 
+                new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL)
+        {
+            @Override
+            public void onOrientationChanged(int o) {
+                orientation = normalizeOrientation(o);
+            }};
+            if (orientationEventListener.canDetectOrientation()) {
+                orientationEventListener.enable();
+            } else {
+                Log.w(Codeable.TAG, "Can not detect orientation");
+                Toast.makeText(this, "Can't Detect Orientation", Toast.LENGTH_LONG).show();
+            }
     }
 
     @Override
@@ -173,17 +174,17 @@ public abstract class BaseAugmaticActivity
         super.onCreate(savedInstanceState);
         try {
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setFormat(PixelFormat.TRANSLUCENT);
+            getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+            getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
 
-        setContentView(getLayoutId());
+            setContentView(getLayoutId());
 
-        //init();
+            //init();
 
-        configMenuButton();
+            configMenuButton();
 
         } catch (Throwable err) {
             AugAppLog.e( "can not create augmatic", err);
@@ -241,7 +242,7 @@ public abstract class BaseAugmaticActivity
             prevlayout.setOnTouchListener(augieScape);
             View b = getControlLayout();
             if (b != null) {
-            	b.setOnLongClickListener(augieScape);
+                b.setOnLongClickListener(augieScape);
             }
 
         } catch (AugiementException e) {
@@ -283,52 +284,32 @@ public abstract class BaseAugmaticActivity
     @Override
     protected void onDestroy() {
         AugAppLog.d( getClass().getName() + " onDestroy");
-    	super.onDestroy();
+        super.onDestroy();
     }
-
-    private boolean isDualPane() {
-        return true;
-
-        /*
-        //AugAppLog.d( "ejs w: " + augview.getWidth() );
-        return augieScape.getWidth() > 300;
-        //return augview.getWidth() > 1000;
-
-        View detailsFrame = null;
-        ViewGroup v = (ViewGroup) findViewById(R.layout.settings);
-        AugAppLog.d( "ejs isDualPane v is null: " + (v == null));
+    
+    protected void leaveNavMode() {
+        
+        getSupportActionBar().hide();
+        View v = getControlLayout();
         if (v != null) {
-            detailsFrame = v.findViewById(R.id.module_details_holder);
-            AugAppLog.d( "ejs isDualPane d is null: " + (detailsFrame == null));
+            Button b = (Button) v.findViewById(R.id.menuButton);
+            if (b != null) b.setVisibility(View.VISIBLE);
         }
-        boolean ret = detailsFrame != null;
-        AugAppLog.d( "isDualPane: " + ret);
-        return ret;
-         */
+        activateSwipeNav(false);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        
+
         SherlockDialogFragment ald;
         switch (item.getItemId()) {
         case R.id.menu_control:
-            //check if tablet
-            if (isDualPane()) {
-                startActivity(new Intent(this, ControlActivity.class));
-            } else {
-                throw (new java.lang.UnsupportedOperationException("not dual pane"));
-            }
+            startActivity(new Intent(this, ControlActivity.class));
             return true;
         case R.id.menu_settings:
             return true;
         case R.id.menu_hide:
-            getSupportActionBar().hide();
-            View v = getControlLayout();
-            if (v != null) {
-                Button b = (Button) v.findViewById(R.id.menuButton);
-                if (b != null) b.setVisibility(View.VISIBLE);
-            }
+            leaveNavMode();
             return true;
         case R.id.about:
             ald = new AboutDialog();
@@ -396,7 +377,7 @@ public abstract class BaseAugmaticActivity
         actionBar.setListNavigationCallbacks(adapter, navl);
         actionBar.setSelectedNavigationItem(modeManager.getCurrentModeIdx());
          */
-        
+
         if (getControlLayout() == null) {
             MenuItem mi = menu.findItem(R.id.menu_hide);
             mi.setVisible(false);
@@ -466,85 +447,85 @@ public abstract class BaseAugmaticActivity
     // part to part communication must go through activity
     //
     private final Map<CodeableName, Callback> callbacks;
-    
+
     @Override
     public void registerCallback(CodeableName dest, Callback cb) {
-        
+
         if (callbacks.containsKey(dest))
             throw new IllegalStateException("dest already has handler"); //fail fast
-        
+
         if (cb == null) callbacks.remove(cb);
-        
+
         else  callbacks.put(dest, cb);
     }
 
     @Override
     public Code sendCode(CodeableName dest, Code code) {
-        
+
         Callback cb = callbacks.get(dest);
         if (cb == null) {
             throw new NullPointerException("no callback for " + dest);
         }
         return cb.handleCode(dest, code);
     }
-    
+
     @Override
-	public int getOrientation() {
-	
-		return orientation;
-	}
-    
-	@Override
-	public Activity getActivity() {
-		return this;
-	}
+    public int getOrientation() {
 
-	@Override
-	public void fire(Code code) {
-		
-		Set<CodeableHandler> handlers;
-		
-		try {
-			handlers = handlerSets.get(code.getCodeableName());
-			if (handlers != null) {
-				for (CodeableHandler h : handlers) {
-					
-					h.onCode(code);
-				}
-			}
-		} catch (CodeableException ex) {
-			AugAppLog.e( ex.toString(), ex);
-		}
-	}
+        return orientation;
+    }
 
-	@Override
-	public void unlisten(CodeableName name, CodeableHandler handler) {
-	    
-	    if (handler == null) return;
-	
-		Set<CodeableHandler> handlers = null;
-		if (handlerSets.containsKey(name)) {
-			handlers = handlerSets.get(name);
-		} 
-		if (handler != null && handlers != null)
-			handlers.remove(handler);
-	}
-	
-	@Override
-	public void listen(CodeableName name, CodeableHandler handler) {
-	
-	    if (handler == null) return;
-	    
-		Set<CodeableHandler> handlers;
-		if (handlerSets.containsKey(name)) {
-			handlers = handlerSets.get(name);
-		} else {
-			handlers = new HashSet<CodeableHandler>();
-			handlerSets.put(name, handlers);
-		}
-		handlers.add(handler);
-	}
-	
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void fire(Code code) {
+
+        Set<CodeableHandler> handlers;
+
+        try {
+            handlers = handlerSets.get(code.getCodeableName());
+            if (handlers != null) {
+                for (CodeableHandler h : handlers) {
+
+                    h.onCode(code);
+                }
+            }
+        } catch (CodeableException ex) {
+            AugAppLog.e( ex.toString(), ex);
+        }
+    }
+
+    @Override
+    public void unlisten(CodeableName name, CodeableHandler handler) {
+
+        if (handler == null) return;
+
+        Set<CodeableHandler> handlers = null;
+        if (handlerSets.containsKey(name)) {
+            handlers = handlerSets.get(name);
+        } 
+        if (handler != null && handlers != null)
+            handlers.remove(handler);
+    }
+
+    @Override
+    public void listen(CodeableName name, CodeableHandler handler) {
+
+        if (handler == null) return;
+
+        Set<CodeableHandler> handlers;
+        if (handlerSets.containsKey(name)) {
+            handlers = handlerSets.get(name);
+        } else {
+            handlers = new HashSet<CodeableHandler>();
+            handlerSets.put(name, handlers);
+        }
+        handlers.add(handler);
+    }
+
     private int currentAugiementIdx = 0;
     public int getCurrentAugiementIdx() {
         return currentAugiementIdx;
@@ -552,5 +533,16 @@ public abstract class BaseAugmaticActivity
 
     public void setCurrentAugiementIdx(int currentAugiementIdx) {
         this.currentAugiementIdx = currentAugiementIdx;
+    }
+
+    protected abstract void activateSwipeNav(boolean activate);
+    
+    protected void setMode(CodeableName cn) throws CodeableException, AugieException {
+
+        Mode m = modeManager.getMode(cn);
+        if (m == null) throw new AugieException("mode not found") {
+            private static final long serialVersionUID = -6373280937418946550L;
+        };
+        modeManager.setCurrentMode(m);
     }
 }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-        android:id="@+id/menuButtonLayout"
-	>
+    android:id="@+id/menuButtonLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
     <Button
         android:id="@+id/menuButton"
@@ -13,7 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="4dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/abs__ic_menu_moreoverflow_holo_dark" 
-        />
+        android:background="@drawable/abs__ic_menu_moreoverflow_holo_dark" />
 
 </RelativeLayout>

@@ -12,7 +12,6 @@ import android.database.Cursor;
 import android.hardware.Camera;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
@@ -435,4 +434,21 @@ public class ModeManagerImpl implements ModeManager {
         return store;
     }
 
+    @Override
+    public List<String> getModeNameStrings() throws AugieStoreException, CodeableException {
+
+        List<String> names = new ArrayList<String>();
+        List<Code> modeCode = getAllModeCode();
+        for (Code c : modeCode) {
+            String n = c.getString(Codeable.UI_NAME_KEY);
+            names.add(n);
+        }
+        return names;
+    }
+    
+    @Override
+    public int getCurrentModePos(List<String> names) {
+        String currentModeUIName = getCurrentMode().getName();
+        return names.indexOf(currentModeUIName); 
+    }
 }

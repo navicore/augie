@@ -21,25 +21,21 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.Code;
-import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.Mode;
-import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.CameraMeta;
-import com.onextent.augmatic.camera.ImageSettingsDialog;
-import com.onextent.augmatic.camera.ProcessingSettingsDialog;
-import com.onextent.augmatic.camera.ShootingSettingsDialog;
+import com.onextent.augie.camera.settings.ImageSettingsDialog;
+import com.onextent.augie.camera.settings.ProcessingSettingsDialog;
+import com.onextent.augie.camera.settings.ShootingSettingsDialog;
 
 public class ControlActivity extends BaseAugmaticActivity {
 
     private final String[] camSettingCatagories = {"Processing", "Image File", "Shooting"};
     private final List<CodeableName> cameraNames = new ArrayList<CodeableName>();
-    private List<Code> modeCode;
     private ListView cameraList;
     private ListView cameraCatagoryList;
     private ListView augiementList;
@@ -54,6 +50,10 @@ public class ControlActivity extends BaseAugmaticActivity {
     }
    
     public AugiementListHelper getHelper() {
+        if (helper == null) {
+            helper = new AugiementListHelper(this);
+            helper.init();
+        }
         return helper;
     }
 
@@ -130,7 +130,7 @@ public class ControlActivity extends BaseAugmaticActivity {
                 long id) {
             showEmptySettingsDetails();
             unsetCameraCatagorySelection();
-            helper.initDialogs(position);
+            getHelper().initDialogs(position);
         }
     };
     
@@ -140,7 +140,16 @@ public class ControlActivity extends BaseAugmaticActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
             
-        Code code = modeCode.get(position);
+        Code code = null;
+        try {
+            code = modeManager.getAllModeCode().get(position);
+            if (code == null) {
+                AugAppLog.e("mode not found");
+                return;
+            }
+        } catch (AugieStoreException e1) {
+            AugAppLog.e(e1);
+        }
 
         CodeableName modeName;
         try {
@@ -169,28 +178,33 @@ public class ControlActivity extends BaseAugmaticActivity {
         }
     };
     
-    private void setMode(CodeableName cn) throws CodeableException, AugieException {
-
-        ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
-        Mode m = modeManager.getMode(cn);
-        if (m == null) throw new AugieException("mode not found") {
-            private static final long serialVersionUID = -6373280937418946550L;
-        };
-        modeManager.setCurrentMode(m);
-    }
-    
     private void setCamera(CodeableName cn) {
         
-        ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
         Mode m = modeManager.getCurrentMode();
         try {
-            AugCamera c = modeManager.getCameraFactory().getCamera(cn);
+            AugCamera c = cameraFactory.getCamera(cn);
             m.deactivate();
             m.setCamera(c);
             m.activate();
         } catch (AugieException e) {
             AugAppLog.e( e.toString(), e);
         }
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            initModeList();
+        } catch (AugieStoreException e) {
+            AugAppLog.e(e);
+            finish();
+        } catch (CodeableException e) {
+            AugAppLog.e(e);
+            finish();
+        }
+        initCameraList();
+        initAugiementList();
     }
     
     @Override
@@ -206,30 +220,13 @@ public class ControlActivity extends BaseAugmaticActivity {
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
             mCurAugiementPosition = savedInstanceState.getInt("curAugieChoice", 0);
         }
-        try {
-            initModeList();
-        } catch (AugieStoreException e) {
-            AugAppLog.e(e);
-            finish();
-        } catch (CodeableException e) {
-            AugAppLog.e(e);
-            finish();
-        }
-        initCameraList();
-        initAugiementList();
     }
-   
+  
+
     public void initModeList() throws AugieStoreException, CodeableException {
         
-        List<String> names = new ArrayList<String>();
-        ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
-        modeCode = modeManager.getAllModeCode();
-        String currentModeUIName = modeManager.getCurrentMode().getName();
-        for (Code c : modeCode) {
-            String n = c.getString(Codeable.UI_NAME_KEY);
-            names.add(n);
-        }
-        int currentModePos = names.indexOf(currentModeUIName); 
+        List<String> names = modeManager.getModeNameStrings();
+        int currentModePos = modeManager.getCurrentModePos(names);
 
         String[] items = new String[names.size()];
         names.toArray(items);
@@ -250,8 +247,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     public void initCameraList() {
         
         List<String> names = new ArrayList<String>();
-        final ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
-        Collection<CameraMeta> cameras = modeManager.getCameraFactory().getCameras();
+        Collection<CameraMeta> cameras = cameraFactory.getCameras();
         CodeableName currentCodeableName = modeManager.getCurrentMode().getCamera().getCameraName();
         for (CameraMeta c : cameras) {
             CodeableName cn = c.getCn();
@@ -282,12 +278,11 @@ public class ControlActivity extends BaseAugmaticActivity {
     }
     
     public void initAugiementList() {
-        
-        helper = new AugiementListHelper(this);
-        helper.init();
+       
+        getHelper();
         
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, 
-                R.layout.row, helper.getItems());
+                R.layout.row, getHelper().getItems());
         augiementList = (ListView) findViewById(R.id.augiement_list);
         augiementList.setAdapter(adapter);
         augiementList.setOnItemClickListener(augiementListener);
@@ -352,4 +347,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         outState.putInt("curChoice", mCurCheckPosition);
         outState.putInt("curAugieChoice", mCurAugiementPosition);
     }
+
+    @Override
+    protected void activateSwipeNav(boolean activate) { }
 }

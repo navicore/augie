@@ -1,5 +1,7 @@
 package com.onextent.augmatic;
 
+import java.util.List;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -62,7 +64,9 @@ public class AugiementStatusFrag extends SherlockDialogFragment {
         statusView = inflater.inflate(R.layout.module_status, container, false);
         CheckBox cbox = (CheckBox) statusView.findViewById(R.id.module_enabled);
 
-        final CodeableName cn = helper.getCnList().get(activity.getCurrentAugiementIdx());
+        int idx = activity.getCurrentAugiementIdx();
+        List<CodeableName> cnlist = helper.getCnList();
+        final CodeableName cn = cnlist.get(idx);
 
         boolean isEnabled = helper.getModeAugiements().containsKey(cn);
         cbox.setChecked(isEnabled);
