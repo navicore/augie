@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical" >
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_flash_mode" 
+    style="@style/AugMediumText"
+	/>
+
+	<Spinner
+	android:id="@+id/camera_flash_modes"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_focus_mode" 
+    style="@style/AugMediumText"
+	/>
+
+	<Spinner
+	android:id="@+id/camera_focus_modes"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_zoom" 
+    style="@style/AugMediumText"
+	/>
+    <TextView
+	android:id="@+id/camera_zoom"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+    style="@style/AugMediumText"
+	/>
+	</TableRow>
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+	<SeekBar
+	android:id="@+id/camera_zoom_bar"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_exp_comp" 
+    style="@style/AugMediumText"
+	/>
+    <TextView
+	android:id="@+id/camera_exposure_comp"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+    style="@style/AugMediumText"
+	/>
+	</TableRow>
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+	<SeekBar
+	android:id="@+id/camera_exposure_comp_bar"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_iso" 
+    style="@style/AugMediumText"
+	/>
+
+	<Spinner
+	android:id="@+id/camera_iso"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+	
+</TableLayout>
+</ScrollView>
