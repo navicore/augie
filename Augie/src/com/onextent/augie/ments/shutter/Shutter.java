@@ -51,7 +51,7 @@ import com.onextent.augie.ments.GPS;
 public class Shutter implements Augiement {
 
 	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SHUTTER");
-	public static final String UI_NAME = "Camera Shutter";
+	public static final String UI_NAME = "Shutter";
 	public static final String DESCRIPTION = "Operates the camera shutter, stores the picture files.";
 
 	protected AugieScape augieScape;

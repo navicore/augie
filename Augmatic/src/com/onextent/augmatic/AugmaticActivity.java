@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.store.CodeStore;
 import com.onextent.android.store.CodeStoreSqliteImpl;
+import com.onextent.android.ui.AbstractTwoFingerListener;
 import com.onextent.augie.AugieStore;
 import com.onextent.augie.AugieStoreException;
 
@@ -203,36 +203,12 @@ public class AugmaticActivity extends BaseAugmaticActivity {
         }
     }
     
-    private final OnTouchListener navTouchListener = new OnTouchListener() {
+    protected final OnTouchListener navTouchListener = new AbstractTwoFingerListener() {
         
-        private boolean activeGestureStrted = false;
-        
-        private void reset() {
-            activeGestureStrted = false;
-        }
-        private void doit() {
-           
-            leaveNavMode();
-            reset();
-        }
-
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            AugAppLog.d("ejs touch: " + event);
-            switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                reset();
-                break;
-            case MotionEvent.ACTION_UP:
-                if (activeGestureStrted) doit();
-                else activeGestureStrted = true;
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                if (activeGestureStrted) doit();
-                else activeGestureStrted = true;
-                break;
-            }
-            return false;
+        protected void doit() {
+            boolean navGestureEnabled = sharedPrefs.getBoolean("nav_shift_gesture", false);
+            if (navGestureEnabled) leaveNavMode();
         }
     };
 }

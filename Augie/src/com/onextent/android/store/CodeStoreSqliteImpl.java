@@ -138,7 +138,7 @@ public class CodeStoreSqliteImpl implements CodeStore {
         
         return db.query(TABLE_NAME,
                 new String[] {CONTENT_NAME},
-                KEY_ID + " LIKE \"" + key + "\"",
+                KEY_ID + " LIKE \"" + key + "\" ORDER BY " + KEY_ID, //for consistency
                 null,
                 null,
                 null,

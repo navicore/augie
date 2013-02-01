@@ -20,4 +20,10 @@
     <string name="aug_btn_title_plus_txt">+</string>
     <string name="aug_btn_title_minus_txt">-</string>
     
+    <string name="aug_fld_noitems_txt">No Items</string>
+    
+    <string name="aug_cat_title_nav_preferences">Screen Navigation Preferences</string>
+    <string name="aug_fld_title_enable_swipe_nav">Nav Shift Gesture</string>
+    <string name="aug_fld_txt_summary">Shift in and out of nav mode with 2 finger swipe</string>
+    
 </resources>

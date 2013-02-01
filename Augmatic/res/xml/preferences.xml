@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+   <PreferenceCategory
+            android:title="@string/aug_cat_title_nav_preferences"
+            >
+
+        <CheckBoxPreference
+                android:key="nav_shift_gesture"
+                android:title="@string/aug_fld_title_enable_swipe_nav"
+                android:summary="@string/aug_fld_txt_summary" 
+                />
+
+    </PreferenceCategory>
+    
 </PreferenceScreen>

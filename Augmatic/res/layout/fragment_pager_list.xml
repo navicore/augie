@@ -4,11 +4,40 @@
     android:layout_height="match_parent"
     android:background="@android:drawable/gallery_thumb">
 
-    <TextView android:id="@+id/text"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:gravity="center_vertical|center_horizontal"
+    >
+    <TextView 
+        android:id="@+id/text_prev"
+        android:layout_width="0dp" 
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center_vertical|center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="another mode"
         />
+    <TextView 
+        android:id="@+id/text"
+        android:layout_width="0dp" 
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
+    <TextView 
+        android:id="@+id/text_post"
+        android:layout_width="0dp" 
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="even another mode"
+        />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -28,7 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="No items."/>
+            android:text="@string/aug_fld_noitems_txt"
+            />
 
     </FrameLayout>
 

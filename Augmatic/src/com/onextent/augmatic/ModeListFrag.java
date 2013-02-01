@@ -5,9 +5,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -58,11 +56,30 @@ public class ModeListFrag extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pager_list, container, false);
-        View tv = v.findViewById(R.id.text);
         try {
             if (modeNames != null) {
+                View tv = v.findViewById(R.id.text);
                 String n = modeNames.get(mNum);
                 ((TextView)tv).setText(n + " Mode");
+                
+                int len = modeNames.size();
+                int lastpos = len -1;
+                
+                tv = v.findViewById(R.id.text_prev);
+                if (mNum > 0) {
+                    n = modeNames.get(mNum - 1);
+                    ((TextView)tv).setText(n + " Mode");
+                } else {
+                    ((TextView)tv).setText("");
+                }
+                
+                tv = v.findViewById(R.id.text_post);
+                if (mNum < lastpos) {
+                    n = modeNames.get(mNum + 1);
+                    ((TextView)tv).setText(n + " Mode");
+                } else {
+                    ((TextView)tv).setText("");
+                }
             }
         } catch (Exception e) {
             AugAppLog.e(e);

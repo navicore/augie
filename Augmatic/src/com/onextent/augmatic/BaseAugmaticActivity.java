@@ -16,17 +16,21 @@ import java.util.Set;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -34,7 +38,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -44,6 +47,7 @@ import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableHandler;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.ui.AbstractTwoFingerListener;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
@@ -168,10 +172,15 @@ implements AugieActivity {
             }
     }
 
+    SharedPreferences sharedPrefs;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        
         try {
 
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
@@ -191,10 +200,11 @@ implements AugieActivity {
         }
     }
 
+    RelativeLayout prevlayout;
     private void init() {
 
         AugAppLog.d( "BaseAugmaticActivity.init");
-        RelativeLayout prevlayout = (RelativeLayout) findViewById(getPreviewId());
+        prevlayout = (RelativeLayout) findViewById(getPreviewId());
         try {
             augieScape = new AugieScapeImpl(this);
             augiementFactory = new AugmaticAugiementFactory();
@@ -239,7 +249,7 @@ implements AugieActivity {
 
             modeManager.getCurrentMode().activate();
 
-            prevlayout.setOnTouchListener(augieScape);
+            prevlayout.setOnTouchListener(new TouchListener(augieScape));
             View b = getControlLayout();
             if (b != null) {
                 b.setOnLongClickListener(augieScape);
@@ -286,6 +296,17 @@ implements AugieActivity {
         AugAppLog.d( getClass().getName() + " onDestroy");
         super.onDestroy();
     }
+   
+    protected void enterNavMode() {
+        
+        getSupportActionBar().show();
+        View v = getControlLayout();
+        if (v != null) {
+            Button b = (Button) v.findViewById(R.id.menuButton);
+            if (b != null) b.setVisibility(View.INVISIBLE);
+        }
+        activateSwipeNav(true);
+    }
     
     protected void leaveNavMode() {
         
@@ -301,7 +322,7 @@ implements AugieActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        SherlockDialogFragment ald;
+        DialogFragment ald;
         switch (item.getItemId()) {
         case R.id.menu_control:
             startActivity(new Intent(this, ControlActivity.class));
@@ -310,6 +331,9 @@ implements AugieActivity {
             return true;
         case R.id.menu_hide:
             leaveNavMode();
+            return true;
+        case R.id.prefs:
+            startActivity(new Intent(this, AugmaticPreferencesActivity.class));
             return true;
         case R.id.about:
             ald = new AboutDialog();
@@ -545,4 +569,17 @@ implements AugieActivity {
         };
         modeManager.setCurrentMode(m);
     }
+    
+    protected final class TouchListener extends AbstractTwoFingerListener {
+        
+        TouchListener(OnTouchListener l) {
+            super(l);
+        }
+        
+        @Override
+        protected void doit() {
+            boolean navGestureEnabled = sharedPrefs.getBoolean("nav_shift_gesture", false);
+            if (navGestureEnabled) enterNavMode();
+        }
+    };
 }
