@@ -50,5 +50,6 @@
     <string name="aug_fld_title_jpg_q">JPEG Quality</string>
     <string name="aug_fld_title_jpg_thn_q">Thumbnail Quality</string>
     <string name="aug_fld_title_prev_fps_range">Preview FPS Range</string>
+    <string name="aug_fld_title_etcha_enabled">Etcha is Enabled</string>
     
 </resources>

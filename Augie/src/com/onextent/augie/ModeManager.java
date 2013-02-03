@@ -15,12 +15,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 
 public interface ModeManager {
 
-    static final String MODE_KEY_DEFAULT = "MODE/SYSTEM/DEFAULT";
+    static final CodeableName MODE_KEY_SYSTEM = new CodeableName("MODE/SYSTEM");
+    static final CodeableName MODE_KEY_DEFAULT = new CodeableName(MODE_KEY_SYSTEM + "/DEFAULT");
     
     void onCreate(Context context) throws AugieStoreException, CodeableException;
 

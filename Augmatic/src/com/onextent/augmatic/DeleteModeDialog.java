@@ -16,7 +16,6 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.ModeManager;
-import com.onextent.augie.ModeName;
 
 public class DeleteModeDialog extends SherlockDialogFragment {
 
@@ -35,7 +34,7 @@ public class DeleteModeDialog extends SherlockDialogFragment {
             final List<CodeableName> augieNameList = new ArrayList<CodeableName>();
             for (Code m : modes) {
                 CodeableName augieName = m.getCodeableName(Codeable.CODEABLE_NAME_KEY);
-                if (augieName.toString().indexOf("/SYSTEM/") < 0) {
+                if (augieName.toString().indexOf(ModeManager.MODE_KEY_DEFAULT.toString()) < 0) {
                     nameList.add(m.getString(Codeable.UI_NAME_KEY));
                     augieNameList.add(augieName);
                 }
@@ -79,7 +78,7 @@ public class DeleteModeDialog extends SherlockDialogFragment {
                         if (currName.toString().equals(augieName.toString())) {
                             AugAppLog.d( "deactivating mode " + augieName);
                             try {
-                                activity.getModeManager().setCurrentMode(modeManager.getMode(new ModeName(ModeManager.MODE_KEY_DEFAULT)));
+                                activity.getModeManager().setCurrentMode(modeManager.getMode(ModeManager.MODE_KEY_DEFAULT));
                             } catch (CodeableException e) {
                                 AugAppLog.e( e.toString(), e);
                             } catch (AugieException e) {

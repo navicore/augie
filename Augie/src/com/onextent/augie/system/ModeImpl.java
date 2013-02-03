@@ -22,7 +22,6 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
-import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 
@@ -50,10 +49,10 @@ public class ModeImpl implements Codeable, Mode {
         this(mm, null, null);
     }
 
-    public ModeImpl(ModeManager mm, String cn, AugCamera c) {
+    public ModeImpl(ModeManager mm, CodeableName cn, AugCamera c) {
         modeManager = mm;
         augiements = new HashMap<CodeableName, Augiement>();
-        if (cn != null) augieName = new CodeableName(cn){};
+        if (cn != null) augieName = cn;
         camera = c;
     }
 
@@ -87,7 +86,7 @@ public class ModeImpl implements Codeable, Mode {
         try {
             if (camera != null) throw new CodeableException("camera already set");
             name = code.getString(KEY_NAME);
-            augieName = new ModeName(code.getString(KEY_AUGIENAME));
+            augieName = new CodeableName(code.getString(KEY_AUGIENAME));
             
             if (!code.has(KEY_CAMERA)) throw new CodeableException("no camera");
             Code cameraCode = code.get(KEY_CAMERA);

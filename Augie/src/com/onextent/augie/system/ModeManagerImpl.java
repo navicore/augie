@@ -27,7 +27,6 @@ import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
-import com.onextent.augie.ModeName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugCameraFactory;
@@ -43,10 +42,10 @@ import com.onextent.augie.ments.shutter.TouchShutter;
 public class ModeManagerImpl implements ModeManager {
 
     CodeStore store;
-    private static final String CURRENT_MODE_KEY_KEY = "CURRENT/MODE_KEY";
-    private static final String MODE_KEY_FLASH = "MODE/SYSTEM/FLASH";
-    private static final String MODE_KEY_STREET = "MODE/SYSTEM/STREET";
-    private static final String MODE_KEY_SELF = "MODE/SYSTEM/SELF";
+    private static final CodeableName CURRENT_MODE_KEY_KEY = new CodeableName("CURRENT/MODE_KEY");
+    private static final CodeableName MODE_KEY_FLASH = new CodeableName("MODE/SYSTEM/FLASH");
+    private static final CodeableName MODE_KEY_STREET = new CodeableName("MODE/SYSTEM/STREET");
+    private static final CodeableName MODE_KEY_SELF = new CodeableName("MODE/SYSTEM/SELF");
 
     private Mode currentMode;
     private List<Code> allModeCode;
@@ -129,7 +128,7 @@ public class ModeManagerImpl implements ModeManager {
         }
         currentMode = mode;
         AugSysLog.d( "setCurrentMode " + mode.getCodeableName());
-        store.replaceContent(CURRENT_MODE_KEY_KEY, mode.getCodeableName().toString());
+        store.replaceContent(CURRENT_MODE_KEY_KEY.toString(), mode.getCodeableName().toString());
         currentMode.activate();
     }
 
@@ -167,15 +166,15 @@ public class ModeManagerImpl implements ModeManager {
 
     private void init() throws AugieStoreException, CodeableException {
 
-        String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY);
+        String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY.toString());
         if (currentMode_key == null) {
             AugSysLog.d( "no current mode key, initializing.");
             primeDbWithModes();
-            currentMode_key = MODE_KEY_DEFAULT;
-            store.replaceContent(CURRENT_MODE_KEY_KEY, currentMode_key);
+            currentMode_key = MODE_KEY_DEFAULT.toString();
+            store.replaceContent(CURRENT_MODE_KEY_KEY.toString(), currentMode_key);
         } 
         AugSysLog.d( "current mode key: " + currentMode_key);
-        currentMode = getMode(new ModeName(currentMode_key));
+        currentMode = getMode(new CodeableName(currentMode_key));
     }
 
     @Override
@@ -370,7 +369,7 @@ public class ModeManagerImpl implements ModeManager {
     public void deleteMode(CodeableName augieName) throws CodeableException {
         if (getCurrentMode().equals(augieName)) {
             try {
-                setCurrentMode(getMode(new ModeName(MODE_KEY_DEFAULT)));
+                setCurrentMode(getMode(MODE_KEY_DEFAULT));
             } catch (AugieException e) {
                 AugSysLog.e( e.toString(), e);
             }

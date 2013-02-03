@@ -13,8 +13,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.onextent.android.codeable.Code;
+import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
-import com.onextent.augie.AugLog;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -27,14 +28,15 @@ public class Draw extends DrawBase {
     
     private static String DESCRIPTION = "Captures screen touches for processing by other augiements.";
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/DRAW");
-    public static final String UI_NAME = "Augie Draw";
+    public static final String UI_NAME = "Draw";
 	
 	int prevX;
 	int prevY;
     List<AugScrible> scribles;
     AugScrible currentScrible;
+    private boolean etchaEnabled;
 
-	@Override
+    @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
     
         super.onCreate(av, helpers);
@@ -67,7 +69,8 @@ public class Draw extends DrawBase {
 		Point p2 = new Point(x, y);
 		AugLine l = MarkerFactory.createLine(p1, p2);
 		currentScrible.add(l);
-		augieScape.getCanvas().drawLine(lx, ly, x, y, augieScape.getPaint());
+		//if (etchaEnabled)
+		//    augieScape.getCanvas().drawLine(lx, ly, x, y, augieScape.getPaint());
 	}
 	
     @Override
@@ -109,11 +112,14 @@ public class Draw extends DrawBase {
 
     @Override
 	public void updateCanvas() {
-        //if (!prefs.getBoolean("ETCHA_ENABLED", false) && lastX == -1) {
+
         if (prevX == -1) {
             if (currentScrible != null) currentScrible.clear();
             scribles.clear();
+            return;
         }
+        
+		if (etchaEnabled)
     	for (AugScrible s : scribles) {
     		for (AugLine l : s) {
     			augieScape.getCanvas().drawLine(l.getP1().x, l.getP1().y, l.getP2().x, l.getP2().y, augieScape.getPaint());
@@ -163,16 +169,22 @@ public class Draw extends DrawBase {
         return AUGIE_NAME;
     }
 
+    private static final String ETCHA_KEY = "etchaEnabled";
     @Override
-    public Code getCode() {
-        // TODO Auto-generated method stub
-        return null;
+    public Code getCode() throws CodeableException {
+        Code code = JSONCoder.newCode();
+        code.put(AUGIE_NAME);
+        code.put(ETCHA_KEY, etchaEnabled);
+        return code;
     }
 
     @Override
-    public void setCode(Code code) {
-        // TODO Auto-generated method stub
-        
+    public void setCode(Code code) throws CodeableException {
+        if (code != null) {
+            if (code.has(ETCHA_KEY)) {
+                etchaEnabled = code.getBoolean(ETCHA_KEY);
+            }
+        }
     }
 
     @Override
@@ -187,13 +199,21 @@ public class Draw extends DrawBase {
 
     @Override
     public DialogFragment getUI() {
-        // TODO Auto-generated method stub
-        return null;
+    
+        return new DrawDialog();
     }
 
     @Override
     public Meta getMeta() {
 
         return META;
+    }
+    
+	public boolean isEtchaEnabled() {
+        return etchaEnabled;
+    }
+
+    public void setEtchaEnabled(boolean etchaEnabled) {
+        this.etchaEnabled = etchaEnabled;
     }
 }
