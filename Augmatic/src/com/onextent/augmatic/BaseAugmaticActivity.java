@@ -237,15 +237,25 @@ implements AugieActivity {
         }
     }
 
-    private boolean setModeByIntent() throws CodeableException, AugieException {
+    private boolean setModeByIntent(Intent intent) throws CodeableException, AugieException {
 
         boolean newModeIsSet = false;
-        Intent i = getIntent();
+        Intent i;
+        if (intent == null) {
+            i = getIntent(); //bug! this only returns the intent that launched us,
+                             //not the one waking us up.  todo: receive custom intent.
+        } else {
+            i = intent;
+        }
         if (i != null) {
             Bundle extras = i.getExtras();
             if (extras != null && extras.containsKey(INTENT_KEY_MODE_NAME)) {
                 String modeName = extras.getString(INTENT_KEY_MODE_NAME);
                 if (modeName != null) {
+                    if (intent != null) { //only for "newIntent" launch
+                        Mode cm = modeManager.getCurrentMode();
+                        if (cm != null) cm.deactivate();
+                    }
                     CodeableName cn = new CodeableName(modeName);
                     Mode m = modeManager.getMode(cn);
                     if (m != null) {
@@ -257,6 +267,21 @@ implements AugieActivity {
             }
         }
         return newModeIsSet;
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode,
+            Bundle options) {
+        // TODO Auto-generated method stub
+        super.startActivityForResult(intent, requestCode, options);
+        AugAppLog.d("ejs startActivityForResult ********************* " + intent);
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        // TODO Auto-generated method stub
+        super.startActivity(intent);
+        AugAppLog.d("ejs startActivity ********************* " + intent);
     }
 
     private void init() {
@@ -278,7 +303,7 @@ implements AugieActivity {
             
             cameraFactory.onCreate(augieScape, null);
 
-            if (!setModeByIntent())
+            if (!setModeByIntent(null))
                 modeManager.getCurrentMode().activate();
 
             prevlayout.setOnTouchListener(new TouchListener(augieScape));
@@ -382,7 +407,9 @@ implements AugieActivity {
         CodeableName cn = m.getCodeableName();
         String uiname = m.getName();
 
+//                <action android:name="com.onextent.augmatic.START_MODE" />
         final Intent shortcutIntent = new Intent(this, AugmaticActivity.class);
+        shortcutIntent.setAction("com.onextent.augmatic.START_MODE");
         shortcutIntent.putExtra(INTENT_KEY_MODE_NAME, cn.toString());
 
         final Intent intent = new Intent();
@@ -609,5 +636,28 @@ implements AugieActivity {
     @Override
     public SuperScape getSuperScape() {
         return superScape;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        
+        super.onNewIntent(intent);
+        
+        try {
+            setModeByIntent(intent);
+        } catch (CodeableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (AugieException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean startActivityIfNeeded(Intent intent, int requestCode) {
+        // TODO Auto-generated method stub
+        AugAppLog.d("ejs startActivityIfNeeded *********************");
+        return super.startActivityIfNeeded(intent, requestCode);
     }
 }

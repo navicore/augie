@@ -31,11 +31,10 @@
             android:screenOrientation="landscape"
             android:theme="@style/AugieScapeTheme" >
             <intent-filter>
+                <action android:name="com.onextent.augmatic.START_MODE" />
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
