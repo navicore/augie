@@ -66,6 +66,7 @@ public abstract class BaseAugmaticActivity
 extends SherlockFragmentActivity 
 implements AugieActivity {
 
+    private static final String INTENT_KEY_MODE_NAME = "augieModeName";
     private OrientationEventListener orientationEventListener;
     protected AugCameraFactory    cameraFactory;
 
@@ -375,7 +376,6 @@ implements AugieActivity {
         }
     }
 
-    private static final String INTENT_KEY_MODE_NAME = "augieModeName";
     private void installShortCut() {
 
         Mode m = modeManager.getCurrentMode();
