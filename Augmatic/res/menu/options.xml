@@ -12,6 +12,8 @@
         <menu xmlns:android="http://schemas.android.com/apk/res/android" >
             <item android:id="@+id/prefs" 
                 android:title="Preferences" />
+            <item android:id="@+id/installShortcut" 
+                android:title="Install Shortcut" />
             <item android:id="@+id/about" 
                 android:title="About" />
             <item android:id="@+id/dump" 

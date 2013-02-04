@@ -80,7 +80,7 @@ implements AugieActivity {
 
     private RelativeLayout prevlayout;
     private SuperScape superScape;
-    
+
     public BaseAugmaticActivity() {
         super();
         callbacks = new HashMap<CodeableName, Callback>();
@@ -236,39 +236,49 @@ implements AugieActivity {
         }
     }
 
+    private boolean setModeByIntent() throws CodeableException, AugieException {
+
+        boolean newModeIsSet = false;
+        Intent i = getIntent();
+        if (i != null) {
+            Bundle extras = i.getExtras();
+            if (extras != null && extras.containsKey(INTENT_KEY_MODE_NAME)) {
+                String modeName = extras.getString(INTENT_KEY_MODE_NAME);
+                if (modeName != null) {
+                    CodeableName cn = new CodeableName(modeName);
+                    Mode m = modeManager.getMode(cn);
+                    if (m != null) {
+                        AugAppLog.d("setting mode " + modeName + " from intent");
+                        modeManager.setCurrentMode(m);
+                        newModeIsSet = true;
+                    }
+                }
+            }
+        }
+        return newModeIsSet;
+    }
+
     private void init() {
 
         AugAppLog.d( "BaseAugmaticActivity.init");
         prevlayout = (RelativeLayout) findViewById(getPreviewId());
         try {
             augieScape = new AugieScapeImpl(this);
-            
+
             superScape = new SuperScape(this);
-            
+
             augiementFactory = new AugmaticAugiementFactory();
 
             initCamFactory();
 
             modeManager = new ModeManagerImpl(this, cameraFactory, augiementFactory);
-
-        } catch (Exception e) {
-            throw new java.lang.IllegalStateException(e);
-        }
-
-        try {
+            
             modeManager.onCreate(this);
-        } catch (AugieStoreException e1) {
-            AugAppLog.e( e1.toString(), e1);
-            return;
-        } catch (CodeableException e) {
-            AugAppLog.e( e.toString(), e);
-            return;
-        }
-
-        try {
+            
             cameraFactory.onCreate(augieScape, null);
 
-            modeManager.getCurrentMode().activate();
+            if (!setModeByIntent())
+                modeManager.getCurrentMode().activate();
 
             prevlayout.setOnTouchListener(new TouchListener(augieScape));
             View b = getControlLayout();
@@ -298,17 +308,6 @@ implements AugieActivity {
         AugAppLog.d( getClass().getName() + " onResume");
         super.onResume();
         init();
-        /*
-        try {
-            modeManager.resume();
-        } catch (AugieStoreException e) {
-            AugAppLog.e(e);
-        } catch (CodeableException e) {
-            AugAppLog.e(e);
-        }
-        cameraFactory.resume();
-        augieScape.resume();
-         */
         startOrientationEventListener();
     }
 
@@ -356,6 +355,9 @@ implements AugieActivity {
         case R.id.prefs:
             startActivity(new Intent(this, AugmaticPreferencesActivity.class));
             return true;
+        case R.id.installShortcut:
+            installShortCut();
+            return true;
         case R.id.about:
             ald = new AboutDialog();
             ald.show(getSupportFragmentManager(), "About Fragment");
@@ -371,6 +373,29 @@ implements AugieActivity {
             AugAppLog.d( "menu default for id " + item.getItemId());
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private static final String INTENT_KEY_MODE_NAME = "augieModeName";
+    private void installShortCut() {
+
+        Mode m = modeManager.getCurrentMode();
+        CodeableName cn = m.getCodeableName();
+        String uiname = m.getName();
+
+        final Intent shortcutIntent = new Intent(this, AugmaticActivity.class);
+        shortcutIntent.putExtra(INTENT_KEY_MODE_NAME, cn.toString());
+
+        final Intent intent = new Intent();
+
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, uiname + " shortcut");
+
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, 
+                Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_launcher));
+        // add the shortcut
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        sendBroadcast(intent);
     }
 
     private void dump() throws CodeableException {
