@@ -18,8 +18,9 @@ enum TOUCH_STATE {NOSTATE, SHOOTING, ZOOMING};
 public class RealityScape extends SurfaceView implements SurfaceHolder.Callback {
 
     private final SurfaceHolder holder;
-    private final AugCamera augcamera;
     private final AugieScape augieScape;
+    
+    private AugCamera augcamera;
 
     public RealityScape(Context context) {
         super(context);
@@ -27,9 +28,8 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
     }
 
     @SuppressWarnings("deprecation")
-    public RealityScape(Context context, AugCamera ac, AugieScape augieScape) {
+    public RealityScape(Context context, AugieScape augieScape) {
         super(context);
-        augcamera = ac;
         this.augieScape = augieScape;
 
         holder = getHolder();
@@ -39,7 +39,10 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
+    @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        if (augcamera == null) throw new java.lang.NullPointerException("camer not set");
+        AugSysLog.d( "surfaceCreated");
         try {
             augcamera.open();
 
@@ -49,12 +52,16 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
             }
             augcamera.setPreviewDisplay(holder);
             augieScape.resume();
+            augcamera.startPreview();
         } catch (AugCameraException e) {
             AugSysLog.e( "Error surfaceCreated: " + e.getMessage());
         }
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        if (augcamera == null) throw new java.lang.NullPointerException("camer not set");
+        AugSysLog.d( "surfaceDestroyed");
         if (augcamera != null) {
             try {
                 augcamera.stopPreview();
@@ -65,18 +72,21 @@ public class RealityScape extends SurfaceView implements SurfaceHolder.Callback 
         }
     }
 
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        try {
-            augcamera.startPreview();
-        } catch (AugCameraException e) {
-            AugSysLog.e( "Error surfaceChanged: " + e.getMessage());
-        }
+        if (augcamera == null) throw new java.lang.NullPointerException("camer not set");
+        AugSysLog.d( "surfaceChanged");
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
-
-        if (holder.getSurface() == null){
-            // preview surface does not exist
-            return;
-        }
+    }
+    
+    public boolean setAugcamera(AugCamera augcamera) throws AugCameraException {
+        //todo: if preview is active, see if camera id is the same and swap without stopping
+        //todo: if preview is active, see if camera id is the same and swap without stopping
+        //todo: if preview is active, see if camera id is the same and swap without stopping
+        //todo: if preview is active, see if camera id is the same and swap without stopping
+        boolean r = augcamera.open(this.augcamera);
+        this.augcamera = augcamera;
+        return r;
     }
 }

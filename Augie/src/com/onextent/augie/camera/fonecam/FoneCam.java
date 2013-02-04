@@ -270,4 +270,10 @@ public class FoneCam implements AugCamera {
     public void setDisplayOrientation(int i) {
         augcamera.setDisplayOrientation(i);
     }
+
+    @Override
+    public boolean open(AugCamera thatcamera) throws AugCameraException {
+        
+        return augcamera.open(thatcamera);
+    }
 }

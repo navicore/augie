@@ -9,11 +9,11 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.CodeableException;
+import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
-import com.onextent.augie.ModeName;
 
 public class NewModeDialog extends SherlockDialogFragment {
 
@@ -43,7 +43,7 @@ public class NewModeDialog extends SherlockDialogFragment {
                     mode.setCode(modeManager.getCurrentMode().getCode()); //clone
                     //fix new names
                     mode.setName(text); 
-                    mode.setCodeableName(new ModeName("MODE/USER/" + text));
+                    mode.setCodeableName(new CodeableName("MODE/USER/" + text));
                     modeManager.addMode(mode);
                     modeManager.setCurrentMode(mode);
 

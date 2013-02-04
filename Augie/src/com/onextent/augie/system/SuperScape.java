@@ -3,9 +3,10 @@
  */
 package com.onextent.augie.system;
 
+import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieScape;
-import com.onextent.augie.ModeManager;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
 
 import android.app.Activity;
 import android.view.View;
@@ -16,29 +17,37 @@ public class SuperScape {
     private final ViewGroup cntlLayout;
     private final AugieScape augieScape;
     private final View button;
-    private final Activity activity;
+    private final AugieActivity activity;
+    private RealityScape camPreview;
 
-    public SuperScape(ModeManager mm) {
-        this.activity = mm.getActivity();
-        this.augieScape = mm.getAugieScape();
-        this.button = mm.getButton();
-        this.cntlLayout = mm.getCamPrevLayout();
+    public SuperScape(AugieActivity a) {
+        this.activity = a;
+        this.augieScape = a.getAugieScape();
+        this.button = a.getMenuButton();
+        this.cntlLayout = a.getCamPrevLayout();
     }
 
-    public void activate(AugCamera camera) {
-       
-        configCamPreview(camera);
+    public void activate(AugCamera camera) throws AugCameraException {
+      
+        if (camPreview == null)
+            configCamPreview(camera);
+        else {
+            boolean switchedOk = camPreview.setAugcamera(camera);
+            if (!switchedOk) 
+                configCamPreview(camera);
+        }
     }
 
     public void deactivate() {
 
     }
     
-    private void configCamPreview(AugCamera augcamera) {
+    private void configCamPreview(AugCamera augcamera) throws AugCameraException {
         
         cntlLayout.removeAllViewsInLayout(); //todo: check for leaks, no idea about views cleaning up
     
-        View camPreview = new RealityScape(activity, augcamera, augieScape);
+        camPreview = new RealityScape((Activity) activity, augieScape);
+        camPreview.setAugcamera(augcamera);
     
         cntlLayout.addView(camPreview); //bottom layer sees
     

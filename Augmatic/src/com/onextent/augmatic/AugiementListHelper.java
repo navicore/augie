@@ -46,7 +46,7 @@ public class AugiementListHelper {
         ModeManager modeManager = ((AugieActivity) activity).getModeManager();
         Mode mode = modeManager.getCurrentMode();
         modeAugiements = mode.getAugiements();
-        allAugiements = modeManager.getAugiementFactory().getAllMeta();
+        allAugiements = activity.getAugiementFactory().getAllMeta();
 
         List<String> itemList = new ArrayList<String>();
         cnList = new ArrayList<CodeableName>();

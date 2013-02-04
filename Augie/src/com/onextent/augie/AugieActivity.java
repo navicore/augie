@@ -3,17 +3,30 @@
  */
 package com.onextent.augie;
 
-import android.app.Activity;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.onextent.android.codeable.EventManager;
 import com.onextent.android.ui.CallbackActivity;
+import com.onextent.augie.camera.AugCameraFactory;
+import com.onextent.augie.system.SuperScape;
 
 
 public interface AugieActivity extends CallbackActivity, EventManager {
 
+    ViewGroup getCamPrevLayout();
+    
     ModeManager getModeManager();
     
     int getOrientation();
     
-    Activity getActivity();
+    AugCameraFactory getCameraFactory();
+    
+    AugiementFactory getAugiementFactory();
+    
+    AugieScape getAugieScape();
+
+    View getMenuButton();
+
+    SuperScape getSuperScape();
 }

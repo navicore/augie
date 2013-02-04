@@ -128,10 +128,10 @@ public class Shutter implements Augiement {
 
 	private void rememberRotation() {
 
-		int prevPicOrientation = ((AugieActivity)context).getOrientation();
+		int orient = ((AugieActivity)context).getOrientation();
 		int newOrientation = ExifInterface.ORIENTATION_NORMAL;
 
-		switch (prevPicOrientation) {
+		switch (orient) {
 		case Surface.ROTATION_90:
 			newOrientation = ExifInterface.ORIENTATION_ROTATE_90;
 			break;

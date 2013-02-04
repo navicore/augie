@@ -87,8 +87,9 @@ public class AugiementStatusFrag extends SherlockDialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                ModeManager modeManager = ((AugieActivity) getActivity()).getModeManager();
-                AugiementFactory af = modeManager.getAugiementFactory();
+                AugieActivity aa = (AugieActivity) getActivity();
+                ModeManager modeManager = aa.getModeManager();
+                AugiementFactory af = aa.getAugiementFactory();
                 Mode mode = modeManager.getCurrentMode();
                 if (isChecked) {
                     Augiement a = af.newInstance(cn);

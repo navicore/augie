@@ -64,4 +64,7 @@ public interface AugCamera extends Augiement {
     void setFaceDetectionListener(AugFaceListener faceListener);
 
     void setDisplayOrientation(int i);
+
+    //return true if this (this) now holds the impl ref of augcamera(that)
+    boolean open(AugCamera augcamera) throws AugCameraException;
 }

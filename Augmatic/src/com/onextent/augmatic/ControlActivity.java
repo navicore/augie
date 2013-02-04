@@ -74,7 +74,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     }
     
     @Override
-    protected void configMenuButton() { }
+    protected View configMenuButton() { return null; }
     
     final private OnClickListener newModeListener = new OnClickListener() {
 
@@ -212,7 +212,7 @@ public class ControlActivity extends BaseAugmaticActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         
-        View detailsFrame = getActivity().findViewById(R.id.module_details);
+        View detailsFrame = findViewById(R.id.module_details);
         isDualPane = detailsFrame != null;
         
         if (savedInstanceState != null) {

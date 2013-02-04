@@ -15,6 +15,7 @@ import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugSysLog;
+import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -41,16 +42,20 @@ public class ModeImpl implements Codeable, Mode {
     private AugCamera camera;
     
     private final ModeManager modeManager;
+    private final AugieActivity activity;
     
     private final Map<CodeableName, Augiement> augiements;
 
 
-    public ModeImpl(ModeManager mm) {
-        this(mm, null, null);
+    public ModeImpl(ModeManager mm, AugieActivity a) {
+        this(mm, a, null, null);
     }
 
-    public ModeImpl(ModeManager mm, CodeableName cn, AugCamera c) {
+    public ModeImpl(ModeManager mm, AugieActivity a, CodeableName cn, AugCamera c) {
+        if (mm == null) throw new java.lang.NullPointerException("mode manager is null");
+        if (a == null) throw new java.lang.NullPointerException("activity is null");
         modeManager = mm;
+        activity = a;
         augiements = new HashMap<CodeableName, Augiement>();
         if (cn != null) augieName = cn;
         camera = c;
@@ -96,7 +101,7 @@ public class ModeImpl implements Codeable, Mode {
             
             CodeableName cameraName = cameraCode.getCodeableName();
             
-            camera = modeManager.getCameraFactory().getCamera(cameraName);
+            camera = activity.getCameraFactory().getCamera(cameraName);
             if (camera == null) 
                 throw new CodeableException("no camera: " + cameraName);
             
@@ -110,7 +115,7 @@ public class ModeImpl implements Codeable, Mode {
                     CodeableName fName = new AugiementName(acode.getString(KEY_AUGIENAME));
                     Augiement f = null;
                     try {
-                    	f = modeManager.getAugiementFactory().newInstance(fName);
+                    	f = activity.getAugiementFactory().newInstance(fName);
                     } catch(Exception e) {
                     	Log.w(TAG, "can not find " + fName + " augiement");
                     	continue;
@@ -181,8 +186,7 @@ public class ModeImpl implements Codeable, Mode {
         
         AugSysLog.d( "activating mode " + getCodeableName());
         
-        ModeManager mm = modeManager;
-        AugieScape v = mm.getAugieScape();
+        AugieScape v = activity.getAugieScape();
         v.stop();
         v.removeFeature(null);
         for (Augiement f : augiements.values()) {
@@ -194,9 +198,8 @@ public class ModeImpl implements Codeable, Mode {
         if (c == null) throw new AugiementException("null camera");
         v.addFeature(c);
         
-        SuperScape superScape = new SuperScape(mm);
+        SuperScape superScape = activity.getSuperScape();
         superScape.activate(c);
-        //v.resume(); //some augiements like facerecog must 'resume' after preview has started
     }
 
     @Override
@@ -209,7 +212,7 @@ public class ModeImpl implements Codeable, Mode {
             throw new AugieException(e) {
                 private static final long serialVersionUID = 660929239042327743L;};
         }
-        AugieScape v = modeManager.getAugieScape();
+        AugieScape v = activity.getAugieScape();
         v.removeFeature(null);
     }
 

@@ -6,12 +6,9 @@ package com.onextent.augie.system;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.hardware.Camera;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
@@ -20,8 +17,8 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.store.CodeStore;
 import com.onextent.augie.AugSysLog;
+import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
-import com.onextent.augie.AugieScape;
 import com.onextent.augie.AugieStore;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.AugiementFactory;
@@ -51,56 +48,29 @@ public class ModeManagerImpl implements ModeManager {
     private List<Code> allModeCode;
 
     private final AugCameraFactory cameraFactory;
-    private final AugiementFactory augiementFactory;
-    private final Activity activity;
-    private final AugieScape augieScape;
+    private final AugieActivity activity;
 
-    //todo: evil, get rid
-    //todo: evil, get rid
-    //todo: evil, get rid
-
-    private final ViewGroup camPrevLayout;
-    private final View button;
-
-    public ModeManagerImpl(Activity a, AugieScape av, AugCameraFactory cf, 
-            AugiementFactory af, ViewGroup l, View b) {
+    public ModeManagerImpl(AugieActivity a, AugCameraFactory cf, AugiementFactory af) {
 
         activity = a;
-        augieScape = av;
         cameraFactory = cf;
-        augiementFactory = af;
-        camPrevLayout = l;
-        button = b;
     }
-
-    @Override
-    public ViewGroup getCamPrevLayout() {
-        return camPrevLayout;
-    }
-    @Override
-    public View getButton() {
-        return button;
-    }   
 
     @Override
     public void onCreate(Context c) throws AugieStoreException, CodeableException {
 
-        //if (store != null) 
-        //throw new java.lang.IllegalStateException("already init");
-
         if (store == null) 
             store = AugieStore.getCodeStore();
-        //init();
     }
 
     @Override
     public void resume() throws AugieStoreException, CodeableException {
-        //onCreate(context);
         init();
     }
 
     @Override
     public void stop() {
+
         if (store == null) {
             throw new java.lang.IllegalStateException("already stopped");
         }
@@ -114,7 +84,6 @@ public class ModeManagerImpl implements ModeManager {
             } 
         }
         allModeCode = null;
-        //store = null;
     }
 
     @Override
@@ -147,14 +116,14 @@ public class ModeManagerImpl implements ModeManager {
 
     @Override
     public Mode newMode() {
-        return new ModeImpl(this);
+        return new ModeImpl(this, activity);
     }
 
     @Override
     public Mode getMode(CodeableName augieName) throws CodeableException {
 
         AugSysLog.d("ejs getMode " + augieName);
-        Mode m = new ModeImpl(this);
+        Mode m = new ModeImpl(this, activity);
         Code code = store.getContentCode(augieName);
         if (code == null) throw new CodeableException("mode not found") {
             private static final long serialVersionUID = 7886435403395937189L;};
@@ -234,7 +203,7 @@ public class ModeManagerImpl implements ModeManager {
             throw new CodeableException(e);
         }
         if (camera == null) throw new CodeableException("no camera");
-        ModeImpl mode = new ModeImpl(this, MODE_KEY_DEFAULT, camera);
+        ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_DEFAULT, camera);
         mode.setName("Default");
 
         Draw drawer = new Draw();
@@ -244,16 +213,11 @@ public class ModeManagerImpl implements ModeManager {
 
         mode.addAugiement(new HorizonCheck());
 
-        //mode.addAugiement(new HistogramFeature());
-
         mode.addAugiement(new Shutter());
         mode.addAugiement(new TouchShutter());
 
         mode.addAugiement(new PinchZoom());
         mode.addAugiement(new GPS());
-
-        //ShakeResetFeature shakeReseter = new ShakeResetFeature();
-        //mode.addAugiement(shakeReseter);
 
         addMode(mode);
     }
@@ -270,7 +234,7 @@ public class ModeManagerImpl implements ModeManager {
                 return;
             p.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
 
-            ModeImpl mode = new ModeImpl(this, MODE_KEY_FLASH, camera);
+            ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_FLASH, camera);
             mode.setName("Flash");
 
             Draw drawer = new Draw();
@@ -280,14 +244,9 @@ public class ModeManagerImpl implements ModeManager {
 
             mode.addAugiement(new HorizonCheck());
 
-            //mode.addAugiement(new PinchZoom());
-
             mode.addAugiement(new Shutter());
             mode.addAugiement(new TouchShutter());
             mode.addAugiement(new GPS());
-
-            //ShakeReset shakeReseter = new ShakeReset();
-            //mode.addAugiement(shakeReseter);
 
             addMode(mode);       
             camera.close();
@@ -308,7 +267,7 @@ public class ModeManagerImpl implements ModeManager {
                 return;
             p.setColorMode(Camera.Parameters.EFFECT_MONO);
 
-            ModeImpl mode = new ModeImpl(this, MODE_KEY_STREET, camera);
+            ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_STREET, camera);
             mode.setName("Street Mono Infinity");
 
             Draw drawer = new Draw();
@@ -318,14 +277,9 @@ public class ModeManagerImpl implements ModeManager {
 
             mode.addAugiement(new HorizonCheck());
 
-            //mode.addAugiement(new PinchZoom());
-
             mode.addAugiement(new Shutter());
             mode.addAugiement(new TouchShutter());
             mode.addAugiement(new GPS());
-
-            //ShakeReset shakeReseter = new ShakeReset();
-            //mode.addAugiement(shakeReseter);
 
             addMode(mode);       
             camera.close();
@@ -343,7 +297,7 @@ public class ModeManagerImpl implements ModeManager {
         }
         if (camera == null) return;
 
-        ModeImpl mode = new ModeImpl(this, MODE_KEY_SELF, camera);
+        ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_SELF, camera);
         mode.setName("Self");
 
         Draw drawer = new Draw();
@@ -353,14 +307,9 @@ public class ModeManagerImpl implements ModeManager {
 
         mode.addAugiement(new HorizonCheck());
 
-        //mode.addAugiement(new PinchZoom());
-
         mode.addAugiement(new Shutter());
         mode.addAugiement(new TouchShutter());
         mode.addAugiement(new GPS());
-
-        //ShakeReset shakeReseter = new ShakeReset();
-        //mode.addAugiement(shakeReseter);
 
         addMode(mode);       
     }
@@ -413,19 +362,6 @@ public class ModeManagerImpl implements ModeManager {
             AugSysLog.e( e.toString(), e);
         }
         return idx;
-    }
-
-    public AugCameraFactory getCameraFactory() {
-        return cameraFactory;
-    }
-    public Activity getActivity() {
-        return activity;
-    }
-    public AugieScape getAugieScape() {
-        return augieScape;
-    }
-    public AugiementFactory getAugiementFactory() {
-        return augiementFactory;
     }
 
     @Override

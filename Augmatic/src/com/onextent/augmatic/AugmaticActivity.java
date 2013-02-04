@@ -45,9 +45,8 @@ public class AugmaticActivity extends BaseAugmaticActivity {
     protected View getControlLayout() {
         if (controlLayout == null) {
 
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            LayoutInflater inflater = getLayoutInflater();
             controlLayout = inflater.inflate(R.layout.main_nav, null);
-            //controlLayout = inflater.inflate(R.layout.main_swipe_nav, null);
         }
         return controlLayout;
     }
@@ -63,12 +62,12 @@ public class AugmaticActivity extends BaseAugmaticActivity {
     }
 
     @Override
-    protected void configMenuButton() {
+    protected View configMenuButton() {
 
         View cntl = getControlLayout();
-        if (cntl == null) return;
+        if (cntl == null) return null;
         final Button btn = (Button) cntl.findViewById(R.id.menuButton);
-        if (btn == null) return;
+        if (btn == null) return null;
 
         btn.setOnClickListener(new View.OnClickListener() {
 
@@ -80,6 +79,7 @@ public class AugmaticActivity extends BaseAugmaticActivity {
                 activateSwipeNav(true);
             }
         });
+        return cntl;
     }
 
     public static void initStore(Context c) {
@@ -105,7 +105,7 @@ public class AugmaticActivity extends BaseAugmaticActivity {
         getSupportActionBar().setBackgroundDrawable(null);
         getSupportActionBar().hide();
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = getLayoutInflater();
         swipeLayout = (ViewGroup) inflater.inflate(R.layout.main_swipe_nav, null);
         mPager = (ViewPager)swipeLayout.findViewById(R.id.pager);
         mPager.setOnTouchListener(navTouchListener);

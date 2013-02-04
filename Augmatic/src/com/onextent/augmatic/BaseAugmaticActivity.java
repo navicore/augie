@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +30,7 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -60,6 +60,7 @@ import com.onextent.augie.camera.AugCameraFactory;
 import com.onextent.augie.camera.fonecam.FoneCamFactory;
 import com.onextent.augie.system.AugieScapeImpl;
 import com.onextent.augie.system.ModeManagerImpl;
+import com.onextent.augie.system.SuperScape;
 
 public abstract class BaseAugmaticActivity 
 extends SherlockFragmentActivity 
@@ -67,7 +68,9 @@ implements AugieActivity {
 
     private OrientationEventListener orientationEventListener;
     protected AugCameraFactory    cameraFactory;
+
     private AugiementFactory    augiementFactory;
+
     protected ModeManager       modeManager;
     private AugieScape          augieScape;
 
@@ -75,6 +78,9 @@ implements AugieActivity {
 
     private int orientation = 0;
 
+    private RelativeLayout prevlayout;
+    private SuperScape superScape;
+    
     public BaseAugmaticActivity() {
         super();
         callbacks = new HashMap<CodeableName, Callback>();
@@ -110,12 +116,13 @@ implements AugieActivity {
 
     protected abstract int getPreviewId();
 
-    protected abstract void configMenuButton();
+    protected abstract View configMenuButton();
     //end subclass methods
 
     private int normalizeOrientation(int degrees) {
 
         //correct for device and rendering context
+
         Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int devOrienation = display.getRotation();
         switch(devOrienation) {
@@ -173,14 +180,20 @@ implements AugieActivity {
     }
 
     SharedPreferences sharedPrefs;
-    
+
+    private View menuButton;
+
+    public View getMenuButton() {
+        return menuButton;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
+
         try {
 
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
@@ -191,45 +204,53 @@ implements AugieActivity {
 
             setContentView(getLayoutId());
 
-            //init();
-
-            configMenuButton();
+            menuButton = configMenuButton();
 
         } catch (Throwable err) {
             AugAppLog.e( "can not create augmatic", err);
         }
     }
 
-    RelativeLayout prevlayout;
+    @Override
+    public ViewGroup getCamPrevLayout() {
+        return prevlayout;
+    }
+
+    private void initCamFactory() {
+
+        cameraFactory = new FoneCamFactory();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            switch (info.facing) {
+            case CameraInfo.CAMERA_FACING_BACK:
+                cameraFactory.registerCamera(i, AugCameraFactory.AUGIE_BACK_CAMERA, "Back Camera");
+                break;
+            case CameraInfo.CAMERA_FACING_FRONT:
+                cameraFactory.registerCamera(i, AugCameraFactory.AUGIE_FRONT_CAMERA, "Front Camera");
+                break;
+            default:
+                cameraFactory.registerCamera(i, new CodeableName("AUGIE/FEATURES/CAMERA/CAMERA_" + i), "Camera " + i);
+            }
+        }
+    }
+
     private void init() {
 
         AugAppLog.d( "BaseAugmaticActivity.init");
         prevlayout = (RelativeLayout) findViewById(getPreviewId());
         try {
             augieScape = new AugieScapeImpl(this);
+            
+            superScape = new SuperScape(this);
+            
             augiementFactory = new AugmaticAugiementFactory();
 
-            cameraFactory = new FoneCamFactory();
-            for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            initCamFactory();
 
-                Camera.CameraInfo info = new Camera.CameraInfo();
-                Camera.getCameraInfo(i, info);
-                switch (info.facing) {
-                case CameraInfo.CAMERA_FACING_BACK:
-                    cameraFactory.registerCamera(i, AugCameraFactory.AUGIE_BACK_CAMERA, "Back Camera");
-                    break;
-                case CameraInfo.CAMERA_FACING_FRONT:
-                    cameraFactory.registerCamera(i, AugCameraFactory.AUGIE_FRONT_CAMERA, "Front Camera");
-                    break;
-                default:
-                    cameraFactory.registerCamera(i, new CodeableName("AUGIE/FEATURES/CAMERA/CAMERA_" + i), "Camera " + i);
-                }
-            }
+            modeManager = new ModeManagerImpl(this, cameraFactory, augiementFactory);
 
-            modeManager = new ModeManagerImpl(this, 
-                    augieScape, 
-                    cameraFactory, 
-                    augiementFactory, prevlayout, getControlLayout());
         } catch (Exception e) {
             throw new java.lang.IllegalStateException(e);
         }
@@ -296,9 +317,9 @@ implements AugieActivity {
         AugAppLog.d( getClass().getName() + " onDestroy");
         super.onDestroy();
     }
-   
+
     protected void enterNavMode() {
-        
+
         getSupportActionBar().show();
         View v = getControlLayout();
         if (v != null) {
@@ -307,9 +328,9 @@ implements AugieActivity {
         }
         activateSwipeNav(true);
     }
-    
+
     protected void leaveNavMode() {
-        
+
         getSupportActionBar().hide();
         View v = getControlLayout();
         if (v != null) {
@@ -368,39 +389,6 @@ implements AugieActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.options, menu);
-
-        /*
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-        final BaseAdapter adapter = new ModeAdapter(this, new ModeNameList());
-
-        OnNavigationListener navl = new OnNavigationListener() {
-
-            @Override
-            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                try {
-                    Code c = modeManager.getAllModeCode().get(itemPosition);
-                    Mode cm = modeManager.getCurrentMode();
-                    if (cm == null || !cm.getCodeableName().toString().equals(c.getString(Codeable.CODEABLE_NAME_KEY))) {
-                        Mode m = modeManager.newMode();
-                        m.setCode(c);
-                        getModeManager().setCurrentMode(m);
-                    }
-                } catch (AugieStoreException e) {
-                    AugAppLog.e( e.toString(), e);
-                } catch (AugieException e) {
-                    AugAppLog.e( e.toString(), e);
-                } catch (CodeableException e) {
-                    AugAppLog.e( e.toString(), e);
-                }
-                return true;
-            }
-        };
-
-        actionBar.setListNavigationCallbacks(adapter, navl);
-        actionBar.setSelectedNavigationItem(modeManager.getCurrentModeIdx());
-         */
 
         if (getControlLayout() == null) {
             MenuItem mi = menu.findItem(R.id.menu_hide);
@@ -500,11 +488,6 @@ implements AugieActivity {
     }
 
     @Override
-    public Activity getActivity() {
-        return this;
-    }
-
-    @Override
     public void fire(Code code) {
 
         Set<CodeableHandler> handlers;
@@ -560,7 +543,7 @@ implements AugieActivity {
     }
 
     protected abstract void activateSwipeNav(boolean activate);
-    
+
     protected void setMode(CodeableName cn) throws CodeableException, AugieException {
 
         Mode m = modeManager.getMode(cn);
@@ -569,17 +552,37 @@ implements AugieActivity {
         };
         modeManager.setCurrentMode(m);
     }
-    
+
     protected final class TouchListener extends AbstractTwoFingerListener {
-        
+
         TouchListener(OnTouchListener l) {
             super(l);
         }
-        
+
         @Override
         protected void doit() {
             boolean navGestureEnabled = sharedPrefs.getBoolean("nav_shift_gesture", false);
             if (navGestureEnabled) enterNavMode();
         }
     };
+
+    @Override
+    public AugCameraFactory getCameraFactory() {
+        return cameraFactory;
+    }
+
+    @Override
+    public AugiementFactory getAugiementFactory() {
+        return augiementFactory;
+    }
+
+    @Override
+    public AugieScape getAugieScape() {
+        return augieScape;
+    }
+
+    @Override
+    public SuperScape getSuperScape() {
+        return superScape;
+    }
 }
