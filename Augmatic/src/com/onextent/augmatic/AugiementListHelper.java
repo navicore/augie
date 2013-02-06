@@ -8,13 +8,11 @@ import java.util.Set;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Augiement;
@@ -143,7 +141,7 @@ public class AugiementListHelper {
             Meta dm = allAugiements.get(cn);
 
             if (dm == null) {
-                Log.w(Codeable.TAG, "getDepsDesc looking for unknown augiement: " + dm);
+                AugAppLog.w("getDepsDesc looking for unknown augiement: " + dm);
                 continue;
             }
 

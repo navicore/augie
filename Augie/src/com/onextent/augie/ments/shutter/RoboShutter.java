@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import android.graphics.Color;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 
@@ -203,7 +202,7 @@ public class RoboShutter implements Augiement, OnLongClickListener {
             try {
                 shutter.takePicture(myCb);
             } catch (AugCameraException e) {
-                Log.w(TAG, "could not take pic: " + e.toString());
+                AugLog.w("could not take pic: " + e.toString());
             } catch (Throwable e) {
                 AugLog.e( e.toString(), e);
                 stopRobo();

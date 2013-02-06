@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.onextent.android.codeable.Codeable;
 import com.onextent.android.store.CodeStoreSqliteImpl;
 import com.onextent.augie.AugSysLog;
 
@@ -44,7 +42,7 @@ public class AugieDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         
-        Log.w(Codeable.TAG, "re-create db for upgrade from version " + oldVersion + " to version " + newVersion);
+        AugSysLog.w("re-create db for upgrade from version " + oldVersion + " to version " + newVersion);
         db.execSQL("drop table if exists " + CodeStoreSqliteImpl.TABLE_NAME);
         onCreate(db);
     }

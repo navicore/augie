@@ -186,8 +186,8 @@ public class FoneCam implements AugCamera {
     }
 
     @Override
-    public void setPreviewCallback(AugPreviewCallback cb) {
-        augcamera.setPreviewCallback(cb);
+    public void addPreviewCallback(AugPreviewCallback cb) {
+        augcamera.addPreviewCallback(cb);
     }
 
     @Override
@@ -195,10 +195,12 @@ public class FoneCam implements AugCamera {
         return augcamera.isOpen();
     }
 
+    /*
     @Override
-    public void setPreviewCallbackWithBuffer(AugPreviewCallback cb) {
-        augcamera.setPreviewCallbackWithBuffer(cb);
+    public void addPreviewCallbackWithBuffer(AugPreviewCallback cb) {
+        augcamera.addPreviewCallbackWithBuffer(cb);
     }
+     */
 
     @Override
     public void addCallbackBuffer(byte[] b) {
@@ -275,5 +277,11 @@ public class FoneCam implements AugCamera {
     public boolean open(AugCamera thatcamera) throws AugCameraException {
         
         return augcamera.open(thatcamera);
+    }
+
+    @Override
+    public void removePreviewCallback(AugPreviewCallback cb) {
+       
+        augcamera.removePreviewCallback(cb);
     }
 }

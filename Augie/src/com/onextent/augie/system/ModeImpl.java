@@ -5,9 +5,6 @@ package com.onextent.augie.system;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import android.util.Log;
-
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeArray;
 import com.onextent.android.codeable.Codeable;
@@ -117,7 +114,7 @@ public class ModeImpl implements Codeable, Mode {
                     try {
                     	f = activity.getAugiementFactory().newInstance(fName);
                     } catch(Exception e) {
-                    	Log.w(TAG, "can not find " + fName + " augiement");
+                    	AugSysLog.w("can not find " + fName + " augiement");
                     	continue;
                     }
                     if (acode.has(KEY_CODE)) {

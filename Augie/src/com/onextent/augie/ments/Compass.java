@@ -12,11 +12,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -135,17 +135,17 @@ public class Compass implements Augiement, SensorEventListener {
 		Activity activity = (Activity) av.getContext();
 		sensorService = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 		if (sensorService == null) {
-			Log.w(TAG, "can not get sensor service");
+			AugLog.w("can not get sensor service");
 			return;
 		}
 		accelerometer = sensorService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		if (accelerometer == null) {
-			Log.w(TAG, "can not get accelerometer");
+			AugLog.w("can not get accelerometer");
 			return;
 		}
 		magnetometer = sensorService.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 		if (magnetometer == null) {
-			Log.w(TAG, "can not get magnetometer");
+			AugLog.w("can not get magnetometer");
 			return;
 		}
 		enabled = true;

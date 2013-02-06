@@ -53,7 +53,6 @@ public class HistogramDialog extends SherlockDialogFragment {
 
 		setHistoHeightUI();
 		setRGBHUI();
-		setMngBuffers();
 
 		return myview;
 	}
@@ -96,23 +95,6 @@ public class HistogramDialog extends SherlockDialogFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 augiement.setGreyscale(!isChecked);
-            }
-        });
-    }
-    
-    private void setMngBuffers() {
-
-        CheckBox cbox = (CheckBox) myview.findViewById(R.id.mngBuffers);
-
-        boolean manageBuffers = augiement.isManageBuffers();
-        cbox.setChecked(manageBuffers);
-
-        cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                augiement.setManageBuffers(isChecked);
             }
         });
     }

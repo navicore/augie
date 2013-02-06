@@ -12,9 +12,9 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PreviewCallback;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.onextent.android.codeable.Code;
@@ -40,12 +40,14 @@ import com.onextent.augie.camera.NamedInt;
 
 public class SimpleFoneCam extends AbstractFoneCam {
 
-    static final CodeableName PARAMS_CODEABLE_NAME = new CodeableName("/AUGIE/CAMERA/PARAMS"){};
+    static final CodeableName PARAMS_CODEABLE_NAME = new CodeableName(
+            "/AUGIE/CAMERA/PARAMS") {
+    };
     protected Camera camera;
 
     protected final int cameraId;
-    protected AugPreviewCallback previewCb;
-    protected AugPreviewCallback previewCbWB;
+    private boolean addWithBuffer = false;
+    private final List<AugPreviewCallback> previewCallbacks = new ArrayList<AugPreviewCallback>();;
 
     private CamParams params;
     private List<byte[]> buffers;
@@ -55,6 +57,7 @@ public class SimpleFoneCam extends AbstractFoneCam {
     }
 
     private final static int NBUFFERS = 3;
+
     private void initBuffers() {
         Parameters p = camera.getParameters();
 
@@ -64,39 +67,59 @@ public class SimpleFoneCam extends AbstractFoneCam {
         if (format == ImageFormat.YV12) {
             int width = sz.width;
             int height = sz.height;
-            int yStride   = (int) Math.ceil(width / 16.0) * 16;
-            int uvStride  = (int) Math.ceil( (yStride / 2) / 16.0) * 16;
-            int ySize     = yStride * height;
-            int uvSize    = uvStride * height / 2;
+            int yStride = (int) Math.ceil(width / 16.0) * 16;
+            int uvStride = (int) Math.ceil((yStride / 2) / 16.0) * 16;
+            int ySize = yStride * height;
+            int uvSize = uvStride * height / 2;
             bsz = ySize + uvSize * 2;
         } else {
             float bpp = ImageFormat.getBitsPerPixel(format);
             float bytepp = bpp / 8;
             bsz = (int) (sz.width * sz.height * bytepp);
         }
-        for (int i = 0; i < NBUFFERS; i++ ) {
+        for (int i = 0; i < NBUFFERS; i++) {
             byte b[] = new byte[bsz];
             camera.addCallbackBuffer(b);
         }
     }
 
+    private final PreviewCallback prevCb = new PreviewCallback() {
+
+        @Override
+        public void onPreviewFrame(byte[] data, Camera camera) {
+            for (AugPreviewCallback cb : previewCallbacks) {
+                cb.onPreviewFrame(data, camera);
+            }
+            if (addWithBuffer) {
+                //todo: re-add buffer
+            }
+        }
+    };
+
+    private void initPreviewCallbacks() {
+
+        if (!previewCallbacks.isEmpty()) {
+            if (addWithBuffer) {
+                initBuffers();
+                camera.setPreviewCallbackWithBuffer(prevCb);
+            } else {
+                camera.setPreviewCallback(prevCb);
+            }
+        }
+
+    }
+    
     @Override
     public void open() throws AugCameraException {
 
         if (camera != null) return;
-        try {
-            AugSysLog.d( "open camera with id: " + getId());
-            camera = Camera.open(getId());
 
-            if (previewCbWB != null) {
-                initBuffers();
-                camera.setPreviewCallbackWithBuffer(previewCbWB);
-                previewCbWB = null;
-            }
-            if (previewCb != null) {
-                camera.setPreviewCallback(previewCb);
-                previewCb = null;
-            }
+        try {
+            AugSysLog.d("open camera with id: " + getId());
+            camera = Camera.open(getId());
+            
+            initPreviewCallbacks();
+
             if (params == null) {
                 initParams();
             } else {
@@ -119,14 +142,16 @@ public class SimpleFoneCam extends AbstractFoneCam {
 
     @Override
     public void close() throws AugCameraException {
-        if (camera == null) return;
+        if (camera == null)
+            return;
         stopPreview();
         camera.release();
         camera = null;
     }
 
     @Override
-    public void setPreviewDisplay(SurfaceHolder holder) throws AugCameraException {
+    public void setPreviewDisplay(SurfaceHolder holder)
+            throws AugCameraException {
         open();
         try {
             camera.setPreviewDisplay(holder);
@@ -139,9 +164,9 @@ public class SimpleFoneCam extends AbstractFoneCam {
     public void startPreview() throws AugCameraException {
         open();
         try {
-            AugSysLog.d( "starting preview...");
+            AugSysLog.d("starting preview...");
             camera.startPreview();
-            AugSysLog.d( "...preview started");
+            AugSysLog.d("...preview started");
         } catch (Exception e) {
             throw new AugCameraException(e);
         }
@@ -149,12 +174,13 @@ public class SimpleFoneCam extends AbstractFoneCam {
 
     @Override
     public void stopPreview() throws AugCameraException {
-        if (camera == null) return;
+        if (camera == null)
+            return;
         try {
-            AugSysLog.d( "stopping preview...");
+            AugSysLog.d("stopping preview...");
             camera.setPreviewCallback(null);
             camera.stopPreview();
-            AugSysLog.d( "...preview stopped");
+            AugSysLog.d("...preview stopped");
         } catch (Exception e) {
             throw new AugCameraException(e);
         }
@@ -163,7 +189,8 @@ public class SimpleFoneCam extends AbstractFoneCam {
     @Override
     public void focus(final AugFocusCallback cb) throws AugCameraException {
 
-        if (camera == null) throw new AugCameraException("camera is null");
+        if (camera == null)
+            throw new AugCameraException("camera is null");
 
         AutoFocusCallback fcb = new AutoFocusCallback() {
 
@@ -187,9 +214,9 @@ public class SimpleFoneCam extends AbstractFoneCam {
     }
 
     @Override
-    public void takePicture(final AugShutterCallback shutter, 
-            final AugPictureCallback raw,
-            final AugPictureCallback jpeg) throws AugCameraException {
+    public void takePicture(final AugShutterCallback shutter,
+            final AugPictureCallback raw, final AugPictureCallback jpeg)
+                    throws AugCameraException {
         Camera.ShutterCallback scb = null;
         Camera.PictureCallback rcb = null;
         Camera.PictureCallback jcb = null;
@@ -199,8 +226,9 @@ public class SimpleFoneCam extends AbstractFoneCam {
             @Override
             public void onShutter() {
 
-                AugSysLog.d( "shutter callback");
-                if (shutter != null) shutter.onShutter();
+                AugSysLog.d("shutter callback");
+                if (shutter != null)
+                    shutter.onShutter();
             }
         };
         if (raw != null)
@@ -209,8 +237,9 @@ public class SimpleFoneCam extends AbstractFoneCam {
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
                 try {
-                    AugSysLog.d( "raw callback");
-                    if (raw != null) raw.onPictureTaken(data, SimpleFoneCam.this);
+                    AugSysLog.d("raw callback");
+                    if (raw != null)
+                        raw.onPictureTaken(data, SimpleFoneCam.this);
                 } finally {
                     unlock();
                 }
@@ -222,18 +251,21 @@ public class SimpleFoneCam extends AbstractFoneCam {
             @Override
             public void onPictureTaken(byte[] data, Camera c) {
                 try {
-                    AugSysLog.d( "jpg callback");
-                    if (jpeg != null) jpeg.onPictureTaken(data, SimpleFoneCam.this);
+                    AugSysLog.d("jpg callback");
+                    if (jpeg != null)
+                        jpeg.onPictureTaken(data, SimpleFoneCam.this);
                 } finally {
                     unlock();
                 }
             }
         };
-        if (rcb == null && jcb == null) throw new AugCameraException("no callbacks");
+        if (rcb == null && jcb == null)
+            throw new AugCameraException("no callbacks");
         boolean locked = lock();
-        if (!locked) throw new AugCameraException("camera busy");
+        if (!locked)
+            throw new AugCameraException("camera busy");
         try {
-            AugSysLog.d( "camera taking picture");
+            AugSysLog.d("camera taking picture");
             camera.takePicture(scb, rcb, jcb);
         } catch (Throwable err) {
             unlock();
@@ -241,14 +273,17 @@ public class SimpleFoneCam extends AbstractFoneCam {
     }
 
     private boolean isLocked = false;
+
     private synchronized boolean lock() {
-        if (isLocked) return false;
-        AugSysLog.d( "locking camera");
+        if (isLocked)
+            return false;
+        AugSysLog.d("locking camera");
         isLocked = true;
         return true;
     }
+
     private synchronized void unlock() {
-        AugSysLog.d( "unlocking camera");
+        AugSysLog.d("unlocking camera");
         isLocked = false;
     }
 
@@ -269,21 +304,26 @@ public class SimpleFoneCam extends AbstractFoneCam {
             params = newParams();
             Camera.Parameters cp = camera.getParameters();
 
-            //todo: update each setting
+            // todo: update each setting
             String m = cp.getFlashMode();
-            if (m != null) params.setFlashMode(m);
+            if (m != null)
+                params.setFlashMode(m);
 
             m = cp.getColorEffect();
-            if (m != null) params.setColorMode(m);
+            if (m != null)
+                params.setColorMode(m);
 
             m = cp.getWhiteBalance();
-            if (m != null) params.setWhiteBalance(m);
+            if (m != null)
+                params.setWhiteBalance(m);
 
             m = cp.getFocusMode();
-            if (m != null) params.setFocusMode(m);
+            if (m != null)
+                params.setFocusMode(m);
 
             m = cp.getAntibanding();
-            if (m != null) params.setAntibanding(m);
+            if (m != null)
+                params.setAntibanding(m);
 
             int v = cp.getPictureFormat();
             NamedInt f = new ImageFmt(v);
@@ -303,37 +343,45 @@ public class SimpleFoneCam extends AbstractFoneCam {
                 params.setXISO(m);
             }
             Camera.Size sz = cp.getPictureSize();
-            if (sz != null) params.setPictureSize(new Size(sz));
+            if (sz != null)
+                params.setPictureSize(new Size(sz));
 
             sz = cp.getPreviewSize();
-            if (sz != null) params.setPreviewSize(new Size(sz));
+            if (sz != null)
+                params.setPreviewSize(new Size(sz));
 
             int i = cp.getJpegQuality();
-            if (i > 0) params.setJpegQuality(i);
+            if (i > 0)
+                params.setJpegQuality(i);
 
             i = cp.getJpegThumbnailQuality();
-            if (i > 0) params.setJpegThumbnailQuality(i);
+            if (i > 0)
+                params.setJpegThumbnailQuality(i);
 
             i = cp.getExposureCompensation();
-            if (i != 0) params.setExposureCompensation(i);
+            if (i != 0)
+                params.setExposureCompensation(i);
 
             i = cp.getZoom();
-            if (i != 0) params.setZoom(i);
+            if (i != 0)
+                params.setZoom(i);
 
             int[] range = new int[2];
             cp.getPreviewFpsRange(range);
-            params.setPreviewFPSRange(range[Parameters.PREVIEW_FPS_MIN_INDEX], 
+            params.setPreviewFPSRange(range[Parameters.PREVIEW_FPS_MIN_INDEX],
                     range[Parameters.PREVIEW_FPS_MAX_INDEX]);
 
         } catch (Throwable err) {
             params = null;
-            AugSysLog.e( err.toString(), err);
+            AugSysLog.e(err.toString(), err);
         }
     }
 
     static ArrayList<String> split(String str, Character c) {
-        if (str == null) return null;
-        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(c);
+        if (str == null)
+            return null;
+        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(
+                c);
         splitter.setString(str);
         ArrayList<String> substrings = new ArrayList<String>();
         for (String s : splitter) {
@@ -368,16 +416,20 @@ public class SimpleFoneCam extends AbstractFoneCam {
     }
 
     @Override
-    public void updateCanvas() { }
+    public void updateCanvas() {
+    }
 
     @Override
-    public void clear() { }
+    public void clear() {
+    }
 
     @Override
-    public void stop() { }
+    public void stop() {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers)
@@ -390,78 +442,97 @@ public class SimpleFoneCam extends AbstractFoneCam {
             cp = camera.getParameters();
             AugCameraParameters p = getParameters();
             if (p == null || cp == null) {
-                throw new java.lang.NullPointerException("can not update params");
+                throw new java.lang.NullPointerException(
+                        "can not update params");
             }
             if (p != null && cp != null) {
-                //todo: update with each 2.3 setting
+                // todo: update with each 2.3 setting
                 String m;
                 m = p.getFlashMode();
-                if (m != null) cp.setFlashMode(m);
+                if (m != null)
+                    cp.setFlashMode(m);
 
                 m = p.getColorMode();
-                if (m != null) cp.setColorEffect(m);
+                if (m != null)
+                    cp.setColorEffect(m);
 
                 m = p.getWhiteBalance();
-                if (m != null) cp.setWhiteBalance(m);
+                if (m != null)
+                    cp.setWhiteBalance(m);
 
                 m = p.getSceneMode();
-                if (m != null) cp.setSceneMode(m);
+                if (m != null)
+                    cp.setSceneMode(m);
 
                 m = p.getFocusMode();
-                if (m != null) cp.setFocusMode(m);
+                if (m != null)
+                    cp.setFocusMode(m);
 
                 m = p.getAntibanding();
-                if (m != null) cp.setAntibanding(m);
+                if (m != null)
+                    cp.setAntibanding(m);
 
                 NamedInt f = p.getPictureFmt();
-                if (f != null) cp.setPictureFormat(f.toInt());
+                if (f != null)
+                    cp.setPictureFormat(f.toInt());
 
                 f = p.getPreviewFmt();
-                if (f != null) cp.setPreviewFormat(f.toInt());
+                if (f != null)
+                    cp.setPreviewFormat(f.toInt());
 
                 m = p.getXPictureFmt();
-                if (m != null) cp.set("picture-format", m);
+                if (m != null)
+                    cp.set("picture-format", m);
 
                 m = p.getXISO();
-                if (m != null) cp.set("iso", m);
+                if (m != null)
+                    cp.set("iso", m);
 
                 Size sz = p.getPictureSize();
-                if (sz != null) cp.setPictureSize(sz.getWidth(), sz.getHeight());
+                if (sz != null)
+                    cp.setPictureSize(sz.getWidth(), sz.getHeight());
 
                 sz = p.getPreviewSize();
-                if (sz != null) cp.setPreviewSize(sz.getWidth(), sz.getHeight());
+                if (sz != null)
+                    cp.setPreviewSize(sz.getWidth(), sz.getHeight());
 
                 int i = p.getJpegQuality();
-                if (i > 0) cp.setJpegQuality(i);
+                if (i > 0)
+                    cp.setJpegQuality(i);
 
                 i = p.getJpegThumbnailQuality();
-                if (i > 0) cp.setJpegThumbnailQuality(i);
+                if (i > 0)
+                    cp.setJpegThumbnailQuality(i);
 
                 i = p.getExposureCompensation();
-                if (i != 0) cp.setExposureCompensation(i);
+                if (i != 0)
+                    cp.setExposureCompensation(i);
 
                 i = p.getZoom();
-                if (i != 0) cp.setZoom(i);
+                if (i != 0)
+                    cp.setZoom(i);
 
                 int[] r = p.getPreviewFPSRange();
-                if (r != null) p.setPreviewFPSRange(r[0], r[1]);
+                if (r != null)
+                    p.setPreviewFPSRange(r[0], r[1]);
             }
 
         } catch (Throwable err) {
-            AugSysLog.e( err.toString(), err);
+            AugSysLog.e(err.toString(), err);
         }
 
         return cp;
     }
 
-    protected final void __applyParameters(Camera.Parameters cp) throws AugCameraException {
+    protected final void __applyParameters(Camera.Parameters cp)
+            throws AugCameraException {
         if (cp != null) {
             try {
 
                 camera.setParameters(getUpdatedCameraParameters());
 
             } catch (Throwable err) {
-                Log.w(TAG, "can not set camera parameters: " + err);
+                AugSysLog.w("can not set camera parameters: " + err);
                 try {
                     getParameters().rollback();
                 } catch (CodeableException e) {
@@ -489,21 +560,16 @@ public class SimpleFoneCam extends AbstractFoneCam {
     }
 
     @Override
-    public void setPreviewCallback(AugPreviewCallback cb) {
-        if (camera != null) {
-            camera.setPreviewCallback(cb);
-        } else {
-            previewCb = cb;
+    public void addPreviewCallback(AugPreviewCallback cb) {
+        previewCallbacks.add(cb);
+        if (camera != null && previewCallbacks.size() == 1) {
+            initPreviewCallbacks();
         }
     }
 
     @Override
-    public void setPreviewCallbackWithBuffer(AugPreviewCallback cb) {
-        if (camera != null) {
-            camera.setPreviewCallbackWithBuffer(cb);
-        } else {
-            previewCbWB = cb;
-        }
+    public void removePreviewCallback(AugPreviewCallback cb) {
+        previewCallbacks.remove(cb);
     }
 
     @Override
@@ -521,8 +587,7 @@ public class SimpleFoneCam extends AbstractFoneCam {
         return null;
     }
 
-    public static final Meta META =
-            new Meta() {
+    public static final Meta META = new Meta() {
 
         @Override
         public Class<? extends Augiement> getAugiementClass() {
@@ -548,6 +613,7 @@ public class SimpleFoneCam extends AbstractFoneCam {
         public int getMinSdkVer() {
             return 0;
         }
+
         @Override
         public Set<CodeableName> getDependencyNames() {
             return null;
@@ -561,57 +627,53 @@ public class SimpleFoneCam extends AbstractFoneCam {
 
     @Override
     public CodeableName getCameraName() {
-        return null; //for the wrapper to wrap
+        return null; // for the wrapper to wrap
     }
 
     @Override
     public void startFaceDetection() {
-        //noop for pre-ics
+        // noop for pre-ics
     }
 
     @Override
     public void stopFaceDetection() {
-        //noop for pre-ics
+        // noop for pre-ics
     }
 
     @Override
     public void setFaceDetectionListener(AugFaceListener faceListener) {
-        //noop for pre-ics
+        // noop for pre-ics
     }
 
     @Override
     public void setDisplayOrientation(int i) {
-        if (camera != null) camera.setDisplayOrientation(i);
+        if (camera != null)
+            camera.setDisplayOrientation(i);
     }
 
     @Override
     public boolean open(AugCamera augcamera) throws AugCameraException {
         return false;
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
-        //broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
+        // broken, this does not work across mode changes or new activities yet
         /*
-        if (augcamera instanceof SimpleFoneCam) {
-
-            SimpleFoneCam thatcamera = (SimpleFoneCam) augcamera;
-            if (getId() == thatcamera.getId()) {
-                camera = thatcamera.camera;
-                
-                previewCb = thatcamera.previewCb;
-                previewCbWB = thatcamera.previewCbWB;
-                applyParameters();
-                return true;
-            }
-        }
-        return false;
+         * if (augcamera instanceof SimpleFoneCam) {
+         * 
+         * SimpleFoneCam thatcamera = (SimpleFoneCam) augcamera; if (getId() ==
+         * thatcamera.getId()) { camera = thatcamera.camera;
+         * 
+         * previewCb = thatcamera.previewCb; previewCbWB =
+         * thatcamera.previewCbWB; applyParameters(); return true; } } return
+         * false;
          */
     }
 }

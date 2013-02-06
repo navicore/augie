@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
@@ -332,7 +331,7 @@ public class Shutter implements Augiement {
 
 				Toast.makeText(context, "error: uriTarget is null", Toast.LENGTH_LONG).show();
 				// todo: if no uri you must return a small bitmap per api for MediaStore.ACTION_IMAGE_CAPTURE");
-				Log.w(TAG, "'no uri'-intent not supported, client activity must send a uri.");
+				AugLog.w("'no uri'-intent not supported, client activity must send a uri.");
 				handleUserCb(data, camera);
 				return;
 			}
@@ -355,7 +354,7 @@ public class Shutter implements Augiement {
 					if (f != null) updateExif(f);
 				}
 			} catch (IOException e) {
-				Log.w(TAG, e.toString());
+				AugLog.w(e.toString());
 			}
 			handleUserCb(data, camera);
 			((Activity)context).finish();

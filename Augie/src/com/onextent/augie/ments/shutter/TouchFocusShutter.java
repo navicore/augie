@@ -14,7 +14,6 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -259,7 +258,7 @@ public class TouchFocusShutter extends SimpleCameraShutter {
     private void handleGesture(AugScrible scrible) throws AugCameraException {
 
         if (scrible == null)  {
-            Log.w(TAG, "no current scrible / gesture");
+            AugLog.w("no current scrible / gesture");
             return;
         }
         GESTURE_TYPE g_type = scrible.getGestureType();
@@ -275,7 +274,7 @@ public class TouchFocusShutter extends SimpleCameraShutter {
             saveMeterArea(scrible);
             break;
         default:
-            Log.w(TAG, "unrecognized gesture");
+            AugLog.w("unrecognized gesture");
         }
     }
 

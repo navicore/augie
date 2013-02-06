@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -175,7 +174,7 @@ implements AugieActivity {
             if (orientationEventListener.canDetectOrientation()) {
                 orientationEventListener.enable();
             } else {
-                Log.w(Codeable.TAG, "Can not detect orientation");
+                AugAppLog.w("Can not detect orientation");
                 Toast.makeText(this, "Can't Detect Orientation", Toast.LENGTH_LONG).show();
             }
     }

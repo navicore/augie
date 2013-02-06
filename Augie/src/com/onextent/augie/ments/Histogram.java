@@ -45,23 +45,17 @@ import com.onextent.augie.camera.AugPreviewCallback;
 
 public class Histogram extends DrawBase implements AugPreviewCallback {
    
-    private boolean manageBuffers = false;
+    //private boolean manageBuffers = false;
 
     @Override
 	public void stop() {
 		super.stop();
-		if (manageBuffers)
-		    camera.setPreviewCallbackWithBuffer(this);
-		else
-		    camera.setPreviewCallback(null);
+		camera.removePreviewCallback(this);
 	}
 	@Override
 	public void resume() {
 		super.resume();
-		if (manageBuffers)
-		    camera.setPreviewCallbackWithBuffer(this);
-		else
-            camera.setPreviewCallback(this);
+		camera.addPreviewCallback(this);
 	}
 
 	public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/HISTOGRAM");
@@ -280,8 +274,6 @@ public class Histogram extends DrawBase implements AugPreviewCallback {
 
             //add buffer back in
             hasData = false;
-            if (manageBuffers)
-                camera.addCallbackBuffer(yyuvdata);
             yyuvdata = null;
         }
 
@@ -390,7 +382,6 @@ public class Histogram extends DrawBase implements AugPreviewCallback {
         code.put(AUGIE_NAME);
         code.put("greyscale", greyscale);
         code.put("hheight", hheight);
-        code.put("manageBuffers", manageBuffers);
         
         return code;
     }
@@ -403,9 +394,6 @@ public class Histogram extends DrawBase implements AugPreviewCallback {
     	}
     	if (code.has("greyscale")) {
     		greyscale = code.getBoolean("greyscale");
-    	}
-    	if (code.has("manageBuffers")) {
-    		manageBuffers = code.getBoolean("manageBuffers");
     	}
     }
 
@@ -482,12 +470,5 @@ public class Histogram extends DrawBase implements AugPreviewCallback {
     	if (hheight != 0) return hheight;
         if (augieScape != null && augieScape.getHeight() > 600) return 100;
         return 50;
-    }
-    
-    public boolean isManageBuffers() {
-        return manageBuffers;
-    }
-    public void setManageBuffers(boolean manageBuffers) {
-        this.manageBuffers = manageBuffers;
     }
 }
