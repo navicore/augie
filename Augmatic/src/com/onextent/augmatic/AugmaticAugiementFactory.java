@@ -14,6 +14,7 @@ import com.onextent.augie.ments.GPS;
 import com.onextent.augie.ments.Histogram;
 import com.onextent.augie.ments.HorizonCheck;
 import com.onextent.augie.ments.Horizon;
+import com.onextent.augie.ments.OpenCV;
 import com.onextent.augie.ments.PinchZoom;
 import com.onextent.augie.ments.ShakeReset;
 import com.onextent.augie.system.AugiementFactoryImpl;
@@ -38,6 +39,7 @@ public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
         registerAugiement(Shutter.META);
         registerAugiement(GPS.META);
         registerAugiement(Compass.META);
+        registerAugiement(OpenCV.META);
         //registerAugiement(RoboShutter.META);  //buggy, loses camera on htc 2.3
         
         int sdkVersion = Build.VERSION.SDK_INT;

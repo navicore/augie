@@ -27,15 +27,12 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.hardware.Camera;
 import android.support.v4.app.DialogFragment;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.codeable.Size;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
@@ -43,18 +40,14 @@ import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugPreviewCallback;
 
-public class Histogram extends DrawBase implements AugPreviewCallback {
+public class Histogram implements AugPreviewCallback, Augiement {
    
-    //private boolean manageBuffers = false;
-
     @Override
 	public void stop() {
-		super.stop();
 		camera.removePreviewCallback(this);
 	}
 	@Override
 	public void resume() {
-		super.resume();
 		camera.addPreviewCallback(this);
 	}
 
@@ -149,10 +142,12 @@ public class Histogram extends DrawBase implements AugPreviewCallback {
         mPaintWhite.setTextSize(25);
     }
 
+    private AugieScape augieScape;
+    
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
-
-        super.onCreate(av, helpers);
+        
+        augieScape = av;
 
         for (Augiement a : helpers) {
             if (a instanceof Draw) {
@@ -163,30 +158,6 @@ public class Histogram extends DrawBase implements AugPreviewCallback {
         }
         if (augdraw == null) throw new AugiementException("draw feature is null");
         if (camera == null) throw new AugiementException("camera is null");
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        try {
-
-            switch(event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-
-            case MotionEvent.ACTION_MOVE:
-
-                break;
-
-            case MotionEvent.ACTION_UP:
-
-            default:
-            }
-        } catch (Exception e) {
-            AugLog.e( e.toString(), e);
-        }
-        return false;
     }
 
     static private void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {

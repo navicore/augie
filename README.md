@@ -9,6 +9,7 @@ Augmented reality Tools, Libraries, and Applications
    See sub-project [here](augie/tree/master/Augmatic).
 
 note, ActionBarSherlock is in the repo just as a convenience.  We've not made any changes to it.
+note, OpenCV is in the repo just as a convenience.  We've not made any changes to it except to comment out Ice Cream Sandwich stuff.
 
 Terms
 ---
