@@ -133,7 +133,7 @@ public class SimpleFoneCam extends AbstractFoneCam {
 
     @Override
     public final CodeableName getCodeableName() {
-        return AugCamera.AUGIENAME;
+        return AugCamera.AUGIE_NAME;
     }
 
     public final int getId() {
@@ -596,7 +596,7 @@ public class SimpleFoneCam extends AbstractFoneCam {
 
         @Override
         public CodeableName getCodeableName() {
-            return AugCamera.AUGIENAME;
+            return AugCamera.AUGIE_NAME;
         }
 
         @Override

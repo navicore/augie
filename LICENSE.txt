@@ -1,0 +1,9 @@
+All code in Augie and Augmatic directories, unless otherwise 
+indicated, was written by Ed Sweeney and is licensed with the 
+Apache 2.0 license.  see LICENSE-2.0.txt.
+
+the OpenCV code is licensed with LICENSE_OPENCV.txt
+
+the ActionBarSherlock code is also licensed with the Apache 2.0
+license, see see LICENSE-2.0.txt.
+

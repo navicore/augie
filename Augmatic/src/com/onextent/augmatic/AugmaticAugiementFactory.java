@@ -4,6 +4,7 @@ import android.os.Build;
 
 import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementFactory;
+import com.onextent.augie.ments.cvface.CvFaceFinder;
 import com.onextent.augie.ments.myface.FaceFinder;
 //import com.onextent.augie.camera.shutter.RoboShutter;
 import com.onextent.augie.ments.shutter.Shutter;
@@ -46,5 +47,6 @@ public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
         if (sdkVersion >= FaceFinder.META.getMinSdkVer() ) {
             registerAugiement(FaceFinder.META);
         }
+        registerAugiement(CvFaceFinder.META);
     }
 }

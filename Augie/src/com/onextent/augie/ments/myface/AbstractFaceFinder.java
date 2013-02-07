@@ -22,7 +22,7 @@ public abstract class AbstractFaceFinder implements Augiement {
 	final static Set<CodeableName> deps;
     static {
         deps = new HashSet<CodeableName>();
-        deps.add(AugCamera.AUGIENAME);
+        deps.add(AugCamera.AUGIE_NAME);
     }
     
     public static AbstractFaceFinder getInstance( ) {

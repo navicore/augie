@@ -51,5 +51,7 @@
     <string name="aug_fld_title_jpg_thn_q">Thumbnail Quality</string>
     <string name="aug_fld_title_prev_fps_range">Preview FPS Range</string>
     <string name="aug_fld_title_etcha_enabled">Etcha is Enabled</string>
+    <string name="aug_fld_title_cv_face_detection_type">Detection Type</string>
+    <string name="aug_fld_title_cv_face_size_pct">Face Size Percent</string>
     
 </resources>

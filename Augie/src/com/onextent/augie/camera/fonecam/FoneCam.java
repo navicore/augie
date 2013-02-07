@@ -226,7 +226,7 @@ public class FoneCam implements AugCamera {
 
             @Override
             public CodeableName getCodeableName() {
-                return AugCamera.AUGIENAME;
+                return AugCamera.AUGIE_NAME;
             }
 
             @Override
