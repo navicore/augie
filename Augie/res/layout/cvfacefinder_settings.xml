@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+<TableLayout 
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical" >
+	
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_cv_face_detection_type" 
+    style="@style/AugMediumText"
+	/>
+
+	<Spinner
+	android:id="@+id/cv_myface_detection_type"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    >
+    <TextView
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	android:text="@string/aug_fld_title_cv_face_size_pct" 
+    style="@style/AugMediumText"
+	/>
+
+	<Spinner
+	android:id="@+id/cv_myface_size_pct"
+	android:layout_width="fill_parent"
+	android:layout_weight="1"
+	android:layout_height="wrap_content"
+	/>
+	</TableRow>
+
+</TableLayout>
+</ScrollView>
