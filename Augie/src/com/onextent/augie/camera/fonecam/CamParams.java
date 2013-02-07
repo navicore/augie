@@ -304,6 +304,12 @@ class CamParams implements AugCameraParameters {
     
     @Override
     public Size getPreviewSize() {
+        if (augcamera != null) { //get real preview size
+            Camera.Size cs = augcamera.camera.getParameters().getPreviewSize();
+            Size rs = new Size(cs);
+            previewSize = rs;
+            return rs;
+        }
        return previewSize; 
     }
     @Override

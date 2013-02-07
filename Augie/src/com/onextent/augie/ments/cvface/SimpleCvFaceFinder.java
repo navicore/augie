@@ -25,6 +25,7 @@ import android.support.v4.app.DialogFragment;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
+import com.onextent.android.codeable.JSONCoder;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
@@ -36,10 +37,8 @@ import com.onextent.augie.ments.cvface.CvFaceFinder.DETECTION_TYPE;
 
 public class SimpleCvFaceFinder extends AbstractCvFaceFinder 
 implements AugPreviewCallback {
-
-    private AugieScape augieScape;
-    private AugCamera camera;
-   
+    
+    private AugieScape augieScape; private AugCamera camera; 
     private Mat                    mFrameMat;
     private Mat                    mBaseMat;
     private Mat                    mRgba;
@@ -47,55 +46,74 @@ implements AugPreviewCallback {
     private File                   mCascadeFile;
     private CascadeClassifier      mJavaDetector;
     private DetectionBasedTracker  mNativeDetector;
-    
+
     private int faceSizePct = 20;
     private float                  mRelativeFaceSize   = 0.2f;
     private int                    mAbsoluteFaceSize   = 0;
-    
+
     private DETECTION_TYPE dtype = DETECTION_TYPE.JAVA;
 
+    public SimpleCvFaceFinder() {
+        updateMinFaceSize(getFaceSizePct());
+    }
+    
     @Override
     public CodeableName getCodeableName() {
 
         return AUGIE_NAME;
     }
 
+    private static final String FACE_SZ_PCT_KEY = "face_sz_pct";
+    private static final String NATIVE_DTYPE_KEY = "dtype_native";
+
     @Override
     public Code getCode() throws CodeableException {
-        return null;
+        Code code = JSONCoder.newCode();
+        if (dtype == DETECTION_TYPE.NATIVE) code.put(NATIVE_DTYPE_KEY, true);
+        code.put(FACE_SZ_PCT_KEY, faceSizePct);
+        return code;
     }
 
     @Override
     public void setCode(Code code) throws CodeableException {
+        if (code == null) return;
+        if (code.has(NATIVE_DTYPE_KEY)) {
+            dtype = DETECTION_TYPE.NATIVE;
+        } else {
+            dtype = DETECTION_TYPE.JAVA;
+        }
+        if (code.has(FACE_SZ_PCT_KEY)) {
+            setFaceSizePct(code.getInt(FACE_SZ_PCT_KEY));
+        }
     }
-    
+
     @Override
     public void updateCanvas() {
-    
+
     }
 
     @Override
     public void clear() {
-   
+
     }
-    
+
     protected void updateFocusAreas(List<Rect> faces) {
-       //noop on pre-ICS devices 
+        //noop on pre-ICS devices 
     }
 
     @Override
-	public void stop() {
-		camera.removePreviewCallback(this);
+    public void stop() {
+        camera.removePreviewCallback(this);
         mGray.release();
         mRgba.release();
-	}
-	@Override
-	public void resume() {
-	    
-	    Context c = augieScape.getContext();
-	    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, c, new LoaderCallback(c));
-	}
-   
+    }
+    @Override
+    public void resume() {
+
+        Context c = augieScape.getContext();
+        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, c, new LoaderCallback(c));
+    }
+
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers)
             throws AugiementException {
@@ -130,10 +148,10 @@ implements AugPreviewCallback {
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        
+
         mBaseMat.put(0, 0, data);
         Imgproc.cvtColor(mBaseMat, mFrameMat, Imgproc.COLOR_YUV2RGBA_NV21, 4);
-   
+
         Mat inputFrame = mFrameMat;
         inputFrame.copyTo(mRgba);
         Imgproc.cvtColor(inputFrame, mGray, Imgproc.COLOR_RGBA2GRAY);
@@ -160,7 +178,7 @@ implements AugPreviewCallback {
         else {
             AugLog.e("Detection method is not selected!");
         }
-        
+
         Rect[] facesArray = faces.toArray();
         AugLog.d("ejs number of faces: " + facesArray.length);
 
@@ -174,9 +192,7 @@ implements AugPreviewCallback {
         return faceSizePct;
     }
 
-    @Override
-    public void setFaceSizePct(int sz) {
-        this.faceSizePct = sz;
+    public void updateMinFaceSize(int sz) {
         if (sz == 50)
             setMinFaceSize(0.5f);
         else if (sz == 40)
@@ -186,16 +202,22 @@ implements AugPreviewCallback {
         else if (sz == 20)
             setMinFaceSize(0.2f);
     }
+    
+    @Override
+    public void setFaceSizePct(int sz) {
+        this.faceSizePct = sz;
+        updateMinFaceSize(sz);
+    }
 
     private void setMinFaceSize(float faceSize) {
         mRelativeFaceSize = faceSize;
         mAbsoluteFaceSize = 0;
     }
-    
+
     private class LoaderCallback extends BaseLoaderCallback {
-       
+
         private final Context context;
-        
+
         public LoaderCallback(Context c) {
             super(c);
             context = c;
@@ -204,57 +226,57 @@ implements AugPreviewCallback {
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
-                case LoaderCallbackInterface.SUCCESS:
-                {
-                    AugLog.i("OpenCV loaded successfully");
+            case LoaderCallbackInterface.SUCCESS:
+            {
+                AugLog.i("OpenCV loaded successfully");
 
-                    // Load native library after(!) OpenCV initialization
-                    System.loadLibrary("detection_based_tracker");
+                // Load native library after(!) OpenCV initialization
+                System.loadLibrary("detection_based_tracker");
 
-                    try {
-                        // load cascade file from application resources
-                        InputStream is = context.getResources().openRawResource(R.raw.lbpcascade_frontalface);
-                        File cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
-                        mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
-                        FileOutputStream os = new FileOutputStream(mCascadeFile);
+                try {
+                    // load cascade file from application resources
+                    InputStream is = context.getResources().openRawResource(R.raw.lbpcascade_frontalface);
+                    File cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
+                    mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
+                    FileOutputStream os = new FileOutputStream(mCascadeFile);
 
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = is.read(buffer)) != -1) {
-                            os.write(buffer, 0, bytesRead);
-                        }
-                        is.close();
-                        os.close();
-
-                        mJavaDetector = new CascadeClassifier(mCascadeFile.getAbsolutePath());
-                        if (mJavaDetector.empty()) {
-                            AugLog.e("Failed to load cascade classifier");
-                            mJavaDetector = null;
-                        } else
-                            AugLog.i("Loaded cascade classifier from " + mCascadeFile.getAbsolutePath());
-
-                        mNativeDetector = new DetectionBasedTracker(mCascadeFile.getAbsolutePath(), 0);
-
-                        cascadeDir.delete();
-
-                        SimpleCvFaceFinder.this.camera.addPreviewCallback(SimpleCvFaceFinder.this);
-                        mGray = new Mat();
-                        mRgba = new Mat();
-                        int h = augieScape.getHeight();
-                        int w = augieScape.getWidth();
-                        mBaseMat = new Mat(h + (h/2), w, CvType.CV_8UC1);
-                        mFrameMat = new Mat();
-                        
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        AugLog.e("Failed to load cascade. Exception thrown: " + e);
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = is.read(buffer)) != -1) {
+                        os.write(buffer, 0, bytesRead);
                     }
+                    is.close();
+                    os.close();
 
-                } break;
-                default:
-                {
-                    super.onManagerConnected(status);
-                } break;
+                    mJavaDetector = new CascadeClassifier(mCascadeFile.getAbsolutePath());
+                    if (mJavaDetector.empty()) {
+                        AugLog.e("Failed to load cascade classifier");
+                        mJavaDetector = null;
+                    } else
+                        AugLog.i("Loaded cascade classifier from " + mCascadeFile.getAbsolutePath());
+
+                    mNativeDetector = new DetectionBasedTracker(mCascadeFile.getAbsolutePath(), 0);
+
+                    cascadeDir.delete();
+
+                    SimpleCvFaceFinder.this.camera.addPreviewCallback(SimpleCvFaceFinder.this);
+                    mGray = new Mat();
+                    mRgba = new Mat();
+                    int h = camera.getParameters().getPreviewSize().getHeight();
+                    int w = camera.getParameters().getPreviewSize().getWidth();
+                    mBaseMat = new Mat(h + (h/2), w, CvType.CV_8UC1);
+                    mFrameMat = new Mat();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    AugLog.e("Failed to load cascade. Exception thrown: " + e);
+                }
+
+            } break;
+            default:
+            {
+                super.onManagerConnected(status);
+            } break;
             }
         }
     };
