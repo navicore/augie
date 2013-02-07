@@ -1,5 +1,7 @@
 .metadata/
 bin/
+libs/
+obj/
 gen/
 eclimd.log
 build.xml
