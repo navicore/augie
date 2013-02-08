@@ -288,13 +288,14 @@ implements AugieActivity {
         AugAppLog.d( "BaseAugmaticActivity.init");
         prevlayout = (RelativeLayout) findViewById(getPreviewId());
         try {
+            
+            initCamFactory();
+            
             augieScape = new AugieScapeImpl(this);
 
             superScape = new SuperScape(this);
 
             augiementFactory = new AugmaticAugiementFactory();
-
-            initCamFactory();
 
             modeManager = new ModeManagerImpl(this, cameraFactory, augiementFactory);
             

@@ -21,12 +21,12 @@ import com.onextent.augie.camera.NamedInt;
 
 class CamParams implements AugCameraParameters {
     
-    private final SimpleFoneCam augcamera;
+    private final FoneCam augcamera;
 
     /**
      * @param simplePhoneCamera
      */
-    CamParams(SimpleFoneCam simplePhoneCamera) {
+    CamParams(FoneCam simplePhoneCamera) {
         augcamera = simplePhoneCamera;
     }
     
@@ -114,20 +114,9 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public CodeableName getCodeableName() {
-        return SimpleFoneCam.PARAMS_CODEABLE_NAME;
+        return FoneCam.PARAMS_CODEABLE_NAME;
     }
 
-    //
-    // ICS ifc
-    //
-    @Override
-    public int getMaxNumFocusAreas() {
-        return 0;
-    }
-    @Override
-    public int getMaxNumMeteringAreas() {
-        return 0;
-    }
     @Override
     public void rollback() throws CodeableException {
         if (initCode != null) {
@@ -280,7 +269,7 @@ class CamParams implements AugCameraParameters {
     @Override
     public List<String> getXSupportedPictureFmts() {
         String sl = augcamera.camera.getParameters().get("picture-format-values");
-        return SimpleFoneCam.split(sl, ',');
+        return FoneCam.split(sl, ',');
     }
 
     @Override
@@ -427,11 +416,36 @@ class CamParams implements AugCameraParameters {
 	public List<String> getXSupportedISOs() {
         String sl = augcamera.camera.getParameters().get("iso-values");
         if (sl == null) return null;
-        return SimpleFoneCam.split(sl, ',');
+        return FoneCam.split(sl, ',');
 	}
+   
+	@Override
+    public int getMaxNumFocusAreas() {
+        if (this.augcamera.camera != null)
+            return this.augcamera.camera.getParameters().getMaxNumFocusAreas();
+        else {
+            AugLog.w("null camera while looking max focus areas");
+            return 0;
+        }
+    }
+
+    @Override
+    public int getMaxNumMeteringAreas() {
+        if (this.augcamera.camera != null)
+            return this.augcamera.camera.getParameters().getMaxNumMeteringAreas();
+        else {
+            AugLog.w("null camera while looking max meter areas");
+            return 0;
+        }
+    }
+    
     @Override
     public int getMaxNumDetectedFaces() {
-        //ics
-        return 0;
+        if (this.augcamera.camera != null)
+            return this.augcamera.camera.getParameters().getMaxNumDetectedFaces();
+        else {
+            AugLog.w("null camera while looking for faces");
+            return 0;
+        }
     }
 }

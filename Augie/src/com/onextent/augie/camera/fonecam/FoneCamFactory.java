@@ -56,7 +56,7 @@ public class FoneCamFactory implements AugCameraFactory {
             //if (camera != null) cameras.put(name, camera);
         }
         
-        if (camera == null) throw new AugCameraException("no camera");
+        if (camera == null) throw new AugCameraException("no camera: " + name);
 
         return camera;
 	}

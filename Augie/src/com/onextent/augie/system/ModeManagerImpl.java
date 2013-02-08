@@ -65,7 +65,12 @@ public class ModeManagerImpl implements ModeManager {
 
     @Override
     public void resume() throws AugieStoreException, CodeableException {
-        init();
+        try {
+            init();
+        } catch (AugieException e) {
+            
+            throw new CodeableException(e);
+        }
     }
 
     @Override
@@ -110,6 +115,8 @@ public class ModeManagerImpl implements ModeManager {
                 AugSysLog.e(e);
             } catch (CodeableException e) {
                 AugSysLog.e(e);
+            } catch (AugieException e) {
+                AugSysLog.e(e);
             }
         return currentMode;
     }
@@ -133,7 +140,7 @@ public class ModeManagerImpl implements ModeManager {
             return m;
     }
 
-    private void init() throws AugieStoreException, CodeableException {
+    private void init() throws CodeableException, AugieException {
 
         String currentMode_key = store.getContentString(CURRENT_MODE_KEY_KEY.toString());
         if (currentMode_key == null) {
@@ -143,7 +150,7 @@ public class ModeManagerImpl implements ModeManager {
             store.replaceContent(CURRENT_MODE_KEY_KEY.toString(), currentMode_key);
         } 
         AugSysLog.d( "current mode key: " + currentMode_key);
-        currentMode = getMode(new CodeableName(currentMode_key));
+        setCurrentMode(getMode(new CodeableName(currentMode_key)));
     }
 
     @Override
@@ -199,27 +206,29 @@ public class ModeManagerImpl implements ModeManager {
         AugCamera camera;
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
+            if (camera == null) throw new CodeableException("no camera");
+
+            ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_DEFAULT, camera);
+            mode.setName("Default");
+
+            Draw drawer = new Draw();
+            mode.addAugiement(drawer);
+
+            mode.addAugiement(new Horizon());
+
+            mode.addAugiement(new HorizonCheck());
+
+            mode.addAugiement(new Shutter());
+            mode.addAugiement(new TouchShutter());
+
+            mode.addAugiement(new PinchZoom());
+            mode.addAugiement(new GPS());
+
+            addMode(mode);
+
         } catch (AugCameraException e) {
             throw new CodeableException(e);
         }
-        if (camera == null) throw new CodeableException("no camera");
-        ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_DEFAULT, camera);
-        mode.setName("Default");
-
-        Draw drawer = new Draw();
-        mode.addAugiement(drawer);
-
-        mode.addAugiement(new Horizon());
-
-        mode.addAugiement(new HorizonCheck());
-
-        mode.addAugiement(new Shutter());
-        mode.addAugiement(new TouchShutter());
-
-        mode.addAugiement(new PinchZoom());
-        mode.addAugiement(new GPS());
-
-        addMode(mode);
     }
 
     private void primeFlashMode() throws CodeableException {
@@ -227,7 +236,9 @@ public class ModeManagerImpl implements ModeManager {
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
             if (camera == null) throw new CodeableException("no camera");
+
             camera.open();
+
             AugCameraParameters p = camera.getParameters();
             if (p == null) throw new CodeableException("no camera parameters");
             if (!p.getSupportedFlashModes().contains(Camera.Parameters.FLASH_MODE_ON))
@@ -380,7 +391,7 @@ public class ModeManagerImpl implements ModeManager {
         }
         return names;
     }
-    
+
     @Override
     public int getCurrentModePos(List<String> names) {
         String currentModeUIName = getCurrentMode().getName();

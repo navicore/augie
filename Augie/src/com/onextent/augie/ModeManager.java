@@ -6,8 +6,6 @@ package com.onextent.augie;
 import java.util.List;
 
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
