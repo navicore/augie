@@ -36,9 +36,10 @@
         <activity
             android:name=".AugmaticActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:theme="@style/AugieScapeTheme" >
+            android:label="@string/app_name"
+            android:theme="@style/AugieScapeTheme" 
+            >
             <intent-filter>
                 <action android:name="com.onextent.augmatic.START_MODE" />
                 <category android:name="android.intent.category.DEFAULT" />

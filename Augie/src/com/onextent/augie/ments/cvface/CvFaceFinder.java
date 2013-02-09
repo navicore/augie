@@ -243,10 +243,14 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
         mAbsoluteFaceSize = 0;
     }
 
+    //static final String HAAR_FRONTAL_FILENANE = "haarcascade_frontalface_default.xml";
+    static final String LBP_FRONTAL_FILENAME = "lbpcascade_frontalface.xml";
+    static final String LBP_PROFILE_FILENAME = "lbpcascade_profileface.xml";
+    
     private class LoaderCallback extends BaseLoaderCallback {
 
         private final Context context;
-
+    
         public LoaderCallback(Context c) {
             super(c);
             context = c;
@@ -266,7 +270,8 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
                     // load cascade file from application resources
                     InputStream is = context.getResources().openRawResource(R.raw.lbpcascade_frontalface);
                     File cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
-                    mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
+                    mCascadeFile = new File(cascadeDir, LBP_FRONTAL_FILENAME);
+                    //mCascadeFile = new File(cascadeDir, LBP_PROFILE_FILENAME);
                     FileOutputStream os = new FileOutputStream(mCascadeFile);
 
                     byte[] buffer = new byte[4096];
