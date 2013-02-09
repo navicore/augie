@@ -77,9 +77,13 @@ public class AugiementStatusFrag extends DialogFragment {
         
         helper.updateButtonText(cbox, cn, isEnabled);
         helper.updateStatusText(statusView, cn);
-        boolean isRequired = helper.updateDepText(statusView, cn);
+        boolean isRequired = helper.updateReqText(statusView, cn);
+        boolean allDepsEnabled = helper.updateDepText(statusView, cn);
         if (isEnabled && isRequired)
             cbox.setEnabled(false);
+        else
+            if (!isEnabled && !allDepsEnabled)
+                cbox.setEnabled(false);
 
         cbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 

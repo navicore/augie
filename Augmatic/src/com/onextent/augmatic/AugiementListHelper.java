@@ -74,15 +74,33 @@ public class AugiementListHelper {
         }
     }
 
+    public boolean updateReqText(View v, CodeableName cn) {
+
+        TextView reqs = (TextView) v.findViewById(R.id.module_required_by);
+        Augiement.Meta m = allAugiements.get(cn);
+        List<Meta> rm = getRequiredByMeta(m);
+        reqs.setText(getRequiredByUINames(rm));
+        reqs.setText(getRequiredByUINames(rm));
+        boolean required = false;
+        if (rm != null) {
+            for (Meta dm : rm) {
+                if (modeAugiements.containsKey(dm.getCodeableName())) {
+                    required = true;
+                    break;
+                }
+            }
+        }
+        return required;
+    }
+
     public boolean updateDepText(View v, CodeableName cn) {
 
         TextView deps = (TextView) v.findViewById(R.id.module_dependencies);
-        TextView reqs = (TextView) v.findViewById(R.id.module_required_by);
         Augiement.Meta m = allAugiements.get(cn);
-        deps.setText(getDepsUINames(m));
-        List<Meta> rm = getRequiredByMeta(m);
-        reqs.setText(getRequiredByUINames(rm));
-        return rm != null;
+        DepsUIHelper duih = getDepsUINames(m);
+        if (duih == null) return true;
+        deps.setText(duih.msg);
+        return duih.allEnabled;
     }
 
     public void updateStatusText(View v, CodeableName cn) {
@@ -128,13 +146,19 @@ public class AugiementListHelper {
 
         return "required by " + ret;
     }
+    private class DepsUIHelper {
+        boolean allEnabled = true;
+        CharSequence msg;
+    }
 
-    private CharSequence getDepsUINames(Meta m) {
+    private DepsUIHelper getDepsUINames(Meta m) {
 
         Set<CodeableName> cnames = m.getDependencyNames();
         if (cnames == null) return null;
 
         String ret = "";
+        
+        boolean allEnabled = true;
 
         for (CodeableName cn : cnames) {
 
@@ -148,11 +172,17 @@ public class AugiementListHelper {
             if (ret.length() > 0) ret += ", ";
 
             ret += dm.getUIName();
+            
+            if (!modeAugiements.containsKey(cn)) allEnabled = false;
         }
 
         if (ret.length() == 0) return null;
+        
+        DepsUIHelper duih = new DepsUIHelper();
+        duih.allEnabled = allEnabled;
+        duih.msg = "depends on " + ret;
 
-        return "depends on " + ret;
+        return duih;
     }
 
     private void showEmptySettingsDialog() {
