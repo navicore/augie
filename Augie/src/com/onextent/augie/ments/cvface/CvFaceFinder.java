@@ -179,9 +179,8 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
         mBaseMat.put(0, 0, data);
         Imgproc.cvtColor(mBaseMat, mFrameMat, Imgproc.COLOR_YUV2RGBA_NV21, 4);
 
-        Mat inputFrame = mFrameMat;
-        inputFrame.copyTo(mRgba);
-        Imgproc.cvtColor(inputFrame, mGray, Imgproc.COLOR_RGBA2GRAY);
+        mFrameMat.copyTo(mRgba);
+        Imgproc.cvtColor(mFrameMat, mGray, Imgproc.COLOR_RGBA2GRAY);
 
         if (mAbsoluteFaceSize == 0) {
             int height = mGray.rows();
