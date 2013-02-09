@@ -103,6 +103,25 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
     @Override
     public void updateCanvas() {
 
+        Rect[] fa = getFacesArray();
+        if (fa == null) return;
+        for (Rect r : fa) {
+            augieScape.getCanvas().drawRect(getCanvasRect(r), augieScape.getPaint());
+        }
+    }
+    private android.graphics.Rect getCanvasRect(Rect r) {
+        float cw = augieScape.getWidth();
+        float ch = augieScape.getHeight();
+        com.onextent.android.codeable.Size prevSz = camera.getParameters().getPreviewSize();
+        float pw = prevSz.getWidth();
+        float ph = prevSz.getHeight();
+        
+        float xmulti = cw / pw;
+        float ymulti = ch / ph;
+        
+        android.graphics.Rect arect = new android.graphics.Rect((int)(r.x * xmulti), (int)(r.y * ymulti), (int)((r.x + r.width) * xmulti), (int)((r.y + r.height) * ymulti));
+        
+        return arect;
     }
 
     @Override
@@ -187,12 +206,17 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
             AugLog.e("Detection method is not selected!");
         }
 
-        Rect[] facesArray = faces.toArray();
-        AugLog.d("ejs number of faces: " + facesArray.length);
+        setFacesArray(faces.toArray());
+    }
+    
+    private Rect[] facesArray;
 
-        //for (int i = 0; i < facesArray.length; i++)
-        //    Core.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), FACE_RECT_COLOR, 3);
+    public synchronized Rect[] getFacesArray() {
+        return facesArray;
+    }
 
+    public synchronized void setFacesArray(Rect[] facesArray) {
+        this.facesArray = facesArray;
     }
 
     public int getFaceSizePct() {
@@ -272,6 +296,7 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
                     int w = camera.getParameters().getPreviewSize().getWidth();
                     mBaseMat = new Mat(h + (h/2), w, CvType.CV_8UC1);
                     mFrameMat = new Mat();
+                    AugLog.i("OpenCV Face Finder has started");
 
                 } catch (IOException e) {
                     e.printStackTrace();

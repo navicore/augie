@@ -65,7 +65,6 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
 
-    	AugLog.d( "LevelerBase.onCreate");
         for (Augiement a : helpers) {
             if (a instanceof Horizon) {
                 horizonFeature = (Horizon) a;
@@ -77,13 +76,8 @@ public abstract class LevelerBase implements Augiement, SensorEventListener {
         prefs = PreferenceManager.getDefaultSharedPreferences(av.getContext());
         mSensorManager  = (SensorManager) av.getContext().getSystemService(Context.SENSOR_SERVICE);
         if (mSensorManager == null) {
-        	AugLog.d( "can not access sensor manager");
+        	AugLog.e( "can not access sensor manager");
         } 
-        /*
-        else {
-        	registerSensorListeners();
-        }
-         */
         
         lastUpdateTime  = 0;
         mAngle          = 0;
