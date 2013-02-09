@@ -12,7 +12,7 @@ import org.opencv.android.OpenCVLoader;
 
 import android.content.Context;
 import android.hardware.Camera;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;

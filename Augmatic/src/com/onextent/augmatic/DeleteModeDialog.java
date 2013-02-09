@@ -5,10 +5,10 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
@@ -17,7 +17,7 @@ import com.onextent.augie.AugieException;
 import com.onextent.augie.AugieStoreException;
 import com.onextent.augie.ModeManager;
 
-public class DeleteModeDialog extends SherlockDialogFragment {
+public class DeleteModeDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

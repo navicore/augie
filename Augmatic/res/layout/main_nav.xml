@@ -12,6 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="4dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/abs__ic_menu_moreoverflow_holo_dark" />
+        android:background="@android:drawable/ic_media_next" />
 
 </RelativeLayout>

@@ -2,12 +2,12 @@ package com.onextent.augmatic;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieActivity;
@@ -15,7 +15,7 @@ import com.onextent.augie.AugieException;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 
-public class NewModeDialog extends SherlockDialogFragment {
+public class NewModeDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

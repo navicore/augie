@@ -3,8 +3,8 @@ package com.onextent.augmatic;
 import java.util.List;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.AugieException;
@@ -23,7 +22,7 @@ import com.onextent.augie.AugiementFactory;
 import com.onextent.augie.Mode;
 import com.onextent.augie.ModeManager;
 
-public class AugiementStatusFrag extends SherlockDialogFragment {
+public class AugiementStatusFrag extends DialogFragment {
     
     private AugiementListHelper helper;
     private DialogFragment augiementUI;
@@ -35,7 +34,7 @@ public class AugiementStatusFrag extends SherlockDialogFragment {
         public void onClick(View v) {
            
             if (augiementUI != null) {
-                augiementUI.show(getActivity().getSupportFragmentManager(), "Module Status");
+                augiementUI.show(getActivity().getFragmentManager(), "Module Status");
             }
         }
     };
@@ -56,7 +55,7 @@ public class AugiementStatusFrag extends SherlockDialogFragment {
             ViewGroup container,
             Bundle savedInstanceState) {
        
-        ControlActivity activity = (ControlActivity) getSherlockActivity();
+        ControlActivity activity = (ControlActivity) getActivity();
         helper = activity.getHelper();
 
         Dialog d = getDialog();

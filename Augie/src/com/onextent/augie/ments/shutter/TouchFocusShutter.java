@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import android.annotation.TargetApi;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -54,7 +53,6 @@ public class TouchFocusShutter extends SimpleCameraShutter {
         meter_areas = new ArrayList<ScribleHolder>();
     }
 
-    @TargetApi(14)
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers) throws AugiementException {
         super.onCreate(av, helpers);

@@ -3,11 +3,12 @@ package com.onextent.augie.camera.settings;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
+import android.app.DialogFragment;
+
 import com.onextent.augie.AugLog;
 import com.onextent.augie.camera.AugCamera;
 
-public class CamSettingsDialogBase extends SherlockDialogFragment {
+public class CamSettingsDialogBase extends DialogFragment {
 
     protected static int getPosition(Object item, List<?> list) {
     

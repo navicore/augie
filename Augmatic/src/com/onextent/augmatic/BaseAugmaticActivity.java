@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,8 +24,10 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -37,10 +40,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.Codeable;
 import com.onextent.android.codeable.CodeableException;
@@ -62,7 +61,7 @@ import com.onextent.augie.system.ModeManagerImpl;
 import com.onextent.augie.system.SuperScape;
 
 public abstract class BaseAugmaticActivity 
-extends SherlockFragmentActivity 
+extends FragmentActivity 
 implements AugieActivity {
 
     private static final String INTENT_KEY_MODE_NAME = "augieModeName";
@@ -196,12 +195,12 @@ implements AugieActivity {
 
         try {
 
+            getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setFormat(PixelFormat.TRANSLUCENT);
             getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
             getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
-
             setContentView(getLayoutId());
 
             menuButton = configMenuButton();
@@ -345,7 +344,7 @@ implements AugieActivity {
 
     protected void enterNavMode() {
 
-        getSupportActionBar().show();
+        getActionBar().show();
         View v = getControlLayout();
         if (v != null) {
             Button b = (Button) v.findViewById(R.id.menuButton);
@@ -356,7 +355,7 @@ implements AugieActivity {
 
     protected void leaveNavMode() {
 
-        getSupportActionBar().hide();
+        getActionBar().hide();
         View v = getControlLayout();
         if (v != null) {
             Button b = (Button) v.findViewById(R.id.menuButton);
@@ -386,7 +385,7 @@ implements AugieActivity {
             return true;
         case R.id.about:
             ald = new AboutDialog();
-            ald.show(getSupportFragmentManager(), "About Fragment");
+            ald.show(getFragmentManager(), "About Fragment");
             return true;
         case R.id.dump:
             try {
@@ -439,7 +438,7 @@ implements AugieActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        android.view.MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options, menu);
 
         if (getControlLayout() == null) {

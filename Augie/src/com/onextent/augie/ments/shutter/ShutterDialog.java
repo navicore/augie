@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -20,13 +21,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SpinnerUI;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.R;
 
-public class ShutterDialog extends SherlockDialogFragment {
+public class ShutterDialog extends DialogFragment {
 
     Shutter augiement;
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,11 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SpinnerUI;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.R;
 
-public class RoboShutterDialog extends SherlockDialogFragment {
+public class RoboShutterDialog extends DialogFragment {
 
     RoboShutter augiement;
 

@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -19,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
@@ -83,8 +83,8 @@ public class ControlActivity extends BaseAugmaticActivity {
             showEmptySettingsDetails();
             unsetCameraCatagorySelection();
             unsetAugiementSelection();
-            SherlockDialogFragment ald = new NewModeDialog();
-            ald.show(getSupportFragmentManager(), "New Mode Fragment");
+            DialogFragment ald = new NewModeDialog();
+            ald.show(getFragmentManager(), "New Mode Fragment");
         }
     };
     final private OnClickListener delModeListener = new OnClickListener() {
@@ -94,8 +94,8 @@ public class ControlActivity extends BaseAugmaticActivity {
             showEmptySettingsDetails();
             unsetCameraCatagorySelection();
             unsetAugiementSelection();
-            SherlockDialogFragment ald = new DeleteModeDialog();
-            ald.show(getSupportFragmentManager(), "Delete Mode Fragment");
+            DialogFragment ald = new DeleteModeDialog();
+            ald.show(getFragmentManager(), "Delete Mode Fragment");
         }
     };
     
@@ -210,7 +210,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        getActionBar().hide();
         
         View detailsFrame = findViewById(R.id.module_details);
         isDualPane = detailsFrame != null;
@@ -290,7 +290,7 @@ public class ControlActivity extends BaseAugmaticActivity {
     
     private void showEmptySettingsDetails() {
         if (!isDualPane) return;
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.module_status, new EmptySettingsDialog());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.replace(R.id.module_details, new EmptySettingsDialog());
@@ -311,8 +311,8 @@ public class ControlActivity extends BaseAugmaticActivity {
             // the list to highlight the selected item and show the data.
             cameraCatagoryList.setItemChecked(index, true);
 
-            FragmentManager fm = getSupportFragmentManager();
-            SherlockDialogFragment f = null;
+            FragmentManager fm = getFragmentManager();
+            DialogFragment f = null;
             switch (index) {
             case 0:
                 f = new ProcessingSettingsDialog();

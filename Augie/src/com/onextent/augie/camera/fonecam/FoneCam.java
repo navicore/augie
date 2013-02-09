@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import android.app.DialogFragment;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
-import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.SurfaceHolder;
 

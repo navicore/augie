@@ -1,3 +1,4 @@
+
 package com.onextent.augmatic;
 
 import java.util.ArrayList;
@@ -5,14 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.Augiement;
@@ -63,14 +63,14 @@ public class AugiementListHelper {
         DialogFragment f = new AugiementStatusFrag();
         
         if (isDualPane) {
-            FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+            FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
             ft.replace(R.id.module_status, f);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
             showDetails(position);
 
         } else {
-            f.show(activity.getSupportFragmentManager(), "Module Status");
+            f.show(activity.getFragmentManager(), "Module Status");
         }
     }
 
@@ -156,7 +156,7 @@ public class AugiementListHelper {
     }
 
     private void showEmptySettingsDialog() {
-        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
         ft.replace(R.id.module_details, new EmptySettingsDialog());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
@@ -177,17 +177,17 @@ public class AugiementListHelper {
             return;
         }
 
-        FragmentManager fm = ((SherlockFragmentActivity)activity).getSupportFragmentManager();
+        FragmentManager fm = activity.getFragmentManager();
         if (f != null) {
             if (isDualPane) {
-                FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
                 ft.replace(R.id.module_details, f);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
 
             } else {
                 f.show(fm, "Augiement Settings");
-                f.show((activity).getSupportFragmentManager(), "Augiement Settings");
+                f.show((activity).getFragmentManager(), "Augiement Settings");
             }
         }
     }

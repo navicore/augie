@@ -6,7 +6,6 @@ package com.onextent.augmatic;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -73,7 +72,7 @@ public class AugmaticActivity extends BaseAugmaticActivity {
 
             public void onClick(View view) {
 
-                getSupportActionBar().show();
+                getActionBar().show();
 
                 btn.setVisibility(View.GONE);
                 activateSwipeNav(true);
@@ -102,8 +101,8 @@ public class AugmaticActivity extends BaseAugmaticActivity {
         initStore(this);
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setBackgroundDrawable(null);
-        getSupportActionBar().hide();
+        getActionBar().setBackgroundDrawable(null);
+        getActionBar().hide();
 
         LayoutInflater inflater = getLayoutInflater();
         swipeLayout = (ViewGroup) inflater.inflate(R.layout.main_swipe_nav, null);
@@ -198,7 +197,7 @@ public class AugmaticActivity extends BaseAugmaticActivity {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public android.support.v4.app.Fragment getItem(int position) {
             return ModeListFrag.newInstance(position);
         }
     }

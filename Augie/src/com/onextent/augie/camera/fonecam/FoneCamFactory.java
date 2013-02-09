@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableName;

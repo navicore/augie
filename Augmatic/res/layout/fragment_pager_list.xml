@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_marginTop="?android:attr/actionBarSize"
     android:gravity="center_vertical|center_horizontal"
     >
     <TextView 
@@ -18,7 +18,6 @@
         android:layout_weight="1"
         android:gravity="center_vertical|center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="another mode"
         />
     <TextView 
         android:id="@+id/text"
@@ -35,7 +34,6 @@
         android:layout_weight="1"
         android:gravity="center_vertical|center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="even another mode"
         />
     </LinearLayout>
 

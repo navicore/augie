@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.android.ui.SpinnerUI;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
@@ -22,7 +22,7 @@ import com.onextent.augie.ModeManager;
 import com.onextent.augie.R;
 import com.onextent.augie.camera.AugCamera;
 
-public class HorizonDialog extends SherlockDialogFragment {
+public class HorizonDialog extends DialogFragment {
 
     Horizon augiement;
 

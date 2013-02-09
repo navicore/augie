@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.graphics.Point;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.view.MotionEvent;
 import android.view.View;
 

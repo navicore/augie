@@ -4,6 +4,7 @@
 package com.onextent.augie.ments;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.R;
 
-public class DrawDialog extends SherlockDialogFragment {
+public class DrawDialog extends DialogFragment {
 
     Draw augiement;
 

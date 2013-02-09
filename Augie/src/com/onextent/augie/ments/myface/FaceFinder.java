@@ -6,7 +6,7 @@ import java.util.Set;
 import android.graphics.Paint;
 import android.hardware.Camera.Face;
 import android.os.Build;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
@@ -130,7 +130,9 @@ public class FaceFinder implements Augiement {
     public DialogFragment getUI() {
 
         return new FaceFinderDialog();
-    }    public static final Meta META =
+    }
+
+    public static final Meta META =
             new Augiement.Meta() {
 
         @Override

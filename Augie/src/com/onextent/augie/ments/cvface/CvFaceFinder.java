@@ -22,7 +22,7 @@ import org.opencv.objdetect.CascadeClassifier;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Build;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
@@ -117,8 +117,8 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
     @Override
     public void stop() {
         camera.removePreviewCallback(this);
-        mGray.release();
-        mRgba.release();
+        if (mGray != null) mGray.release();
+        if (mRgba != null) mRgba.release();
     }
     @Override
     public void resume() {

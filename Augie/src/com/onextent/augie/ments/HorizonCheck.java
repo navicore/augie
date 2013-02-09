@@ -15,7 +15,7 @@ import com.onextent.augie.marker.AugLine;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 
 public class HorizonCheck extends LevelerBase {
     

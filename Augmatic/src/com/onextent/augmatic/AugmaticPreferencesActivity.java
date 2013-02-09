@@ -1,10 +1,10 @@
 package com.onextent.augmatic;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-
-public class AugmaticPreferencesActivity extends SherlockPreferenceActivity {
+//todo: make this a fragment
+public class AugmaticPreferencesActivity extends PreferenceActivity {
     
     @SuppressWarnings("deprecation")
     @Override

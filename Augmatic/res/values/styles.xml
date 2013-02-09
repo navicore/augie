@@ -1,10 +1,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AugieScapeTheme" parent="Theme.Sherlock">
+    <style name="AugieScapeTheme" parent="android:Theme">
     </style>
 
     <!--   style name="AugControlTheme" parent="Theme.Sherlock.Light.DarkActionBar" -->
-    <style name="AugControlTheme" parent="Theme.Sherlock.Light">
+    <style name="AugControlTheme" parent="android:Theme.Light">
     </style>
 
     <style name="AugButtonTxtBase" 

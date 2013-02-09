@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import android.graphics.Color;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 

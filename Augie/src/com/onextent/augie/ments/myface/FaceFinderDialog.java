@@ -4,19 +4,19 @@
 package com.onextent.augie.ments.myface;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieActivity;
 import com.onextent.augie.R;
 import com.onextent.augie.camera.AugCamera;
 
-public class FaceFinderDialog extends SherlockDialogFragment {
+public class FaceFinderDialog extends DialogFragment {
 
     FaceFinder augiement;
     AugCamera camera;
