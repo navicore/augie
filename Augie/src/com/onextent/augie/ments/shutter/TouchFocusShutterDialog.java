@@ -29,16 +29,16 @@ import com.onextent.augie.camera.NamedInt;
 
 public class TouchFocusShutterDialog extends SherlockDialogFragment {
 
-    TouchShutter augiement;
+    TouchFocusShutter augiement;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         AugieActivity activity = (AugieActivity) getActivity();
-        augiement = (TouchShutter) 
+        augiement = (TouchFocusShutter) 
         			activity.getModeManager().getCurrentMode()
         			.getAugiements()
-        			.get(TouchShutter.AUGIE_NAME);
+        			.get(TouchFocusShutter.AUGIE_NAME);
 
         Dialog d = getDialog();
         if (d != null) d.setTitle(augiement.getMeta().getUIName() + " Settings");

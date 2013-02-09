@@ -36,11 +36,12 @@ import com.onextent.augie.marker.AugLine;
 import com.onextent.augie.marker.AugScrible;
 import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class TouchFocusShutter extends SimpleCameraShutter {
 
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/TOUCH_FOCUS_SHUTTER");
-
+    public static final String UI_NAME = "Touch Focus Shutter";
+    public static final String DESCRIPTION = "Trigger camera shutter by touching the screen.";
+    
     final List<ScribleHolder> focus_areas, meter_areas;
 
     private ScribleHolder movingRect;
@@ -434,5 +435,49 @@ public class TouchFocusShutter extends SimpleCameraShutter {
     public DialogFragment getUI() {
        
         return new TouchFocusShutterDialog();
+    }
+    
+    public static final Meta META =
+        new Augiement.Meta() {
+
+            @Override
+            public Class<? extends Augiement> getAugiementClass() {
+    
+                return TouchFocusShutter.class;
+            }
+
+            @Override
+            public CodeableName getCodeableName() {
+                
+                return AUGIE_NAME;
+            }
+
+            @Override
+            public String getUIName() {
+
+                return UI_NAME;
+            }
+
+            @Override
+            public String getDescription() {
+                
+                return DESCRIPTION;
+            }
+
+            @Override
+            public Set<CodeableName> getDependencyNames() {
+                return SimpleCameraShutter.deps;
+            }
+
+            @Override
+            public int getMinSdkVer() {
+                return Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+            }
+        };
+        
+    @Override
+    public Augiement.Meta getMeta() {
+        
+        return META;
     }
 }

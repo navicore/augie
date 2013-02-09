@@ -8,7 +8,7 @@ import com.onextent.augie.ments.cvface.CvFaceFinder;
 import com.onextent.augie.ments.myface.FaceFinder;
 //import com.onextent.augie.camera.shutter.RoboShutter;
 import com.onextent.augie.ments.shutter.Shutter;
-import com.onextent.augie.ments.shutter.TouchShutter;
+import com.onextent.augie.ments.shutter.TouchFocusShutter;
 import com.onextent.augie.ments.Draw;
 import com.onextent.augie.ments.Compass;
 import com.onextent.augie.ments.GPS;
@@ -33,7 +33,7 @@ public class AugmaticAugiementFactory extends AugiementFactoryImpl implements
 
         registerAugiement(Horizon.META);
         registerAugiement(HorizonCheck.META);
-        registerAugiement(TouchShutter.META);
+        registerAugiement(TouchFocusShutter.META);
         registerAugiement(ShakeReset.META);
         registerAugiement(PinchZoom.META);
         registerAugiement(Histogram.META);

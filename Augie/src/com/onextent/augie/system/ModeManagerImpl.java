@@ -34,7 +34,7 @@ import com.onextent.augie.ments.Horizon;
 import com.onextent.augie.ments.HorizonCheck;
 import com.onextent.augie.ments.PinchZoom;
 import com.onextent.augie.ments.shutter.Shutter;
-import com.onextent.augie.ments.shutter.TouchShutter;
+import com.onextent.augie.ments.shutter.TouchFocusShutter;
 
 public class ModeManagerImpl implements ModeManager {
 
@@ -207,6 +207,7 @@ public class ModeManagerImpl implements ModeManager {
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
             if (camera == null) throw new CodeableException("no camera");
+            camera.open();
 
             ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_DEFAULT, camera);
             mode.setName("Default");
@@ -219,12 +220,13 @@ public class ModeManagerImpl implements ModeManager {
             mode.addAugiement(new HorizonCheck());
 
             mode.addAugiement(new Shutter());
-            mode.addAugiement(new TouchShutter());
+            mode.addAugiement(new TouchFocusShutter());
 
             mode.addAugiement(new PinchZoom());
             mode.addAugiement(new GPS());
 
             addMode(mode);
+            camera.close();
 
         } catch (AugCameraException e) {
             throw new CodeableException(e);
@@ -236,7 +238,6 @@ public class ModeManagerImpl implements ModeManager {
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
             if (camera == null) throw new CodeableException("no camera");
-
             camera.open();
 
             AugCameraParameters p = camera.getParameters();
@@ -256,7 +257,7 @@ public class ModeManagerImpl implements ModeManager {
             mode.addAugiement(new HorizonCheck());
 
             mode.addAugiement(new Shutter());
-            mode.addAugiement(new TouchShutter());
+            mode.addAugiement(new TouchFocusShutter());
             mode.addAugiement(new GPS());
 
             addMode(mode);       
@@ -289,7 +290,7 @@ public class ModeManagerImpl implements ModeManager {
             mode.addAugiement(new HorizonCheck());
 
             mode.addAugiement(new Shutter());
-            mode.addAugiement(new TouchShutter());
+            mode.addAugiement(new TouchFocusShutter());
             mode.addAugiement(new GPS());
 
             addMode(mode);       
@@ -303,10 +304,8 @@ public class ModeManagerImpl implements ModeManager {
         AugCamera camera;
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_FRONT_CAMERA);
-        } catch (AugCameraException e) {
-            throw new CodeableException(e);
-        }
         if (camera == null) return;
+        camera.open();
 
         ModeImpl mode = new ModeImpl(this, activity, MODE_KEY_SELF, camera);
         mode.setName("Self");
@@ -319,10 +318,14 @@ public class ModeManagerImpl implements ModeManager {
         mode.addAugiement(new HorizonCheck());
 
         mode.addAugiement(new Shutter());
-        mode.addAugiement(new TouchShutter());
+        mode.addAugiement(new TouchFocusShutter());
         mode.addAugiement(new GPS());
 
         addMode(mode);       
+        camera.close();
+        } catch (AugCameraException e) {
+            throw new CodeableException(e);
+        }
     }
 
     @Override

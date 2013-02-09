@@ -6,30 +6,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import android.graphics.Color;
-import android.support.v4.app.DialogFragment;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.onextent.android.codeable.Code;
 import com.onextent.android.codeable.CodeableException;
 import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
-import com.onextent.augie.AugLog;
 import com.onextent.augie.AugieScape;
 import com.onextent.augie.Augiement;
 import com.onextent.augie.AugiementException;
-import com.onextent.augie.AugiementName;
 import com.onextent.augie.camera.AugCamera;
 import com.onextent.augie.camera.AugCameraException;
 import com.onextent.augie.camera.AugPictureCallback;
-import com.onextent.augie.marker.AugScrible;
-import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
 import com.onextent.augie.ments.Draw;
 
-public class SimpleCameraShutter extends AbstractTouchShutter implements OnTouchListener {
+public abstract class SimpleCameraShutter implements OnTouchListener, Augiement {
 	
-    public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SIMPLE_SHUTTER");
+    //public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/SIMPLE_SHUTTER");
     
     protected Shutter shutter;
     protected AugieScape augieScape;
@@ -71,18 +64,19 @@ public class SimpleCameraShutter extends AbstractTouchShutter implements OnTouch
         if (shutter == null) throw new AugiementException("shutter feature is null");
     }
 	
+    protected void takePicture(AugPictureCallback userCb) throws AugCameraException {
+    	shutter.takePicture(userCb);
+	}
+    /*
 	@Override
 	public void updateCanvas() {
 		//noop	
 	}
 
-    protected void takePicture(AugPictureCallback userCb) throws AugCameraException {
-    	shutter.takePicture(userCb);
-	}
     private void takePicture() throws AugCameraException {
     	shutter.takePicture();
 	}
-    
+   
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
@@ -130,6 +124,7 @@ public class SimpleCameraShutter extends AbstractTouchShutter implements OnTouch
     public CodeableName getCodeableName() {
         return AUGIE_NAME;
     }
+     */
 
     private static final String DEFAULT_FOCUS_SZ_KEY 	= "defaultFocusAreaSize";
     private static final String ALWAYS_FOCUS_AREA_KEY 	= "alwaysSetFocusArea";
@@ -161,6 +156,7 @@ public class SimpleCameraShutter extends AbstractTouchShutter implements OnTouch
     		setTouchFocusSz(code.getInt(DEFAULT_FOCUS_SZ_KEY));
     }
 
+    /*
     @Override
     public DialogFragment getUI() {
         // TODO Auto-generated method stub
@@ -171,6 +167,7 @@ public class SimpleCameraShutter extends AbstractTouchShutter implements OnTouch
     public Meta getMeta() {
         return null;
     }
+     */
     
     public int getMeterAreaColor() {
         return meterAreaColor;
