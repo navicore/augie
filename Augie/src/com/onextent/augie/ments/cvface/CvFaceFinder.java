@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,9 @@ import org.opencv.objdetect.CascadeClassifier;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Build;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 import android.app.DialogFragment;
 
 import com.onextent.android.codeable.Code;
@@ -35,10 +39,17 @@ import com.onextent.augie.AugiementException;
 import com.onextent.augie.AugiementName;
 import com.onextent.augie.R;
 import com.onextent.augie.camera.AugCamera;
+import com.onextent.augie.camera.AugCameraException;
+import com.onextent.augie.camera.AugPictureCallback;
 import com.onextent.augie.camera.AugPreviewCallback;
+import com.onextent.augie.marker.AugScrible;
+import com.onextent.augie.marker.AugScrible.GESTURE_TYPE;
+import com.onextent.augie.ments.Draw;
 import com.onextent.augie.ments.OpenCV;
+import com.onextent.augie.ments.shutter.Shutter;
+import com.onextent.augie.ments.shutter.SimpleCameraShutter;
 
-public class CvFaceFinder implements AugPreviewCallback, Augiement {
+public class CvFaceFinder extends SimpleCameraShutter implements AugPreviewCallback, Augiement {
     
     public static final CodeableName AUGIE_NAME = new AugiementName("AUGIE/FEATURES/CVFACEFINDER");
     public static final String UI_NAME = "(CV) Face Finder";
@@ -49,9 +60,10 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
         deps = new HashSet<CodeableName>();
         deps.add(AugCamera.AUGIE_NAME);
         deps.add(OpenCV.AUGIE_NAME);
+        deps.add(Shutter.AUGIE_NAME);
+        deps.add(Draw.AUGIE_NAME);
     }
     public enum DETECTION_TYPE {JAVA, NATIVE};
-    private AugieScape augieScape; private AugCamera camera; 
     private Mat                    mFrameMat;
     private Mat                    mBaseMat;
     private Mat                    mRgba;
@@ -103,12 +115,36 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
     @Override
     public void updateCanvas() {
 
-        Rect[] fa = getFacesArray();
+        MatOfRect ma = getFacesArray();
+        if (ma == null) return;
+        Rect[] fa = ma.toArray();
         if (fa == null) return;
+        
+        List<Camera.Area> caa = new ArrayList<Camera.Area>();
+       
+        int mfa = camera.getParameters().getMaxNumFocusAreas();
         for (Rect r : fa) {
+            
             augieScape.getCanvas().drawRect(getCanvasRect(r), augieScape.getPaint());
+            
+            if (caa.size() >= mfa) continue;
+            
+            android.graphics.Rect rect = getRelCoord(getCanvasRect(r));
+            Camera.Area a = new Camera.Area(rect, 500);
+            caa.add(a);
+        }
+        
+        if (!caa.isEmpty()) {
+            
+            camera.getParameters().setFocusAreas(caa);
+            try {
+                camera.applyParameters();
+            } catch (AugCameraException e) {
+                AugLog.w(e);
+            }
         }
     }
+    
     private android.graphics.Rect getCanvasRect(Rect r) {
         float cw = augieScape.getWidth();
         float ch = augieScape.getHeight();
@@ -149,7 +185,7 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
     @Override
     public void onCreate(AugieScape av, Set<Augiement> helpers)
             throws AugiementException {
-        augieScape = av;
+        super.onCreate(av, helpers);
         for (Augiement a : helpers) {
             if (a instanceof AugCamera) {
                 camera = (AugCamera) a;
@@ -205,17 +241,20 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
             AugLog.e("Detection method is not selected!");
         }
 
-        setFacesArray(faces.toArray());
+        setFacesArray(faces);
     }
     
-    private Rect[] facesArray;
+    private MatOfRect faces;
 
-    public synchronized Rect[] getFacesArray() {
-        return facesArray;
+    public synchronized MatOfRect getFacesArray() {
+        return faces;
     }
 
-    public synchronized void setFacesArray(Rect[] facesArray) {
-        this.facesArray = facesArray;
+    public synchronized void setFacesArray(MatOfRect faces) {
+        if (this.faces != null) {
+            this.faces.release();
+        }
+        this.faces = faces;
     }
 
     public int getFaceSizePct() {
@@ -358,5 +397,72 @@ public class CvFaceFinder implements AugPreviewCallback, Augiement {
     public Meta getMeta() {
 
         return META;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        
+        try {
+
+            switch(event.getAction() & MotionEvent.ACTION_MASK) {
+
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                AugScrible scrible = augdraw.getCurrentScrible();
+                handleGesture(scrible);
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                break;
+            default:
+                return false;
+            }
+        } catch (Exception e) {
+            Toast.makeText(augieScape.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            AugLog.e( e.toString(), e);
+        }
+        return true;
+    }
+    
+    protected void handleGesture(AugScrible scrible) throws AugCameraException {
+
+        if (scrible == null)  {
+            AugLog.w("no current scrible / gesture");
+            return;
+        }
+        GESTURE_TYPE g_type = scrible.getGestureType();
+        switch (g_type) {
+
+        case TAP:
+            takePicture();
+            break;
+        case CLOCKWISE_AREA:
+            break;
+        case COUNTER_CLOCKWISE_AREA:
+            break;
+        default:
+            AugLog.w("unrecognized gesture");
+        }
+    }
+    
+    protected void takePicture() throws AugCameraException {
+
+        try {
+
+            super.takePicture(new AugPictureCallback() {
+
+                @Override
+                public void onPictureTaken(byte[] data, AugCamera c) {
+                    AugLog.d("CvFaceFinder took picture");
+                }
+            });
+        } catch (AugCameraException e) {
+
+            throw e;
+        }
     }
 }

@@ -126,17 +126,6 @@ public class TouchFocusShutter extends SimpleCameraShutter {
         }
     }
 
-    private Rect getTouchFocusRect(Point p) {
-        double w = augieScape.getWidth();
-        double h = augieScape.getHeight();
-        double sz = getTouchFocusSz();
-        double len = sz / 100 * w;
-        if (len > h) len = h / 2;
-        if (len < 5) len = 5;
-        int xadj = (int) (len / 2);
-        int yadj = (int) (len / 2);
-        return new Rect(p.x - xadj, p.y - yadj, p.x + xadj, p.y + yadj);
-    }
     private void _setTouchFocusArea() {
         AugScrible scrible = augdraw.getCurrentScrible();
         if (scrible == null || scrible.size() == 0) return;
@@ -168,7 +157,7 @@ public class TouchFocusShutter extends SimpleCameraShutter {
         return al;
     }
 
-    private boolean _setMeterAreas() throws AugCameraException {
+    protected boolean _setMeterAreas() throws AugCameraException {
 
         if (augieScape == null) return false;
 
@@ -178,7 +167,7 @@ public class TouchFocusShutter extends SimpleCameraShutter {
         return success;
     }
 
-    private boolean _setFocusAreas() throws AugCameraException {
+    protected boolean _setFocusAreas() throws AugCameraException {
 
         if (augieScape == null) return false;
 
@@ -186,26 +175,6 @@ public class TouchFocusShutter extends SimpleCameraShutter {
         boolean success = fa.size() > 0;
         camera.getParameters().setFocusAreas(fa);
         return success;
-    }
-
-    private int getRelNum(double p, double sz) {
-        double result;
-        double m = sz / 2;
-        if (p <= m)
-            result = (p / m) * 1000 * -1;
-        result = ((p - m) / m) * 1000;
-        return (int) result;
-    }
-    private Rect getRelCoord(Rect r) {
-        int w = augieScape.getWidth();
-        int h = augieScape.getHeight();
-        Rect relr = new Rect(
-                getRelNum(r.left, w), 
-                getRelNum(r.top, h), 
-                getRelNum(r.right, w),
-                getRelNum(r.bottom, h)
-                );
-        return relr;
     }
 
     private void saveArea(AugScrible s, List<ScribleHolder> areas) {
@@ -252,29 +221,6 @@ public class TouchFocusShutter extends SimpleCameraShutter {
         Point endP = new Point((int) event.getX(), (int) event.getY());
         movingRect.rect.offset(endP.x - startP.x, endP.y - startP.y);
         augdraw.undoCurrentScrible();
-    }
-
-    private void handleGesture(AugScrible scrible) throws AugCameraException {
-
-        if (scrible == null)  {
-            AugLog.w("no current scrible / gesture");
-            return;
-        }
-        GESTURE_TYPE g_type = scrible.getGestureType();
-        switch (g_type) {
-
-        case TAP:
-            takePicture();
-            break;
-        case CLOCKWISE_AREA:
-            saveFocusArea(scrible);
-            break;
-        case COUNTER_CLOCKWISE_AREA:
-            saveMeterArea(scrible);
-            break;
-        default:
-            AugLog.w("unrecognized gesture");
-        }
     }
 
     @Override
@@ -477,5 +423,28 @@ public class TouchFocusShutter extends SimpleCameraShutter {
     public Augiement.Meta getMeta() {
         
         return META;
+    }
+    
+    protected void handleGesture(AugScrible scrible) throws AugCameraException {
+
+        if (scrible == null)  {
+            AugLog.w("no current scrible / gesture");
+            return;
+        }
+        GESTURE_TYPE g_type = scrible.getGestureType();
+        switch (g_type) {
+
+        case TAP:
+            takePicture();
+            break;
+        case CLOCKWISE_AREA:
+            saveFocusArea(scrible);
+            break;
+        case COUNTER_CLOCKWISE_AREA:
+            saveMeterArea(scrible);
+            break;
+        default:
+            AugLog.w("unrecognized gesture");
+        }
     }
 }

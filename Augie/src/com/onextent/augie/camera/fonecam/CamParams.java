@@ -15,6 +15,7 @@ import com.onextent.android.codeable.CodeableName;
 import com.onextent.android.codeable.JSONCoder;
 import com.onextent.android.codeable.Size;
 import com.onextent.augie.AugLog;
+import com.onextent.augie.AugSysLog;
 import com.onextent.augie.camera.AugCameraParameters;
 import com.onextent.augie.camera.ImageFmt;
 import com.onextent.augie.camera.NamedInt;
@@ -137,6 +138,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedFlashModes() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         return augcamera.camera.getParameters().getSupportedFlashModes();
     }
     
@@ -150,7 +155,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedColorModes() {
-        if (augcamera == null) AugLog.e( "ejs null augcamera");
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         if (augcamera.camera == null) AugLog.e( "ejs null camera");
         if (augcamera.camera.getParameters() == null) AugLog.e( "ejs null params");
         return augcamera.camera.getParameters().getSupportedColorEffects();
@@ -166,6 +174,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedWhiteBalances() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         return augcamera.camera.getParameters().getSupportedWhiteBalance();
     }
     
@@ -179,6 +191,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedSceneModes() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         return augcamera.camera.getParameters().getSupportedSceneModes();
     }
     
@@ -192,6 +208,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedFocusModes() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         return augcamera.camera.getParameters().getSupportedFocusModes();
     }
     
@@ -205,6 +225,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getSupportedAntibanding() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         return augcamera.camera.getParameters().getSupportedAntibanding();
     }
     
@@ -218,6 +242,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<NamedInt> getSupportedPictureFmts() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         List<Integer> cfmts = augcamera.camera.getParameters().getSupportedPictureFormats();
         List<NamedInt> list = new ArrayList<NamedInt>();
         for (int i : cfmts) {
@@ -237,6 +265,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<NamedInt> getSupportedPreviewFmts() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         List<Integer> cfmts = augcamera.camera.getParameters().getSupportedPreviewFormats();
         List<NamedInt> list = new ArrayList<NamedInt>();
         for (int i : cfmts) {
@@ -268,6 +300,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<String> getXSupportedPictureFmts() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         String sl = augcamera.camera.getParameters().get("picture-format-values");
         return FoneCam.split(sl, ',');
     }
@@ -282,6 +318,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<Size> getSupportedPictureSizes() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         List<Camera.Size> csz = augcamera.camera.getParameters().getSupportedPictureSizes();
         List<Size> l = new ArrayList<Size>();
         for (Camera.Size s : csz) {
@@ -293,6 +333,10 @@ class CamParams implements AugCameraParameters {
     
     @Override
     public Size getPreviewSize() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         if (augcamera != null) { //get real preview size
             Camera.Size cs = augcamera.camera.getParameters().getPreviewSize();
             Size rs = new Size(cs);
@@ -307,6 +351,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public List<Size> getSupportedPreviewSizes() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         List<Camera.Size> csz = augcamera.camera.getParameters().getSupportedPreviewSizes();
         List<Size> l = new ArrayList<Size>();
         for (Camera.Size s : csz) {
@@ -353,10 +401,18 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public int getMinExposureCompensation() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         return augcamera.camera.getParameters().getMinExposureCompensation();
     }
     @Override
     public int getMaxExposureCompensation() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         return augcamera.camera.getParameters().getMaxExposureCompensation();
     }
     @Override
@@ -365,6 +421,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public float getExposureCompensationStep() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         return augcamera.camera.getParameters().getExposureCompensationStep();
     }
     @Override
@@ -373,6 +433,10 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public int getMaxZoom() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         return augcamera.camera.getParameters().getMaxZoom();
     }
     @Override
@@ -385,10 +449,18 @@ class CamParams implements AugCameraParameters {
     }
     @Override
     public boolean isZoomSupported() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return false;
+        }
         return augcamera.camera.getParameters().isZoomSupported();
     }
     @Override
     public List<int[]>getSupportedPreviewFPSRanges() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         return augcamera.camera.getParameters().getSupportedPreviewFpsRange();
     }
     @Override
@@ -414,6 +486,10 @@ class CamParams implements AugCameraParameters {
 	}
 	@Override
 	public List<String> getXSupportedISOs() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return null;
+        }
         String sl = augcamera.camera.getParameters().get("iso-values");
         if (sl == null) return null;
         return FoneCam.split(sl, ',');
@@ -421,6 +497,10 @@ class CamParams implements AugCameraParameters {
    
 	@Override
     public int getMaxNumFocusAreas() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         if (this.augcamera.camera != null)
             return this.augcamera.camera.getParameters().getMaxNumFocusAreas();
         else {
@@ -431,6 +511,10 @@ class CamParams implements AugCameraParameters {
 
     @Override
     public int getMaxNumMeteringAreas() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         if (this.augcamera.camera != null)
             return this.augcamera.camera.getParameters().getMaxNumMeteringAreas();
         else {
@@ -441,6 +525,10 @@ class CamParams implements AugCameraParameters {
     
     @Override
     public int getMaxNumDetectedFaces() {
+        if (this.augcamera == null || augcamera.camera == null) {
+            AugSysLog.w("camera is not set");
+            return 0;
+        }
         if (this.augcamera.camera != null)
             return this.augcamera.camera.getParameters().getMaxNumDetectedFaces();
         else {

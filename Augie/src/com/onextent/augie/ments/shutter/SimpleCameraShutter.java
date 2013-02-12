@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.view.View.OnTouchListener;
 
 import com.onextent.android.codeable.Code;
@@ -193,5 +195,38 @@ public abstract class SimpleCameraShutter implements OnTouchListener, Augiement 
     }
     public void setTouchFocusSz(int sz) {
         this.touchFocusSz = sz;
+    }
+    
+    protected Rect getTouchFocusRect(Point p) {
+        double w = augieScape.getWidth();
+        double h = augieScape.getHeight();
+        double sz = getTouchFocusSz();
+        double len = sz / 100 * w;
+        if (len > h) len = h / 2;
+        if (len < 5) len = 5;
+        int xadj = (int) (len / 2);
+        int yadj = (int) (len / 2);
+        return new Rect(p.x - xadj, p.y - yadj, p.x + xadj, p.y + yadj);
+    }
+    
+    protected int getRelNum(double p, double sz) {
+        double result;
+        double m = sz / 2;
+        if (p <= m)
+            result = (p / m) * 1000 * -1;
+        result = ((p - m) / m) * 1000;
+        return (int) result;
+    }
+    
+    protected Rect getRelCoord(Rect r) {
+        int w = augieScape.getWidth();
+        int h = augieScape.getHeight();
+        Rect relr = new Rect(
+                getRelNum(r.left, w), 
+                getRelNum(r.top, h), 
+                getRelNum(r.right, w),
+                getRelNum(r.bottom, h)
+                );
+        return relr;
     }
 }
