@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 public class AboutDialog extends DialogFragment {
 
+    //test comment
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

@@ -1,6 +1,12 @@
 package com.onextent.android.codeable;
 
 public interface Code {
+
+    /**
+     * another test comment
+     * @param key
+     * @return
+     */
     
     boolean has(String key);
     
