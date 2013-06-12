@@ -1,0 +1,3 @@
+include ':OpenCV-2.4.3.2-android-sdk:sdk:java'
+include ':Augmatic'
+include ':Augie'

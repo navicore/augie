@@ -115,7 +115,7 @@ public class CvFaceFinder extends SimpleCameraShutter implements AugPreviewCallb
     @Override
     public void updateCanvas() {
 
-        MatOfRect ma = getFacesArray();
+        MatOfRect ma = getFaces();
         if (ma == null) return;
         Rect[] fa = ma.toArray();
         if (fa == null) return;
@@ -162,11 +162,7 @@ public class CvFaceFinder extends SimpleCameraShutter implements AugPreviewCallb
 
     @Override
     public void clear() {
-
-    }
-
-    protected void updateFocusAreas(List<Rect> faces) {
-        //noop on pre-ICS devices 
+        setFaces(null);
     }
 
     @Override
@@ -213,6 +209,17 @@ public class CvFaceFinder extends SimpleCameraShutter implements AugPreviewCallb
     public void onPreviewFrame(byte[] data, Camera camera) {
 
         mBaseMat.put(0, 0, data);
+        
+        //todo: if portrait, transpose and flip and undo when updateCanvas :(
+        //todo: if portrait, transpose and flip and undo when updateCanvas :(
+        //todo: if portrait, transpose and flip and undo when updateCanvas :(
+        //
+        //  a better solution would be a cascade that works in portrait
+        //
+        //todo: if portrait, transpose and flip and undo when updateCanvas :(
+        //todo: if portrait, transpose and flip and undo when updateCanvas :(
+        //todo: if portrait, transpose and flip and undo when updateCanvas :(
+        
         Imgproc.cvtColor(mBaseMat, mFrameMat, Imgproc.COLOR_YUV2RGBA_NV21, 4);
 
         mFrameMat.copyTo(mRgba);
@@ -241,16 +248,16 @@ public class CvFaceFinder extends SimpleCameraShutter implements AugPreviewCallb
             AugLog.e("Detection method is not selected!");
         }
 
-        setFacesArray(faces);
+        setFaces(faces);
     }
     
     private MatOfRect faces;
 
-    public synchronized MatOfRect getFacesArray() {
+    public synchronized MatOfRect getFaces() {
         return faces;
     }
 
-    public synchronized void setFacesArray(MatOfRect faces) {
+    public synchronized void setFaces(MatOfRect faces) {
         if (this.faces != null) {
             this.faces.release();
         }
