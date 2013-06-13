@@ -4,5 +4,7 @@
 
 #ant debug && ant installd
 
-adb install Augmatic.apk
+#adb install Augmatic.apk
+
+gradle build && gradle installDebug
 
