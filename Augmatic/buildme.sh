@@ -6,5 +6,5 @@
 
 #adb install Augmatic.apk
 
-gradle build && gradle installDebug
+../gradlew build && ../gradlew installDebug
 
