@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Augie.aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Augmatic/build/exploded-bundles/Augie.aar/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

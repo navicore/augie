@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="java.aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Augie/build/exploded-bundles/java.aar/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
