@@ -1,3 +1,5 @@
-include ':OpenCV-2.4.3.2-android-sdk:sdk:java'
+//include ':Augmatic', ':libraries:Augie', ':libaries:OpenCV-2.4.3.2-android-sdk:sdk:java'
 include ':Augmatic'
-include ':Augie'
+include ':libraries:Augie'
+include ':libraries:OpenCV-2.4.3.2-android-sdk:sdk:java'
+
