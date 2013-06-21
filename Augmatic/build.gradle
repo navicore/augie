@@ -32,3 +32,12 @@ android {
     }
 }
 
+task initGitInfo << {
+    def proc = "./init_gitinfo.sh".execute() 
+    proc.in.eachLine {line -> println line} 
+    proc.err.eachLine {line -> println 'ERROR: ' + line} 
+    proc.waitFor() 
+}
+
+//build.dependsOn(initGitInfo)
+
