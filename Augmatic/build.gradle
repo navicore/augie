@@ -39,5 +39,10 @@ task initGitInfo << {
     proc.waitFor() 
 }
 
-//build.dependsOn(initGitInfo)
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    //println "[$task.name]"
+    if (task.name == 'compileRelease') {
+        tasks.initGitInfo.execute();
+    }
+}
 
