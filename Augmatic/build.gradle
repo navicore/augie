@@ -40,8 +40,8 @@ task initGitInfo << {
 }
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
-    //println "[$task.name]"
     if (task.name == 'compileRelease') {
+        println "creating git info"
         tasks.initGitInfo.execute();
     }
 }
