@@ -9,4 +9,13 @@ augie.vpj
 augie.vpg
 augie.vtg
 augie.vpw*
+.idea/
+.gradle/
+.metadata/
+bin/
+build/
+obj/
+gen/
+eclimd.log
+local.properties
 
