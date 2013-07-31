@@ -18,4 +18,5 @@ obj/
 gen/
 eclimd.log
 local.properties
+gitinfo.xml
 
