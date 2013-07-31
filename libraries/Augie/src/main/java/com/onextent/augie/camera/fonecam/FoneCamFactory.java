@@ -119,6 +119,8 @@ public class FoneCamFactory implements AugCameraFactory {
 
     @Override
     public void registerCamera(int id, CodeableName cn, String name) {
+
+        AugLog.d( "register camera. cn: " + cn + " name: " + name);
         //AugCamera c = new CameraImpl(id, augname, name);
         //cameras.put(augname, c);
         camerasMeta.put(cn, new CameraMeta(id, cn, name));

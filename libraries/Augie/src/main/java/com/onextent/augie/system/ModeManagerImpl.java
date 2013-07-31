@@ -197,9 +197,17 @@ public class ModeManagerImpl implements ModeManager {
 
     private void primeDbWithModes() throws AugieStoreException, CodeableException {
         primeDefaultMode();
-        primeFlashMode();
-        primeStreetMode();
-        primeSelfMode();
+        try {
+            primeFlashMode();
+            primeStreetMode();
+            primeSelfMode();
+        } catch (Exception ex) {
+            //todo: there is a concurrncy bug here, the phone isn't available if you access
+            // it in quick succession the way these profile calls do to test if the features
+            //  are supported
+
+            AugSysLog.w(ex.toString(), ex);
+        }
     }
 
     private void primeDefaultMode() throws CodeableException {
@@ -237,7 +245,8 @@ public class ModeManagerImpl implements ModeManager {
         AugCamera camera;
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
-            if (camera == null) throw new CodeableException("no camera");
+            if (camera == null) //throw new CodeableException("no camera");
+                return;
             camera.open();
 
             AugCameraParameters p = camera.getParameters();
@@ -271,7 +280,8 @@ public class ModeManagerImpl implements ModeManager {
         AugCamera camera;
         try {
             camera = cameraFactory.getCamera(AugCameraFactory.AUGIE_BACK_CAMERA);
-            if (camera == null) throw new CodeableException("no camera");
+            if (camera == null) //throw new CodeableException("no camera");
+                return;
             camera.open();
             AugCameraParameters p = camera.getParameters();
             p.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY);

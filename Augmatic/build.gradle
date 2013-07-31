@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.4'
+        classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
 apply plugin: 'android'
@@ -33,7 +33,8 @@ android {
 }
 
 task initGitInfo << {
-    def proc = "./init_gitinfo.sh".execute() 
+    //ejs fix this @@4#$%#$$ing absolute path
+    def proc = "/home/esweeney/git/augie/Augmatic/init_gitinfo.sh".execute()
     proc.in.eachLine {line -> println line} 
     proc.err.eachLine {line -> println 'ERROR: ' + line} 
     proc.waitFor() 
