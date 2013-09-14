@@ -3,4 +3,7 @@
 // hack since studio keeps adding android-facet to root holder proj
 task assemble{}
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.7'
+}
 
