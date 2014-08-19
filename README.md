@@ -3,6 +3,8 @@ The Augie Project
 Augmented reality Tools, Libraries, and Applications
 ---
 
+#### NOTE: another experiment to learn android better.  I hope to dust this off and rev it to Android L soon
+
 1. AugieLib is a set of libraries and tools for
    camera tablets. See sub-project [here](augie/tree/master/Augie).
 1. Augmatic 1000 is an reference implementation.
