@@ -4,6 +4,6 @@
 task assemble{}
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '7.6'
+    gradleVersion = '7.6.1'
 }
 
