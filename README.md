@@ -1,3 +1,8 @@
+<!-- ghmig:moved -->
+> **This repository has moved to [https://git.navicore.tech/navicore/augie](https://git.navicore.tech/navicore/augie).**
+>
+> The GitHub copy is archived and no longer maintained.
+
 The Augie Project
 ===
 Augmented reality Tools, Libraries, and Applications
